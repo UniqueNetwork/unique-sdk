@@ -1,0 +1,32 @@
+{
+  "root": "packages/sdk-full",
+  "sourceRoot": "packages/sdk-full/src",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/sdk-full",
+        "main": "packages/sdk-full/src/index.ts",
+        "tsConfig": "packages/sdk-full/tsconfig.lib.json",
+        "assets": ["packages/sdk-full/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/sdk-full/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/sdk-full"],
+      "options": {
+        "jestConfig": "packages/sdk-full/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
