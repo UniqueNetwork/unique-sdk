@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  web:
+    container_name: sdk-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    command: [ "yarn", "start" ]
