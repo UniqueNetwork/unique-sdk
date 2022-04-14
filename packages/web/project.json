@@ -1,16 +1,16 @@
 {
-  "root": "packages/sdk-rest-api",
-  "sourceRoot": "packages/sdk-rest-api/src",
+  "root": "packages/web",
+  "sourceRoot": "packages/web/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/sdk-rest-api",
-        "main": "packages/sdk-rest-api/src/main.ts",
-        "tsConfig": "packages/sdk-rest-api/tsconfig.app.json",
-        "assets": ["packages/sdk-rest-api/src/assets"]
+        "outputPath": "dist/packages/web",
+        "main": "packages/web/src/main.ts",
+        "tsConfig": "packages/web/tsconfig.app.json",
+        "assets": ["packages/web/src/assets"]
       },
       "configurations": {
         "production": {
@@ -19,8 +19,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "packages/sdk-rest-api/src/environments/environment.ts",
-              "with": "packages/sdk-rest-api/src/environments/environment.prod.ts"
+              "replace": "packages/web/src/environments/environment.ts",
+              "with": "packages/web/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -29,21 +29,21 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "sdk-rest-api:build"
+        "buildTarget": "web:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/sdk-rest-api/**/*.ts"]
+        "lintFilePatterns": ["packages/web/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/sdk-rest-api"],
+      "outputs": ["coverage/packages/web"],
       "options": {
-        "jestConfig": "packages/sdk-rest-api/jest.config.js",
+        "jestConfig": "packages/web/jest.config.js",
         "passWithNoTests": true
       }
     }

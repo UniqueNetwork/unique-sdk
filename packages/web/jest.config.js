@@ -1,14 +1,15 @@
 module.exports = {
-  displayName: 'sdk-full',
+  displayName: 'web',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
+  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/packages/sdk-full',
+  coverageDirectory: '../../coverage/packages/web',
 };

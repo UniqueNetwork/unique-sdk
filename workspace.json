@@ -1,7 +1,7 @@
 {
   "version": 2,
   "projects": {
-    "sdk-full": "packages/sdk-full",
-    "sdk-rest-api": "packages/sdk-rest-api"
+    "sdk": "packages/sdk",
+    "web": "packages/web"
   }
 }

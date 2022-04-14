@@ -1,15 +1,14 @@
 module.exports = {
-  displayName: 'sdk-rest-api',
+  displayName: 'sdk',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
-  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/packages/sdk-rest-api',
+  coverageDirectory: '../../coverage/packages/sdk',
 };

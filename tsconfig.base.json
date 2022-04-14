@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@unique-sdk/sdk-full": ["packages/sdk-full/src/index.ts"]
+      "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

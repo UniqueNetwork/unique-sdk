@@ -14,9 +14,9 @@ describe('AppService', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to sdk-rest-api!"', () => {
+    it('should return "Welcome to web!"', () => {
       expect(service.getData()).toEqual({
-        message: 'Welcome to sdk-rest-api!',
+        message: 'Welcome to web!',
       });
     });
   });
