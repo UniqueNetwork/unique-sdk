@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
+    "build:sdk": "nx build sdk",
+    "build:web": "nx build web",
     "start": "node ./dist/packages/web/main.js"
   },
   "private": true,
