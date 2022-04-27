@@ -1,4 +1,6 @@
-import '@polkadot/api-augment/polkadot';
+import '@unique-nft/types/augment-api-rpc';
+
+import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SignerPayload, ExtrinsicEra } from '@polkadot/types/interfaces';
@@ -24,7 +26,12 @@ export class Sdk {
   constructor(private readonly options: SdkOptions) {
     const provider = new WsProvider(this.options.chainWsUrl);
 
-    this.api = new ApiPromise({ provider });
+    this.api = new ApiPromise({
+      provider,
+      rpc: {
+        unique: unique.rpc,
+      },
+    });
     // todo EventEmitter? sdk.on('connect') ..
     this.isReady = this.api.isReadyOrError
       .catch(() => {
@@ -51,6 +58,18 @@ export class Sdk {
       }),
       // todo formatted -> formatted, withUnit, as number?
     };
+  }
+
+  /**
+   * just sample method using "unique" pallet
+   * @param collectionId
+   */
+  async getCollectionExists(collectionId: string): Promise<boolean> {
+    const collectionInfo = await this.api.rpc.unique.collectionById(
+      collectionId,
+    );
+
+    return !collectionInfo.isEmpty;
   }
 
   async getChainProperties(): Promise<ChainProperties> {
