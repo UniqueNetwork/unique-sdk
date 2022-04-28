@@ -27,7 +27,9 @@ async function bootstrap() {
 
   const port = config.get('port');
   await app.listen(port);
-  Logger.log(`Application is running on :${[port, prefix].filter(v => !!v).join('/')}`);
+  Logger.log(
+    `Application is running on :${[port, prefix].filter((v) => !!v).join('/')}`,
+  );
 }
 
 bootstrap();
