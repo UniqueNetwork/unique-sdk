@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Access level errors",
+    "errors": {
+      "UN01001": {
+        "description": "Bad signature",
+        "ru": "Не верная подпись"
+      }
+    }
+  },
+  {
+    "name": "User data serialization errors",
+    "errors": {
+      "UN02001": {
+        "description": "Invalid parameter",
+        "ru": "Не верный параметр"
+      }
+    }
+  }
+]
