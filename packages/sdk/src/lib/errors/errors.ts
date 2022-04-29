@@ -1,16 +1,25 @@
-import { SdkErrorCodes } from './codes';
-import { SdkErrorInfo, getErrorInfo } from './loader';
+enum ErrorCodes {
+  BadSignature = 'UN01001',
+  InvalidParameter = 'UN02001',
+}
 
 export class SdkError extends Error {
-  readonly code: SdkErrorCodes;
-  readonly info?: SdkErrorInfo;
-  readonly values?: Record<string, any>;
+  constructor(
+    public readonly code: ErrorCodes,
+    name: string,
+    message?: string,
+  ) {
+    super(message);
+    this.name = name;
+  }
+}
 
-  constructor(code: SdkErrorCodes, values?: Record<string, any>) {
-    const info = getErrorInfo(code);
-    super(info.description);
-    this.code = code;
-    this.info = info;
-    this.values = values;
+export class BadSignatureError extends SdkError {
+  constructor(message = BadSignatureError.name) {
+    super(
+      ErrorCodes.BadSignature,
+      BadSignatureError.name,
+      message,
+    );
   }
 }
