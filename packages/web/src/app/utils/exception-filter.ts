@@ -6,15 +6,17 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import {BadSignatureError, SdkError} from '@unique-nft/sdk';
+import { BadSignatureError, SdkError } from '@unique-nft/sdk';
 
-const httpResponseErrorMap = new Map<string, { new (err: SdkError): HttpException } >();
+const httpResponseErrorMap = new Map<
+  string,
+  { new (err: SdkError): HttpException }
+>();
 httpResponseErrorMap.set(BadSignatureError.name, BadRequestException);
 
 @Catch(SdkError)
 export class SdkExceptionsFilter extends BaseExceptionFilter {
   catch(exception: SdkError, host: ArgumentsHost) {
-
     if (httpResponseErrorMap.has(exception.constructor.name)) {
       const errorClass = httpResponseErrorMap.get(exception.constructor.name);
       const httpError = new errorClass(exception);

@@ -16,10 +16,6 @@ export class SdkError extends Error {
 
 export class BadSignatureError extends SdkError {
   constructor(message = BadSignatureError.name) {
-    super(
-      ErrorCodes.BadSignature,
-      BadSignatureError.name,
-      message,
-    );
+    super(ErrorCodes.BadSignature, BadSignatureError.name, message);
   }
 }

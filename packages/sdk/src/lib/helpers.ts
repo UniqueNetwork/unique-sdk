@@ -6,7 +6,7 @@ import {
 import { HexString } from '@polkadot/util/types';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
-import {BadSignatureError} from './errors';
+import { BadSignatureError } from './errors';
 
 // todo helper per file? helpers as @unique-nft/sdk/helpers ... @unique-nft/sdk/helpers/get_signer_payload_hex ...
 export const getSignerPayloadHex = (
