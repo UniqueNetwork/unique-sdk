@@ -21,6 +21,7 @@ import { getSignerPayloadHex, verifyTxSignature } from './helpers';
 
 export class Sdk {
   private readonly api: ApiPromise;
+
   readonly isReady: Promise<boolean>;
 
   constructor(private readonly options: SdkOptions) {

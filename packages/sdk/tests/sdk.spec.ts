@@ -1,7 +1,7 @@
-import { Sdk } from './sdk';
 import { u8aToHex } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
+import { Sdk } from '../src/lib/sdk';
 
 describe(Sdk.name, () => {
   let sdk: Sdk;

@@ -16,46 +16,57 @@ export class SignerPayloadJSONDto implements SignerPayloadJSON {
    * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
    */
   address: string;
+
   /**
    * @description The checkpoint hash of the block, in hex
    */
   blockHash: string;
+
   /**
    * @description The checkpoint block number, in hex
    */
   blockNumber: string;
+
   /**
    * @description The era for this transaction, in hex
    */
   era: string;
+
   /**
    * @description The genesis hash of the chain, in hex
    */
   genesisHash: string;
+
   /**
    * @description The encoded method (with arguments) in hex
    */
   method: string;
+
   /**
    * @description The nonce for this transaction, in hex
    */
   nonce: string;
+
   /**
    * @description The current spec version for the runtime
    */
   specVersion: string;
+
   /**
    * @description The tip for this transaction, in hex
    */
   tip: string;
+
   /**
    * @description The current transaction version for the runtime
    */
   transactionVersion: string;
+
   /**
    * @description The applicable signed extensions for this runtime
    */
   signedExtensions: string[];
+
   /**
    * @description The version of the extrinsic we are dealing with
    */
@@ -69,11 +80,13 @@ export class ExtrinsicBuildRequest implements TxBuildArgs {
   address: string;
 
   /**
+   * todo enum? endpoint with enums? schema?
    * @example 'balances'
    */
   section: string;
 
   /**
+   * todo enum? endpoint with enums? schema?
    * @example 'transfer'
    */
   method: string;
@@ -84,11 +97,13 @@ export class ExtrinsicBuildRequest implements TxBuildArgs {
   args: Array<string | number | Record<string, string | number>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
 
   /**
+   * todo required? why?
    * @example '64'
    */
   era: number;
 
   /**
+   * todo required? why?
    * @example 'false'
    */
   isImmortal: boolean;
@@ -100,10 +115,12 @@ export class SignerPayloadRawDto implements SignerPayloadRaw {
    * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
    */
   address: string;
+
   /**
    * @description The hex-encoded data for this request
    */
   data: string;
+
   /**
    * @description The type of the contained data
    */

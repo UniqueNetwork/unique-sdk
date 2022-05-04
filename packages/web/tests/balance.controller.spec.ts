@@ -1,12 +1,12 @@
 import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
-import { KeyringPair } from '@polkadot/keyring/types';
 import { INestApplication } from '@nestjs/common';
-
-import { BalanceController } from './balance.controller';
-import { AppModule } from '../app.module';
+import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { waitReady } from '@polkadot/wasm-crypto';
+import request from 'supertest';
+
+import { BalanceController } from '../src/app/controllers';
+import { AppModule } from '../src/app/app.module';
 
 describe(BalanceController.name, () => {
   let app: INestApplication;

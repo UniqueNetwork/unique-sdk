@@ -1,8 +1,4 @@
-const esModules = [
-  '@polkadot/util/is/function',
-  '@polkadot/api-augment/',
-  '@polkadot/types-augment/',
-].join('|');
+const esModules = ['@polkadot/', '@unique-nft/types'].join('|');
 
 module.exports = {
   displayName: 'sdk',

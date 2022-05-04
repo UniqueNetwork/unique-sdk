@@ -2,6 +2,10 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx"],
+  "extends": ["airbnb/base", "airbnb-typescript/base"],
+  "parserOptions": {
+    "project": "./tsconfig.base.json"
+  },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -18,7 +22,9 @@
               }
             ]
           }
-        ]
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": "off"
       }
     },
     {
@@ -32,6 +38,11 @@
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
+    }, {
+      "files": ["*.dto.ts", "errors.ts"],
+      "rules": {
+        "max-classes-per-file": "off"
+      }
     }
   ]
 }

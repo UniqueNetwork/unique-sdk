@@ -8,9 +8,9 @@ import '@polkadot/api-augment';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app/app.module';
 import { addSwagger } from './app/utils/swagger';
-import { ConfigService } from '@nestjs/config';
 import { Config } from './app/config/config.module';
 
 async function bootstrap() {
