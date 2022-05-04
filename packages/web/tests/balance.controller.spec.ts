@@ -59,9 +59,8 @@ describe(BalanceController.name, () => {
         .query({
           address: alice.address,
           destination: bob.address,
-          amount: 1,
+          amount: 2,
         });
-      console.log('response', buildResponse.body);
       expect(buildResponse.ok).toEqual(true);
       expect(buildResponse.body).toMatchObject({
         signerPayloadJSON: expect.any(Object),
@@ -80,7 +79,10 @@ describe(BalanceController.name, () => {
           signature,
           signerPayloadJSON,
         });
-      console.log('submitResponse', submitResponse.body);
+      expect(submitResponse.ok).toEqual(true);
+      expect(submitResponse.body).toMatchObject({
+        hash: expect.any(String),
+      });
     });
   });
 });
