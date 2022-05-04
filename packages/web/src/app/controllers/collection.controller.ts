@@ -36,7 +36,7 @@ export class CollectionController {
 
     if (collection) return collection;
 
-    throw new NotFoundException();
+    throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
   @Post()

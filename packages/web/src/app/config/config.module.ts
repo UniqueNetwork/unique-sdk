@@ -12,8 +12,9 @@ const loadConfig = (): Config => ({
   isProduction: process.env.NODE_ENV !== 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
   chainWsUrl:
-    // 'wss://ws-quartz.unique.network' ||
-    process.env.CHAIN_WS_URL || 'wss://ws-quartz-dev.comecord.com',
+    'wss://ws-quartz.unique.network' ||
+    process.env.CHAIN_WS_URL ||
+    'wss://ws-quartz-dev.comecord.com',
   prefix: process.env.PREFIX || '',
   swagger: process.env.SWAGGER || 'swagger',
 });

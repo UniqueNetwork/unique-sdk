@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Patch,
   Post,
   Query,
@@ -27,7 +28,13 @@ export class TokenController {
 
   @Get()
   async getToken(@Query() args: TokenGetRequest): Promise<any> {
-    return this.sdk.query.token(args);
+    const token = await this.sdk.query.token(args);
+
+    if (token) return token;
+
+    throw new NotFoundException(
+      `no token with id ${args.collectionId} - ${args.tokenId}`,
+    );
   }
 
   @Post()

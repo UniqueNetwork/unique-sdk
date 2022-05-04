@@ -15,6 +15,7 @@ import {
   CollectionAccess,
   CollectionSchemaVersion,
   CollectionMode,
+  DEFAULT_CONST_SCHEMA,
 } from '@unique-nft/sdk';
 
 export class CollectionGetRequest implements CollectionIdArg {
@@ -74,7 +75,7 @@ export class CollectionResponse implements CollectionInfo {
   @ApiProperty({ enum: CollectionSchemaVersion })
   schemaVersion: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
 
-  @ApiProperty({ type: Object })
+  @ApiProperty({ type: Object, example: JSON.stringify(DEFAULT_CONST_SCHEMA) })
   constOnChainSchema?: any;
 
   description: string;
@@ -130,7 +131,7 @@ export class CreateCollectionDto implements CreateCollectionArgs {
   @ApiProperty({ enum: CollectionSchemaVersion })
   schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
 
-  @ApiProperty({ type: Object })
+  @ApiProperty({ type: Object, example: JSON.stringify(DEFAULT_CONST_SCHEMA) })
   constOnChainSchema?: AnyJson;
 
   limits?: CollectionLimitsDto;

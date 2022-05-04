@@ -20,7 +20,7 @@ describe(Sdk.name, () => {
   it('balances transfer build & submit test', async () => {
     expect(Sdk).toBeDefined();
 
-    const txPayload = await sdk.buildTx({
+    const txPayload = await sdk.extrinsics.build({
       address: alice.address,
       section: 'balances',
       method: 'transfer',
@@ -41,7 +41,7 @@ describe(Sdk.name, () => {
 
     const signature = u8aToHex(signatureU8a);
 
-    const submitPromise = sdk.submitTx({
+    const submitPromise = sdk.extrinsics.submit({
       signature,
       signerPayloadJSON,
     });
