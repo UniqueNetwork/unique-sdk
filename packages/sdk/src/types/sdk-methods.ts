@@ -33,6 +33,12 @@ export interface TxBuildArgs {
   isImmortal?: boolean;
 }
 
+export interface TransferBuildArgs {
+  address: string;
+  destination: string;
+  amount: number;
+}
+
 export interface UnsignedTxPayload {
   signerPayloadJSON: SignerPayloadJSON;
   signerPayloadRaw: SignerPayloadRaw;
@@ -90,6 +96,7 @@ export interface ISdkToken {
 
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
+  buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
   submit(args: SubmitTxArgs): Promise<SubmitResult>;
 }
 

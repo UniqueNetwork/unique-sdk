@@ -1,6 +1,12 @@
-import {AddressArg, Balance, SignatureType, SubmitTxArgs} from '@unique-nft/sdk';
-import {SignerPayloadJSON} from "@polkadot/types/types";
-import {HexString} from "@polkadot/util/types";
+import {
+  AddressArg,
+  Balance,
+  SignatureType,
+  SubmitTxArgs,
+  TransferBuildArgs,
+} from '@unique-nft/sdk';
+import { SignerPayloadJSON } from '@polkadot/types/types';
+import { HexString } from '@polkadot/util/types';
 
 export class BalanceResponse implements Balance {
   /**
@@ -25,7 +31,7 @@ export class BalanceRequest implements AddressArg {
   address: string;
 }
 
-export class BalanceTransferBuildRequest {
+export class BalanceTransferBuildRequest implements TransferBuildArgs {
   /**
    * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
    */
@@ -41,7 +47,6 @@ export class BalanceTransferBuildRequest {
    */
   amount: number;
 }
-
 
 export class BalanceTransferSubmitRequest implements SubmitTxArgs {
   /**

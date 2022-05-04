@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Query, UseFilters } from '@nestjs/common';
 
-import {Sdk, UnsignedTxPayload} from '@unique-nft/sdk';
+import { Sdk, UnsignedTxPayload } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import {
   BalanceRequest,
   BalanceResponse,
   BalanceTransferBuildRequest,
-  BalanceTransferSubmitRequest,
+  BalanceTransferSubmitRequest, ExtrinsicSubmitResponse,
 } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
@@ -25,21 +25,13 @@ export class BalanceController {
   async transferBuild(
     @Query() args: BalanceTransferBuildRequest,
   ): Promise<UnsignedTxPayload> {
-    return this.sdk.extrinsics.build({
-      address: args.address,
-      section: 'balances',
-      method: 'transfer',
-      args: [args.destination, args.amount],
-    });
+    return this.sdk.extrinsics.buildTransfer(args);
   }
 
   @Post('transfer/submit')
   async transferSubmit(
     @Query() args: BalanceTransferSubmitRequest,
-  ): Promise<any> {
-    const {hash} = await this.sdk.extrinsics.submit(args);
-    return {
-      hash,
-    };
+  ): Promise<ExtrinsicSubmitResponse> {
+    return this.sdk.extrinsics.submit(args);
   }
 }

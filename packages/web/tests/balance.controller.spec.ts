@@ -7,7 +7,7 @@ import request from 'supertest';
 
 import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
-import {u8aToHex} from "@polkadot/util";
+import { u8aToHex } from '@polkadot/util';
 
 describe(BalanceController.name, () => {
   let app: INestApplication;

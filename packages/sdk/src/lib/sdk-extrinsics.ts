@@ -7,10 +7,11 @@ import {
   ISdkExtrinsics,
   SubmitResult,
   SubmitTxArgs,
+  TransferBuildArgs,
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
-import {InvalidTransactionError} from "@unique-nft/sdk";
+import { InvalidTransactionError } from '@unique-nft/sdk';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
@@ -72,6 +73,15 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.api, signerPayload);
   }
 
+  buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload> {
+    return this.build({
+      address: buildArgs.address,
+      section: 'balances',
+      method: 'transfer',
+      args: [buildArgs.destination, buildArgs.amount],
+    });
+  }
+
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
     const { signerPayloadJSON, signature, signatureType } = args;
     const { method, version, address } = signerPayloadJSON;
@@ -95,7 +105,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     try {
       const hash = await this.api.rpc.author.submitExtrinsic(extrinsic);
-      return {hash: hash.toHex()};
+      return { hash: hash.toHex() };
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
