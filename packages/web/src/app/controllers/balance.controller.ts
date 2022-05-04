@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Query, UseFilters } from '@nestjs/common';
 
-import {Sdk, SubmitTxArgs, UnsignedTxPayload} from '@unique-nft/sdk';
+import {Sdk, UnsignedTxPayload} from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import {
   BalanceRequest,
@@ -35,7 +35,7 @@ export class BalanceController {
 
   @Post('transfer/submit')
   async transferSubmit(
-    @Query() args: SubmitTxArgs,
+    @Query() args: BalanceTransferSubmitRequest,
   ): Promise<any> {
     const {hash} = await this.sdk.extrinsics.submit(args);
     return {
