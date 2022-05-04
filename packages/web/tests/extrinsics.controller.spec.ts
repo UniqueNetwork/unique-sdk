@@ -59,7 +59,8 @@ describe(ExtrinsicsController.name, () => {
         });
 
       expect(badSubmit.status).toEqual(400);
-      expect(badSubmit.body.code).toEqual(ErrorCodes.BadSignature);
+      expect(badSubmit.body.ok).toEqual(false);
+      expect(badSubmit.body.error.code).toEqual(ErrorCodes.BadSignature);
     });
   });
 });

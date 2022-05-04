@@ -10,7 +10,7 @@ import {BadSignatureError, InvalidTransactionError, SdkError} from '@unique-nft/
 
 const httpResponseErrorMap = new Map<
   string,
-  { new (err: string | object | any): HttpException }
+  { new (err: object): HttpException }
 >();
 httpResponseErrorMap.set(BadSignatureError.name, BadRequestException);
 httpResponseErrorMap.set(InvalidTransactionError.name, BadRequestException);
@@ -21,9 +21,12 @@ export class SdkExceptionsFilter extends BaseExceptionFilter {
     if (httpResponseErrorMap.has(exception.constructor.name)) {
       const ErrorClass = httpResponseErrorMap.get(exception.constructor.name);
       const httpError = new ErrorClass({
-        errorCode: exception.code,
-        name: exception.name,
-        message: exception.message,
+        ok: false,
+        error: {
+          code: exception.code,
+          name: exception.name,
+          message: exception.message,
+        }
       });
       super.catch(httpError, host);
     } else {
