@@ -11,7 +11,11 @@ import {
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
-import { InvalidTransactionError } from '@unique-nft/sdk';
+import {
+  InvalidAmountError,
+  InvalidArgumentsError,
+  InvalidTransactionError,
+} from '@unique-nft/sdk';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
@@ -56,7 +60,14 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       signedExtensions,
     };
 
-    const tx = this.api.tx[section][method](...args);
+    let tx;
+    try {
+      tx = this.api.tx[section][method](...args);
+    } catch (error) {
+      const errorMessage =
+        error && error instanceof Error ? error.message : undefined;
+      throw new InvalidTransactionError(errorMessage);
+    }
 
     const signerPayload = this.api.registry.createTypeUnsafe<SignerPayload>(
       'SignerPayload',
@@ -73,12 +84,29 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.api, signerPayload);
   }
 
-  buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload> {
+  buildTransfer({
+    address,
+    destination,
+    amount,
+  }: TransferBuildArgs): Promise<UnsignedTxPayload> {
+    if (!address || !destination || address === destination) {
+      throw new InvalidArgumentsError({
+        address,
+        destination,
+      });
+    }
+    if (
+      amount <= 0 ||
+      Math.floor(amount) !== amount ||
+      amount > Number.MAX_VALUE
+    ) {
+      throw new InvalidAmountError(amount);
+    }
     return this.build({
-      address: buildArgs.address,
+      address,
       section: 'balances',
       method: 'transfer',
-      args: [buildArgs.destination, buildArgs.amount],
+      args: [destination, amount],
     });
   }
 

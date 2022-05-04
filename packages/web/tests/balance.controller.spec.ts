@@ -8,11 +8,13 @@ import request from 'supertest';
 import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
 import { u8aToHex } from '@polkadot/util';
+import { ErrorCodes } from '@unique-nft/sdk';
 
 describe(BalanceController.name, () => {
   let app: INestApplication;
   let alice: KeyringPair;
   let bob: KeyringPair;
+  let emptyUser: KeyringPair;
 
   beforeAll(async () => {
     const testingModule = await Test.createTestingModule({
@@ -27,13 +29,47 @@ describe(BalanceController.name, () => {
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
+    emptyUser = new Keyring({ type: 'sr25519' }).addFromUri('EmptyUser');
   });
+
+  function getBalance(address: string) {
+    return request(app.getHttpServer()).get(`/api/balance`).query({ address });
+  }
+  function transferBuild(amount: number, keyringPair?: KeyringPair): any {
+    return request(app.getHttpServer())
+      .post(`/api/balance/transfer/build`)
+      .send({
+        address: keyringPair ? keyringPair.address : alice.address,
+        destination: bob.address,
+        amount,
+      });
+  }
+  async function transfer(amount: number, keyringPair?: KeyringPair) {
+    keyringPair = keyringPair || alice;
+    const buildResponse = await transferBuild(amount, keyringPair);
+    expect(buildResponse.ok).toEqual(true);
+    expect(buildResponse.body).toMatchObject({
+      signerPayloadJSON: expect.any(Object),
+      signerPayloadHex: expect.any(String),
+    });
+
+    const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
+    const signatureU8a = keyringPair.sign(signerPayloadHex, {
+      withType: true,
+    });
+    const signature = u8aToHex(signatureU8a);
+
+    return request(app.getHttpServer())
+      .post(`/api/balance/transfer/submit`)
+      .send({
+        signature,
+        signerPayloadJSON,
+      });
+  }
 
   describe('GET /api/balance', () => {
     it('ok', async () => {
-      const response = await request(app.getHttpServer())
-        .get(`/api/balance`)
-        .query({ address: alice.address });
+      const response = await getBalance(alice.address);
 
       expect(response.ok).toEqual(true);
 
@@ -54,35 +90,27 @@ describe(BalanceController.name, () => {
 
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
-      const buildResponse = await request(app.getHttpServer())
-        .post(`/api/balance/transfer/build`)
-        .query({
-          address: alice.address,
-          destination: bob.address,
-          amount: 2,
-        });
-      expect(buildResponse.ok).toEqual(true);
-      expect(buildResponse.body).toMatchObject({
-        signerPayloadJSON: expect.any(Object),
-        signerPayloadHex: expect.any(String),
-      });
-
-      const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
-      const signatureU8a = alice.sign(signerPayloadHex, {
-        withType: true,
-      });
-      const signature = u8aToHex(signatureU8a);
-
-      const submitResponse = await request(app.getHttpServer())
-        .post(`/api/balance/transfer/submit`)
-        .query({
-          signature,
-          signerPayloadJSON,
-        });
+      const submitResponse = await transfer(1);
       expect(submitResponse.ok).toEqual(true);
       expect(submitResponse.body).toMatchObject({
         hash: expect.any(String),
       });
     });
+    it('balance too low', async () => {
+      const balanceResponse = await getBalance(emptyUser.address);
+      const currentAmount = +balanceResponse.body.amount;
+      const submitResponse = await transfer(currentAmount + 1, emptyUser);
+      expect(submitResponse.ok).toEqual(false);
+      expect(submitResponse.body.error.code).toEqual(
+        ErrorCodes.InvalidTransaction,
+      );
+    });
+    it.each([-1, 0.1])('invalid amount: %d', async (amount) => {
+      // todo: add err case, value=0
+      const buildResponse = await transferBuild(amount);
+      expect(buildResponse.ok).toEqual(false);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.InvalidAmount);
+    });
+    // todo: add error case, transfer to myself
   });
 });
