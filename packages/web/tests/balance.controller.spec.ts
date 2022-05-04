@@ -7,10 +7,12 @@ import request from 'supertest';
 
 import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
+import {u8aToHex} from "@polkadot/util";
 
 describe(BalanceController.name, () => {
   let app: INestApplication;
   let alice: KeyringPair;
+  let bob: KeyringPair;
 
   beforeAll(async () => {
     const testingModule = await Test.createTestingModule({
@@ -24,6 +26,7 @@ describe(BalanceController.name, () => {
     await app.init();
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
+    bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
   });
 
   describe('GET /api/balance', () => {
@@ -51,14 +54,33 @@ describe(BalanceController.name, () => {
 
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
-      const response = await request(app.getHttpServer())
+      const buildResponse = await request(app.getHttpServer())
         .post(`/api/balance/transfer/build`)
         .query({
-          address: 'yGE1aRUaNnQ97C9DzEVgVG2MvDqT3K1KPwzF6dymrLbJrzcCo',
-          destination: 'yGE1YdjDSB4PXwPZ6bLFNKr14pw7z6FCvbzLS49voE4C5e7N1',
+          address: alice.address,
+          destination: bob.address,
           amount: 1,
         });
-      console.log('response', response.body);
+      console.log('response', buildResponse.body);
+      expect(buildResponse.ok).toEqual(true);
+      expect(buildResponse.body).toMatchObject({
+        signerPayloadJSON: expect.any(Object),
+        signerPayloadHex: expect.any(String),
+      });
+
+      const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
+      const signatureU8a = alice.sign(signerPayloadHex, {
+        withType: true,
+      });
+      const signature = u8aToHex(signatureU8a);
+
+      const submitResponse = await request(app.getHttpServer())
+        .post(`/api/balance/transfer/submit`)
+        .query({
+          signature,
+          signerPayloadJSON,
+        });
+      console.log('submitResponse', submitResponse.body);
     });
   });
 });

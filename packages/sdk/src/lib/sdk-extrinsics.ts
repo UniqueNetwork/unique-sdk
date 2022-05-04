@@ -92,8 +92,12 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     extrinsic.addSignature(address, signatureWithType, signerPayloadJSON);
 
-    const hash = await this.api.rpc.author.submitExtrinsic(extrinsic);
-
-    return { hash: hash.toHex() };
+    try {
+      const hash = await this.api.rpc.author.submitExtrinsic(extrinsic);
+      return {hash: hash.toHex()};
+    } catch (err) {
+      console.log('sdk err', err);
+      throw err;
+    }
   }
 }
