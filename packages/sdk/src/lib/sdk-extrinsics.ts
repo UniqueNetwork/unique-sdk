@@ -10,6 +10,7 @@ import {
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
+import {InvalidTransactionError} from "@unique-nft/sdk";
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
@@ -95,9 +96,10 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     try {
       const hash = await this.api.rpc.author.submitExtrinsic(extrinsic);
       return {hash: hash.toHex()};
-    } catch (err) {
-      console.log('sdk err', err);
-      throw err;
+    } catch (error) {
+      const errorMessage =
+        error && error instanceof Error ? error.message : undefined;
+      throw new InvalidTransactionError(errorMessage);
     }
   }
 }
