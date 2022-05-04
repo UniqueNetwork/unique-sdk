@@ -22,3 +22,20 @@ export class BalanceRequest implements AddressArg {
    */
   address: string;
 }
+
+export class BalanceTransferBuildRequest {
+  /**
+   * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
+   */
+  address: string;
+
+  /**
+   * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
+   */
+  destination: string;
+
+  /**
+   * @example '0.001'
+   */
+  amount: number;
+}

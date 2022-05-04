@@ -48,4 +48,17 @@ describe(BalanceController.name, () => {
       expect(response.ok).toEqual(false);
     });
   });
+
+  describe('GET /api/balance/transfer', () => {
+    it('ok', async () => {
+      const response = await request(app.getHttpServer())
+        .post(`/api/balance/transfer/build`)
+        .query({
+          address: 'yGE1aRUaNnQ97C9DzEVgVG2MvDqT3K1KPwzF6dymrLbJrzcCo',
+          destination: 'yGE1YdjDSB4PXwPZ6bLFNKr14pw7z6FCvbzLS49voE4C5e7N1',
+          amount: 1,
+        });
+      console.log('response', response.body);
+    });
+  });
 });
