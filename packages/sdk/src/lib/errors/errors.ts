@@ -1,7 +1,4 @@
-export enum ErrorCodes {
-  BadSignature = 'UN01001',
-  InvalidParameter = 'UN02001',
-}
+import { ErrorCodes } from './codes';
 
 export class SdkError extends Error {
   constructor(
@@ -11,11 +8,5 @@ export class SdkError extends Error {
   ) {
     super(message);
     this.name = name;
-  }
-}
-
-export class BadSignatureError extends SdkError {
-  constructor(message = BadSignatureError.name) {
-    super(ErrorCodes.BadSignature, BadSignatureError.name, message);
   }
 }

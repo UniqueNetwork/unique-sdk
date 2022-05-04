@@ -4,7 +4,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { waitReady } from '@polkadot/wasm-crypto';
 import { u8aToHex } from '@polkadot/util';
-import {ErrorCodes, UnsignedTxPayload} from '@unique-nft/sdk';
+import { ErrorCodes, UnsignedTxPayload } from '@unique-nft/sdk';
 import request from 'supertest';
 
 import { ExtrinsicsController } from '../src/app/controllers';
