@@ -7,7 +7,7 @@ import { HexString } from '@polkadot/util/types';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
 import { SignerPayload } from '@polkadot/types/interfaces';
-import { BadSignatureError } from '../types/errors';
+import { BadSignatureError } from '../lib/errors';
 import { UnsignedTxPayload } from '../types';
 
 const getSignerPayloadHex = (
@@ -59,9 +59,9 @@ export const verifyTxSignature = (
 
     if (verifyResult.isValid) return;
   } catch (error) {
-    const message = error && error instanceof Error ? error.message : undefined;
-
-    throw new BadSignatureError(message);
+    const errorMessage =
+      error && error instanceof Error ? error.message : undefined;
+    throw new BadSignatureError(errorMessage);
   }
 
   throw new BadSignatureError();
