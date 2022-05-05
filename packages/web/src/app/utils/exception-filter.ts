@@ -9,8 +9,8 @@ import { BaseExceptionFilter } from '@nestjs/core';
 import {
   SdkError,
   BadSignatureError,
-  BuildExtrinsicsError,
-  SubmitExtrinsicsError,
+  BuildExtrinsicError,
+  SubmitExtrinsicError,
 } from '@unique-nft/sdk';
 
 const httpResponseErrorMap = new Map<
@@ -18,8 +18,8 @@ const httpResponseErrorMap = new Map<
   { new (err: object): HttpException }
 >();
 httpResponseErrorMap.set(BadSignatureError.name, BadRequestException);
-httpResponseErrorMap.set(BuildExtrinsicsError.name, BadRequestException);
-httpResponseErrorMap.set(SubmitExtrinsicsError.name, BadRequestException);
+httpResponseErrorMap.set(BuildExtrinsicError.name, BadRequestException);
+httpResponseErrorMap.set(SubmitExtrinsicError.name, BadRequestException);
 
 @Catch(SdkError)
 export class SdkExceptionsFilter extends BaseExceptionFilter {

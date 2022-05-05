@@ -10,7 +10,7 @@ import {
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
-import { BuildExtrinsicsError, SubmitExtrinsicsError } from './errors';
+import { BuildExtrinsicError, SubmitExtrinsicError } from './errors';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
@@ -61,7 +61,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
-      throw new BuildExtrinsicsError(errorMessage);
+      throw new BuildExtrinsicError(errorMessage);
     }
 
     const signerPayload = this.api.registry.createTypeUnsafe<SignerPayload>(
@@ -106,7 +106,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
-      throw new SubmitExtrinsicsError(errorMessage);
+      throw new SubmitExtrinsicError(errorMessage);
     }
   }
 }

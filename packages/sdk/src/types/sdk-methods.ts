@@ -101,7 +101,6 @@ export interface ISdkExtrinsics {
 
 export interface ISdkBalance {
   buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
-  submitTransfer(args: SubmitTxArgs): Promise<SubmitResult>;
 }
 
 export interface ISdkQuery {

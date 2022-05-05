@@ -3,8 +3,6 @@ import { ApiPromise } from '@polkadot/api';
 import {
   ISdkBalance,
   ISdkExtrinsics,
-  SubmitResult,
-  SubmitTxArgs,
   TransferBuildArgs,
   UnsignedTxPayload,
 } from '../types';
@@ -25,9 +23,5 @@ export class SdkBalance implements ISdkBalance {
       method: 'transfer',
       args: [args.destination, amountRaw],
     });
-  }
-
-  submitTransfer(args: SubmitTxArgs): Promise<SubmitResult> {
-    return this.extrinsics.submit(args);
   }
 }

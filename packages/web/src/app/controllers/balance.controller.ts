@@ -33,6 +33,6 @@ export class BalanceController {
   async transferSubmit(
     @Body() args: BalanceTransferSubmitRequest,
   ): Promise<ExtrinsicSubmitResponse> {
-    return this.sdk.balance.submitTransfer(args);
+    return this.sdk.extrinsics.submit(args);
   }
 }

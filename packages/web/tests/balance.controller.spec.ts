@@ -102,14 +102,14 @@ describe(BalanceController.name, () => {
       const submitResponse = await transfer(currentAmount + 1, emptyUser);
       expect(submitResponse.ok).toEqual(false);
       expect(submitResponse.body.error.code).toEqual(
-        ErrorCodes.SubmitExtrinsics,
+        ErrorCodes.SubmitExtrinsic,
       );
     });
     it.each([-1])('invalid amount: %d', async (amount) => {
       // todo: add err case, value=0
       const buildResponse = await transferBuild(amount);
       expect(buildResponse.ok).toEqual(false);
-      expect(buildResponse.body.error.code).toEqual(ErrorCodes.BuildExtrinsics);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.BuildExtrinsic);
     });
     // todo: add error case, transfer to myself
   });
