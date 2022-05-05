@@ -4,11 +4,11 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { waitReady } from '@polkadot/wasm-crypto';
 import request from 'supertest';
+import { u8aToHex } from '@polkadot/util';
+import { ErrorCodes } from '@unique-nft/sdk';
 
 import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
-import { u8aToHex } from '@polkadot/util';
-import { ErrorCodes } from '@unique-nft/sdk';
 
 describe(BalanceController.name, () => {
   let app: INestApplication;
@@ -45,8 +45,8 @@ describe(BalanceController.name, () => {
       });
   }
   async function transfer(amount: number, keyringPair?: KeyringPair) {
-    keyringPair = keyringPair || alice;
-    const buildResponse = await transferBuild(amount, keyringPair);
+    const keyring = keyringPair || alice;
+    const buildResponse = await transferBuild(amount, keyring);
     expect(buildResponse.ok).toEqual(true);
     expect(buildResponse.body).toMatchObject({
       signerPayloadJSON: expect.any(Object),
@@ -54,7 +54,7 @@ describe(BalanceController.name, () => {
     });
 
     const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
-    const signatureU8a = keyringPair.sign(signerPayloadHex, {
+    const signatureU8a = keyring.sign(signerPayloadHex, {
       withType: true,
     });
     const signature = u8aToHex(signatureU8a);

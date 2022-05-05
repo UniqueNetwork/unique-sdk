@@ -2,6 +2,7 @@ import { ErrorCodes } from './codes';
 
 export class SdkError extends Error {
   private values?: Record<string, any>;
+
   constructor(
     public readonly code: ErrorCodes,
     name: string,

@@ -15,7 +15,7 @@ import {
   InvalidAmountError,
   InvalidArgumentsError,
   InvalidTransactionError,
-} from '@unique-nft/sdk';
+} from './errors';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
