@@ -90,7 +90,7 @@ describe(BalanceController.name, () => {
 
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
-      const submitResponse = await transfer(1);
+      const submitResponse = await transfer(0.001);
       expect(submitResponse.ok).toEqual(true);
       expect(submitResponse.body).toMatchObject({
         hash: expect.any(String),
@@ -105,7 +105,7 @@ describe(BalanceController.name, () => {
         ErrorCodes.SubmitExtrinsics,
       );
     });
-    it.each([-1, 0.1])('invalid amount: %d', async (amount) => {
+    it.each([-1])('invalid amount: %d', async (amount) => {
       // todo: add err case, value=0
       const buildResponse = await transferBuild(amount);
       expect(buildResponse.ok).toEqual(false);

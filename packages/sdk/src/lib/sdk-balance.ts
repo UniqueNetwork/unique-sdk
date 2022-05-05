@@ -1,4 +1,4 @@
-import {ApiPromise} from "@polkadot/api";
+import { ApiPromise } from '@polkadot/api';
 
 import {
   ISdkBalance,
@@ -10,14 +10,20 @@ import {
 } from '../types';
 
 export class SdkBalance implements ISdkBalance {
-  constructor(private readonly extrinsics: ISdkExtrinsics, readonly api: ApiPromise) {}
+  private readonly multiplierToRaw: number;
+
+  constructor(private readonly extrinsics: ISdkExtrinsics, api: ApiPromise) {
+    const tokenDecimals = api.registry.chainDecimals[0];
+    this.multiplierToRaw = 10 ** tokenDecimals;
+  }
 
   buildTransfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
+    const amountRaw = BigInt(args.amount * this.multiplierToRaw);
     return this.extrinsics.build({
       address: args.address,
       section: 'balances',
       method: 'transfer',
-      args: [args.destination, args.amount],
+      args: [args.destination, amountRaw],
     });
   }
 
