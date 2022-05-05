@@ -7,15 +7,10 @@ import {
   ISdkExtrinsics,
   SubmitResult,
   SubmitTxArgs,
-  TransferBuildArgs,
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
-import {
-  InvalidAmountError,
-  InvalidArgumentsError,
-  InvalidTransactionError,
-} from './errors';
+import { BuildExtrinsicsError, SubmitExtrinsicsError } from './errors';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
@@ -66,7 +61,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
-      throw new InvalidTransactionError(errorMessage);
+      throw new BuildExtrinsicsError(errorMessage);
     }
 
     const signerPayload = this.api.registry.createTypeUnsafe<SignerPayload>(
@@ -82,19 +77,6 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     );
 
     return signerPayloadToUnsignedTxPayload(this.api, signerPayload);
-  }
-
-  buildTransfer({
-    address,
-    destination,
-    amount,
-  }: TransferBuildArgs): Promise<UnsignedTxPayload> {
-    return this.build({
-      address,
-      section: 'balances',
-      method: 'transfer',
-      args: [destination, amount],
-    });
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
@@ -124,7 +106,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
-      throw new InvalidTransactionError(errorMessage);
+      throw new SubmitExtrinsicsError(errorMessage);
     }
   }
 }

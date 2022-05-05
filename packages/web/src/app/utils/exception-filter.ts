@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import {
-  BadSignatureError,
-  InvalidAmountError,
-  InvalidTransactionError,
   SdkError,
+  BadSignatureError,
+  BuildExtrinsicsError,
+  SubmitExtrinsicsError,
 } from '@unique-nft/sdk';
 
 const httpResponseErrorMap = new Map<
@@ -18,8 +18,8 @@ const httpResponseErrorMap = new Map<
   { new (err: object): HttpException }
 >();
 httpResponseErrorMap.set(BadSignatureError.name, BadRequestException);
-httpResponseErrorMap.set(InvalidTransactionError.name, BadRequestException);
-httpResponseErrorMap.set(InvalidAmountError.name, BadRequestException);
+httpResponseErrorMap.set(BuildExtrinsicsError.name, BadRequestException);
+httpResponseErrorMap.set(SubmitExtrinsicsError.name, BadRequestException);
 
 @Catch(SdkError)
 export class SdkExceptionsFilter extends BaseExceptionFilter {
@@ -32,7 +32,6 @@ export class SdkExceptionsFilter extends BaseExceptionFilter {
           code: exception.code,
           name: exception.name,
           message: exception.message,
-          values: exception.getValues(),
         },
       });
       super.catch(httpError, host);

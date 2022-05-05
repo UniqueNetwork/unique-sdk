@@ -26,13 +26,13 @@ export class BalanceController {
   async transferBuild(
     @Body() args: BalanceTransferBuildRequest,
   ): Promise<UnsignedTxPayload> {
-    return this.sdk.extrinsics.buildTransfer(args);
+    return this.sdk.balance.buildTransfer(args);
   }
 
   @Post('transfer/submit')
   async transferSubmit(
     @Body() args: BalanceTransferSubmitRequest,
   ): Promise<ExtrinsicSubmitResponse> {
-    return this.sdk.extrinsics.submit(args);
+    return this.sdk.balance.submitTransfer(args);
   }
 }

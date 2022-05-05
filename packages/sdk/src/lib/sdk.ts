@@ -12,11 +12,13 @@ import {
   ISdkExtrinsics,
   ISdkCollection,
   ISdkToken,
+  ISdkBalance,
 } from '../types';
 import { SkdQuery } from './skd-query';
 import { SdkExtrinsics } from './sdk-extrinsics';
 import { SdkCollection } from './sdk-collection';
 import { SdkToken } from './sdk-token';
+import { SdkBalance } from './sdk-balance';
 
 export class Sdk implements ISdk {
   readonly isReady: Promise<boolean>;
@@ -26,6 +28,8 @@ export class Sdk implements ISdk {
   readonly extrinsics: ISdkExtrinsics;
 
   readonly query: ISdkQuery;
+
+  readonly balance: ISdkBalance;
 
   collection: ISdkCollection;
 
@@ -47,5 +51,6 @@ export class Sdk implements ISdk {
     this.extrinsics = new SdkExtrinsics(this.api);
     this.collection = new SdkCollection(this.api, this.extrinsics);
     this.token = new SdkToken(this.api, this.extrinsics, this.query);
+    this.balance = new SdkBalance(this.extrinsics, this.api);
   }
 }

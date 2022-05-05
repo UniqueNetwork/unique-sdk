@@ -96,8 +96,12 @@ export interface ISdkToken {
 
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
-  buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
   submit(args: SubmitTxArgs): Promise<SubmitResult>;
+}
+
+export interface ISdkBalance {
+  buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
+  submitTransfer(args: SubmitTxArgs): Promise<SubmitResult>;
 }
 
 export interface ISdkQuery {
@@ -110,6 +114,7 @@ export interface ISdkQuery {
 export interface ISdk {
   query: ISdkQuery;
   extrinsics: ISdkExtrinsics;
+  balance: ISdkBalance;
   collection: ISdkCollection;
   token: ISdkToken;
 }
