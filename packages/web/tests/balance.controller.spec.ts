@@ -109,7 +109,7 @@ describe(BalanceController.name, () => {
       // todo: add err case, value=0
       const buildResponse = await transferBuild(amount);
       expect(buildResponse.ok).toEqual(false);
-      expect(buildResponse.body.error.code).toEqual(ErrorCodes.InvalidAmount);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.InvalidTransaction);
     });
     // todo: add error case, transfer to myself
   });

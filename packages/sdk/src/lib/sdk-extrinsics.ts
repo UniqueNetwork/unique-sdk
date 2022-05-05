@@ -89,19 +89,6 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     destination,
     amount,
   }: TransferBuildArgs): Promise<UnsignedTxPayload> {
-    if (!address || !destination || address === destination) {
-      throw new InvalidArgumentsError({
-        address,
-        destination,
-      });
-    }
-    if (
-      amount <= 0 ||
-      Math.floor(amount) !== amount ||
-      amount > Number.MAX_VALUE
-    ) {
-      throw new InvalidAmountError(amount);
-    }
     return this.build({
       address,
       section: 'balances',
