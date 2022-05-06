@@ -1,3 +1,4 @@
+import { u8aToHex } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
 import type {
   BurnTokenArgs,
@@ -9,7 +10,6 @@ import type {
   UnsignedTxPayload,
 } from '../types';
 import { serializeConstData } from '../utils/protobuf.utils';
-import { u8aToHex } from '@polkadot/util';
 
 export class SdkToken implements ISdkToken {
   constructor(

@@ -56,13 +56,13 @@ describe(Sdk.name, () => {
   });
 
   const createCollection = async (): Promise<{ collectionId: number }> => {
-    let txPayload = await sdk.collection.create({
+    const txPayload = await sdk.collection.create({
       ...collectionInitial,
       address: account.address,
       constOnChainSchema,
     });
 
-    let signature = u8aToHex(account.sign(txPayload.signerPayloadHex));
+    const signature = u8aToHex(account.sign(txPayload.signerPayloadHex));
 
     await sdk.extrinsics.submit({
       signerPayloadJSON: txPayload.signerPayloadJSON,
