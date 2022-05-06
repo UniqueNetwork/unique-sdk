@@ -1,5 +1,12 @@
 import { HexString } from '@polkadot/util/types';
 import { AugmentedSubmittables } from '@polkadot/api-base/types/submittable';
+import {
+  IsString,
+  IsNumber,
+  IsPositive,
+  NotEquals,
+  ValidateBy,
+} from 'class-validator';
 import { CollectionInfo, TokenInfo } from './unique-types';
 import {
   SignatureType,
@@ -33,10 +40,27 @@ export interface TxBuildArgs {
   isImmortal?: boolean;
 }
 
-export interface TransferBuildArgs {
-  address: string;
-  destination: string;
-  amount: number;
+export class TransferBuildArgs {
+  @IsString()
+  address!: string;
+
+  @IsString()
+  @ValidateBy({
+    name: 'Validate yourself',
+    validator: {
+      validate: (value, args) => {
+        const obj: any = args?.object;
+        return obj.address !== obj.destination;
+      },
+      defaultMessage: () => "You can't translate to yourself",
+    },
+  })
+  destination!: string;
+
+  @IsNumber()
+  @IsPositive()
+  @NotEquals(0)
+  amount!: number;
 }
 
 export interface UnsignedTxPayload {

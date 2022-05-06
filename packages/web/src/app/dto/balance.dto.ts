@@ -3,7 +3,6 @@ import {
   Balance,
   SignatureType,
   SubmitTxArgs,
-  TransferBuildArgs,
 } from '@unique-nft/sdk';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { HexString } from '@polkadot/util/types';
@@ -29,23 +28,6 @@ export class BalanceRequest implements AddressArg {
    * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
    */
   address: string;
-}
-
-export class BalanceTransferBuildRequest implements TransferBuildArgs {
-  /**
-   * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
-   */
-  address: string;
-
-  /**
-   * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
-   */
-  destination: string;
-
-  /**
-   * @example '0.001'
-   */
-  amount: number;
 }
 
 export class BalanceTransferSubmitRequest implements SubmitTxArgs {

@@ -1,4 +1,5 @@
 import { ApiPromise } from '@polkadot/api';
+import { validateValue } from '../utils/validation';
 
 import {
   ISdkBalance,
@@ -15,7 +16,8 @@ export class SdkBalance implements ISdkBalance {
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  buildTransfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
+  async buildTransfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
+    await validateValue(TransferBuildArgs, args);
     const amountRaw = BigInt(args.amount * this.multiplierToRaw);
     return this.extrinsics.build({
       address: args.address,

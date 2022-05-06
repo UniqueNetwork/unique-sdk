@@ -11,6 +11,7 @@ import {
   BadSignatureError,
   BuildExtrinsicError,
   SubmitExtrinsicError,
+  DataValidateError,
 } from '@unique-nft/sdk';
 
 const httpResponseErrorMap = new Map<
@@ -20,6 +21,7 @@ const httpResponseErrorMap = new Map<
 httpResponseErrorMap.set(BadSignatureError.name, BadRequestException);
 httpResponseErrorMap.set(BuildExtrinsicError.name, BadRequestException);
 httpResponseErrorMap.set(SubmitExtrinsicError.name, BadRequestException);
+httpResponseErrorMap.set(DataValidateError.name, BadRequestException);
 
 @Catch(SdkError)
 export class SdkExceptionsFilter extends BaseExceptionFilter {
