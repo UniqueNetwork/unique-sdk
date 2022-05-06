@@ -52,7 +52,7 @@ export class TransferBuildArgs {
         const obj: any = args?.object;
         return obj.address !== obj.destination;
       },
-      defaultMessage: () => "You can't translate to yourself",
+      defaultMessage: () => "Can't transfer money to yourself",
     },
   })
   destination!: string;
