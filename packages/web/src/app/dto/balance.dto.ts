@@ -7,6 +7,7 @@ import {
 } from '@unique-nft/sdk';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { HexString } from '@polkadot/util/types';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class BalanceResponse implements Balance {
   /**
@@ -52,6 +53,7 @@ export class BalanceTransferSubmitRequest implements SubmitTxArgs {
   /**
    * @example '0x01cc293085eaeff5358a27fdf32513f7889e5fd02321d75fbe4f3b4595942a7979a13abc08fd202005cd1615866c1bc77a1efd9812d6f1653f9e85fe22411bd08e'
    */
+  @ApiProperty({ type: String })
   signature: HexString;
 
   /**

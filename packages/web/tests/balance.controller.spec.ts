@@ -32,10 +32,13 @@ describe(BalanceController.name, () => {
     emptyUser = new Keyring({ type: 'sr25519' }).addFromUri('EmptyUser');
   });
 
-  function getBalance(address: string) {
+  function getBalance(address: string): request.Test {
     return request(app.getHttpServer()).get(`/api/balance`).query({ address });
   }
-  function transferBuild(amount: number, keyringPair?: KeyringPair): any {
+  function transferBuild(
+    amount: number,
+    keyringPair?: KeyringPair,
+  ): request.Test {
     return request(app.getHttpServer())
       .post(`/api/balance/transfer/build`)
       .send({

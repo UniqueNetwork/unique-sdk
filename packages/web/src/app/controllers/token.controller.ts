@@ -46,7 +46,7 @@ export class TokenController {
 
   @Delete()
   async burnToken(
-    @Body() args: BurnTokenRequest,
+    @Query() args: BurnTokenRequest,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.token.burn(args);
   }

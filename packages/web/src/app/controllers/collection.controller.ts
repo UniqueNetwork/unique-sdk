@@ -48,7 +48,7 @@ export class CollectionController {
 
   @Delete()
   async burnCollection(
-    @Body() args: BurnCollectionDto,
+    @Query() args: BurnCollectionDto,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.collection.burn(args);
   }

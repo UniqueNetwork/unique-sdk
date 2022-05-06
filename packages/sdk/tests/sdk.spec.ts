@@ -2,6 +2,7 @@ import { u8aToHex } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '../src/lib/sdk';
+import { getDefaultSdkOptions } from './utils';
 
 describe(Sdk.name, () => {
   let sdk: Sdk;
@@ -9,9 +10,7 @@ describe(Sdk.name, () => {
   let bob: KeyringPair;
 
   beforeAll(async () => {
-    sdk = new Sdk({ chainWsUrl: 'wss://ws-quartz-dev.comecord.com' });
-
-    await sdk.isReady;
+    sdk = await Sdk.create(getDefaultSdkOptions());
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
@@ -49,5 +48,9 @@ describe(Sdk.name, () => {
     await expect(submitPromise).resolves.toMatchObject({
       hash: expect.any(String),
     });
+  });
+
+  afterAll(async () => {
+    await sdk.api.disconnect();
   });
 });

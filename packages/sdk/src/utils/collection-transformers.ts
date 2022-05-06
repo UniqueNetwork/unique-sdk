@@ -95,7 +95,7 @@ export function encodeCollection(
 
   if (collectionInfo.constOnChainSchema) {
     params.push({
-      tokenPrefix: JSON.stringify(collectionInfo.constOnChainSchema),
+      constOnChainSchema: JSON.stringify(collectionInfo.constOnChainSchema),
     });
   }
 

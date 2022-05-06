@@ -2,7 +2,6 @@ import { ApiPromise } from '@polkadot/api';
 import { formatBalance } from '@polkadot/util';
 import { Option } from '@polkadot/types-codec';
 import { PalletNonfungibleItemData } from '@unique-nft/types';
-import { INamespace } from 'protobufjs';
 import {
   AddressArg,
   Balance,
@@ -14,8 +13,8 @@ import {
   TokenIdArg,
   TokenInfo,
 } from '../types';
-import { deserializeConstData } from '../utils/protobuf.utils';
 import { decodeCollection } from '../utils/collection-transformers';
+import { decodeToken } from '../utils/token-transformers';
 
 export class SkdQuery implements ISdkQuery {
   constructor(readonly options: SdkOptions, readonly api: ApiPromise) {}
@@ -62,7 +61,6 @@ export class SkdQuery implements ISdkQuery {
     const collection = await this.collection({ collectionId });
 
     if (!collection) return null;
-    const { offchainSchema, constOnChainSchema } = collection;
 
     const tokenDataOption: Option<PalletNonfungibleItemData> =
       await this.api.query.nonfungible.tokenData(collectionId, tokenId);
@@ -71,18 +69,6 @@ export class SkdQuery implements ISdkQuery {
 
     if (!tokenData) return null;
 
-    const { constData, variableData, owner } = tokenData;
-
-    return {
-      id: tokenId,
-      collectionId,
-      url: offchainSchema.replace('{id}', tokenId.toString()),
-      constData: deserializeConstData({
-        schema: constOnChainSchema as INamespace,
-        buffer: constData,
-      }),
-      variableData: variableData.toString(),
-      owner: owner.value.toString(),
-    };
+    return decodeToken(collection, tokenId, tokenData, this.options);
   }
 }

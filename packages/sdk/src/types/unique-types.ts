@@ -61,8 +61,8 @@ export interface CollectionInfo {
 export interface TokenInfo {
   id: number;
   collectionId: number;
-  url: string;
-  constData: any;
-  variableData: string;
+  url: string | null;
+  constData: Record<string, any> | null;
+  variableData: string | null;
   owner: string;
 }

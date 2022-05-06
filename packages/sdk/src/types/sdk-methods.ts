@@ -48,7 +48,7 @@ export interface UnsignedTxPayload {
 export interface SubmitTxArgs {
   signerPayloadJSON: SignerPayloadJSON;
   signature: HexString;
-  signatureType?: SignatureType;
+  signatureType?: SignatureType | `${SignatureType}`;
 }
 
 export interface SubmitResult {

@@ -15,7 +15,10 @@ export const sdkProvider = {
   inject: [ConfigService],
   provide: Sdk,
   useFactory: async (configService: ConfigService) => {
-    const sdk = new Sdk({ chainWsUrl: configService.get('chainWsUrl') });
+    const sdk = new Sdk({
+      chainWsUrl: configService.get('chainWsUrl'),
+      ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
+    });
 
     await sdk.isReady;
 

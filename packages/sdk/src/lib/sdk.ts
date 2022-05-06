@@ -35,6 +35,13 @@ export class Sdk implements ISdk {
 
   token: ISdkToken;
 
+  static async create(options: SdkOptions): Promise<Sdk> {
+    const sdk = new Sdk(options);
+    await sdk.isReady;
+
+    return sdk;
+  }
+
   constructor(private readonly options: SdkOptions) {
     const provider = new WsProvider(this.options.chainWsUrl);
 

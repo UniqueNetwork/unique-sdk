@@ -9,6 +9,7 @@ import type {
   UnsignedTxPayload,
 } from '../types';
 import { serializeConstData } from '../utils/protobuf.utils';
+import { u8aToHex } from '@polkadot/util';
 
 export class SdkToken implements ISdkToken {
   constructor(
@@ -30,10 +31,9 @@ export class SdkToken implements ISdkToken {
       constData && constOnChainSchema
         ? {
             nft: {
-              constData: serializeConstData({
-                payload: constData,
-                schema: constOnChainSchema,
-              }),
+              constData: u8aToHex(
+                serializeConstData(constData, constOnChainSchema),
+              ),
             },
           }
         : { nft: null };
@@ -42,7 +42,7 @@ export class SdkToken implements ISdkToken {
       address,
       section: 'unique',
       method: 'createItem',
-      args: [collectionId, address, tokenData],
+      args: [collectionId, { substrate: address }, tokenData],
     });
   }
 
