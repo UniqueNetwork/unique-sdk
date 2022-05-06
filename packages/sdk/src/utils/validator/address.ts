@@ -1,13 +1,13 @@
-const { decodeAddress, encodeAddress } = require('@polkadot/keyring');
-const { hexToU8a, isHex } = require('@polkadot/util');
 import { registerDecorator, ValidationOptions } from 'class-validator';
+import { decodeAddress, encodeAddress } from '@polkadot/keyring';
+import { hexToU8a, isHex } from '@polkadot/util';
 
 export function ValidAddress(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       name: 'NotYourselfAddress',
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       constraints: [],
       options: validationOptions,
       validator: {

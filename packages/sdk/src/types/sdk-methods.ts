@@ -7,8 +7,7 @@ import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from './polkadot-types';
-import { ValidAddress } from '../utils/validator/address';
-import { NotYourselfAddress } from '../utils/validator/yourself-address';
+import { ValidAddress, NotYourselfAddress } from '../utils/validator';
 
 export interface ChainProperties {
   SS58Prefix: number;

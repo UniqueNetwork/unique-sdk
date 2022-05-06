@@ -8,11 +8,11 @@ export function NotYourselfAddress(
   property: string,
   validationOptions?: ValidationOptions,
 ) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       name: 'NotYourselfAddress',
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       constraints: [property],
       options: validationOptions,
       validator: {
