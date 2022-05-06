@@ -3,6 +3,12 @@
 ![Docker Automated build](https://img.shields.io/docker/cloud/automated/uniquenetwork/marketplace-frontend?style=flat-square)
 ![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-marketplace-frontend?style=flat-square)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
+
+_нужен раздел че это такое, ссылки на публичные экзепмляры, докерхаб, на наш сайт_
+
+_так же расписать что концептульно апи собирает экстринсик, клиент должен его подписать и отправить обратно_
+
+_туду: будет вариант самоподписывающихся транзакций если мы передадим сид в апи_
 ## Table of Contents
 
 - [Prerequisites](#)
@@ -23,10 +29,13 @@
   - [Method 9](#)
   - [Method 10](#)
 
+_тут надо будет расписать: 1) запуск образа с докерхаба; 2) билд и запуск и репы; 3) использование наших публичных доменов_
 # SDK Deployment - Getting Started Guide
 
 This tutorial shows the steps that need to be performed to carry out an install of the SDK on a computer in a local environment or in a virtual machine with Ubuntu OS. The process of installing it in a production environment is identical, with the caveat that your IT administrator will need to setup the supporting infrastructure (such as a globally accessible domain name, hosting, firewall, nginx, and SSL certificates) so that the server that hosts the SDK can be accessed by the users on the Internet. Visit [https://unqnft.io](https://unqnft.io) to experience an example of a self-hosted, globally accessible SDK.
 
+
+_вот эта штука не нужна_
 ## Prerequisites
 
 >  * OS: Ubuntu 18.04 or 20.04
@@ -41,21 +50,29 @@ This tutorial shows the steps that need to be performed to carry out an install 
 
 ### Сhain
 
+_добавлять в т.ч. ссылку на метод в сваггере_
 Назначение метода:*******
 
-GET /chain/properties
+_вот здесь лучше предлагать сразу пример курловый, и выделить как код типа_
+```shell
+curl -X GET https://web-quartz.unique.network/chain/properties
+```
 
 Parameters - No parameters
 
+_как то выделить Request, Response_
 Ответ:
 1) Успешный ответ - 200 OK и содержит тело:
 
+_тоже заворачивать в код_
+```json
 {
-"SS58Prefix": 255,
-"decimals": 18,
-"token": "QTZ",
-"wsUrl": "wss://ws-quartz.unique.network"
+  "SS58Prefix": 255,
+  "decimals": 18,
+  "token": "QTZ",
+  "wsUrl": "wss://ws-quartz.unique.network"
 }
+```
 
 2) Успешный ответ - default и содержит тело:
 
@@ -75,6 +92,8 @@ decimals | десятичный | предел коичества знаков �
 token | строка | валюта токена
 wsUrl | строка | url блокчейна
 
+
+_ошибки я думаю надо будет прямо в отдельный раздел_
 #### Ошибки
 
 ***** - ошибка(?)
@@ -90,12 +109,16 @@ Parameters - address (string)
 Ответ:
 Успешный ответ - 200 OK и содержит тело:
 
+_по большому счету ответы надо будет описывать только у квери-запросов типа этого, а вот ответы запросов которые собирают экстринсик будут все одинаковые_
+
 {
 "amount": "411348197000000000000",
 "formatted": "411.3481 QTZ"
 }
 
 Каждый элемент коллекции содержит следующую информацию:
+
+_комментарии поидее можно собирать из сваггера_ 
 
 название | тип | комментарий
 ---------|-----|------------
@@ -129,6 +152,8 @@ Parameters - No parameters
 }
 
 Каждый элемент коллекции содержит следующую информацию:
+
+_есть смысл вынести section/method в енумы? в том числе на стороне кода?_
 
 название | тип | комментарий
 ---------|-----|------------
@@ -240,6 +265,8 @@ method | строка |
 nonce | объект |
 
 
+
+_опа опа, а там у нас точно 201, поидее да, хорошо бы_
 Успешный ответ - 201 OK и содержит тело:
 
 {
