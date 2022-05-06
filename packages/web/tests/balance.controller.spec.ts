@@ -32,14 +32,14 @@ describe(BalanceController.name, () => {
     emptyUser = new Keyring({ type: 'sr25519' }).addFromUri('EmptyUser');
   });
 
-  function getBalance(address: string) {
+  function getBalance(address: string): request.Test {
     return request(app.getHttpServer()).get(`/api/balance`).query({ address });
   }
   function transferBuild(
     amount: number,
     from: KeyringPair,
     to: KeyringPair,
-  ): any {
+  ): request.Test {
     return request(app.getHttpServer())
       .post(`/api/balance/transfer/build`)
       .send({
@@ -48,7 +48,11 @@ describe(BalanceController.name, () => {
         amount,
       });
   }
-  async function transfer(amount: number, from: KeyringPair, to: KeyringPair) {
+  async function transfer(
+    amount: number,
+    from: KeyringPair,
+    to: KeyringPair,
+  ): Promise<request.Test> {
     const buildResponse = await transferBuild(amount, from, to);
     expect(buildResponse.ok).toEqual(true);
     expect(buildResponse.body).toMatchObject({
@@ -115,12 +119,12 @@ describe(BalanceController.name, () => {
     it.each([-1, 0])('invalid amount: %d', async (amount) => {
       const buildResponse = await transferBuild(amount, alice, bob);
       expect(buildResponse.ok).toEqual(false);
-      expect(buildResponse.body.error.code).toEqual(ErrorCodes.DataValidate);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.Validation);
     });
     it('invalid transfer to myself', async () => {
       const buildResponse = await transferBuild(1, alice, alice);
       expect(buildResponse.ok).toEqual(false);
-      expect(buildResponse.body.error.code).toEqual(ErrorCodes.DataValidate);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.Validation);
     });
   });
 });
