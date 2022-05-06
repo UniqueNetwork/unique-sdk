@@ -1,18 +1,14 @@
 import { HexString } from '@polkadot/util/types';
 import { AugmentedSubmittables } from '@polkadot/api-base/types/submittable';
-import {
-  IsString,
-  IsNumber,
-  IsPositive,
-  NotEquals,
-  ValidateBy,
-} from 'class-validator';
+import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { CollectionInfo, TokenInfo } from './unique-types';
 import {
   SignatureType,
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from './polkadot-types';
+import { ValidAddress } from '../utils/validator/address';
+import { NotYourselfAddress } from '../utils/validator/yourself-address';
 
 export interface ChainProperties {
   SS58Prefix: number;
@@ -42,19 +38,11 @@ export interface TxBuildArgs {
 
 export class TransferBuildArgs {
   @IsString()
+  @ValidAddress()
+  @NotYourselfAddress('destination')
   address!: string;
 
-  @IsString()
-  @ValidateBy({
-    name: 'Validate yourself',
-    validator: {
-      validate: (value, args) => {
-        const obj: any = args?.object;
-        return obj.address !== obj.destination;
-      },
-      defaultMessage: () => "Can't transfer money to yourself",
-    },
-  })
+  @ValidAddress()
   destination!: string;
 
   @IsNumber()

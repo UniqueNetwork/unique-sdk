@@ -34,6 +34,7 @@ export class SdkExceptionsFilter extends BaseExceptionFilter {
           code: exception.code,
           name: exception.name,
           message: exception.message,
+          details: exception.details,
         },
       });
       super.catch(httpError, host);
