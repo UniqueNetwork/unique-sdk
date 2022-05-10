@@ -6,8 +6,6 @@ import {
   BalanceRequest,
   BalanceResponse,
   BalanceTransferBuildRequest,
-  BalanceTransferSubmitRequest,
-  ExtrinsicSubmitResponse,
 } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
@@ -29,10 +27,4 @@ export class BalanceController {
     return this.sdk.balance.buildTransfer(args);
   }
 
-  @Post('transfer/submit')
-  async transferSubmit(
-    @Body() args: BalanceTransferSubmitRequest,
-  ): Promise<ExtrinsicSubmitResponse> {
-    return this.sdk.extrinsics.submit(args);
-  }
 }
