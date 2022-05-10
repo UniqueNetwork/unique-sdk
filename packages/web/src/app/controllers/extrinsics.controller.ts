@@ -20,13 +20,13 @@ export class ExtrinsicsController {
   async buildTx(
     @Body() args: ExtrinsicBuildRequest,
   ): Promise<ExtrinsicBuildResponse> {
-    return this.sdk.buildTx(args);
+    return this.sdk.extrinsics.build(args);
   }
 
   @Post('submit')
   async submitTx(
     @Body() args: ExtrinsicSubmitRequest,
   ): Promise<ExtrinsicSubmitResponse> {
-    return this.sdk.submitTx(args);
+    return this.sdk.extrinsics.submit(args);
   }
 }

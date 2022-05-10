@@ -6,10 +6,11 @@ import {
 import { HexString } from '@polkadot/util/types';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
-import { BadSignatureError } from './errors';
+import { SignerPayload } from '@polkadot/types/interfaces';
+import { BadSignatureError } from '../lib/errors';
+import { UnsignedTxPayload } from '../types';
 
-// todo helper per file? helpers as @unique-nft/sdk/helpers ... @unique-nft/sdk/helpers/get_signer_payload_hex ...
-export const getSignerPayloadHex = (
+const getSignerPayloadHex = (
   api: ApiPromise,
   signerPayloadRaw: SignerPayloadRaw,
 ): HexString => {
@@ -24,7 +25,7 @@ export const getSignerPayloadHex = (
   return signerPayloadRaw.data as HexString;
 };
 
-export const getSignerPayloadRaw = (
+const getSignerPayloadRaw = (
   api: ApiPromise,
   signerPayloadJSON: SignerPayloadJSON,
 ): SignerPayloadRaw => {
@@ -64,4 +65,19 @@ export const verifyTxSignature = (
   }
 
   throw new BadSignatureError();
+};
+
+export const signerPayloadToUnsignedTxPayload = (
+  api: ApiPromise,
+  signerPayload: SignerPayload,
+): UnsignedTxPayload => {
+  const signerPayloadJSON = signerPayload.toPayload();
+  const signerPayloadRaw = signerPayload.toRaw();
+  const signerPayloadHex = getSignerPayloadHex(api, signerPayloadRaw);
+
+  return {
+    signerPayloadJSON,
+    signerPayloadRaw,
+    signerPayloadHex,
+  };
 };

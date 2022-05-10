@@ -6,6 +6,8 @@ import {
   ChainController,
   BalanceController,
   ExtrinsicsController,
+  CollectionController,
+  TokenController,
 } from './controllers';
 import { GlobalConfigModule } from './config/config.module';
 
@@ -13,7 +15,10 @@ export const sdkProvider = {
   inject: [ConfigService],
   provide: Sdk,
   useFactory: async (configService: ConfigService) => {
-    const sdk = new Sdk({ chainWsUrl: configService.get('chainWsUrl') });
+    const sdk = new Sdk({
+      chainWsUrl: configService.get('chainWsUrl'),
+      ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
+    });
 
     await sdk.isReady;
 
@@ -23,7 +28,13 @@ export const sdkProvider = {
 
 @Module({
   imports: [GlobalConfigModule],
-  controllers: [ChainController, BalanceController, ExtrinsicsController],
+  controllers: [
+    ChainController,
+    BalanceController,
+    ExtrinsicsController,
+    CollectionController,
+    TokenController,
+  ],
   providers: [sdkProvider],
 })
 export class AppModule {}

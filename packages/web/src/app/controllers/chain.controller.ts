@@ -14,6 +14,6 @@ export class ChainController {
   @Get('properties')
   @ApiResponse({ type: ChainPropertiesResponse })
   async getChainProperties(): Promise<ChainPropertiesResponse> {
-    return this.sdk.getChainProperties();
+    return this.sdk.query.chainProperties();
   }
 }
