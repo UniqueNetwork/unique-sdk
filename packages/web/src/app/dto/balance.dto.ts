@@ -32,19 +32,20 @@ export class BalanceRequest implements AddressArg {
   address: string;
 }
 
-export class BalanceTransferBuildRequest implements TransferBuildArgs {
+export class BalanceTransferSubmitRequest implements SubmitTxArgs {
   /**
-   * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
+   * @example '0x01cc293085eaeff5358a27fdf32513f7889e5fd02321d75fbe4f3b4595942a7979a13abc08fd202005cd1615866c1bc77a1efd9812d6f1653f9e85fe22411bd08e'
    */
-  address: string;
+  signature: HexString;
 
   /**
-   * @example 'yGEeaYLrnw8aiTFj5QZAmwWRKu6QdxUkaASLCQznuZX2Lyj7q'
+   * @example '{"specVersion": "0x000e01fa", "address":  "...", "blockHash": "...", ...}'
    */
-  destination: string;
+  signerPayloadJSON: SignerPayloadJSON;
 
   /**
-   * @example '0.001'
+   * @example 'sr25519'
    */
-  amount: number;
+  signatureType?: SignatureType;
 }
+

@@ -1,11 +1,13 @@
 import { HexString } from '@polkadot/util/types';
 import { AugmentedSubmittables } from '@polkadot/api-base/types/submittable';
 import { CollectionInfo, TokenInfo } from './unique-types';
+import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import {
   SignatureType,
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from './polkadot-types';
+import {NotYourselfAddress, ValidAddress} from "../utils/validator";
 
 export interface ChainProperties {
   SS58Prefix: number;
@@ -33,10 +35,19 @@ export interface TxBuildArgs {
   isImmortal?: boolean;
 }
 
-export interface TransferBuildArgs {
-  address: string;
-  destination: string;
-  amount: number;
+export class TransferBuildArgs {
+  @IsString()
+  @ValidAddress()
+  @NotYourselfAddress('destination')
+  address!: string;
+
+  @ValidAddress()
+  destination!: string;
+
+  @IsNumber()
+  @IsPositive()
+  @NotEquals(0)
+  amount!: number;
 }
 
 export interface UnsignedTxPayload {
