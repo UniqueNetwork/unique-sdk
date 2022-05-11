@@ -1,14 +1,23 @@
-
+// eslint-disable-next-line max-classes-per-file
 import { HexString } from '@polkadot/util/types';
 import { AugmentedSubmittables } from '@polkadot/api-base/types/submittable';
-import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsPositive,
+  NotEquals,
+  IsNotEmptyObject,
+  IsHexadecimal,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 import { CollectionInfo, TokenInfo } from './unique-types';
 import {
   SignatureType,
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from './polkadot-types';
-import {NotYourselfAddress, ValidAddress} from "../utils/validator";
+import { NotYourselfAddress, ValidAddress } from '../utils/validator';
 
 export interface ChainProperties {
   SS58Prefix: number;
@@ -57,9 +66,15 @@ export interface UnsignedTxPayload {
   signerPayloadHex: HexString;
 }
 
-export interface SubmitTxArgs {
-  signerPayloadJSON: SignerPayloadJSON;
-  signature: HexString;
+export class SubmitTxArgs {
+  @IsNotEmptyObject()
+  signerPayloadJSON!: SignerPayloadJSON;
+
+  @IsHexadecimal()
+  signature!: HexString;
+
+  @IsOptional()
+  @IsEnum(SignatureType)
   signatureType?: SignatureType | `${SignatureType}`;
 }
 
@@ -75,9 +90,10 @@ export type TokenIdArg = CollectionIdArg & {
   tokenId: number;
 };
 
-export type AddressArg = {
-  address: string;
-};
+export class AddressArg {
+  @ValidAddress()
+  address!: string;
+}
 
 export type CreateCollectionArgs = Partial<
   Omit<CollectionInfo, 'id' | 'owner'>

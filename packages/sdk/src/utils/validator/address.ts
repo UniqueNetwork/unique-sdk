@@ -12,6 +12,7 @@ export function ValidAddress(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any) {
+          if (!value) return false;
           try {
             // todo optimize address validator
             encodeAddress(

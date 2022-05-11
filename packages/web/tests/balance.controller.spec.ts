@@ -52,7 +52,7 @@ describe(BalanceController.name, () => {
     amount: number,
     from: KeyringPair,
     to: KeyringPair,
-  ) : Promise<request.Test> {
+  ): Promise<request.Test> {
     const buildResponse = await transferBuild(amount, from, to);
     expect(buildResponse.ok).toEqual(true);
     expect(buildResponse.body).toMatchObject({
@@ -66,12 +66,10 @@ describe(BalanceController.name, () => {
     });
     const signature = u8aToHex(signatureU8a);
 
-    return request(app.getHttpServer())
-      .post(`/api/extrinsic/submit`)
-      .send({
-        signature,
-        signerPayloadJSON,
-      });
+    return request(app.getHttpServer()).post(`/api/extrinsic/submit`).send({
+      signature,
+      signerPayloadJSON,
+    });
   }
 
   describe('GET /api/balance', () => {

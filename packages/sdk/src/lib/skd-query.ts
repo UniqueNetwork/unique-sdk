@@ -15,6 +15,7 @@ import {
 } from '../types';
 import { decodeCollection } from '../utils/collection-transformers';
 import { decodeToken } from '../utils/token-transformers';
+import { validate } from '../utils/validator';
 
 export class SkdQuery implements ISdkQuery {
   constructor(readonly options: SdkOptions, readonly api: ApiPromise) {}
@@ -28,10 +29,13 @@ export class SkdQuery implements ISdkQuery {
     };
   }
 
-  async balance({ address }: AddressArg): Promise<Balance> {
+  async balance(args: AddressArg): Promise<Balance> {
+    await validate(args, AddressArg);
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
-    const { availableBalance } = await this.api.derive.balances.all(address);
+    const { availableBalance } = await this.api.derive.balances.all(
+      args.address,
+    );
 
     return {
       amount: availableBalance.toBigInt().toString(),
