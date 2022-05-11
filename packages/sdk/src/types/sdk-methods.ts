@@ -1,7 +1,7 @@
 import { HexString } from '@polkadot/util/types';
 import { AugmentedSubmittables } from '@polkadot/api-base/types/submittable';
-import { CollectionInfo, TokenInfo } from './unique-types';
 import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
+import { CollectionInfo, TokenInfo } from './unique-types';
 import {
   SignatureType,
   SignerPayloadJSON,
