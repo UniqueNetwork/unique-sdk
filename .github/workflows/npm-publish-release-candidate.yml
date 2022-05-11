@@ -24,7 +24,7 @@ jobs:
         shell: bash
         id: version
         run: |
-          TAG=${GITHUB_REF#*/v*}
+          TAG="${GITHUB_REF#*/v*}"
           LATEST_VER=$(npm view @unique-nft/sdk versions --json | sed -n "/$TAG-rc/p" | tail -1)
           SUFF=${LATEST_VER#*-rc.*}
           LATEST_RC=${SUFF%\"*}
