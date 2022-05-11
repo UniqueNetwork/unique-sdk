@@ -5,8 +5,6 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   BalanceRequest,
   BalanceResponse,
-  BalanceTransferSubmitRequest,
-  ExtrinsicSubmitResponse,
 } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
@@ -27,12 +25,4 @@ export class BalanceController {
   ): Promise<UnsignedTxPayload> {
     return this.sdk.balance.buildTransfer(args);
   }
-
-  @Post('transfer/submit')
-  async transferSubmit(
-    @Body() args: BalanceTransferSubmitRequest,
-  ): Promise<ExtrinsicSubmitResponse> {
-    return this.sdk.extrinsics.submit(args);
-  }
-
 }

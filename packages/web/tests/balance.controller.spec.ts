@@ -67,7 +67,7 @@ describe(BalanceController.name, () => {
     const signature = u8aToHex(signatureU8a);
 
     return request(app.getHttpServer())
-      .post(`/api/balance/transfer/submit`)
+      .post(`/api/extrinsic/submit`)
       .send({
         signature,
         signerPayloadJSON,
