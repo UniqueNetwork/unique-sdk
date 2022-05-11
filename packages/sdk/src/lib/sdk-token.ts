@@ -68,7 +68,7 @@ export class SdkToken implements ISdkToken {
     return this.extrinsics.build({
       address: from,
       section: 'unique',
-      method: 'transferItem',
+      method: 'transfer',
       args: [to, collectionId, tokenId, 1],
     });
   }
