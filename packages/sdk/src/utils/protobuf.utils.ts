@@ -1,6 +1,7 @@
 import { Root, INamespace, Enum } from 'protobufjs';
 
 export function serializeConstData(
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   payload: Record<string, any>,
   schema: INamespace,
 ): Uint8Array {
@@ -21,6 +22,7 @@ export function serializeConstData(
 export const decodeConstData = (
   tokenConstData: Uint8Array,
   schema: INamespace,
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
 ): Record<string, any> => {
   const root = Root.fromJSON(schema);
 

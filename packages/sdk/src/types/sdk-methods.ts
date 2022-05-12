@@ -87,6 +87,7 @@ export class TxBuildArgs {
       type: 'array | number | Record<string, any>',
     },
   })
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   args: Array<string | number | BigInt | Record<string, any>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
 
   /**
@@ -215,6 +216,7 @@ export class CreateTokenArgs {
   address: string;
 
   @ApiProperty()
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   constData: Record<string, any>;
 }
 

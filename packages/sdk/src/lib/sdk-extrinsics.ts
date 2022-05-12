@@ -2,6 +2,7 @@ import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
+import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from '../utils';
 import {
   ISdkExtrinsics,
@@ -10,7 +11,6 @@ import {
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
-import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { validate } from '../utils/validator';
 
 export class SdkExtrinsics implements ISdkExtrinsics {

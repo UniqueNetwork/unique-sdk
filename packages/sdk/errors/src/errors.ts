@@ -5,6 +5,7 @@ export class SdkError extends Error {
     public readonly code: ErrorCodes,
     name: string,
     message?: string,
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     public readonly details?: any,
   ) {
     super(message);
