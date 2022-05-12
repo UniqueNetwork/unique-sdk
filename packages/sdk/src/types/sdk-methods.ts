@@ -170,12 +170,30 @@ export class TransferCollectionArgs {
   to: string;
 }
 
-export type CreateTokenArgs = CollectionIdArg &
-  AddressArg & {
-    constData: Record<string, any>;
-  };
-export type BurnTokenArgs = TokenIdArg & AddressArg;
-export type TransferTokenArgs = TokenIdArg & FromToArgs;
+export class CreateTokenArgs {
+  @ApiProperty()
+  collectionId: number;
+
+  @ValidAddress()
+  @ApiProperty()
+  address: string;
+
+  @ApiProperty()
+  constData: Record<string, any>;
+}
+
+export class BurnTokenArgs extends TokenIdArg {
+  @ValidAddress()
+  @ApiProperty()
+  address: string;
+}
+export class TransferTokenArgs extends TokenIdArg {
+  @ApiProperty()
+  from: string;
+
+  @ApiProperty()
+  to: string;
+}
 
 export interface ISdkCollection {
   create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload>;

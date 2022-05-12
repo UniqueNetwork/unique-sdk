@@ -10,15 +10,16 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
-import { Sdk, TokenIdArg } from '@unique-nft/sdk';
+import {
+  BurnTokenArgs,
+  CreateTokenArgs,
+  Sdk,
+  TokenIdArg,
+  TransferTokenArgs,
+} from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import { ExtrinsicBuildResponse } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import {
-  BurnTokenRequest,
-  CreateTokenRequest,
-  TransferTokenRequest,
-} from '../dto/token.dto';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
@@ -39,21 +40,21 @@ export class TokenController {
 
   @Post()
   async createToken(
-    @Body() args: CreateTokenRequest,
+    @Body() args: CreateTokenArgs,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.token.create(args);
   }
 
   @Delete()
   async burnToken(
-    @Query() args: BurnTokenRequest,
+    @Query() args: BurnTokenArgs,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.token.burn(args);
   }
 
   @Patch('transfer')
   async transferToken(
-    @Body() args: TransferTokenRequest,
+    @Body() args: TransferTokenArgs,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.token.transfer(args);
   }
