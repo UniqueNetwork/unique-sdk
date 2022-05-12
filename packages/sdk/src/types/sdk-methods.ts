@@ -11,7 +11,8 @@ import {
   IsEnum,
   IsOptional,
 } from 'class-validator';
-import { CollectionInfo, TokenInfo } from './unique-types';
+import { ApiProperty } from '@nestjs/swagger';
+import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
 import {
   SignatureType,
   SignerPayloadJSON,
@@ -49,15 +50,15 @@ export class TransferBuildArgs {
   @IsString()
   @ValidAddress()
   @NotYourselfAddress('destination')
-  address!: string;
+  address: string;
 
   @ValidAddress()
-  destination!: string;
+  destination: string;
 
   @IsNumber()
   @IsPositive()
   @NotEquals(0)
-  amount!: number;
+  amount: number;
 }
 
 export interface UnsignedTxPayload {
@@ -68,10 +69,10 @@ export interface UnsignedTxPayload {
 
 export class SubmitTxArgs {
   @IsNotEmptyObject()
-  signerPayloadJSON!: SignerPayloadJSON;
+  signerPayloadJSON: SignerPayloadJSON;
 
   @IsHexadecimal()
-  signature!: HexString;
+  signature: HexString;
 
   @IsOptional()
   @IsEnum(SignatureType)
@@ -92,13 +93,17 @@ export type TokenIdArg = CollectionIdArg & {
 
 export class AddressArg {
   @ValidAddress()
-  address!: string;
+  address: string;
 }
 
-export type CreateCollectionArgs = Partial<
-  Omit<CollectionInfo, 'id' | 'owner'>
-> &
-  AddressArg;
+export class CreateCollectionArgs extends CollectionInfoBase {
+  /**
+   * @description The ss-58 encoded address
+   * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
+   */
+  @ApiProperty()
+  address: string;
+}
 
 export type BurnCollectionArgs = CollectionIdArg & AddressArg;
 export type TransferCollectionArgs = CollectionIdArg & FromToArgs;

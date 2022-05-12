@@ -1,5 +1,5 @@
 import { ApiPromise } from '@polkadot/api';
-import type {
+import {
   BurnCollectionArgs,
   CreateCollectionArgs,
   ISdkCollection,
@@ -8,11 +8,13 @@ import type {
   UnsignedTxPayload,
 } from '../types';
 import { encodeCollection } from '../utils/collection-transformers';
+import { validate } from '../utils/validator';
 
 export class SdkCollection implements ISdkCollection {
   constructor(readonly api: ApiPromise, readonly extrinsics: ISdkExtrinsics) {}
 
-  create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
+  async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
+    await validate(collection, CreateCollectionArgs);
     const { address, ...rest } = collection;
 
     const encodedCollection = encodeCollection(this.api.registry, rest).toHex();

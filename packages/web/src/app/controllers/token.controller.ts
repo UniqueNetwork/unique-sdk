@@ -41,7 +41,7 @@ export class TokenController {
   async createToken(
     @Body() args: CreateTokenRequest,
   ): Promise<ExtrinsicBuildResponse> {
-    return this.sdk.collection.create(args);
+    return this.sdk.token.create(args);
   }
 
   @Delete()
