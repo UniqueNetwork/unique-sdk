@@ -14,7 +14,9 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
+            "allow": [
+              "@unique-nft/sdk"
+            ],
             "depConstraints": [
               {
                 "sourceTag": "*",

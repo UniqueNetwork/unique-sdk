@@ -136,6 +136,7 @@ export interface TokenInfo {
   id: number;
   collectionId: number;
   url: string | null;
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   constData: Record<string, any> | null;
   variableData: string | null;
   owner: string;

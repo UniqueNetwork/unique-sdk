@@ -17,6 +17,7 @@ export function bytesToString(input: Bytes): string {
   return hexToString(input.toHex());
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export function bytesToJson(input: Bytes): any | undefined {
   try {
     return JSON.parse(bytesToString(input));

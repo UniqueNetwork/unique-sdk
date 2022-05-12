@@ -12,7 +12,7 @@ import {
   BuildExtrinsicError,
   SubmitExtrinsicError,
   ValidationError,
-} from '@unique-nft/sdk';
+} from '@unique-nft/sdk/errors';
 
 const httpResponseErrorMap = new Map<
   string,

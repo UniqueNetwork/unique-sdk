@@ -3,7 +3,7 @@ import { decodeAddress, encodeAddress } from '@polkadot/keyring';
 import { hexToU8a, isHex } from '@polkadot/util';
 
 export function ValidAddress(validationOptions?: ValidationOptions) {
-  return function (object: object, propertyName: string) {
+  return (object: object, propertyName: string) => {
     registerDecorator({
       name: 'NotYourselfAddress',
       target: object.constructor,
@@ -11,7 +11,8 @@ export function ValidAddress(validationOptions?: ValidationOptions) {
       constraints: [],
       options: validationOptions,
       validator: {
-        validate(value: any) {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        validate: (value: any) => {
           if (!value) return false;
           try {
             // todo optimize address validator

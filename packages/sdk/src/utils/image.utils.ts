@@ -20,6 +20,7 @@ const getImageUrlForUniqueSchema = ({
   decodedConstData = {},
   ipfsGatewayUrl,
 }: {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   decodedConstData: Record<string, any>;
   ipfsGatewayUrl: string;
 }): string | null => {
@@ -50,6 +51,7 @@ export const getTokenUrl = ({
 }: {
   collection: CollectionInfo;
   tokenId: number;
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   decodedConstData?: Record<string, any>;
   ipfsGatewayUrl: string;
 }): string | null => {

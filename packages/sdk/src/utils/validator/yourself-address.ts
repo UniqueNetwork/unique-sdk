@@ -8,7 +8,7 @@ export function NotYourselfAddress(
   property: string,
   validationOptions?: ValidationOptions,
 ) {
-  return function (object: object, propertyName: string) {
+  return (object: object, propertyName: string) => {
     registerDecorator({
       name: 'NotYourselfAddress',
       target: object.constructor,
@@ -16,6 +16,7 @@ export function NotYourselfAddress(
       constraints: [property],
       options: validationOptions,
       validator: {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         validate(value: any, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
