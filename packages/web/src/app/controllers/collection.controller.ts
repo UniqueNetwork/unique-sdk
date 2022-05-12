@@ -17,9 +17,9 @@ import {
   CreateCollectionArgs,
   TransferCollectionArgs,
   Sdk,
+  UnsignedTxPayload,
 } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
-import { ExtrinsicBuildResponse } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -40,21 +40,21 @@ export class CollectionController {
   @Post()
   async createCollection(
     @Body() args: CreateCollectionArgs,
-  ): Promise<ExtrinsicBuildResponse> {
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.create(args);
   }
 
   @Delete()
   async burnCollection(
     @Query() args: BurnCollectionArgs,
-  ): Promise<ExtrinsicBuildResponse> {
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.burn(args);
   }
 
   @Patch('transfer')
   async transferCollection(
     @Body() args: TransferCollectionArgs,
-  ): Promise<ExtrinsicBuildResponse> {
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.transfer(args);
   }
 }

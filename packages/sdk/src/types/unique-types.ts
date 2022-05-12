@@ -27,11 +27,10 @@ export enum MetaUpdatePermission {
 }
 
 export class CollectionSponsorship {
-  /**
-   * @description The ss-58 encoded address
-   * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   address: string;
 
   @ApiProperty()
@@ -77,31 +76,29 @@ export class CollectionInfoBase {
   @ApiProperty({ enum: CollectionSchemaVersion, required: false })
   schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
 
-  /**
-   * @example 'Sample collection name'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Sample collection name',
+  })
   name: string;
 
-  /**
-   * @example 'sample collection description'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 'sample collection description',
+  })
   description: string;
 
-  /**
-   * @example 'TEST'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 'TEST',
+  })
   tokenPrefix: string;
 
   @ApiProperty({ required: false })
   mintMode?: boolean;
 
-  /**
-   * @example https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png
-   */
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    example:
+      'https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png',
+  })
   offchainSchema?: string;
 
   @ApiProperty({ required: false })
@@ -128,11 +125,10 @@ export class CollectionInfo extends CollectionInfoBase {
   @ApiProperty()
   id: number;
 
-  /**
-   * @description The ss-58 encoded address
-   * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   owner: string;
 }
 

@@ -1,6 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
 import { HexString } from '@polkadot/util/types';
-import { AugmentedSubmittables } from '@polkadot/api-base/types/submittable';
 import {
   IsString,
   IsNumber,
@@ -15,55 +14,42 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
 import {
   SignatureType,
-  SignerPayloadJSON,
-  SignerPayloadRaw,
+  SignerPayloadJSONDto,
+  SignerPayloadRawDto,
 } from './polkadot-types';
 import { NotYourselfAddress, ValidAddress } from '../utils/validator';
 
 export class ChainProperties {
-  /**
-   * @example 255
-   */
   @ApiProperty({
     example: 255,
   })
   SS58Prefix: number;
 
-  /**
-   * @example 'QTZ'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 'QTZ',
+  })
   token: string;
 
-  /**
-   * @example 18
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 18,
+  })
   decimals: number;
 
-  /**
-   * @example 'wss://ws-quartz.unique.network'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 'wss://ws-quartz.unique.network',
+  })
   wsUrl: string;
 }
 
-export interface FromToArgs {
-  from: string;
-  to: string;
-}
-
 export class Balance {
-  /**
-   * @example '411348197000000000000'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: '411348197000000000000',
+  })
   amount: string;
 
-  /**
-   * @example '411.3481 QTZ'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: '411.3481 QTZ',
+  })
   formatted: string;
 
   // todo see sdk.ts line 50
@@ -71,12 +57,54 @@ export class Balance {
   // todo withUnit: string
 }
 
-export interface TxBuildArgs {
+export class TxBuildArgs {
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   address: string;
-  section: keyof AugmentedSubmittables<'promise'> | string; // todo section enum
-  method: string; // todo method enum
-  args: any[];
+
+  /**
+   * todo enum? endpoint with enums? schema?
+   */
+  @ApiProperty({
+    example: 'balances',
+  })
+  section: string;
+
+  /**
+   * todo enum? endpoint with enums? schema?
+   */
+  @ApiProperty({
+    example: 'transfer',
+  })
+  method: string;
+
+  @ApiProperty({
+    example: ['yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK', 100000000],
+    type: 'array',
+    items: {
+      type: 'array | number | Record<string, any>',
+    },
+  })
+  args: Array<string | number | BigInt | Record<string, any>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
+
+  /**
+   * todo required? why?
+   */
+  @ApiProperty({
+    required: false,
+    example: 64,
+  })
   era?: number;
+
+  /**
+   * todo required? why?
+   */
+  @ApiProperty({
+    required: false,
+    example: false,
+  })
   isImmortal?: boolean;
 }
 
@@ -95,41 +123,51 @@ export class TransferBuildArgs {
   amount: number;
 }
 
-export interface UnsignedTxPayload {
-  signerPayloadJSON: SignerPayloadJSON;
-  signerPayloadRaw: SignerPayloadRaw;
+export class UnsignedTxPayload {
+  @ApiProperty()
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  @ApiProperty()
+  signerPayloadRaw: SignerPayloadRawDto;
+
+  @ApiProperty({ type: String })
   signerPayloadHex: HexString;
 }
 
 export class SubmitTxArgs {
   @IsNotEmptyObject()
-  signerPayloadJSON: SignerPayloadJSON;
+  @ApiProperty()
+  signerPayloadJSON: SignerPayloadJSONDto;
 
   @IsHexadecimal()
+  @ApiProperty({ type: String })
   signature: HexString;
 
   @IsOptional()
   @IsEnum(SignatureType)
+  @ApiProperty({
+    enum: SignatureType,
+    required: false,
+  })
   signatureType?: SignatureType | `${SignatureType}`;
 }
 
-export interface SubmitResult {
+export class SubmitResult {
+  @ApiProperty({ type: String })
   hash: HexString;
 }
 
 export class CollectionIdArg {
-  /**
-   * @example 1
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+  })
   collectionId: number;
 }
 
 export class TokenIdArg extends CollectionIdArg {
-  /**
-   * @example 1
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+  })
   tokenId: number;
 }
 
@@ -140,19 +178,17 @@ export class AddressArg {
 }
 
 export class CreateCollectionArgs extends CollectionInfoBase {
-  /**
-   * @description The ss-58 encoded address
-   * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   address: string;
 }
 
 export class BurnCollectionArgs {
-  /**
-   * @example 1
-   */
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+  })
   collectionId: number;
 
   @ValidAddress()
