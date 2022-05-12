@@ -10,16 +10,16 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
-import { Sdk } from '@unique-nft/sdk';
-import { ApiTags } from '@nestjs/swagger';
 import {
-  BurnCollectionDto,
-  CollectionGetRequest,
-  CollectionResponse,
-  CreateCollectionDto,
-  ExtrinsicBuildResponse,
-  TransferCollectionDto,
-} from '../dto';
+  BurnCollectionArgs,
+  CollectionIdArg,
+  CollectionInfo,
+  CreateCollectionArgs,
+  TransferCollectionArgs,
+  Sdk,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk';
+import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -29,9 +29,7 @@ export class CollectionController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getCollection(
-    @Query() args: CollectionGetRequest,
-  ): Promise<CollectionResponse> {
+  async getCollection(@Query() args: CollectionIdArg): Promise<CollectionInfo> {
     const collection = await this.sdk.query.collection(args);
 
     if (collection) return collection;
@@ -41,22 +39,22 @@ export class CollectionController {
 
   @Post()
   async createCollection(
-    @Body() args: CreateCollectionDto,
-  ): Promise<ExtrinsicBuildResponse> {
+    @Body() args: CreateCollectionArgs,
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.create(args);
   }
 
   @Delete()
   async burnCollection(
-    @Query() args: BurnCollectionDto,
-  ): Promise<ExtrinsicBuildResponse> {
+    @Query() args: BurnCollectionArgs,
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.burn(args);
   }
 
   @Patch('transfer')
   async transferCollection(
-    @Body() args: TransferCollectionDto,
-  ): Promise<ExtrinsicBuildResponse> {
+    @Body() args: TransferCollectionArgs,
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.transfer(args);
   }
 }

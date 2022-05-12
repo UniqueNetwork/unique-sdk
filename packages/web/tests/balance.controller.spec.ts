@@ -37,19 +37,23 @@ describe(BalanceController.name, () => {
   }
   function transferBuild(
     amount: number,
-    keyringPair?: KeyringPair,
+    from: KeyringPair,
+    to: KeyringPair,
   ): request.Test {
     return request(app.getHttpServer())
       .post(`/api/balance/transfer/build`)
       .send({
-        address: keyringPair ? keyringPair.address : alice.address,
-        destination: bob.address,
+        address: from.address,
+        destination: to.address,
         amount,
       });
   }
-  async function transfer(amount: number, keyringPair?: KeyringPair) {
-    const keyring = keyringPair || alice;
-    const buildResponse = await transferBuild(amount, keyring);
+  async function transfer(
+    amount: number,
+    from: KeyringPair,
+    to: KeyringPair,
+  ): Promise<request.Test> {
+    const buildResponse = await transferBuild(amount, from, to);
     expect(buildResponse.ok).toEqual(true);
     expect(buildResponse.body).toMatchObject({
       signerPayloadJSON: expect.any(Object),
@@ -57,17 +61,15 @@ describe(BalanceController.name, () => {
     });
 
     const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
-    const signatureU8a = keyring.sign(signerPayloadHex, {
+    const signatureU8a = from.sign(signerPayloadHex, {
       withType: true,
     });
     const signature = u8aToHex(signatureU8a);
 
-    return request(app.getHttpServer())
-      .post(`/api/balance/transfer/submit`)
-      .send({
-        signature,
-        signerPayloadJSON,
-      });
+    return request(app.getHttpServer()).post(`/api/extrinsic/submit`).send({
+      signature,
+      signerPayloadJSON,
+    });
   }
 
   describe('GET /api/balance', () => {
@@ -93,7 +95,7 @@ describe(BalanceController.name, () => {
 
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
-      const submitResponse = await transfer(0.001);
+      const submitResponse = await transfer(0.001, alice, bob);
       expect(submitResponse.ok).toEqual(true);
       expect(submitResponse.body).toMatchObject({
         hash: expect.any(String),
@@ -102,18 +104,25 @@ describe(BalanceController.name, () => {
     it('balance too low', async () => {
       const balanceResponse = await getBalance(emptyUser.address);
       const currentAmount = +balanceResponse.body.amount;
-      const submitResponse = await transfer(currentAmount + 1, emptyUser);
+      const submitResponse = await transfer(
+        currentAmount + 1,
+        emptyUser,
+        alice,
+      );
       expect(submitResponse.ok).toEqual(false);
       expect(submitResponse.body.error.code).toEqual(
         ErrorCodes.SubmitExtrinsic,
       );
     });
-    it.each([-1])('invalid amount: %d', async (amount) => {
-      // todo: add err case, value=0
-      const buildResponse = await transferBuild(amount);
+    it.each([-1, 0])('invalid amount: %d', async (amount) => {
+      const buildResponse = await transferBuild(amount, alice, bob);
       expect(buildResponse.ok).toEqual(false);
-      expect(buildResponse.body.error.code).toEqual(ErrorCodes.BuildExtrinsic);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.Validation);
     });
-    // todo: add error case, transfer to myself
+    it('invalid transfer to myself', async () => {
+      const buildResponse = await transferBuild(1, alice, alice);
+      expect(buildResponse.ok).toEqual(false);
+      expect(buildResponse.body.error.code).toEqual(ErrorCodes.Validation);
+    });
   });
 });

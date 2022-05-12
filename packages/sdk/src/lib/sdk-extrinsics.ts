@@ -11,6 +11,7 @@ import {
   UnsignedTxPayload,
 } from '../types';
 import { BuildExtrinsicError, SubmitExtrinsicError } from './errors';
+import { validate } from '../utils/validator';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly api: ApiPromise) {}
@@ -80,6 +81,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
+    await validate(args, SubmitTxArgs);
     const { signerPayloadJSON, signature, signatureType } = args;
     const { method, version, address } = signerPayloadJSON;
 

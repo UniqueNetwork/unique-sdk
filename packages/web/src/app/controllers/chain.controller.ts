@@ -1,8 +1,7 @@
 import { Controller, Get, UseFilters } from '@nestjs/common';
 
-import { Sdk } from '@unique-nft/sdk';
+import { ChainProperties, Sdk } from '@unique-nft/sdk';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ChainPropertiesResponse } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -12,8 +11,8 @@ export class ChainController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get('properties')
-  @ApiResponse({ type: ChainPropertiesResponse })
-  async getChainProperties(): Promise<ChainPropertiesResponse> {
+  @ApiResponse({ type: ChainProperties })
+  async getChainProperties(): Promise<ChainProperties> {
     return this.sdk.query.chainProperties();
   }
 }

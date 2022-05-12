@@ -5,6 +5,7 @@ export class SdkError extends Error {
     public readonly code: ErrorCodes,
     name: string,
     message?: string,
+    public readonly details?: any,
   ) {
     super(message);
     this.name = name;

@@ -10,15 +10,16 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
-import { Sdk } from '@unique-nft/sdk';
-import { ApiTags } from '@nestjs/swagger';
-import { ExtrinsicBuildResponse, TokenGetRequest } from '../dto';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
 import {
-  BurnTokenRequest,
-  CreateTokenRequest,
-  TransferTokenRequest,
-} from '../dto/token.dto';
+  BurnTokenArgs,
+  CreateTokenArgs,
+  Sdk,
+  TokenIdArg,
+  TransferTokenArgs,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk';
+import { ApiTags } from '@nestjs/swagger';
+import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
@@ -27,7 +28,7 @@ export class TokenController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getToken(@Query() args: TokenGetRequest): Promise<any> {
+  async getToken(@Query() args: TokenIdArg): Promise<any> {
     const token = await this.sdk.query.token(args);
 
     if (token) return token;
@@ -38,23 +39,19 @@ export class TokenController {
   }
 
   @Post()
-  async createToken(
-    @Body() args: CreateTokenRequest,
-  ): Promise<ExtrinsicBuildResponse> {
-    return this.sdk.collection.create(args);
+  async createToken(@Body() args: CreateTokenArgs): Promise<UnsignedTxPayload> {
+    return this.sdk.token.create(args);
   }
 
   @Delete()
-  async burnToken(
-    @Query() args: BurnTokenRequest,
-  ): Promise<ExtrinsicBuildResponse> {
+  async burnToken(@Query() args: BurnTokenArgs): Promise<UnsignedTxPayload> {
     return this.sdk.token.burn(args);
   }
 
   @Patch('transfer')
   async transferToken(
-    @Body() args: TransferTokenRequest,
-  ): Promise<ExtrinsicBuildResponse> {
+    @Body() args: TransferTokenArgs,
+  ): Promise<UnsignedTxPayload> {
     return this.sdk.token.transfer(args);
   }
 }
