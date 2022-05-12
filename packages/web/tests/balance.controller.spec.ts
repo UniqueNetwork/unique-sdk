@@ -41,7 +41,7 @@ describe(BalanceController.name, () => {
     to: KeyringPair,
   ): request.Test {
     return request(app.getHttpServer())
-      .post(`/api/balance/transfer/build`)
+      .post(`/api/balance/transfer`)
       .send({
         address: from.address,
         destination: to.address,

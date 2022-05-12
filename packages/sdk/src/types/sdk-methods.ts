@@ -112,14 +112,25 @@ export class TransferBuildArgs {
   @IsString()
   @ValidAddress()
   @NotYourselfAddress('destination')
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   address: string;
 
   @ValidAddress()
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   destination: string;
 
   @IsNumber()
   @IsPositive()
   @NotEquals(0)
+  @ApiProperty({
+    example: 0.01
+  })
   amount: number;
 }
 
