@@ -159,7 +159,16 @@ export class BurnCollectionArgs {
   @ApiProperty()
   address: string;
 }
-export type TransferCollectionArgs = CollectionIdArg & FromToArgs;
+export class TransferCollectionArgs {
+  @ApiProperty()
+  collectionId: number;
+
+  @ApiProperty()
+  from: string;
+
+  @ApiProperty()
+  to: string;
+}
 
 export type CreateTokenArgs = CollectionIdArg &
   AddressArg & {

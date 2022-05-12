@@ -15,10 +15,11 @@ import {
   CollectionIdArg,
   CollectionInfo,
   CreateCollectionArgs,
+  TransferCollectionArgs,
   Sdk,
 } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
-import { ExtrinsicBuildResponse, TransferCollectionDto } from '../dto';
+import { ExtrinsicBuildResponse } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -52,7 +53,7 @@ export class CollectionController {
 
   @Patch('transfer')
   async transferCollection(
-    @Body() args: TransferCollectionDto,
+    @Body() args: TransferCollectionArgs,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.collection.transfer(args);
   }
