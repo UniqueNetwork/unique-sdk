@@ -1,10 +1,10 @@
 name: Release Candidate
 
 on:
-#  push:
-#    branches:
-#      - release/**
-#      - hotfix/**
+  push:
+    branches:
+      - release/**
+      - hotfix/**
   workflow_dispatch:
     inputs:
       publish_rc:
