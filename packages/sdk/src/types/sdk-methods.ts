@@ -130,7 +130,7 @@ export class TransferBuildArgs {
   @IsPositive()
   @NotEquals(0)
   @ApiProperty({
-    example: 0.01
+    example: 0.01,
   })
   amount: number;
 }

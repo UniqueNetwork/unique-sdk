@@ -28,7 +28,8 @@ export class TokenController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getToken(@Query() args: TokenIdArg): Promise<any> {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  async getToken(@Query() args: TokenIdArg): Promise<any> { // todo fix any
     const token = await this.sdk.query.token(args);
 
     if (token) return token;
