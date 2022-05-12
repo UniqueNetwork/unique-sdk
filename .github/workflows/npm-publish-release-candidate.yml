@@ -5,11 +5,18 @@ on:
     branches:
       - release/**
       - hotfix/**
+  workflow_dispatch:
+    inputs:
+      publish_rc:
+        description: 'True to print to publish RC'
+        required: true
+        type: boolean
 
 jobs:
   build-and-publish:
     name: Build and publish package
     runs-on: ubuntu-latest
+    if:  ${{ github.event.inputs.publish_rc == 'true' }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
