@@ -3,13 +3,10 @@
   "sourceRoot": "packages/sdk/src",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@nrwl/angular:package",
       "options": {
-        "outputPath": "dist/packages/sdk",
-        "main": "packages/sdk/src/index.ts",
-        "tsConfig": "packages/sdk/tsconfig.lib.json",
-        "assets": ["packages/sdk/*.md"]
+        "project": "packages/sdk/ng-package.json",
+        "tsConfig": "packages/sdk/tsconfig.lib.json"
       }
     },
     "lint": {

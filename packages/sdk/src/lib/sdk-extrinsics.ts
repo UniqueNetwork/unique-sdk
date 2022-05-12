@@ -10,7 +10,7 @@ import {
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
-import { BuildExtrinsicError, SubmitExtrinsicError } from './errors';
+import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { validate } from '../utils/validator';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
