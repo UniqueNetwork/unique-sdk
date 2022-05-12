@@ -20,10 +20,31 @@ import {
 } from './polkadot-types';
 import { NotYourselfAddress, ValidAddress } from '../utils/validator';
 
-export interface ChainProperties {
+export class ChainProperties {
+  /**
+   * @example 255
+   */
+  @ApiProperty({
+    example: 255,
+  })
   SS58Prefix: number;
+
+  /**
+   * @example 'QTZ'
+   */
+  @ApiProperty()
   token: string;
+
+  /**
+   * @example 18
+   */
+  @ApiProperty()
   decimals: number;
+
+  /**
+   * @example 'wss://ws-quartz.unique.network'
+   */
+  @ApiProperty()
   wsUrl: string;
 }
 

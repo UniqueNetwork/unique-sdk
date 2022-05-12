@@ -40,31 +40,31 @@ export class CollectionSponsorship {
 
 export class CollectionLimits {
   @ApiProperty({ required: false })
-  accountTokenOwnershipLimit?: number;
+  accountTokenOwnershipLimit?: number | null;
 
   @ApiProperty({ required: false })
-  sponsoredDataSize?: number;
+  sponsoredDataSize?: number | null;
 
   @ApiProperty({ required: false })
-  sponsoredDataRateLimit?: number;
+  sponsoredDataRateLimit?: number | null;
 
   @ApiProperty({ required: false })
-  tokenLimit?: number;
+  tokenLimit?: number | null;
 
   @ApiProperty({ required: false })
-  sponsorTransferTimeout?: number;
+  sponsorTransferTimeout?: number | null;
 
   @ApiProperty({ required: false })
-  sponsorApproveTimeout?: number;
+  sponsorApproveTimeout?: number | null;
 
   @ApiProperty({ required: false })
-  ownerCanTransfer?: boolean;
+  ownerCanTransfer?: boolean | null;
 
   @ApiProperty({ required: false })
-  ownerCanDestroy?: boolean;
+  ownerCanDestroy?: boolean | null;
 
   @ApiProperty({ required: false })
-  transfersEnabled?: boolean;
+  transfersEnabled?: boolean | null;
 }
 
 export class CollectionInfoBase {
