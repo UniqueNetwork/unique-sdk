@@ -24,97 +24,83 @@ export enum SignatureType {
 }
 
 export class SignerPayloadJSONDto implements SignerPayloadJSON {
-  /**
-   * @description The ss-58 encoded address
-   * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   address: string;
 
-  /**
-   * @description The checkpoint hash of the block, in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The checkpoint hash of the block, in hex',
+  })
   blockHash: string;
 
-  /**
-   * @description The checkpoint block number, in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The checkpoint block number, in hex',
+  })
   blockNumber: string;
 
-  /**
-   * @description The era for this transaction, in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The era for this transaction, in hex',
+  })
   era: string;
 
-  /**
-   * @description The genesis hash of the chain, in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The genesis hash of the chain, in hex',
+  })
   genesisHash: string;
 
-  /**
-   * @description The encoded method (with arguments) in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The encoded method (with arguments) in hex',
+  })
   method: string;
 
-  /**
-   * @description The nonce for this transaction, in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The nonce for this transaction, in hex',
+  })
   nonce: string;
 
-  /**
-   * @description The current spec version for the runtime
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The current spec version for the runtime',
+  })
   specVersion: string;
 
-  /**
-   * @description The tip for this transaction, in hex
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The tip for this transaction, in hex',
+  })
   tip: string;
 
-  /**
-   * @description The current transaction version for the runtime
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The current transaction version for the runtime',
+  })
   transactionVersion: string;
 
-  /**
-   * @description The applicable signed extensions for this runtime
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The applicable signed extensions for this runtime',
+  })
   signedExtensions: string[];
 
-  /**
-   * @description The version of the extrinsic we are dealing with
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The version of the extrinsic we are dealing with',
+  })
   version: number;
 }
 
 export class SignerPayloadRawDto implements SignerPayloadRaw {
-  /**
-   * @description The ss-58 encoded address
-   * @example 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm'
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
   address: string;
 
-  /**
-   * @description The hex-encoded data for this request
-   */
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The hex-encoded data for this request',
+  })
   data: string;
 
-  /**
-   * @description The type of the contained data
-   */
-  @ApiProperty({ enum: ['bytes', 'payload'] })
+  @ApiProperty({
+    enum: ['bytes', 'payload'],
+    description: 'The type of the contained data',
+  })
   type: 'bytes' | 'payload';
 }
