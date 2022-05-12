@@ -10,11 +10,15 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
-import { CollectionInfo, CreateCollectionArgs, Sdk } from '@unique-nft/sdk';
+import {
+  BurnCollectionArgs,
+  CollectionIdArg,
+  CollectionInfo,
+  CreateCollectionArgs,
+  Sdk,
+} from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import {
-  BurnCollectionDto,
-  CollectionGetRequest,
   ExtrinsicBuildResponse,
   TransferCollectionDto,
 } from '../dto';
@@ -28,7 +32,7 @@ export class CollectionController {
 
   @Get()
   async getCollection(
-    @Query() args: CollectionGetRequest,
+    @Query() args: CollectionIdArg,
   ): Promise<CollectionInfo> {
     const collection = await this.sdk.query.collection(args);
 
@@ -46,7 +50,7 @@ export class CollectionController {
 
   @Delete()
   async burnCollection(
-    @Query() args: BurnCollectionDto,
+    @Query() args: BurnCollectionArgs,
   ): Promise<ExtrinsicBuildResponse> {
     return this.sdk.collection.burn(args);
   }

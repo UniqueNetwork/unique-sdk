@@ -32,9 +32,22 @@ export interface FromToArgs {
   to: string;
 }
 
-export interface Balance {
+export class Balance {
+  /**
+   * @example '411348197000000000000'
+   */
+  @ApiProperty()
   amount: string;
+
+  /**
+   * @example '411.3481 QTZ'
+   */
+  @ApiProperty()
   formatted: string;
+
+  // todo see sdk.ts line 50
+  // todo formatted: string
+  // todo withUnit: string
 }
 
 export interface TxBuildArgs {
@@ -83,16 +96,25 @@ export interface SubmitResult {
   hash: HexString;
 }
 
-export type CollectionIdArg = {
+export class CollectionIdArg {
+  /**
+   * @example 1
+   */
+  @ApiProperty()
   collectionId: number;
-};
+}
 
-export type TokenIdArg = CollectionIdArg & {
+export class TokenIdArg extends CollectionIdArg {
+  /**
+   * @example 1
+   */
+  @ApiProperty()
   tokenId: number;
-};
+}
 
 export class AddressArg {
   @ValidAddress()
+  @ApiProperty()
   address: string;
 }
 
@@ -105,7 +127,17 @@ export class CreateCollectionArgs extends CollectionInfoBase {
   address: string;
 }
 
-export type BurnCollectionArgs = CollectionIdArg & AddressArg;
+export class BurnCollectionArgs {
+  /**
+   * @example 1
+   */
+  @ApiProperty()
+  collectionId: number;
+
+  @ValidAddress()
+  @ApiProperty()
+  address: string;
+}
 export type TransferCollectionArgs = CollectionIdArg & FromToArgs;
 
 export type CreateTokenArgs = CollectionIdArg &
