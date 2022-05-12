@@ -10,7 +10,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
-import {Sdk, TokenIdArg} from '@unique-nft/sdk';
+import { Sdk, TokenIdArg } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import { ExtrinsicBuildResponse } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';

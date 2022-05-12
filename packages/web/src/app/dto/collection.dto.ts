@@ -1,6 +1,4 @@
-import {
-  TransferCollectionArgs,
-} from '@unique-nft/sdk';
+import { TransferCollectionArgs } from '@unique-nft/sdk';
 
 export class TransferCollectionDto implements TransferCollectionArgs {
   collectionId: number;

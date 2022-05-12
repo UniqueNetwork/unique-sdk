@@ -39,32 +39,32 @@ export class CollectionSponsorship {
 }
 
 export class CollectionLimits {
-  @ApiProperty()
-  accountTokenOwnershipLimit: number | null;
+  @ApiProperty({ required: false })
+  accountTokenOwnershipLimit?: number;
 
-  @ApiProperty()
-  sponsoredDataSize: number | null;
+  @ApiProperty({ required: false })
+  sponsoredDataSize?: number;
 
-  @ApiProperty()
-  sponsoredDataRateLimit: number | null;
+  @ApiProperty({ required: false })
+  sponsoredDataRateLimit?: number;
 
-  @ApiProperty()
-  tokenLimit: number | null;
+  @ApiProperty({ required: false })
+  tokenLimit?: number;
 
-  @ApiProperty()
-  sponsorTransferTimeout: number | null;
+  @ApiProperty({ required: false })
+  sponsorTransferTimeout?: number;
 
-  @ApiProperty()
-  sponsorApproveTimeout: number | null;
+  @ApiProperty({ required: false })
+  sponsorApproveTimeout?: number;
 
-  @ApiProperty()
-  ownerCanTransfer: boolean | null;
+  @ApiProperty({ required: false })
+  ownerCanTransfer?: boolean;
 
-  @ApiProperty()
-  ownerCanDestroy: boolean | null;
+  @ApiProperty({ required: false })
+  ownerCanDestroy?: boolean;
 
-  @ApiProperty()
-  transfersEnabled: boolean | null;
+  @ApiProperty({ required: false })
+  transfersEnabled?: boolean;
 }
 
 export class CollectionInfoBase {

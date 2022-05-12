@@ -18,10 +18,7 @@ import {
   Sdk,
 } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
-import {
-  ExtrinsicBuildResponse,
-  TransferCollectionDto,
-} from '../dto';
+import { ExtrinsicBuildResponse, TransferCollectionDto } from '../dto';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -31,9 +28,7 @@ export class CollectionController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getCollection(
-    @Query() args: CollectionIdArg,
-  ): Promise<CollectionInfo> {
+  async getCollection(@Query() args: CollectionIdArg): Promise<CollectionInfo> {
     const collection = await this.sdk.query.collection(args);
 
     if (collection) return collection;
