@@ -56,7 +56,7 @@ export class Sdk implements ISdk {
 
     this.query = new SkdQuery(this.options, this.api);
     this.extrinsics = new SdkExtrinsics(this.api);
-    this.collection = new SdkCollection(this.api, this.extrinsics);
+    this.collection = new SdkCollection(this);
     this.token = new SdkToken(this.api, this.extrinsics, this.query);
     this.balance = new SdkBalance(this.extrinsics, this.api);
   }

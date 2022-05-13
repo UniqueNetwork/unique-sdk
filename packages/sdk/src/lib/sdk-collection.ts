@@ -1,9 +1,8 @@
-import { ApiPromise } from '@polkadot/api';
+import { Sdk } from '@unique-nft/sdk';
 import {
   BurnCollectionArgs,
   CreateCollectionArgs,
   ISdkCollection,
-  ISdkExtrinsics,
   TransferCollectionArgs,
   UnsignedTxPayload,
 } from '../types';
@@ -11,15 +10,17 @@ import { encodeCollection } from '../utils/collection-transformers';
 import { validate } from '../utils/validator';
 
 export class SdkCollection implements ISdkCollection {
-  constructor(readonly api: ApiPromise, readonly extrinsics: ISdkExtrinsics) {}
+  constructor(
+    readonly sdk: Sdk,
+  ) {}
 
   async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
     await validate(collection, CreateCollectionArgs);
     const { address, ...rest } = collection;
 
-    const encodedCollection = encodeCollection(this.api.registry, rest).toHex();
+    const encodedCollection = encodeCollection(this.sdk.api.registry, rest).toHex();
 
-    return this.extrinsics.build({
+    return this.sdk.extrinsics.build({
       address,
       section: 'unique',
       method: 'createCollectionEx',
@@ -28,7 +29,7 @@ export class SdkCollection implements ISdkCollection {
   }
 
   transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload> {
-    return this.extrinsics.build({
+    return this.sdk.extrinsics.build({
       address: args.from,
       section: 'unique',
       method: 'changeCollectionOwner',
@@ -37,7 +38,7 @@ export class SdkCollection implements ISdkCollection {
   }
 
   burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload> {
-    return this.extrinsics.build({
+    return this.sdk.extrinsics.build({
       address: args.address,
       section: 'unique',
       method: 'destroyCollection',
