@@ -21,26 +21,14 @@ _туду: будет вариант самоподписывающихся тр
   - [Шаг N -......](#)
 
 - [Unique SDK HTTP API Methods:](#)
-  - [GET Methods](#)
-    - [Method 1](#)
-    - [Method 2](#)
-    - [Method 3](#)
-    - [Method 4](#)
-  - [POST Methods](#)
-    - [Method 1](#)
-    - [Method 2](#)
-    - [Method 3](#)
-    - [Method 4](#)
-  - [DELETE Methods](#)
-    - [Method 1](#)
-    - [Method 2](#)
-    - [Method 3](#)
-    - [Method 4](#)
-  - [PATCH Methods](#)
-    - [Method 1](#)
-    - [Method 2](#)
-    - [Method 3](#)
-    - [Method 4](#)
+  - [Main Methods](#)
+    - [Extrinsic build](#)
+    - [Extrinsic submit](#)
+  - [Additional Methods](#)
+    - [Сhain](#)
+    - [Balance](#)
+    - [Collection](#)
+    - [Token](#)
   - [Ошибки](#)
 
 
@@ -68,206 +56,9 @@ _тут надо будет расписать:
 
 # Methods
 
-## GET Methods
+## Main Methods
 
-### Сhain
-
-
-Назначение метода:*******
-
-#### Request
-
-_вот здесь лучше предлагать сразу пример курловый, и выделить как код типа_
-```shell
-curl -X GET https://web-quartz.unique.network/chain/properties
-```
-
-Parameters - No parameters
-
-_как то выделить Request, Response_
-
-#### Response
-
-1) Успешный ответ - 200 OK и содержит тело:
-
-```json
-{
-  "SS58Prefix": 255,
-  "decimals": 18,
-  "token": "QTZ",
-  "wsUrl": "wss://ws-quartz.unique.network"
-}
-```
-
-2) Успешный ответ - default и содержит тело:
-
-```json
-{
-"SS58Prefix": 255,
-"decimals": 18,
-"token": "QTZ",
-"wsUrl": "wss://ws-quartz.unique.network"
-}
-```
-
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|------------
-SS58Prefix | префикс чейна
-decimals   | предел коичества знаков после запятой
-token      | валюта токена
-wsUrl      | url блокчейна
-
-
-### Balance
-
-Назначение метода:*******
-
-GET /balance
-
-Parameters - address (string)
-
-Ответ:
-Успешный ответ - 200 OK и содержит тело:
-
-```json
-{
-"amount": "411348197000000000000",
-"formatted": "411.3481 QTZ"
-}
-```
-
-Каждый элемент коллекции содержит следующую информацию:
-
-
-название  | комментарий
---------- |------------
-amount    | **********
-formatted | *********
-
-
-### Collection
-
-Назначение метода: *******
-
-GET /collection
-
-Parameters
-Параметр | комментарий
----------|------------
-collectionId  | ***********
-
-Ответ:
-Успешный ответ - 200 OK и содержит тело:
-```json
-{
-  "mode": "Nft",
-  "access": "Normal",
-  "schemaVersion": "ImageURL",
-  "constOnChainSchema": {
-    "nested": {
-      "onChainMetaData": {
-        "nested": {
-          "NFTMeta": {
-            "fields": {
-              "ipfsJson": {
-                "id": 1,
-                "rule": "required",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "variableOnChainSchema": {},
-  "id": 0,
-  "description": "string",
-  "limits": {
-    "accountTokenOwnershipLimit": 0,
-    "sponsoredDataSize": 0,
-    "sponsoredDataRateLimit": 0,
-    "tokenLimit": 0,
-    "sponsorTransferTimeout": 0,
-    "sponsorApproveTimeout": 0,
-    "ownerCanTransfer": true,
-    "ownerCanDestroy": true,
-    "transfersEnabled": true
-  },
-  "metaUpdatePermission": {},
-  "mintMode": true,
-  "name": "string",
-  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
-  "owner": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "sponsorship": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "isConfirmed": true
-  },
-  "tokenPrefix": "string"
-}
-```
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|------------
-mode | ************
-access | ************
-schemaVersion | *********
-constOnChainSchema | *********
-nested | ***********
-onChainMetaData | **********
-NFTMeta | ***********
-fields | *********
-ipfsJson | ************
-id | ************
-rule | ****************
-type | *************
-variableOnChainSchema | ************
-id | *****************
-description | **************
-limits | ***************
-accountTokenOwnershipLimit | **************
-sponsoredDataSize | ****************
-sponsoredDataRateLimit | ************
-tokenLimit | ********************
-sponsorTransferTimeout | *****************
-sponsorApproveTimeout | ***************
-ownerCanTransfer | ****************
-ownerCanDestroy | ****************
-transfersEnabled | *****************
-metaUpdatePermission | ******************
-mintMode | ********************
-name | ***********
-offchainSchema | ******************
-owner | ******************
-sponsorship | *************
-address | ***************
-isConfirmed | *****************
-tokenPrefix | *****************
-
-### Get Token
-
-GET /token
-
-Назначение метода: *******
-
-Parameters
-Параметр | комментарий
----------|------------
-collectionId  | **************
-TokenID | ***************
-
-Ответ:
-Успешный ответ - 200 OK и содержит тело:
-```json
-{}
-```
-
-## POST Methods
-
-### Extrinsic
+### Extrinsic build
 
 Назначение метода: *******
 
@@ -356,7 +147,6 @@ type | ***************
 
 ### Extrinsic submit
 
-
 Назначение метода: *******
 
 POST /extrinsic/submit
@@ -423,73 +213,152 @@ signerPayloadJSON | *********
 
 
 
-### Extrinsic\build
+## Additional Methods
 
-Назначение метода: *******
+### Сhain
 
-(POST /extrinsic/build)
 
-Parameters - No parameters
+Назначение метода:*******
 
 #### Request
 
+_вот здесь лучше предлагать сразу пример курловый, и выделить как код типа_
+```shell
+curl -X GET https://web-quartz.unique.network/chain/properties
+```
+
+Parameters - No parameters
+
+_как то выделить Request, Response_
+
+#### Response
+
+1) Успешный ответ - 200 OK и содержит тело:
+
 ```json
-{}
+{
+  "SS58Prefix": 255,
+  "decimals": 18,
+  "token": "QTZ",
+  "wsUrl": "wss://ws-quartz.unique.network"
+}
+```
+
+2) Успешный ответ - default и содержит тело:
+
+```json
+{
+"SS58Prefix": 255,
+"decimals": 18,
+"token": "QTZ",
+"wsUrl": "wss://ws-quartz.unique.network"
+}
 ```
 
 Каждый элемент коллекции содержит следующую информацию:
 
 название | комментарий
 ---------|------------
-signerPayloadHex | *********
-signerPayloadJSON | *********
+SS58Prefix | префикс чейна
+decimals   | предел коичества знаков после запятой
+token      | валюта токена
+wsUrl      | url блокчейна
 
+
+### Balance
+
+Назначение метода:*******
+
+#### GET /balance
+
+Parameters
+Параметр | тип | комментарий
+---------|-----|------------
+address  | string |
+
+Ответ:
 Успешный ответ - 200 OK и содержит тело:
 
-{}
+```json
+{
+"amount": "411348197000000000000",
+"formatted": "411.3481 QTZ"
+}
+```
 
 Каждый элемент коллекции содержит следующую информацию:
 
-название | комментарий
----------|------------
-signerPayloadHex | *********
-signerPayloadJSON | *********
+название | тип | комментарий
+---------|-----|------------
+amount | *** |
+formatted | *** |
 
+#### POST /balance/transfer
 
+Parameters
 
-### Метод
+Request body (Example Value, Schema)
+```
+{
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "destination": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "amount": 0.01
+}
+```
 
-Назначение метода: *******
+Ответ:
+Успешный ответ - 201 OK и содержит тело:
 
-(POST /extrinsic/build)
-
-Parameters - No parameters
-
-Запрос:
-
-{}
+```json
+{
+  "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  },
+  "signerPayloadRaw": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "data": "string",
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
+}
+```
 
 Каждый элемент коллекции содержит следующую информацию:
 
-название | комментарий
----------|------------
-signerPayloadHex | *********
-signerPayloadJSON | *********
 
-
-Успешный ответ - 200 OK и содержит тело:
-
-{}
-
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|------------
-signerPayloadHex | *********
-signerPayloadJSON | *********
-
-
-
+название | тип | комментарий
+---------|-----|------------
+signerPayloadJSON | строка |
+address | строка |
+blockHash | строка |
+blockNumber | строка |
+era | строка |
+genesisHash | строка |
+method | строка |
+nonce | строка |
+specVersion | строка |
+tip | строка |
+transactionVersion | строка |
+signedExtensions | строка |
+version | число |
+signerPayloadRaw | строка |
+address | срока |
+data |строка |
+type | строка |
+signerPayloadHex | строка |
 
 ### Collection
 
