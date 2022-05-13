@@ -21,7 +21,7 @@ export class BalanceController {
     return this.sdk.query.balance(args);
   }
 
-  @Post('transfer/build')
+  @Post('transfer')
   async transferBuild(
     @Body() args: TransferBuildArgs,
   ): Promise<UnsignedTxPayload> {
