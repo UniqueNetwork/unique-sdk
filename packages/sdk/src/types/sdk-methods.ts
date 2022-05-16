@@ -8,12 +8,12 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { SubmitResult, SubmitTxArgs, TxBuildArgs, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { HexString } from '@polkadot/util/types';
+import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
 import {
   CollectionInfo,
   CollectionInfoBase,
   TokenInfo,
 } from './unique-types';
-import { NotYourselfAddress, ValidAddress } from '../utils/validator';
 
 export class ChainProperties {
   @ApiProperty({

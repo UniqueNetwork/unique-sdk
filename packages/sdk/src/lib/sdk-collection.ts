@@ -1,4 +1,5 @@
 import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { validate } from '@unique-nft/sdk/validation';
 import { ApiPromise } from '@polkadot/api';
 import {
   BurnCollectionArgs,
@@ -7,7 +8,6 @@ import {
   TransferCollectionArgs,
 } from '../types';
 import { encodeCollection } from '../utils/collection-transformers';
-import { validate } from '../utils/validator';
 
 interface Sdk {
   api: ApiPromise;

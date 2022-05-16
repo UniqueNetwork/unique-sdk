@@ -3,6 +3,7 @@ import { Option } from '@polkadot/types-codec';
 import { PalletNonfungibleItemData } from '@unique-nft/types';
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { validate } from '@unique-nft/sdk/validation';
 import {
   AddressArg,
   Balance,
@@ -15,7 +16,6 @@ import {
 } from '../types';
 import { decodeCollection } from '../utils/collection-transformers';
 import { decodeToken } from '../utils/token-transformers';
-import { validate } from '../utils/validator';
 
 interface Sdk {
   api: ApiPromise;

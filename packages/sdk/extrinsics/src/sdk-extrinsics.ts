@@ -4,6 +4,7 @@ import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
 import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
+import { validate } from '@unique-nft/sdk/validation';
 import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
 import {
   ISdkExtrinsics,
@@ -88,8 +89,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
-    // todo вернуть когда сделаем ентрипоинт @unique-nft/sdk/validation
-    // await validate(args, SubmitTxArgs);
+    await validate(args, SubmitTxArgs);
     const { signerPayloadJSON, signature, signatureType } = args;
     const { method, version, address } = signerPayloadJSON;
 

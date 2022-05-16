@@ -1,7 +1,7 @@
 import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { ApiPromise } from '@polkadot/api';
+import { validate } from '@unique-nft/sdk/validation';
 
-import { validate } from '../utils/validator';
 import {
   ISdkBalance,
   TransferBuildArgs,
