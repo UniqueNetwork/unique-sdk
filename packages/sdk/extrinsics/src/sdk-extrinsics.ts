@@ -97,10 +97,11 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
   }
 
-  sign(args: SignTxArgs): SignTxResult {
-    if (!this.sdk.signer) throw new InvalidSignerError();
+  sign(args: SignTxArgs, signer?: SdkSigner): SignTxResult {
+    const currentSigner = signer || this.sdk.signer;
+    if (!currentSigner) throw new InvalidSignerError();
 
-    const signature = this.sdk.signer.sign(args.signerPayloadHex);
+    const signature = currentSigner.sign(args.signerPayloadHex);
     if (args.signerPayloadJSON) {
       verifyTxSignature(this.sdk.api, args.signerPayloadJSON, signature);
     }

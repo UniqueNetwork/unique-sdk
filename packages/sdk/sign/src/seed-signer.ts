@@ -11,7 +11,7 @@ export class SeedSigner implements SdkSigner {
     this.pair = new Keyring({ type: 'sr25519' }).addFromMnemonic(seed);
   }
 
-  public sign(payload: string): HexString {
+  public sign(payload: HexString): HexString {
     const signatureU8a = this.pair.sign(payload, { withType: true });
     return u8aToHex(signatureU8a);
   }

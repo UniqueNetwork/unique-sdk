@@ -7,7 +7,7 @@ export interface SdkOptions {
   signer?: SignerOptions;
 }
 
-export type SignerOptions = SeedSignerOptions | JsonFileSignerOptions;
+export type SignerOptions = SeedSignerOptions | KeyfileSignerOptions;
 
 export class SeedSignerOptions {
   @ValidSeed()
@@ -16,7 +16,7 @@ export class SeedSignerOptions {
   developmentAccount?: boolean;
 }
 
-export class JsonFileSignerOptions {
+export class KeyfileSignerOptions {
   keyfile: string;
 
   passwordCallback: () => string;
