@@ -11,11 +11,10 @@ import {
   SdkOptions,
   ISdk,
   ISdkQuery,
-  ISdkExtrinsics,
   ISdkCollection,
   ISdkToken,
   ISdkBalance,
-} from '../types';
+} from '@unique-nft/sdk/types';
 import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
 import { SdkToken } from './sdk-token';

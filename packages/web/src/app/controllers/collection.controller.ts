@@ -10,14 +10,14 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
+import { Sdk } from '@unique-nft/sdk';
 import {
   BurnCollectionArgs,
   CollectionIdArg,
   CollectionInfo,
   CreateCollectionArgs,
   TransferCollectionArgs,
-  Sdk,
-} from '@unique-nft/sdk';
+} from '@unique-nft/sdk/types';
 import { ApiTags } from '@nestjs/swagger';
 import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';

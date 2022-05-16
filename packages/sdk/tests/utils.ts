@@ -2,7 +2,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { Sdk } from '../src/lib/sdk';
-import { SdkOptions } from '../src/types';
+import { SdkOptions } from '@unique-nft/sdk/types';
 
 export type TestAccounts = {
   alice: KeyringPair;

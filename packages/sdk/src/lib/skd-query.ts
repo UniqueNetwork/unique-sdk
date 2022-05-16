@@ -10,12 +10,12 @@ import {
   ChainProperties,
   CollectionIdArg,
   CollectionInfo,
-  ISdkQuery, SdkOptions,
+  ISdkQuery,
+  SdkOptions,
   TokenIdArg,
   TokenInfo,
-} from '../types';
-import { decodeCollection } from '../utils/collection-transformers';
-import { decodeToken } from '../utils/token-transformers';
+} from '@unique-nft/sdk/types';
+import { decodeCollection, decodeToken } from '@unique-nft/sdk/utils';
 
 interface Sdk {
   api: ApiPromise;
@@ -24,9 +24,7 @@ interface Sdk {
 }
 
 export class SkdQuery implements ISdkQuery {
-  constructor(
-    private readonly sdk: Sdk,
-  ) {}
+  constructor(private readonly sdk: Sdk) {}
 
   chainProperties(): ChainProperties {
     return {

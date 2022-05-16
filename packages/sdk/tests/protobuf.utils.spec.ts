@@ -1,8 +1,5 @@
 import { INamespace } from 'protobufjs';
-import {
-  serializeConstData,
-  decodeConstData,
-} from '../src/utils/protobuf.utils';
+import { serializeConstData, decodeConstData } from '../utils/protobuf.utils';
 
 const constOnChainSchema: INamespace = {
   nested: {

@@ -2,10 +2,7 @@ import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { ApiPromise } from '@polkadot/api';
 import { validate } from '@unique-nft/sdk/validation';
 
-import {
-  ISdkBalance,
-  TransferBuildArgs,
-} from '../types';
+import { ISdkBalance, TransferBuildArgs } from '@unique-nft/sdk/types';
 
 interface Sdk {
   api: ApiPromise;
@@ -15,9 +12,7 @@ interface Sdk {
 export class SdkBalance implements ISdkBalance {
   private readonly multiplierToRaw: number;
 
-  constructor(
-    private readonly sdk: Sdk,
-  ) {
+  constructor(private readonly sdk: Sdk) {
     const tokenDecimals = this.sdk.api.registry.chainDecimals[0];
     this.multiplierToRaw = 10 ** tokenDecimals;
   }

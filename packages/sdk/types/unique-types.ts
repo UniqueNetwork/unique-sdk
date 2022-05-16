@@ -2,7 +2,7 @@
 import { AnyJson } from '@polkadot/types/types';
 import { INamespace } from 'protobufjs';
 import { ApiProperty } from '@nestjs/swagger';
-import { DEFAULT_CONST_SCHEMA } from '../constants';
+import { DEFAULT_CONST_SCHEMA } from './constants';
 
 export enum CollectionMode {
   Nft = 'Nft',
