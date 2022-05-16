@@ -26,6 +26,10 @@ export class SubmitResult {
 export class SignTxArgs {
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
+
+  @IsNotEmptyObject()
+  @ApiProperty()
+  signerPayloadJSON?: SignerPayloadJSONDto;
 }
 
 export class SignTxResult {

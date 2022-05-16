@@ -7,8 +7,6 @@ export type Config = {
   ipfsGatewayUrl: string;
   prefix: string;
   swagger: string;
-  signerSeed: string;
-  developmentAccount: boolean;
 };
 
 const loadConfig = (): Config => ({
@@ -19,8 +17,6 @@ const loadConfig = (): Config => ({
   swagger: process.env.SWAGGER || 'swagger',
   ipfsGatewayUrl:
     process.env.IPFS_GATEWAY_URL || 'https://ipfs.unique.network/ipfs/',
-  signerSeed: process.env.SIGNER_SEED || '//Alice',
-  developmentAccount: process.env.DEVELOPMENT_ACCOUNT === 'true',
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

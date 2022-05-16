@@ -18,10 +18,6 @@ export const sdkProvider = {
     const sdk = new Sdk({
       chainWsUrl: configService.get('chainWsUrl'),
       ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
-      signer: {
-        seed: configService.get('signerSeed'),
-        developmentAccount: configService.get('developmentAccount'),
-      },
     });
 
     await sdk.isReady;
