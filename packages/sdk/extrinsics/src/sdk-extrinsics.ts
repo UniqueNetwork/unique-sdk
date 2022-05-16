@@ -21,7 +21,7 @@ import {
   SignTxResult,
 } from './types';
 
-export interface SdkSigner {
+interface SdkSigner {
   sign(payload: string): HexString;
 }
 

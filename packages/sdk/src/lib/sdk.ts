@@ -7,6 +7,7 @@ import { unique } from '@unique-nft/types/definitions';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { SdkSigner, SeedSigner } from '@unique-nft/sdk/sign';
 
 import {
   ISdk,
@@ -22,7 +23,6 @@ import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
 import { SdkToken } from './sdk-token';
 import { SdkBalance } from './sdk-balance';
-import { SdkSigner, SeedSigner } from './sdk-signers';
 
 export class Sdk implements ISdk {
   readonly isReady: Promise<boolean>;
