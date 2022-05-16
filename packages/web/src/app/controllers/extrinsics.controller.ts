@@ -2,12 +2,9 @@ import { Body, Controller, Post, UseFilters } from '@nestjs/common';
 
 import {
   Sdk,
-  SubmitResult,
-  SubmitTxArgs,
-  TxBuildArgs,
-  UnsignedTxPayload,
 } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
+import { SubmitResult, SubmitTxArgs, TxBuildArgs, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)

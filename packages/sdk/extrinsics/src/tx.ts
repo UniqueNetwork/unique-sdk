@@ -7,8 +7,9 @@ import { HexString } from '@polkadot/util/types';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
 import { SignerPayload } from '@polkadot/types/interfaces';
-import { BadSignatureError } from '@unique-nft/sdk/errors';
-import { UnsignedTxPayload } from '../types';
+import { UnsignedTxPayload } from './types';
+
+class BadSignatureError extends Error {}
 
 const getSignerPayloadHex = (
   api: ApiPromise,
