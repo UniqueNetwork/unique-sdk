@@ -38,7 +38,7 @@ export class SkdQuery implements ISdkQuery {
   }
 
   async balance(args: AddressArg): Promise<Balance> {
-    validate(args, AddressArg);
+    await validate(args, AddressArg);
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
     const { availableBalance } = await this.sdk.api.derive.balances.all(

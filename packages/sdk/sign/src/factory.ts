@@ -1,4 +1,4 @@
-import { validate } from '@unique-nft/sdk/validation';
+import { validateSync } from '@unique-nft/sdk/validation';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk';
 import { SeedSignerOptions, SignerOptions, UriSignerOptions } from './types';
@@ -8,11 +8,11 @@ export async function createSigner(
   signerOptions: SignerOptions,
 ): Promise<SdkSigner> {
   if ('seed' in signerOptions) {
-    await validate(signerOptions, SeedSignerOptions);
+    validateSync(signerOptions, SeedSignerOptions);
     return new SeedSigner(signerOptions.seed);
   }
   if ('uri' in signerOptions) {
-    await validate(signerOptions, UriSignerOptions);
+    validateSync(signerOptions, UriSignerOptions);
     return new SeedSigner(signerOptions.uri);
   }
 

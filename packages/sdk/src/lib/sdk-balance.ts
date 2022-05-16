@@ -17,8 +17,8 @@ export class SdkBalance implements ISdkBalance {
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  buildTransfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
-    validate(args, TransferBuildArgs);
+  async buildTransfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
+    await validate(args, TransferBuildArgs);
     const amountRaw = BigInt(args.amount * this.multiplierToRaw);
     return this.sdk.extrinsics.build({
       address: args.address,

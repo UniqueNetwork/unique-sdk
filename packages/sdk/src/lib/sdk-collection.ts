@@ -17,8 +17,8 @@ interface Sdk {
 export class SdkCollection implements ISdkCollection {
   constructor(readonly sdk: Sdk) {}
 
-  create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
-    validate(collection, CreateCollectionArgs);
+  async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
+    await validate(collection, CreateCollectionArgs);
     const { address, ...rest } = collection;
 
     const encodedCollection = encodeCollection(
