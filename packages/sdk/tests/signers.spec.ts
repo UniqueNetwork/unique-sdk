@@ -118,15 +118,23 @@ describe('signers', () => {
     const sdk = await createSdk({
       seed: testUser.seed,
     });
-    const { signerPayloadHex } = await sdk.balance.buildTransfer({
-      address: alice.address,
-      destination: bob.address,
-      amount: 0.001,
-    });
+    const { signerPayloadHex, signerPayloadJSON } =
+      await sdk.balance.buildTransfer({
+        address: alice.address,
+        destination: bob.address,
+        amount: 0.001,
+      });
 
     const { signature } = await sdk.extrinsics.sign({
       signerPayloadHex,
     });
     expect(typeof signature).toBe('string');
+
+    await tryAndExpectSdkError(async () => {
+      await sdk.extrinsics.verifySign({
+        signature,
+        signerPayloadJSON,
+      });
+    }, ErrorCodes.BadSignature);
   });
 });
