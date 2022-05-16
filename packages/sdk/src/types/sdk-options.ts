@@ -1,4 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
+import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { ValidSeed } from '@unique-nft/sdk/validation';
 
 export interface SdkOptions {
@@ -17,7 +18,7 @@ export class SeedSignerOptions {
 }
 
 export class KeyfileSignerOptions {
-  keyfile: string;
+  keyfile: KeyringPair$Json;
 
   passwordCallback: () => string;
 }
