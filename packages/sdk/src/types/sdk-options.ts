@@ -1,18 +1,23 @@
+// eslint-disable-next-line max-classes-per-file
+import { ValidSeed } from '@unique-nft/sdk/validation';
+
 export interface SdkOptions {
   chainWsUrl: string;
   ipfsGatewayUrl: string;
   signer?: SignerOptions;
 }
 
-export interface SignerOptions {
-  type: SignerType;
+export type SignerOptions = SeedSignerOptions | JsonFileSignerOptions;
 
-  seed?: string;
+export class SeedSignerOptions {
+  @ValidSeed()
+  seed: string;
 
-  jsonFile?: string;
-  passwordCallback?: () => string;
+  developmentAccount?: boolean;
 }
 
-export enum SignerType {
-  SEED = 'seed',
+export class JsonFileSignerOptions {
+  keyfile: string;
+
+  passwordCallback: () => string;
 }

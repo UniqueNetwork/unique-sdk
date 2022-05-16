@@ -1,22 +1,13 @@
 // eslint-disable-next-line max-classes-per-file
-import {
-  IsString,
-  IsNumber,
-  IsPositive,
-  NotEquals,
-  IsNotEmptyObject,
-  IsHexadecimal,
-  IsOptional,
-  IsEnum,
-} from 'class-validator';
+import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  SignatureType,
-  SignerPayloadJSONDto,
-  SignerPayloadRawDto,
   SignTxArgs,
   SignTxResult,
+  SubmitResult,
+  SubmitTxArgs,
   TxBuildArgs,
+  UnsignedTxPayload,
 } from '@unique-nft/sdk/extrinsics';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
@@ -90,40 +81,6 @@ export class TransferBuildArgs {
     example: 0.01,
   })
   amount: number;
-}
-
-export class UnsignedTxPayload {
-  @ApiProperty()
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  @ApiProperty()
-  signerPayloadRaw: SignerPayloadRawDto;
-
-  @ApiProperty({ type: String })
-  signerPayloadHex: HexString;
-}
-
-export class SubmitTxArgs {
-  @IsNotEmptyObject()
-  @ApiProperty()
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  @IsHexadecimal()
-  @ApiProperty({ type: String })
-  signature: HexString;
-
-  @IsOptional()
-  @IsEnum(SignatureType)
-  @ApiProperty({
-    enum: SignatureType,
-    required: false,
-  })
-  signatureType?: SignatureType | `${SignatureType}`;
-}
-
-export class SubmitResult {
-  @ApiProperty({ type: String })
-  hash: HexString;
 }
 
 export class CollectionIdArg {

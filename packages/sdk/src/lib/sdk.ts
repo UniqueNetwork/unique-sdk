@@ -8,6 +8,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import { SdkSigner, SeedSigner } from '@unique-nft/sdk/sign';
+import { validate } from '@unique-nft/sdk/validation';
 
 import {
   ISdk,
@@ -16,8 +17,8 @@ import {
   ISdkQuery,
   ISdkToken,
   SdkOptions,
+  SeedSignerOptions,
   SignerOptions,
-  SignerType,
 } from '../types';
 import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
@@ -29,8 +30,6 @@ export class Sdk implements ISdk {
 
   readonly api: ApiPromise;
 
-  readonly signer?: SdkSigner;
-
   readonly extrinsics: SdkExtrinsics;
 
   readonly query: ISdkQuery;
@@ -40,6 +39,8 @@ export class Sdk implements ISdk {
   collection: ISdkCollection;
 
   token: ISdkToken;
+
+  signer?: SdkSigner;
 
   static async create(options: SdkOptions): Promise<Sdk> {
     const sdk = new Sdk(options);
@@ -58,11 +59,7 @@ export class Sdk implements ISdk {
       },
     });
 
-    if (options.signer) {
-      this.signer = Sdk.createSigner(this.options.signer!);
-    }
-
-    this.isReady = this.api.isReady.then(() => true);
+    this.isReady = this.api.isReady.then(() => this.onReady());
 
     this.extrinsics = new SdkExtrinsics(this);
     this.query = new SkdQuery(this);
@@ -71,12 +68,28 @@ export class Sdk implements ISdk {
     this.balance = new SdkBalance(this);
   }
 
-  private static createSigner(signerOptions: SignerOptions): SdkSigner {
-    switch (signerOptions.type) {
-      case SignerType.SEED:
-        return new SeedSigner(signerOptions.seed!);
-      default:
-        throw new InvalidSignerError();
+  async onReady() {
+    if (this.options.signer) {
+      this.signer = await Sdk.createSigner(this.options.signer);
     }
+    return true;
+  }
+
+  private static async createSigner(
+    signerOptions: SignerOptions,
+  ): Promise<SdkSigner> {
+    if ('seed' in signerOptions) {
+      if (!signerOptions.developmentAccount) {
+        await validate(signerOptions, SeedSignerOptions);
+      }
+      return new SeedSigner(signerOptions.seed);
+    }
+
+    if ('keyfile' in signerOptions) {
+      // todo add json signer
+      throw new InvalidSignerError();
+    }
+
+    throw new InvalidSignerError();
   }
 }

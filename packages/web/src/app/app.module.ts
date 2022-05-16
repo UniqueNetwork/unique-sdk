@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { Sdk, SignerType } from '@unique-nft/sdk';
+import { Sdk } from '@unique-nft/sdk';
 import { ConfigService } from '@nestjs/config';
 
 import {
@@ -19,8 +19,8 @@ export const sdkProvider = {
       chainWsUrl: configService.get('chainWsUrl'),
       ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
       signer: {
-        type: SignerType.SEED,
         seed: configService.get('signerSeed'),
+        developmentAccount: configService.get('developmentAccount'),
       },
     });
 
