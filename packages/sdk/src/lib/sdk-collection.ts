@@ -1,4 +1,5 @@
-import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { ApiPromise } from '@polkadot/api';
 import {
   BurnCollectionArgs,
   CreateCollectionArgs,
@@ -7,7 +8,11 @@ import {
 } from '../types';
 import { encodeCollection } from '../utils/collection-transformers';
 import { validate } from '../utils/validator';
-import { Sdk } from './sdk';
+
+interface Sdk {
+  api: ApiPromise;
+  extrinsics: SdkExtrinsics;
+}
 
 export class SdkCollection implements ISdkCollection {
   constructor(

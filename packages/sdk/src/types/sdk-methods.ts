@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { SubmitResult, SubmitTxArgs, TxBuildArgs, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { HexString } from '@polkadot/util/types';
 import {
   CollectionInfo,
   CollectionInfoBase,

@@ -1,13 +1,20 @@
 import { u8aToHex } from '@polkadot/util';
-import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { ApiPromise } from '@polkadot/api';
+import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import type {
   BurnTokenArgs,
   CreateTokenArgs,
+  ISdkQuery,
   ISdkToken,
   TransferTokenArgs,
 } from '../types';
 import { serializeConstData } from '../utils/protobuf.utils';
-import { Sdk } from './sdk';
+
+interface Sdk {
+  api: ApiPromise;
+  extrinsics: SdkExtrinsics;
+  query: ISdkQuery;
+}
 
 export class SdkToken implements ISdkToken {
   constructor(

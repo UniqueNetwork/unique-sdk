@@ -88,6 +88,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
+    // todo вернуть когда сделаем ентрипоинт @unique-nft/sdk/validation
     // await validate(args, SubmitTxArgs);
     const { signerPayloadJSON, signature, signatureType } = args;
     const { method, version, address } = signerPayloadJSON;

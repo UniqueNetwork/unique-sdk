@@ -1,11 +1,16 @@
-import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
-import { Sdk } from './sdk';
+import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { ApiPromise } from '@polkadot/api';
 
 import { validate } from '../utils/validator';
 import {
   ISdkBalance,
   TransferBuildArgs,
 } from '../types';
+
+interface Sdk {
+  api: ApiPromise;
+  extrinsics: SdkExtrinsics;
+}
 
 export class SdkBalance implements ISdkBalance {
   private readonly multiplierToRaw: number;

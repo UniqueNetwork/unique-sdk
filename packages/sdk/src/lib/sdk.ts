@@ -26,7 +26,7 @@ export class Sdk implements ISdk {
 
   readonly api: ApiPromise;
 
-  readonly extrinsics: ISdkExtrinsics;
+  readonly extrinsics: SdkExtrinsics;
 
   readonly query: ISdkQuery;
 
@@ -55,8 +55,8 @@ export class Sdk implements ISdk {
 
     this.isReady = this.api.isReady.then(() => true);
 
-    this.query = new SkdQuery(this);
     this.extrinsics = new SdkExtrinsics(this);
+    this.query = new SkdQuery(this);
     this.collection = new SdkCollection(this);
     this.token = new SdkToken(this);
     this.balance = new SdkBalance(this);

@@ -1,20 +1,27 @@
 import { formatBalance } from '@polkadot/util';
 import { Option } from '@polkadot/types-codec';
 import { PalletNonfungibleItemData } from '@unique-nft/types';
+import { ApiPromise } from '@polkadot/api';
+import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   AddressArg,
   Balance,
   ChainProperties,
   CollectionIdArg,
   CollectionInfo,
-  ISdkQuery,
+  ISdkQuery, SdkOptions,
   TokenIdArg,
   TokenInfo,
 } from '../types';
 import { decodeCollection } from '../utils/collection-transformers';
 import { decodeToken } from '../utils/token-transformers';
 import { validate } from '../utils/validator';
-import { Sdk } from './sdk';
+
+interface Sdk {
+  api: ApiPromise;
+  extrinsics: SdkExtrinsics;
+  options: SdkOptions;
+}
 
 export class SkdQuery implements ISdkQuery {
   constructor(
