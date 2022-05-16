@@ -41,7 +41,8 @@ export class ChainProperties {
   wsUrl: string;
 
   @ApiProperty({
-    example: '0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39',
+    example:
+      '0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39',
   })
   genesisHash: HexString;
 }
@@ -149,6 +150,16 @@ export class UnsignedTxPayload {
 
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
+}
+
+export class SignTxArgs {
+  @ApiProperty({ type: String })
+  signerPayloadHex: HexString;
+}
+
+export class SignTxResult {
+  @ApiProperty({ type: String })
+  signature: HexString;
 }
 
 export class SubmitTxArgs {
@@ -263,6 +274,7 @@ export interface ISdkToken {
 
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
+  sign(signArgs: SignTxArgs): SignTxResult;
   submit(args: SubmitTxArgs): Promise<SubmitResult>;
 }
 

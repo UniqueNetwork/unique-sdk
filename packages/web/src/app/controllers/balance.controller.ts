@@ -6,6 +6,7 @@ import {
   TransferBuildArgs,
   UnsignedTxPayload,
   AddressArg,
+  SubmitResult,
 } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
@@ -24,7 +25,7 @@ export class BalanceController {
   @Post('transfer')
   async transferBuild(
     @Body() args: TransferBuildArgs,
-  ): Promise<UnsignedTxPayload> {
+  ): Promise<UnsignedTxPayload | SubmitResult> {
     return this.sdk.balance.buildTransfer(args);
   }
 }

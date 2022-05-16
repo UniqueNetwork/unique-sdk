@@ -2,19 +2,26 @@ import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
-import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
+import {
+  BuildExtrinsicError,
+  InvalidSignerError,
+  SubmitExtrinsicError,
+} from '@unique-nft/sdk/errors';
 import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from '../utils';
 import {
   ISdkExtrinsics,
+  SignTxArgs,
+  SignTxResult,
   SubmitResult,
   SubmitTxArgs,
   TxBuildArgs,
   UnsignedTxPayload,
 } from '../types';
 import { validate } from '../utils/validator';
+import { SdkSigner } from './sdk-signers';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
-  constructor(readonly api: ApiPromise) {}
+  constructor(readonly api: ApiPromise, private readonly signer?: SdkSigner) {}
 
   async build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload> {
     const { address, section, method, args } = buildArgs;
@@ -78,6 +85,14 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     );
 
     return signerPayloadToUnsignedTxPayload(this.api, signerPayload);
+  }
+
+  sign(args: SignTxArgs): SignTxResult {
+    if (!this.signer) throw new InvalidSignerError();
+
+    return {
+      signature: this.signer.sign(args.signerPayloadHex),
+    };
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {

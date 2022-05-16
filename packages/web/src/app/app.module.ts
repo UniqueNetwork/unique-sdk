@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { Sdk } from '@unique-nft/sdk';
+import { Sdk, SignerType } from '@unique-nft/sdk';
 import { ConfigService } from '@nestjs/config';
 
 import {
-  ChainController,
   BalanceController,
-  ExtrinsicsController,
+  ChainController,
   CollectionController,
+  ExtrinsicsController,
   TokenController,
 } from './controllers';
 import { GlobalConfigModule } from './config/config.module';
@@ -18,6 +18,10 @@ export const sdkProvider = {
     const sdk = new Sdk({
       chainWsUrl: configService.get('chainWsUrl'),
       ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
+      signer: {
+        type: SignerType.SEED,
+        seed: configService.get('signerSeed'),
+      },
     });
 
     await sdk.isReady;

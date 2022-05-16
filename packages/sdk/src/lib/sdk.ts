@@ -5,25 +5,31 @@ import '@unique-nft/types/augment-api-query';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
+import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import {
-  SdkOptions,
   ISdk,
-  ISdkQuery,
-  ISdkExtrinsics,
-  ISdkCollection,
-  ISdkToken,
   ISdkBalance,
+  ISdkCollection,
+  ISdkExtrinsics,
+  ISdkQuery,
+  ISdkToken,
+  SdkOptions,
+  SignerOptions,
+  SignerType,
 } from '../types';
 import { SkdQuery } from './skd-query';
 import { SdkExtrinsics } from './sdk-extrinsics';
 import { SdkCollection } from './sdk-collection';
 import { SdkToken } from './sdk-token';
 import { SdkBalance } from './sdk-balance';
+import { SdkSigner, SeedSigner } from './sdk-signers';
 
 export class Sdk implements ISdk {
   readonly isReady: Promise<boolean>;
 
   readonly api: ApiPromise;
+
+  readonly signer?: SdkSigner;
 
   readonly extrinsics: ISdkExtrinsics;
 
@@ -52,12 +58,25 @@ export class Sdk implements ISdk {
       },
     });
 
+    if (options.signer) {
+      this.signer = Sdk.createSigner(this.options.signer!);
+    }
+
     this.isReady = this.api.isReady.then(() => true);
 
     this.query = new SkdQuery(this.options, this.api);
-    this.extrinsics = new SdkExtrinsics(this.api);
+    this.extrinsics = new SdkExtrinsics(this.api, this.signer);
     this.collection = new SdkCollection(this.api, this.extrinsics);
     this.token = new SdkToken(this.api, this.extrinsics, this.query);
     this.balance = new SdkBalance(this.extrinsics, this.api);
+  }
+
+  private static createSigner(signerOptions: SignerOptions): SdkSigner {
+    switch (signerOptions.type) {
+      case SignerType.SEED:
+        return new SeedSigner(signerOptions.seed!);
+      default:
+        throw new InvalidSignerError();
+    }
   }
 }
