@@ -1,32 +1,42 @@
+// eslint-disable-next-line max-classes-per-file
+import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
-import { ApiPromise } from '@polkadot/api';
+import { HexString } from '@polkadot/util/types';
 import {
   BuildExtrinsicError,
   InvalidSignerError,
   SubmitExtrinsicError,
 } from '@unique-nft/sdk/errors';
-import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from '../utils';
+import { validate } from '@unique-nft/sdk/validation';
+import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
 import {
   ISdkExtrinsics,
-  SignTxArgs,
-  SignTxResult,
   SubmitResult,
   SubmitTxArgs,
   TxBuildArgs,
   UnsignedTxPayload,
-} from '../types';
-import { validate } from '../utils/validator';
-import { SdkSigner } from './sdk-signers';
+  SignTxArgs,
+  SignTxResult,
+} from './types';
+
+export interface SdkSigner {
+  sign(payload: string): HexString;
+}
+
+interface Sdk {
+  api: ApiPromise;
+  signer?: SdkSigner;
+}
 
 export class SdkExtrinsics implements ISdkExtrinsics {
-  constructor(readonly api: ApiPromise, private readonly signer?: SdkSigner) {}
+  constructor(readonly sdk: Sdk) {}
 
   async build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload> {
     const { address, section, method, args } = buildArgs;
 
-    const signingInfo = await this.api.derive.tx.signingInfo(
+    const signingInfo = await this.sdk.api.derive.tx.signingInfo(
       address,
       undefined,
       buildArgs.isImmortal ? 0 : undefined,
@@ -36,7 +46,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     // todo 'ExtrinsicEra' -> enum ExtrinsicTypes {} ?
     const era = !buildArgs.isImmortal
-      ? this.api.registry.createTypeUnsafe<ExtrinsicEra>('ExtrinsicEra', [
+      ? this.sdk.api.registry.createTypeUnsafe<ExtrinsicEra>('ExtrinsicEra', [
           {
             current: header?.number || 0,
             period: buildArgs.era || mortalLength,
@@ -45,14 +55,14 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       : undefined;
 
     const blockHash = buildArgs.isImmortal
-      ? this.api.genesisHash
-      : header?.hash || this.api.genesisHash;
+      ? this.sdk.api.genesisHash
+      : header?.hash || this.sdk.api.genesisHash;
 
     const {
       genesisHash,
       runtimeVersion,
       registry: { signedExtensions },
-    } = this.api;
+    } = this.sdk.api;
 
     const signatureOptions: SignatureOptions = {
       nonce,
@@ -65,14 +75,14 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     let tx;
     try {
-      tx = this.api.tx[section][method](...args);
+      tx = this.sdk.api.tx[section][method](...args);
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
       throw new BuildExtrinsicError(errorMessage);
     }
 
-    const signerPayload = this.api.registry.createTypeUnsafe<SignerPayload>(
+    const signerPayload = this.sdk.api.registry.createTypeUnsafe<SignerPayload>(
       'SignerPayload',
       [
         objectSpread({}, signatureOptions, {
@@ -84,14 +94,14 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       ],
     );
 
-    return signerPayloadToUnsignedTxPayload(this.api, signerPayload);
+    return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
   }
 
   sign(args: SignTxArgs): SignTxResult {
-    if (!this.signer) throw new InvalidSignerError();
+    if (!this.sdk.signer) throw new InvalidSignerError();
 
     return {
-      signature: this.signer.sign(args.signerPayloadHex),
+      signature: this.sdk.signer.sign(args.signerPayloadHex),
     };
   }
 
@@ -102,15 +112,15 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     // todo 'ExtrinsicSignature' -> enum ExtrinsicTypes {} ?
     const signatureWithType = signatureType
-      ? this.api.registry
+      ? this.sdk.api.registry
           .createType('ExtrinsicSignature', { [signatureType]: signature })
           .toHex()
       : signature;
 
-    verifyTxSignature(this.api, signerPayloadJSON, signature);
+    verifyTxSignature(this.sdk.api, signerPayloadJSON, signature);
 
     // todo 'Extrinsic' -> enum ExtrinsicTypes {} ?
-    const extrinsic = this.api.registry.createType('Extrinsic', {
+    const extrinsic = this.sdk.api.registry.createType('Extrinsic', {
       method,
       version,
     });
@@ -118,7 +128,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     extrinsic.addSignature(address, signatureWithType, signerPayloadJSON);
 
     try {
-      const hash = await this.api.rpc.author.submitExtrinsic(extrinsic);
+      const hash = await this.sdk.api.rpc.author.submitExtrinsic(extrinsic);
       return { hash: hash.toHex() };
     } catch (error) {
       const errorMessage =

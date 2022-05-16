@@ -4,11 +4,11 @@ import {
   Sdk,
   Balance,
   TransferBuildArgs,
-  UnsignedTxPayload,
   AddressArg,
   SubmitResult,
 } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
+import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
