@@ -1,27 +1,23 @@
 import { u8aToHex } from '@polkadot/util';
-import { ApiPromise } from '@polkadot/api';
+import { Sdk } from '@unique-nft/sdk';
+import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import type {
   BurnTokenArgs,
   CreateTokenArgs,
-  ISdkExtrinsics,
-  ISdkQuery,
   ISdkToken,
   TransferTokenArgs,
-  UnsignedTxPayload,
 } from '../types';
 import { serializeConstData } from '../utils/protobuf.utils';
 
 export class SdkToken implements ISdkToken {
   constructor(
-    readonly api: ApiPromise,
-    readonly extrinsics: ISdkExtrinsics,
-    readonly query: ISdkQuery,
+    readonly sdk: Sdk,
   ) {}
 
   async create(token: CreateTokenArgs): Promise<UnsignedTxPayload> {
     const { address, collectionId, constData } = token;
 
-    const collection = await this.query.collection({ collectionId });
+    const collection = await this.sdk.query.collection({ collectionId });
 
     if (!collection) throw new Error(`no collection ${collectionId}`);
 
@@ -38,7 +34,7 @@ export class SdkToken implements ISdkToken {
           }
         : { nft: null };
 
-    return this.extrinsics.build({
+    return this.sdk.extrinsics.build({
       address,
       section: 'unique',
       method: 'createItem',
@@ -51,7 +47,7 @@ export class SdkToken implements ISdkToken {
     collectionId,
     tokenId,
   }: BurnTokenArgs): Promise<UnsignedTxPayload> {
-    return this.extrinsics.build({
+    return this.sdk.extrinsics.build({
       address,
       section: 'unique',
       method: 'burnItem',
@@ -65,7 +61,7 @@ export class SdkToken implements ISdkToken {
     collectionId,
     tokenId,
   }: TransferTokenArgs): Promise<UnsignedTxPayload> {
-    return this.extrinsics.build({
+    return this.sdk.extrinsics.build({
       address: from,
       section: 'unique',
       method: 'transfer',

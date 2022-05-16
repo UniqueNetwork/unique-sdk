@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import { Header, Index } from '@polkadot/types/interfaces';
 import {
   SignerPayloadJSON,

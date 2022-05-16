@@ -1,17 +1,22 @@
+import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
-import { Sdk } from '@unique-nft/sdk';
-import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
-import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from '../utils';
+import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
 import {
   ISdkExtrinsics,
   SubmitResult,
   SubmitTxArgs,
   TxBuildArgs,
   UnsignedTxPayload,
-} from '../types';
-import { validate } from '../utils/validator';
+} from './types';
+
+interface Sdk {
+  api: ApiPromise;
+}
+
+class BuildExtrinsicError extends Error {}
+class SubmitExtrinsicError extends Error {}
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(
@@ -83,7 +88,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
-    await validate(args, SubmitTxArgs);
+    // await validate(args, SubmitTxArgs);
     const { signerPayloadJSON, signature, signatureType } = args;
     const { method, version, address } = signerPayloadJSON;
 

@@ -1,10 +1,10 @@
 import { Sdk } from '@unique-nft/sdk';
+import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import {
   BurnCollectionArgs,
   CreateCollectionArgs,
   ISdkCollection,
   TransferCollectionArgs,
-  UnsignedTxPayload,
 } from '../types';
 import { encodeCollection } from '../utils/collection-transformers';
 import { validate } from '../utils/validator';

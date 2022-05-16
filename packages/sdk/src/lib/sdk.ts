@@ -5,6 +5,8 @@ import '@unique-nft/types/augment-api-query';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
+
+import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   SdkOptions,
   ISdk,
@@ -15,7 +17,6 @@ import {
   ISdkBalance,
 } from '../types';
 import { SkdQuery } from './skd-query';
-import { SdkExtrinsics } from './sdk-extrinsics';
 import { SdkCollection } from './sdk-collection';
 import { SdkToken } from './sdk-token';
 import { SdkBalance } from './sdk-balance';
@@ -42,7 +43,7 @@ export class Sdk implements ISdk {
     return sdk;
   }
 
-  constructor(private readonly options: SdkOptions) {
+  constructor(public readonly options: SdkOptions) {
     const provider = new WsProvider(this.options.chainWsUrl);
 
     this.api = new ApiPromise({
@@ -54,10 +55,10 @@ export class Sdk implements ISdk {
 
     this.isReady = this.api.isReady.then(() => true);
 
-    this.query = new SkdQuery(this.options, this.api);
-    this.extrinsics = new SdkExtrinsics(this.api);
+    this.query = new SkdQuery(this);
+    this.extrinsics = new SdkExtrinsics(this);
     this.collection = new SdkCollection(this);
-    this.token = new SdkToken(this.api, this.extrinsics, this.query);
-    this.balance = new SdkBalance(this.extrinsics, this.api);
+    this.token = new SdkToken(this);
+    this.balance = new SdkBalance(this);
   }
 }
