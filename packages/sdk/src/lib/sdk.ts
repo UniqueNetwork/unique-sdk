@@ -55,19 +55,14 @@ export class Sdk implements ISdk {
       },
     });
 
-    this.isReady = this.api.isReady.then(() => this.onReady());
+    this.isReady = this.api.isReady.then(() => true);
+
+    this.signer = this.options.signer;
 
     this.extrinsics = new SdkExtrinsics(this);
     this.query = new SkdQuery(this);
     this.collection = new SdkCollection(this);
     this.token = new SdkToken(this);
     this.balance = new SdkBalance(this);
-  }
-
-  async onReady() {
-    if (this.options.signerFactory) {
-      this.signer = await this.options.signerFactory();
-    }
-    return true;
   }
 }

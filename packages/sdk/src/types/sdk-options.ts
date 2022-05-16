@@ -3,7 +3,7 @@ import { HexString } from '@polkadot/util/types';
 export interface SdkOptions {
   chainWsUrl: string;
   ipfsGatewayUrl: string;
-  signerFactory?: () => Promise<SdkSigner>;
+  signer?: SdkSigner;
 }
 
 export interface SdkSigner {

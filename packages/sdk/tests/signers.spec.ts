@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { SdkOptions } from '@unique-nft/sdk';
+import { SdkOptions, SdkSigner } from '@unique-nft/sdk';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
 import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '../src/lib/sdk';
@@ -23,11 +23,12 @@ describe('signers', () => {
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
   });
 
-  function createSdk(signerOptions: SignerOptions): Promise<Sdk> {
+  async function createSdk(signerOptions: SignerOptions): Promise<Sdk> {
+    const signer: SdkSigner = await createSigner(signerOptions);
     const options: SdkOptions = {
       chainWsUrl: defOptions.chainWsUrl,
       ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
-      signerFactory: () => createSigner(signerOptions),
+      signer,
     };
     return Sdk.create(options);
   }

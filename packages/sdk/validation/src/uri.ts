@@ -1,5 +1,4 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { mnemonicValidate } from '@polkadot/util-crypto';
 
 const uriRegEx = /^\/\/\w+$/;
 export function ValidUri(validationOptions?: ValidationOptions) {
