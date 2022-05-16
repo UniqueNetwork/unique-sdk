@@ -9,6 +9,10 @@ describe('signers', () => {
   let alice: KeyringPair;
   let bob: KeyringPair;
 
+  const testAddress = '5HHErUrB48ysnAcP8TJU9ZUx9fks4QwA8aDZtXqQBkttbW9S';
+  const testSeed =
+    'arrest lunch tone surprise recall output session drift among riot brand pulp';
+
   beforeAll(async () => {
     await Sdk.create(getDefaultSdkOptions());
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
@@ -28,26 +32,25 @@ describe('signers', () => {
     }
   }
 
-  it('seed signer validate - ok', async () => {
+  it('uri signer validate - ok', async () => {
     const defOptions = getDefaultSdkOptions();
     const options: SdkOptions = {
       chainWsUrl: defOptions.chainWsUrl,
       ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
       signer: {
-        seed: '//Alice',
-        developmentAccount: true,
+        uri: '//Alice',
       },
     };
     await Sdk.create(options);
   });
 
-  it('seed signer validate - error', async () => {
+  it('uri signer validate - fail', async () => {
     const defOptions = getDefaultSdkOptions();
     const options: SdkOptions = {
       chainWsUrl: defOptions.chainWsUrl,
       ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
       signer: {
-        seed: '//Alice',
+        uri: 'Alice',
       },
     };
 
@@ -56,14 +59,13 @@ describe('signers', () => {
     }, ErrorCodes.Validation);
   });
 
-  it('seed signer sign - ok', async () => {
+  it('uri signer sign - ok', async () => {
     const defOptions = getDefaultSdkOptions();
     const options: SdkOptions = {
       chainWsUrl: defOptions.chainWsUrl,
       ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
       signer: {
-        seed: '//Alice',
-        developmentAccount: true,
+        uri: '//Alice',
       },
     };
     const sdk = await Sdk.create(options);
@@ -79,14 +81,13 @@ describe('signers', () => {
     expect(typeof signature).toBe('string');
   });
 
-  it('seed signer sign - error', async () => {
+  it('uri signer sign - fail', async () => {
     const defOptions = getDefaultSdkOptions();
     const options: SdkOptions = {
       chainWsUrl: defOptions.chainWsUrl,
       ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
       signer: {
-        seed: '//Alice',
-        developmentAccount: true,
+        uri: '//Alice',
       },
     };
     const sdk = await Sdk.create(options);
@@ -106,5 +107,49 @@ describe('signers', () => {
         signerPayloadJSON,
       });
     }, ErrorCodes.BadSignature);
+  });
+
+  it('seed signer sign - ok', async () => {
+    const defOptions = getDefaultSdkOptions();
+    const options: SdkOptions = {
+      chainWsUrl: defOptions.chainWsUrl,
+      ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
+      signer: {
+        seed: testSeed,
+      },
+    };
+    const sdk = await Sdk.create(options);
+    const { signerPayloadHex } = await sdk.balance.buildTransfer({
+      address: testAddress,
+      destination: bob.address,
+      amount: 0.001,
+    });
+
+    const { signature } = await sdk.extrinsics.sign({
+      signerPayloadHex,
+    });
+    expect(typeof signature).toBe('string');
+  });
+
+  it('seed signer sign - fail', async () => {
+    const defOptions = getDefaultSdkOptions();
+    const options: SdkOptions = {
+      chainWsUrl: defOptions.chainWsUrl,
+      ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
+      signer: {
+        seed: testSeed,
+      },
+    };
+    const sdk = await Sdk.create(options);
+    const { signerPayloadHex } = await sdk.balance.buildTransfer({
+      address: alice.address,
+      destination: bob.address,
+      amount: 0.001,
+    });
+
+    const { signature } = await sdk.extrinsics.sign({
+      signerPayloadHex,
+    });
+    expect(typeof signature).toBe('string');
   });
 });

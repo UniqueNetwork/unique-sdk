@@ -19,6 +19,7 @@ import {
   SdkOptions,
   SeedSignerOptions,
   SignerOptions,
+  UriSignerOptions,
 } from '../types';
 import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
@@ -79,10 +80,12 @@ export class Sdk implements ISdk {
     signerOptions: SignerOptions,
   ): Promise<SdkSigner> {
     if ('seed' in signerOptions) {
-      if (!signerOptions.developmentAccount) {
-        await validate(signerOptions, SeedSignerOptions);
-      }
+      await validate(signerOptions, SeedSignerOptions);
       return new SeedSigner(signerOptions.seed);
+    }
+    if ('uri' in signerOptions) {
+      await validate(signerOptions, UriSignerOptions);
+      return new SeedSigner(signerOptions.uri);
     }
 
     if ('keyfile' in signerOptions) {

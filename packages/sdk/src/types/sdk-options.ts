@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { ValidSeed } from '@unique-nft/sdk/validation';
+import { ValidSeed, ValidUri } from '@unique-nft/sdk/validation';
 
 export interface SdkOptions {
   chainWsUrl: string;
@@ -8,13 +8,19 @@ export interface SdkOptions {
   signer?: SignerOptions;
 }
 
-export type SignerOptions = SeedSignerOptions | KeyfileSignerOptions;
+export type SignerOptions =
+  | SeedSignerOptions
+  | UriSignerOptions
+  | KeyfileSignerOptions;
 
 export class SeedSignerOptions {
   @ValidSeed()
   seed: string;
+}
 
-  developmentAccount?: boolean;
+export class UriSignerOptions {
+  @ValidUri()
+  uri: string;
 }
 
 export class KeyfileSignerOptions {
