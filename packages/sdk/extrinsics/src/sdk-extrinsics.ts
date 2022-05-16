@@ -19,6 +19,7 @@ import {
   UnsignedTxPayload,
   SignTxArgs,
   SignTxResult,
+  VerifySignArgs,
 } from './types';
 
 interface SdkSigner {
@@ -101,14 +102,13 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     const currentSigner = signer || this.sdk.signer;
     if (!currentSigner) throw new InvalidSignerError();
 
-    const signature = currentSigner.sign(args.signerPayloadHex);
-    if (args.signerPayloadJSON) {
-      verifyTxSignature(this.sdk.api, args.signerPayloadJSON, signature);
-    }
-
     return {
-      signature,
+      signature: currentSigner.sign(args.signerPayloadHex),
     };
+  }
+
+  verifySign(args: VerifySignArgs) {
+    verifyTxSignature(this.sdk.api, args.signerPayloadJSON, args.signature);
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {

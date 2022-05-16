@@ -97,9 +97,12 @@ describe('signers', () => {
         amount: 0.001,
       });
 
+    const { signature } = await sdk.extrinsics.sign({
+      signerPayloadHex,
+    });
     await tryAndExpectSdkError(async () => {
-      await sdk.extrinsics.sign({
-        signerPayloadHex,
+      await sdk.extrinsics.verifySign({
+        signature,
         signerPayloadJSON,
       });
     }, ErrorCodes.BadSignature);
