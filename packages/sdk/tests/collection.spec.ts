@@ -1,8 +1,8 @@
 import { u8aToHex } from '@polkadot/util';
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { Sdk } from '../src/lib/sdk';
 import { CreateCollectionArgs } from '@unique-nft/sdk/types';
+import { Sdk } from '../src/lib/sdk';
 import {
   delay,
   getDefaultSdkOptions,
