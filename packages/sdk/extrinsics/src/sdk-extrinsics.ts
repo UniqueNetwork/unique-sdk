@@ -98,12 +98,14 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
   }
 
-  sign(args: SignTxArgs, signer?: SdkSigner): SignTxResult {
-    const currentSigner = signer || this.sdk.signer;
-    if (!currentSigner) throw new InvalidSignerError();
+  sign(
+    args: SignTxArgs,
+    signer: SdkSigner | undefined = this.sdk.signer,
+  ): SignTxResult {
+    if (!signer) throw new InvalidSignerError();
 
     return {
-      signature: currentSigner.sign(args.signerPayloadHex),
+      signature: signer.sign(args.signerPayloadHex),
     };
   }
 
