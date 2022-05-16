@@ -34,6 +34,11 @@ export class ChainProperties {
     example: 'wss://ws-quartz.unique.network',
   })
   wsUrl: string;
+
+  @ApiProperty({
+    example: '0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39',
+  })
+  genesisHash: HexString;
 }
 
 export class Balance {

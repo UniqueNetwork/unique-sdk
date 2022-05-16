@@ -27,6 +27,7 @@ export class SkdQuery implements ISdkQuery {
       token: this.sdk.api.registry.chainTokens[0],
       decimals: this.sdk.api.registry.chainDecimals[0],
       wsUrl: this.sdk.options.chainWsUrl,
+      genesisHash: this.sdk.api.genesisHash.toHex(), // todo hex?
     };
   }
 
