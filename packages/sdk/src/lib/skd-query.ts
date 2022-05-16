@@ -10,7 +10,8 @@ import {
   ChainProperties,
   CollectionIdArg,
   CollectionInfo,
-  ISdkQuery, SdkOptions,
+  ISdkQuery,
+  SdkOptions,
   TokenIdArg,
   TokenInfo,
 } from '../types';
@@ -24,9 +25,7 @@ interface Sdk {
 }
 
 export class SkdQuery implements ISdkQuery {
-  constructor(
-    private readonly sdk: Sdk,
-  ) {}
+  constructor(private readonly sdk: Sdk) {}
 
   chainProperties(): ChainProperties {
     return {
@@ -39,7 +38,7 @@ export class SkdQuery implements ISdkQuery {
   }
 
   async balance(args: AddressArg): Promise<Balance> {
-    await validate(args, AddressArg);
+    validate(args, AddressArg);
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
     const { availableBalance } = await this.sdk.api.derive.balances.all(

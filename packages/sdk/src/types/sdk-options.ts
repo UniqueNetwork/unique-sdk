@@ -1,30 +1,11 @@
-// eslint-disable-next-line max-classes-per-file
-import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { ValidSeed, ValidUri } from '@unique-nft/sdk/validation';
+import { HexString } from '@polkadot/util/types';
 
 export interface SdkOptions {
   chainWsUrl: string;
   ipfsGatewayUrl: string;
-  signer?: SignerOptions;
+  signerFactory?: () => Promise<SdkSigner>;
 }
 
-export type SignerOptions =
-  | SeedSignerOptions
-  | UriSignerOptions
-  | KeyfileSignerOptions;
-
-export class SeedSignerOptions {
-  @ValidSeed()
-  seed: string;
-}
-
-export class UriSignerOptions {
-  @ValidUri()
-  uri: string;
-}
-
-export class KeyfileSignerOptions {
-  keyfile: KeyringPair$Json;
-
-  passwordCallback: () => string;
+export interface SdkSigner {
+  sign(payload: string): HexString;
 }

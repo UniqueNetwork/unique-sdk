@@ -15,15 +15,16 @@ interface Sdk {
 }
 
 export class SdkCollection implements ISdkCollection {
-  constructor(
-    readonly sdk: Sdk,
-  ) {}
+  constructor(readonly sdk: Sdk) {}
 
-  async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
-    await validate(collection, CreateCollectionArgs);
+  create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
+    validate(collection, CreateCollectionArgs);
     const { address, ...rest } = collection;
 
-    const encodedCollection = encodeCollection(this.sdk.api.registry, rest).toHex();
+    const encodedCollection = encodeCollection(
+      this.sdk.api.registry,
+      rest,
+    ).toHex();
 
     return this.sdk.extrinsics.build({
       address,

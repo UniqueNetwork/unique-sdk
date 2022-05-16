@@ -5,10 +5,7 @@ import '@unique-nft/types/augment-api-query';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-import { SdkSigner, SeedSigner } from '@unique-nft/sdk/sign';
-import { validate } from '@unique-nft/sdk/validation';
 
 import {
   ISdk,
@@ -17,9 +14,7 @@ import {
   ISdkQuery,
   ISdkToken,
   SdkOptions,
-  SeedSignerOptions,
-  SignerOptions,
-  UriSignerOptions,
+  SdkSigner,
 } from '../types';
 import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
@@ -70,29 +65,9 @@ export class Sdk implements ISdk {
   }
 
   async onReady() {
-    if (this.options.signer) {
-      this.signer = await Sdk.createSigner(this.options.signer);
+    if (this.options.signerFactory) {
+      this.signer = await this.options.signerFactory();
     }
     return true;
-  }
-
-  private static async createSigner(
-    signerOptions: SignerOptions,
-  ): Promise<SdkSigner> {
-    if ('seed' in signerOptions) {
-      await validate(signerOptions, SeedSignerOptions);
-      return new SeedSigner(signerOptions.seed);
-    }
-    if ('uri' in signerOptions) {
-      await validate(signerOptions, UriSignerOptions);
-      return new SeedSigner(signerOptions.uri);
-    }
-
-    if ('keyfile' in signerOptions) {
-      // todo add json signer
-      throw new InvalidSignerError();
-    }
-
-    throw new InvalidSignerError();
   }
 }
