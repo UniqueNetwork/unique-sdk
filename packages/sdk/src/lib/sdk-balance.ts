@@ -1,5 +1,5 @@
-import { Sdk } from '@unique-nft/sdk';
 import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { Sdk } from './sdk';
 
 import { validate } from '../utils/validator';
 import {

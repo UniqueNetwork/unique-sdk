@@ -1,4 +1,3 @@
-import { Sdk } from '@unique-nft/sdk';
 import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import {
   BurnCollectionArgs,
@@ -8,6 +7,7 @@ import {
 } from '../types';
 import { encodeCollection } from '../utils/collection-transformers';
 import { validate } from '../utils/validator';
+import { Sdk } from './sdk';
 
 export class SdkCollection implements ISdkCollection {
   constructor(

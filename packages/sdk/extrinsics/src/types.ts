@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
 import { IsEnum, IsHexadecimal, IsNotEmptyObject, IsOptional } from 'class-validator';

@@ -1,7 +1,6 @@
 import { formatBalance } from '@polkadot/util';
 import { Option } from '@polkadot/types-codec';
 import { PalletNonfungibleItemData } from '@unique-nft/types';
-import { Sdk } from '@unique-nft/sdk';
 import {
   AddressArg,
   Balance,
@@ -15,6 +14,7 @@ import {
 import { decodeCollection } from '../utils/collection-transformers';
 import { decodeToken } from '../utils/token-transformers';
 import { validate } from '../utils/validator';
+import { Sdk } from './sdk';
 
 export class SkdQuery implements ISdkQuery {
   constructor(

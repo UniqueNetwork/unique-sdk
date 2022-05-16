@@ -1,5 +1,4 @@
 import { u8aToHex } from '@polkadot/util';
-import { Sdk } from '@unique-nft/sdk';
 import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import type {
   BurnTokenArgs,
@@ -8,6 +7,7 @@ import type {
   TransferTokenArgs,
 } from '../types';
 import { serializeConstData } from '../utils/protobuf.utils';
+import { Sdk } from './sdk';
 
 export class SdkToken implements ISdkToken {
   constructor(

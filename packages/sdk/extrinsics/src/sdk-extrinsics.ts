@@ -1,7 +1,9 @@
+// eslint-disable-next-line max-classes-per-file
 import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
+import { BuildExtrinsicError, SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
 import {
   ISdkExtrinsics,
@@ -15,8 +17,6 @@ interface Sdk {
   api: ApiPromise;
 }
 
-class BuildExtrinsicError extends Error {}
-class SubmitExtrinsicError extends Error {}
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(
