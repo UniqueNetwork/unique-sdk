@@ -3,7 +3,6 @@ import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
-import { HexString } from '@polkadot/util/types';
 import {
   BuildExtrinsicError,
   InvalidSignerError,
@@ -106,7 +105,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     };
   }
 
-  verifySign(args: SubmitTxArgs) {
+  verifySign(args: SubmitTxArgs): void {
     verifyTxSignature(this.sdk.api, args.signerPayloadJSON, args.signature);
   }
 

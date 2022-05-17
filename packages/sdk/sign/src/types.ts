@@ -23,6 +23,10 @@ export class SeedSignerOptions {
   @IsEnum(SignType)
   @IsOptional()
   type?: SignType;
+
+  constructor(seed: string) {
+    this.seed = seed;
+  }
 }
 
 export class UriSignerOptions {
@@ -32,6 +36,10 @@ export class UriSignerOptions {
   @IsEnum(SignType)
   @IsOptional()
   type?: SignType;
+
+  constructor(uri: string) {
+    this.uri = uri;
+  }
 }
 
 export class KeyfileSignerOptions {
