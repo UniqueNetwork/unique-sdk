@@ -1,6 +1,6 @@
 # Unique Network web-API Docker image
 
-![dockerhub](https://img.shields.io/docker/pulls/uniquenetwork/web.svg?logo=docker&style=flat-square)
+[![dockerhub](https://img.shields.io/docker/pulls/uniquenetwork/web.svg?logo=docker&style=flat-square)](https://hub.docker.com/r/uniquenetwork/web)
 
 ## How to use this image
 start container with command 
