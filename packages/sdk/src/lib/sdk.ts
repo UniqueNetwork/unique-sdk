@@ -10,12 +10,12 @@ import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   ISdk,
   ISdkBalance,
-  ISdkCollection,
   ISdkQuery,
+  ISdkCollection,
   ISdkToken,
   SdkOptions,
   SdkSigner,
-} from '../types';
+} from '@unique-nft/sdk/types';
 import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
 import { SdkToken } from './sdk-token';

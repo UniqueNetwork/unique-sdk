@@ -7,8 +7,8 @@ import type {
   ISdkQuery,
   ISdkToken,
   TransferTokenArgs,
-} from '../types';
-import { serializeConstData } from '../utils/protobuf.utils';
+} from '@unique-nft/sdk/types';
+import { serializeConstData } from '@unique-nft/sdk/utils';
 
 interface Sdk {
   api: ApiPromise;
@@ -17,9 +17,7 @@ interface Sdk {
 }
 
 export class SdkToken implements ISdkToken {
-  constructor(
-    readonly sdk: Sdk,
-  ) {}
+  constructor(readonly sdk: Sdk) {}
 
   async create(token: CreateTokenArgs): Promise<UnsignedTxPayload> {
     const { address, collectionId, constData } = token;

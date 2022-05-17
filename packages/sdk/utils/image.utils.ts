@@ -1,4 +1,4 @@
-import { CollectionInfo, CollectionSchemaVersion } from '../types';
+import { CollectionInfo, CollectionSchemaVersion } from '@unique-nft/sdk/types';
 
 const getImageUrlForImageUrlSchema = ({
   tokenId,
