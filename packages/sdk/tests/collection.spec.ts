@@ -2,6 +2,7 @@ import { u8aToHex } from '@polkadot/util';
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { CreateCollectionArgs } from '@unique-nft/sdk/types';
+import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '../src/lib/sdk';
 import {
   delay,
@@ -10,7 +11,6 @@ import {
   getLastCollectionId,
   TestAccounts,
 } from './testing-utils';
-import { normalizeAddress } from '@unique-nft/sdk/utils';
 
 const constOnChainSchema: INamespace = {
   nested: {
