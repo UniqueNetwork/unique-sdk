@@ -35,34 +35,6 @@ _тут надо будет расписать: 1) запуск образа с 
 
 # SDK Deployment - Getting Started Guide
 
-## Configuration
-Application reads configuration from environment variables.
-
-### Required variables
-
-```
-CHAIN_WS_URL=wss://ws-quartz.unique.network
-```
-
-### Optional variables
-
-```
-IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
-```
-
-### Public WS URLs:
-
-#### production
-- wss://ws.unique.network
-
-#### staging
-- wss://quartz.unique.network
-- wss://eu-ws-quartz.unique.network
-- wss://us-ws-quartz.unique.network
-
-#### test
-- wss://testnet2.unique.network
-
 This tutorial shows the steps that need to be performed to carry out an install of the SDK on a computer in a local environment or in a virtual machine with Ubuntu OS. The process of installing it in a production environment is identical, with the caveat that your IT administrator will need to setup the supporting infrastructure (such as a globally accessible domain name, hosting, firewall, nginx, and SSL certificates) so that the server that hosts the SDK can be accessed by the users on the Internet. Visit [https://unqnft.io](https://unqnft.io) to experience an example of a self-hosted, globally accessible SDK.
 
 _вот эта штука не нужна_
