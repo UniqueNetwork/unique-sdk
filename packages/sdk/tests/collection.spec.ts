@@ -9,7 +9,7 @@ import {
   getKeyringPairs,
   getLastCollectionId,
   TestAccounts,
-} from './utils';
+} from './testing-utils';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 
 const constOnChainSchema: INamespace = {
