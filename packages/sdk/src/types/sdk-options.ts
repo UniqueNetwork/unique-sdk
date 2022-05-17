@@ -1,11 +1,7 @@
-import { HexString } from '@polkadot/util/types';
+import { SdkSigner } from '@unique-nft/sdk/extrinsics';
 
 export interface SdkOptions {
   chainWsUrl: string;
   ipfsGatewayUrl: string;
   signer?: SdkSigner;
-}
-
-export interface SdkSigner {
-  sign(payload: string): HexString;
 }

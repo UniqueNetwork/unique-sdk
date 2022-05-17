@@ -15,7 +15,12 @@ import {
 
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
+  sign(args: SignTxArgs, signer: SdkSigner | undefined): Promise<SignTxResult>;
   submit(args: SubmitTxArgs): Promise<SubmitResult>;
+}
+
+export interface SdkSigner {
+  sign(payload: string): Promise<HexString>;
 }
 
 export class SubmitResult {

@@ -24,7 +24,7 @@ export class ExtrinsicsController {
   }
 
   @Post('sign')
-  sign(@Body() args: SignTxArgs): SignTxResult {
+  sign(@Body() args: SignTxArgs): Promise<SignTxResult> {
     return this.sdk.extrinsics.sign(args);
   }
 

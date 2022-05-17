@@ -1,6 +1,6 @@
 import { validateSync } from '@unique-nft/sdk/validation';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk';
+import { SdkSigner } from '@unique-nft/sdk/extrinsics';
 import {
   KeyfileSignerOptions,
   SeedSignerOptions,
@@ -15,15 +15,27 @@ export async function createSigner(
 ): Promise<SdkSigner> {
   if ('seed' in signerOptions) {
     validateSync(signerOptions, SeedSignerOptions);
-    return SeedSigner.createSignerWithSeed(signerOptions);
+    try {
+      return new SeedSigner(signerOptions.seed, signerOptions.type);
+    } catch (err: any) {
+      throw new InvalidSignerError(err.message);
+    }
   }
   if ('uri' in signerOptions) {
     validateSync(signerOptions, UriSignerOptions);
-    return SeedSigner.createSignerWithUri(signerOptions);
+    try {
+      return new SeedSigner(signerOptions.uri, signerOptions.type);
+    } catch (err: any) {
+      throw new InvalidSignerError(err.message);
+    }
   }
   if ('keyfile' in signerOptions) {
     validateSync(signerOptions, KeyfileSignerOptions);
-    return KeyfileSigner.createSigner(signerOptions);
+    try {
+      return new KeyfileSigner(signerOptions);
+    } catch (err: any) {
+      throw new InvalidSignerError(err.message);
+    }
   }
 
   throw new InvalidSignerError('Not known options');

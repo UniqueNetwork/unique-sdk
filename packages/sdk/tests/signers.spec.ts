@@ -186,7 +186,7 @@ describe('signers', () => {
         });
       },
       ErrorCodes.InvalidSigner,
-      'Failed to create: Password was not received',
+      'Password was not received',
     );
   });
 
@@ -201,7 +201,7 @@ describe('signers', () => {
         });
       },
       ErrorCodes.InvalidSigner,
-      'Failed to create: Unable to decode using the supplied passphrase',
+      'Unable to decode using the supplied passphrase',
     );
   });
 

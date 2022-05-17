@@ -22,7 +22,7 @@ import {
 } from './types';
 
 interface SdkSigner {
-  sign(payload: string): HexString;
+  sign(payload: string): Promise<HexString>;
 }
 
 interface Sdk {
@@ -97,14 +97,15 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
   }
 
-  sign(
+  async sign(
     args: SignTxArgs,
     signer: SdkSigner | undefined = this.sdk.signer,
-  ): SignTxResult {
+  ): Promise<SignTxResult> {
     if (!signer) throw new InvalidSignerError();
 
+    const signature = await signer.sign(args.signerPayloadHex);
     return {
-      signature: signer.sign(args.signerPayloadHex),
+      signature,
     };
   }
 
