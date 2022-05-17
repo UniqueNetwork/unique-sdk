@@ -7,7 +7,7 @@ import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SeedSignerOptions, SignType, UriSignerOptions } from './types';
 
 export class SeedSigner implements SdkSigner {
-  public static createSeed(options: SeedSignerOptions) {
+  public static createSignerWithSeed(options: SeedSignerOptions): SeedSigner {
     try {
       return new SeedSigner(options.seed, options.type);
     } catch (err: any) {
@@ -15,7 +15,7 @@ export class SeedSigner implements SdkSigner {
     }
   }
 
-  public static createUri(options: UriSignerOptions) {
+  public static createSignerWithUri(options: UriSignerOptions): SeedSigner {
     try {
       return new SeedSigner(options.uri, options.type);
     } catch (err: any) {

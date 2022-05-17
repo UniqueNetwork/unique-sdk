@@ -15,15 +15,15 @@ export async function createSigner(
 ): Promise<SdkSigner> {
   if ('seed' in signerOptions) {
     validateSync(signerOptions, SeedSignerOptions);
-    return SeedSigner.createSeed(signerOptions);
+    return SeedSigner.createSignerWithSeed(signerOptions);
   }
   if ('uri' in signerOptions) {
     validateSync(signerOptions, UriSignerOptions);
-    return SeedSigner.createUri(signerOptions);
+    return SeedSigner.createSignerWithUri(signerOptions);
   }
   if ('keyfile' in signerOptions) {
     validateSync(signerOptions, KeyfileSignerOptions);
-    return KeyfileSigner.create(signerOptions);
+    return KeyfileSigner.createSigner(signerOptions);
   }
 
   throw new InvalidSignerError('Not known options');

@@ -7,7 +7,9 @@ import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { KeyfileSignerOptions, SignType } from './types';
 
 export class KeyfileSigner implements SdkSigner {
-  public static async create(options: KeyfileSignerOptions) {
+  public static async createSigner(
+    options: KeyfileSignerOptions,
+  ): Promise<KeyfileSigner> {
     const password = await options.passwordCallback();
     if (!password) {
       throw new InvalidSignerError(
