@@ -3,6 +3,7 @@ import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions } from '@unique-nft/sdk/types';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk/extrinsics';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {
   createSigner,
   KeyfileSigner,
@@ -38,7 +39,7 @@ describe('signers', () => {
   const defOptions = getDefaultSdkOptions();
 
   beforeAll(async () => {
-    await Sdk.create(defOptions);
+    await cryptoWaitReady();
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
   });
