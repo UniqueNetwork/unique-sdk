@@ -26,15 +26,11 @@ explore available methods on
 http://localhost:3000/swagger/
 
 ## Environment Variables
-```
-# Required variables
 
+### Required variables
+
+```
 CHAIN_WS_URL=wss://ws-quartz.unique.network
-
-# Optional variables
-
-PORT=3000
-
-IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
-
 ```
+
+Other variables are optional, full list is available in [WEB docs](../packages/web#sdk-deployment---getting-started-guide)
