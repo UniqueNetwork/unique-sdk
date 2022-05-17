@@ -1,5 +1,5 @@
 import { INamespace } from 'protobufjs';
-import { serializeConstData, decodeConstData } from '../utils/protobuf.utils';
+import { serializeConstData, decodeConstData } from '@unique-nft/sdk/utils';
 
 const constOnChainSchema: INamespace = {
   nested: {

@@ -10,7 +10,7 @@ import {
   getLastCollectionId,
   TestAccounts,
 } from './utils';
-import { normalizeAddress } from '../utils';
+import { normalizeAddress } from '@unique-nft/sdk/utils';
 
 const constOnChainSchema: INamespace = {
   nested: {
