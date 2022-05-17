@@ -6,8 +6,8 @@ import {
   CreateCollectionArgs,
   ISdkCollection,
   TransferCollectionArgs,
-} from '../types';
-import { encodeCollection } from '../utils/collection-transformers';
+} from '@unique-nft/sdk/types';
+import { encodeCollection } from '@unique-nft/sdk/utils';
 
 interface Sdk {
   api: ApiPromise;

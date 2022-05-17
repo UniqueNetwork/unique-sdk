@@ -19,11 +19,8 @@ import {
   UnsignedTxPayload,
   SignTxArgs,
   SignTxResult,
+  SdkSigner,
 } from './types';
-
-interface SdkSigner {
-  sign(payload: string): Promise<HexString>;
-}
 
 interface Sdk {
   api: ApiPromise;

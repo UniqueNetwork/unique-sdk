@@ -10,7 +10,7 @@ import type {
   CollectionInfo,
   CollectionLimits,
   CollectionSponsorship,
-} from '../types';
+} from '@unique-nft/sdk/types';
 import {
   sponsoredDataRateLimitToNumber,
   toBoolean,

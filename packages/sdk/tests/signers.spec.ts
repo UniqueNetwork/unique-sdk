@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
-import { SdkOptions } from '@unique-nft/sdk';
+import { SdkOptions } from '@unique-nft/sdk/types';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk/extrinsics';
 import {
@@ -9,7 +9,7 @@ import {
   SignerOptions,
 } from '@unique-nft/sdk/sign';
 import { Sdk } from '../src/lib/sdk';
-import { getDefaultSdkOptions } from './utils';
+import { getDefaultSdkOptions } from './testing-utils';
 
 describe('signers', () => {
   let alice: KeyringPair;

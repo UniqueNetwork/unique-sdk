@@ -10,13 +10,13 @@ import {
   UseFilters,
 } from '@nestjs/common';
 
+import { Sdk } from '@unique-nft/sdk';
 import {
   BurnTokenArgs,
   CreateTokenArgs,
-  Sdk,
   TokenIdArg,
   TransferTokenArgs,
-} from '@unique-nft/sdk';
+} from '@unique-nft/sdk/types';
 import { ApiTags } from '@nestjs/swagger';
 import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
@@ -29,7 +29,8 @@ export class TokenController {
 
   @Get()
   /* eslint-disable  @typescript-eslint/no-explicit-any */
-  async getToken(@Query() args: TokenIdArg): Promise<any> { // todo fix any
+  async getToken(@Query() args: TokenIdArg): Promise<any> {
+    // todo fix any
     const token = await this.sdk.query.token(args);
 
     if (token) return token;
