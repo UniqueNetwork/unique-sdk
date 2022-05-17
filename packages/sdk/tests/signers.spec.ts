@@ -1,5 +1,5 @@
 import { Keyring } from '@polkadot/keyring';
-import { KeyringPair } from '@polkadot/keyring/types';
+import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
 import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
@@ -11,8 +11,23 @@ describe('signers', () => {
   let bob: KeyringPair;
 
   const testUser = {
-    address: '5HHErUrB48ysnAcP8TJU9ZUx9fks4QwA8aDZtXqQBkttbW9S',
-    seed: 'arrest lunch tone surprise recall output session drift among riot brand pulp',
+    seed: 'bus ahead nation nice damp recall place dance guide media clap language',
+    password: '1234567890',
+    keyfile: {
+      encoded:
+        'W+AsS/awIMmo6dB5lyornWFQ5bUpA1xUN8n8dxu9q2QAgAAAAQAAAAgAAADA6bTLjVK9tTinUDROjJNwL49vgFwn40WV1f7rb0svNFwK3AmNQ+pfW0i7mcFKt9id7KKNm2W3jr0vePTrQmOsfACWSyN55cYs2cqI/VbF/92ZUgo6YTbdwxLHzU1t3l1LdkU5DdaR5ZbPl7SGGYAk5FnjRLQmTWfXHEW1teuYbsdy8lthPoEYa/t57U30YZ21FzD/I7zt0IN9ekkD',
+      encoding: {
+        content: ['pkcs8', 'sr25519'],
+        type: ['scrypt', 'xsalsa20-poly1305'],
+        version: '3',
+      },
+      address: '5HNUuEAYMWEo4cuBW7tuL9mLHR9zSA8H7SdNKsNnYRB9M5TX',
+      meta: {
+        genesisHash: '',
+        name: 'Unique-sdk test user',
+        whenCreated: 1652779712656,
+      },
+    },
   };
 
   const defOptions = getDefaultSdkOptions();
@@ -36,23 +51,28 @@ describe('signers', () => {
   async function tryAndExpectSdkError(
     cb: () => Promise<void>,
     code: ErrorCodes,
+    errorMessage?: string,
   ) {
     try {
       await cb();
       expect(true).toEqual(false);
     } catch (err) {
       const sdkError = err as SdkError;
+      console.log('sdkError', sdkError);
       expect(sdkError.code).toEqual(code);
+      if (errorMessage) {
+        expect(sdkError.message).toEqual(errorMessage);
+      }
     }
   }
 
-  it('uri signer validate - ok', async () => {
+  it('uri validate - ok', async () => {
     await createSdk({
       uri: '//Alice',
     });
   });
 
-  it('uri signer validate - fail', async () => {
+  it('uri validate - fail', async () => {
     await tryAndExpectSdkError(async () => {
       await createSdk({
         uri: 'Alice',
@@ -60,23 +80,28 @@ describe('signers', () => {
     }, ErrorCodes.Validation);
   });
 
-  it('uri signer sign - ok', async () => {
+  it('uri sign - ok', async () => {
     const sdk = await createSdk({
       uri: '//Alice',
     });
-    const { signerPayloadHex } = await sdk.balance.buildTransfer({
-      address: alice.address,
-      destination: bob.address,
-      amount: 0.001,
-    });
+    const { signerPayloadHex, signerPayloadJSON } =
+      await sdk.balance.buildTransfer({
+        address: alice.address,
+        destination: bob.address,
+        amount: 0.001,
+      });
 
     const { signature } = await sdk.extrinsics.sign({
       signerPayloadHex,
     });
     expect(typeof signature).toBe('string');
+    await sdk.extrinsics.verifySign({
+      signature,
+      signerPayloadJSON,
+    });
   });
 
-  it('uri signer sign - fail', async () => {
+  it('uri sign - fail', async () => {
     const sdk = await createSdk({
       uri: '//Alice',
     });
@@ -98,12 +123,12 @@ describe('signers', () => {
     }, ErrorCodes.BadSignature);
   });
 
-  it('seed signer sign - ok', async () => {
+  it('seed sign - ok', async () => {
     const sdk = await createSdk({
       seed: testUser.seed,
     });
     const { signerPayloadHex } = await sdk.balance.buildTransfer({
-      address: testUser.address,
+      address: testUser.keyfile.address,
       destination: bob.address,
       amount: 0.001,
     });
@@ -114,7 +139,7 @@ describe('signers', () => {
     expect(typeof signature).toBe('string');
   });
 
-  it('seed signer sign - fail', async () => {
+  it('seed sign - fail', async () => {
     const sdk = await createSdk({
       seed: testUser.seed,
     });
@@ -136,5 +161,81 @@ describe('signers', () => {
         signerPayloadJSON,
       });
     }, ErrorCodes.BadSignature);
+  });
+
+  it('keyfile validate - fail', async () => {
+    await tryAndExpectSdkError(async () => {
+      const keyfile: object = {};
+      await createSdk({
+        keyfile: keyfile as KeyringPair$Json,
+        passwordCallback() {
+          return Promise.resolve('');
+        },
+      });
+    }, ErrorCodes.Validation);
+  });
+
+  it('keyfile create - fail, pass empty', async () => {
+    await tryAndExpectSdkError(
+      async () => {
+        await createSdk({
+          keyfile: testUser.keyfile as KeyringPair$Json,
+          passwordCallback() {
+            return Promise.resolve('');
+          },
+        });
+      },
+      ErrorCodes.InvalidSigner,
+      'Failed to create: Password was not received',
+    );
+  });
+
+  it('keyfile create - fail, pass invalid', async () => {
+    await tryAndExpectSdkError(
+      async () => {
+        await createSdk({
+          keyfile: testUser.keyfile as KeyringPair$Json,
+          passwordCallback() {
+            return Promise.resolve('123');
+          },
+        });
+      },
+      ErrorCodes.InvalidSigner,
+      'Failed to create: Unable to decode using the supplied passphrase',
+    );
+  });
+
+  it('keyfile create - ok', async () => {
+    await createSdk({
+      keyfile: testUser.keyfile as KeyringPair$Json,
+      passwordCallback() {
+        return Promise.resolve(testUser.password);
+      },
+    });
+  });
+
+  it('keyfile sign - ok', async () => {
+    const sdk = await createSdk({
+      keyfile: testUser.keyfile as KeyringPair$Json,
+      passwordCallback() {
+        return Promise.resolve(testUser.password);
+      },
+    });
+
+    const { signerPayloadHex, signerPayloadJSON } =
+      await sdk.balance.buildTransfer({
+        address: testUser.keyfile.address,
+        destination: bob.address,
+        amount: 0.001,
+      });
+
+    const { signature } = await sdk.extrinsics.sign({
+      signerPayloadHex,
+    });
+    expect(typeof signature).toBe('string');
+    await sdk.extrinsics.verifySign({
+      signature,
+      signerPayloadJSON,
+    });
   });
 });
