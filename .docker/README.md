@@ -1,10 +1,12 @@
 # Unique Network web-API Docker image
 
+![dockerhub](https://img.shields.io/docker/pulls/uniquenetwork/web.svg?logo=docker&style=flat-square)
+
 ## How to use this image
 start container with command 
 
 ```shell
-docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-quartz.unique.network uniquenetwork/web:develop
+docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-quartz.unique.network uniquenetwork/web:latest
 ```
 
 ... or via docker-compose
@@ -14,7 +16,7 @@ version: '3'
 
 services:
   unique-web:
-    image: uniquenetwork/web:develop
+    image: uniquenetwork/web:latest
     ports:
       - '3000:3000'
     environment:
