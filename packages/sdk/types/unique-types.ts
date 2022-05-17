@@ -132,12 +132,24 @@ export class CollectionInfo extends CollectionInfoBase {
   owner: string;
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 export interface TokenInfo {
   id: number;
   collectionId: number;
   url: string | null;
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
   constData: Record<string, any> | null;
   variableData: string | null;
   owner: string;
 }
+
+export type TokenPayload =
+  | {
+      NFT: any;
+    }
+  | {
+      Fungible: any;
+    }
+  | {
+      ReFungible: any;
+    };

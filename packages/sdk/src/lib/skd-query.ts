@@ -15,7 +15,7 @@ import {
   TokenIdArg,
   TokenInfo,
 } from '@unique-nft/sdk/types';
-import { decodeCollection, decodeToken } from '@unique-nft/sdk/utils';
+import { decodeCollection, decodeToken } from '@unique-nft/sdk/collections';
 
 interface Sdk {
   api: ApiPromise;

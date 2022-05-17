@@ -1,4 +1,3 @@
-import { u8aToHex } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import type {
@@ -8,7 +7,7 @@ import type {
   ISdkToken,
   TransferTokenArgs,
 } from '@unique-nft/sdk/types';
-import { serializeConstData } from '@unique-nft/sdk/utils';
+import { encodeToken } from './utils/encode-token';
 
 interface Sdk {
   api: ApiPromise;
@@ -28,35 +27,13 @@ export class SdkToken implements ISdkToken {
 
     const { constOnChainSchema } = collection;
 
-    const tokenData =
-      constData && constOnChainSchema
-        ? {
-            nft: {
-              constData: u8aToHex(
-                serializeConstData(constData, constOnChainSchema),
-              ),
-            },
-          }
-        : { nft: null };
+    const tokenPayload = encodeToken(constData, constOnChainSchema);
 
     return this.sdk.extrinsics.build({
       address,
       section: 'unique',
       method: 'createItem',
-      args: [collectionId, { substrate: address }, tokenData],
-    });
-  }
-
-  burn({
-    address,
-    collectionId,
-    tokenId,
-  }: BurnTokenArgs): Promise<UnsignedTxPayload> {
-    return this.sdk.extrinsics.build({
-      address,
-      section: 'unique',
-      method: 'burnItem',
-      args: [collectionId, tokenId, 1],
+      args: [collectionId, { substrate: address }, tokenPayload],
     });
   }
 
@@ -71,6 +48,19 @@ export class SdkToken implements ISdkToken {
       section: 'unique',
       method: 'transfer',
       args: [to, collectionId, tokenId, 1],
+    });
+  }
+
+  burn({
+    address,
+    collectionId,
+    tokenId,
+  }: BurnTokenArgs): Promise<UnsignedTxPayload> {
+    return this.sdk.extrinsics.build({
+      address,
+      section: 'unique',
+      method: 'burnItem',
+      args: [collectionId, tokenId, 1],
     });
   }
 }

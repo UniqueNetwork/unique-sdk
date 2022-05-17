@@ -1,8 +1,12 @@
-import { PalletNonfungibleItemData } from '@unique-nft/types';
 import { u8aToString } from '@polkadot/util';
-import { CollectionInfo, SdkOptions, TokenInfo } from '@unique-nft/sdk/types';
-import { decodeConstData } from './protobuf.utils';
-import { getTokenUrl } from './image.utils';
+import { decodeConstData, getTokenUrl } from '@unique-nft/sdk/utils';
+
+import type { PalletNonfungibleItemData } from '@unique-nft/types';
+import type {
+  CollectionInfo,
+  SdkOptions,
+  TokenInfo,
+} from '@unique-nft/sdk/types';
 
 type IpfsOptions = Pick<SdkOptions, 'ipfsGatewayUrl'>;
 

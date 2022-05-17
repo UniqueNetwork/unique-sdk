@@ -16,9 +16,8 @@ import {
   SdkOptions,
   SdkSigner,
 } from '@unique-nft/sdk/types';
+import { SdkCollection, SdkToken } from '@unique-nft/sdk/collections';
 import { SkdQuery } from './skd-query';
-import { SdkCollection } from './sdk-collection';
-import { SdkToken } from './sdk-token';
 import { SdkBalance } from './sdk-balance';
 
 export class Sdk implements ISdk {
