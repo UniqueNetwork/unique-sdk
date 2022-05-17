@@ -5,7 +5,7 @@ import '@unique-nft/types/augment-api-query';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { SdkExtrinsics, SdkSigner } from '@unique-nft/sdk/extrinsics';
 
 import {
   ISdk,
@@ -14,7 +14,6 @@ import {
   ISdkCollection,
   ISdkToken,
   SdkOptions,
-  SdkSigner,
 } from '@unique-nft/sdk/types';
 import { SdkCollection, SdkToken } from '@unique-nft/sdk/collections';
 import { SkdQuery } from './skd-query';
