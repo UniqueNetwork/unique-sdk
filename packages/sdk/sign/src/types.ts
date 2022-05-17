@@ -1,24 +1,46 @@
 // eslint-disable-next-line max-classes-per-file
+import 'reflect-metadata';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { ValidSeed, ValidUri } from '@unique-nft/sdk/validation';
+import { IsNotEmptyObject, IsEnum, IsOptional } from 'class-validator';
 
 export type SignerOptions =
   | SeedSignerOptions
   | UriSignerOptions
   | KeyfileSignerOptions;
 
+export enum SignType {
+  ed25519 = 'ed25519',
+  sr25519 = 'sr25519',
+  ecdsa = 'ecdsa',
+  ethereum = 'ethereum',
+}
+
 export class SeedSignerOptions {
   @ValidSeed()
   seed: string;
+
+  @IsEnum(SignType)
+  @IsOptional()
+  type?: SignType;
 }
 
 export class UriSignerOptions {
   @ValidUri()
   uri: string;
+
+  @IsEnum(SignType)
+  @IsOptional()
+  type?: SignType;
 }
 
 export class KeyfileSignerOptions {
+  @IsNotEmptyObject()
   keyfile: KeyringPair$Json;
 
-  passwordCallback: () => string;
+  passwordCallback: () => Promise<string>;
+
+  @IsEnum(SignType)
+  @IsOptional()
+  type?: SignType;
 }

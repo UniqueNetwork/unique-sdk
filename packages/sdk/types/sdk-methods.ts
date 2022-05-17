@@ -1,14 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  SignTxArgs,
-  SignTxResult,
-  SubmitResult,
-  SubmitTxArgs,
-  TxBuildArgs,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/extrinsics';
+import { ISdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
 import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
@@ -168,12 +161,6 @@ export interface ISdkToken {
   create(token: CreateTokenArgs): Promise<UnsignedTxPayload>;
   burn(args: BurnTokenArgs): Promise<UnsignedTxPayload>;
   transfer(args: TransferTokenArgs): Promise<UnsignedTxPayload>;
-}
-
-export interface ISdkExtrinsics {
-  build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
-  sign(signArgs: SignTxArgs): SignTxResult;
-  submit(args: SubmitTxArgs): Promise<SubmitResult>;
 }
 
 export interface ISdkBalance {

@@ -3,6 +3,6 @@ import { ErrorCodes } from './codes';
 
 export class InvalidSignerError extends SdkError {
   constructor(message = InvalidSignerError.name) {
-    super(ErrorCodes.Validation, InvalidSignerError.name, message);
+    super(ErrorCodes.InvalidSigner, InvalidSignerError.name, message);
   }
 }
