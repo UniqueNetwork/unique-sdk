@@ -8,8 +8,12 @@ export type Config = {
   ipfsGatewayUrl: string;
   prefix: string;
   swagger: string;
-  signerSeed?: string;
-  signerUri?: string;
+  signer?: SignerConfig;
+};
+
+export type SignerConfig = {
+  seed?: string;
+  uri?: string;
 };
 
 const loadConfig = (): Config => ({
@@ -20,8 +24,10 @@ const loadConfig = (): Config => ({
   swagger: process.env.SWAGGER || 'swagger',
   ipfsGatewayUrl:
     process.env.IPFS_GATEWAY_URL || 'https://ipfs.unique.network/ipfs/',
-  signerSeed: process.env.SIGNER_SEED || undefined,
-  signerUri: process.env.SIGNER_URI || undefined,
+  signer: {
+    seed: process.env.SIGNER_SEED || undefined,
+    uri: process.env.SIGNER_URI || undefined,
+  },
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

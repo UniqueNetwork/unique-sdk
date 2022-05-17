@@ -44,7 +44,7 @@ describe(BalanceController.name, () => {
     bob = new Keyring({ type: SignType.sr25519 }).addFromUri('//Bob');
   });
 
-  async function createAll() {
+  async function createApp() {
     const testingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -89,7 +89,7 @@ describe(BalanceController.name, () => {
   describe('signer env/uri', () => {
     beforeAll(async () => {
       process.env.SIGNER_URI = '//Alice';
-      await createAll();
+      await createApp();
     });
 
     it('sign - ok', async () => {
@@ -106,7 +106,7 @@ describe(BalanceController.name, () => {
   describe('signer env/seed', () => {
     beforeAll(async () => {
       process.env.SIGNER_SEED = testUser.seed;
-      await createAll();
+      await createApp();
     });
 
     it('sign - ok', async () => {
