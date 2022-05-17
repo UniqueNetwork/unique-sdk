@@ -30,7 +30,7 @@ export class CollectionController {
 
   @Get()
   async getCollection(@Query() args: CollectionIdArg): Promise<CollectionInfo> {
-    const collection = await this.sdk.query.collection(args);
+    const collection = await this.sdk.collection.get(args);
 
     if (collection) return collection;
 

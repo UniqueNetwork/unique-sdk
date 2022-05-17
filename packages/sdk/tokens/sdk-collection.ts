@@ -1,13 +1,18 @@
+import '@unique-nft/types/augment-api';
+
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { validate } from '@unique-nft/sdk/validation';
 import {
   BurnCollectionArgs,
+  CollectionIdArg,
+  CollectionInfo,
   CreateCollectionArgs,
   ISdkCollection,
   TransferCollectionArgs,
 } from '@unique-nft/sdk/types';
 
+import { decodeCollection } from './utils/decode-collection';
 import { encodeCollection } from './utils/encode-collection';
 
 interface Sdk {
@@ -17,6 +22,15 @@ interface Sdk {
 
 export class SdkCollection implements ISdkCollection {
   constructor(readonly sdk: Sdk) {}
+
+  async get({ collectionId }: CollectionIdArg): Promise<CollectionInfo | null> {
+    const collectionOption = await this.sdk.api.rpc.unique.collectionById(
+      collectionId,
+    );
+    const collection = collectionOption.unwrapOr(null);
+
+    return collection ? decodeCollection(collectionId, collection) : collection;
+  }
 
   async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
     await validate(collection, CreateCollectionArgs);

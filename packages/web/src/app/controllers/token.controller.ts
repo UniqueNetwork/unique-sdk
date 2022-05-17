@@ -31,7 +31,7 @@ export class TokenController {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   async getToken(@Query() args: TokenIdArg): Promise<any> {
     // todo fix any
-    const token = await this.sdk.query.token(args);
+    const token = await this.sdk.token.get(args);
 
     if (token) return token;
 

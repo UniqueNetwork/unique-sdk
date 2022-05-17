@@ -1,7 +1,4 @@
-import '@unique-nft/types/augment-api-rpc';
-import '@unique-nft/types/augment-api-tx';
-import '@unique-nft/types/augment-api-query';
-
+import '@unique-nft/types/augment-api';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
@@ -15,7 +12,7 @@ import {
   ISdkToken,
   SdkOptions,
 } from '@unique-nft/sdk/types';
-import { SdkCollection, SdkToken } from '@unique-nft/sdk/collections';
+import { SdkCollection, SdkToken } from '@unique-nft/sdk/tokens';
 import { SkdQuery } from './skd-query';
 import { SdkBalance } from './sdk-balance';
 

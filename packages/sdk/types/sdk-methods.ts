@@ -152,12 +152,14 @@ export class TransferTokenArgs extends TokenIdArg {
 }
 
 export interface ISdkCollection {
+  get(args: CollectionIdArg): Promise<CollectionInfo | null>;
   create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload>;
   burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload>;
   transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdkToken {
+  get(args: TokenIdArg): Promise<TokenInfo | null>;
   create(token: CreateTokenArgs): Promise<UnsignedTxPayload>;
   burn(args: BurnTokenArgs): Promise<UnsignedTxPayload>;
   transfer(args: TransferTokenArgs): Promise<UnsignedTxPayload>;
@@ -170,8 +172,6 @@ export interface ISdkBalance {
 export interface ISdkQuery {
   chainProperties(): ChainProperties;
   balance(args: AddressArg): Promise<Balance>;
-  collection(args: CollectionIdArg): Promise<CollectionInfo | null>;
-  token(args: TokenIdArg): Promise<TokenInfo | null>;
 }
 
 export interface ISdk {
