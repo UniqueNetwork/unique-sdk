@@ -4,7 +4,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { waitReady } from '@polkadot/wasm-crypto';
 import { u8aToHex } from '@polkadot/util';
-import { ErrorCodes, UnsignedTxPayload } from '@unique-nft/sdk';
+import { ErrorCodes } from '@unique-nft/sdk/errors';
 import request from 'supertest';
 
 import { ExtrinsicsController } from '../src/app/controllers';
@@ -43,7 +43,7 @@ describe(ExtrinsicsController.name, () => {
 
       expect(payloadResponse.ok).toBe(true);
 
-      const { signerPayloadJSON } = payloadResponse.body as UnsignedTxPayload;
+      const { signerPayloadJSON } = payloadResponse.body;
 
       const badSignature = u8aToHex(
         alice.sign('not_a_payload_hex', {

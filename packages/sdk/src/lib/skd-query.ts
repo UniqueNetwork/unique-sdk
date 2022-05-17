@@ -10,7 +10,8 @@ import {
   ChainProperties,
   CollectionIdArg,
   CollectionInfo,
-  ISdkQuery, SdkOptions,
+  ISdkQuery,
+  SdkOptions,
   TokenIdArg,
   TokenInfo,
 } from '../types';
@@ -24,9 +25,7 @@ interface Sdk {
 }
 
 export class SkdQuery implements ISdkQuery {
-  constructor(
-    private readonly sdk: Sdk,
-  ) {}
+  constructor(private readonly sdk: Sdk) {}
 
   chainProperties(): ChainProperties {
     return {

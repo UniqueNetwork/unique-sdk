@@ -5,16 +5,16 @@ import '@unique-nft/types/augment-api-query';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
-
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+
 import {
-  SdkOptions,
   ISdk,
-  ISdkQuery,
-  ISdkExtrinsics,
-  ISdkCollection,
-  ISdkToken,
   ISdkBalance,
+  ISdkCollection,
+  ISdkQuery,
+  ISdkToken,
+  SdkOptions,
+  SdkSigner,
 } from '../types';
 import { SkdQuery } from './skd-query';
 import { SdkCollection } from './sdk-collection';
@@ -36,6 +36,8 @@ export class Sdk implements ISdk {
 
   token: ISdkToken;
 
+  signer?: SdkSigner;
+
   static async create(options: SdkOptions): Promise<Sdk> {
     const sdk = new Sdk(options);
     await sdk.isReady;
@@ -54,6 +56,8 @@ export class Sdk implements ISdk {
     });
 
     this.isReady = this.api.isReady.then(() => true);
+
+    this.signer = this.options.signer;
 
     this.extrinsics = new SdkExtrinsics(this);
     this.query = new SkdQuery(this);

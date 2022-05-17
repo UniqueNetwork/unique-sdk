@@ -1,19 +1,17 @@
 // eslint-disable-next-line max-classes-per-file
-import {
-  IsString,
-  IsNumber,
-  IsPositive,
-  NotEquals,
-} from 'class-validator';
+import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { SubmitResult, SubmitTxArgs, TxBuildArgs, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import {
+  SignTxArgs,
+  SignTxResult,
+  SubmitResult,
+  SubmitTxArgs,
+  TxBuildArgs,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/extrinsics';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
-import {
-  CollectionInfo,
-  CollectionInfoBase,
-  TokenInfo,
-} from './unique-types';
+import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
 
 export class ChainProperties {
   @ApiProperty({
@@ -37,7 +35,8 @@ export class ChainProperties {
   wsUrl: string;
 
   @ApiProperty({
-    example: '0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39',
+    example:
+      '0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39',
   })
   genesisHash: HexString;
 }
@@ -173,6 +172,7 @@ export interface ISdkToken {
 
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
+  sign(signArgs: SignTxArgs): SignTxResult;
   submit(args: SubmitTxArgs): Promise<SubmitResult>;
 }
 
