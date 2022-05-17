@@ -19,7 +19,6 @@ import {
   UnsignedTxPayload,
   SignTxArgs,
   SignTxResult,
-  VerifySignArgs,
 } from './types';
 
 interface SdkSigner {
@@ -109,7 +108,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     };
   }
 
-  verifySign(args: VerifySignArgs) {
+  verifySign(args: SubmitTxArgs) {
     verifyTxSignature(this.sdk.api, args.signerPayloadJSON, args.signature);
   }
 

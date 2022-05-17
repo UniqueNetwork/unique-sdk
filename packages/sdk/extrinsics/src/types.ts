@@ -33,14 +33,6 @@ export class SignTxResult {
   signature: HexString;
 }
 
-export class VerifySignArgs {
-  @ApiProperty({ type: String })
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  @ApiProperty({ type: String })
-  signature: HexString;
-}
-
 export class SubmitTxArgs {
   @IsNotEmptyObject()
   @ApiProperty()
