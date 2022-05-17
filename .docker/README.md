@@ -1,4 +1,4 @@
-# Unique network web API
+# Unique Network web-API Docker image
 
 ## How to use this image
 start container with command 
