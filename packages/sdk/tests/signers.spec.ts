@@ -1,8 +1,13 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
-import { SdkOptions, SdkSigner } from '@unique-nft/sdk';
+import { SdkOptions } from '@unique-nft/sdk';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
-import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
+import { SdkSigner } from '@unique-nft/sdk/extrinsics';
+import {
+  createSigner,
+  KeyfileSigner,
+  SignerOptions,
+} from '@unique-nft/sdk/sign';
 import { Sdk } from '../src/lib/sdk';
 import { getDefaultSdkOptions } from './utils';
 
@@ -176,14 +181,16 @@ describe('signers', () => {
   });
 
   it('keyfile create - fail, pass empty', async () => {
+    const sdk = await createSdk({
+      keyfile: testUser.keyfile as KeyringPair$Json,
+      passwordCallback() {
+        return Promise.resolve('');
+      },
+    });
     await tryAndExpectSdkError(
       async () => {
-        await createSdk({
-          keyfile: testUser.keyfile as KeyringPair$Json,
-          passwordCallback() {
-            return Promise.resolve('');
-          },
-        });
+        const signer = sdk.signer as KeyfileSigner;
+        await signer.unlock();
       },
       ErrorCodes.InvalidSigner,
       'Password was not received',
@@ -191,14 +198,16 @@ describe('signers', () => {
   });
 
   it('keyfile create - fail, pass invalid', async () => {
+    const sdk = await createSdk({
+      keyfile: testUser.keyfile as KeyringPair$Json,
+      passwordCallback() {
+        return Promise.resolve('123');
+      },
+    });
     await tryAndExpectSdkError(
       async () => {
-        await createSdk({
-          keyfile: testUser.keyfile as KeyringPair$Json,
-          passwordCallback() {
-            return Promise.resolve('123');
-          },
-        });
+        const signer = sdk.signer as KeyfileSigner;
+        await signer.unlock();
       },
       ErrorCodes.InvalidSigner,
       'Unable to decode using the supplied passphrase',

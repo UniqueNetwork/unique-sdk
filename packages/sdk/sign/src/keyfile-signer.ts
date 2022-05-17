@@ -15,7 +15,9 @@ export class KeyfileSigner implements SdkSigner {
     }).addFromJson(options.keyfile);
   }
 
-  private async unlockPair() {
+  public async unlock() {
+    if (!this.pair.isLocked) return;
+
     const password = await this.options.passwordCallback();
     if (!password) {
       throw new InvalidSignerError('Password was not received');
@@ -28,7 +30,7 @@ export class KeyfileSigner implements SdkSigner {
   }
 
   public async sign(payload: HexString): Promise<HexString> {
-    await this.unlockPair();
+    await this.unlock();
     const signatureU8a = this.pair.sign(payload, { withType: true });
     return u8aToHex(signatureU8a);
   }
