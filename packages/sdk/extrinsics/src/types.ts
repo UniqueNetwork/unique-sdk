@@ -1,7 +1,12 @@
 // eslint-disable-next-line max-classes-per-file
 import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
-import { IsEnum, IsHexadecimal, IsNotEmptyObject, IsOptional } from 'class-validator';
+import {
+  IsEnum,
+  IsHexadecimal,
+  IsNotEmptyObject,
+  IsOptional,
+} from 'class-validator';
 import {
   SignatureType,
   SignerPayloadJSONDto,
@@ -16,6 +21,16 @@ export interface ISdkExtrinsics {
 export class SubmitResult {
   @ApiProperty({ type: String })
   hash: HexString;
+}
+
+export class SignTxArgs {
+  @ApiProperty({ type: String })
+  signerPayloadHex: HexString;
+}
+
+export class SignTxResult {
+  @ApiProperty({ type: String })
+  signature: HexString;
 }
 
 export class SubmitTxArgs {
@@ -66,7 +81,7 @@ export class TxBuildArgs {
       type: 'array | number | Record<string, any>',
     },
   })
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   args: Array<string | number | BigInt | Record<string, any>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
 
   /**

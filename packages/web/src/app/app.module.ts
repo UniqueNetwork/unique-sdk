@@ -3,10 +3,10 @@ import { Sdk } from '@unique-nft/sdk';
 import { ConfigService } from '@nestjs/config';
 
 import {
-  ChainController,
   BalanceController,
-  ExtrinsicsController,
+  ChainController,
   CollectionController,
+  ExtrinsicsController,
   TokenController,
 } from './controllers';
 import { GlobalConfigModule } from './config/config.module';

@@ -1,10 +1,15 @@
 import { Body, Controller, Post, UseFilters } from '@nestjs/common';
 
-import {
-  Sdk,
-} from '@unique-nft/sdk';
+import { Sdk } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
-import { SubmitResult, SubmitTxArgs, TxBuildArgs, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import {
+  SignTxArgs,
+  SignTxResult,
+  SubmitResult,
+  SubmitTxArgs,
+  TxBuildArgs,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -16,6 +21,11 @@ export class ExtrinsicsController {
   @Post('build')
   async buildTx(@Body() args: TxBuildArgs): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build(args);
+  }
+
+  @Post('sign')
+  sign(@Body() args: SignTxArgs): SignTxResult {
+    return this.sdk.extrinsics.sign(args);
   }
 
   @Post('submit')
