@@ -1,10 +1,10 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { SdkOptions, SdkSigner } from '@unique-nft/sdk';
+import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
 import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '../src/lib/sdk';
-import { getDefaultSdkOptions } from './utils';
+import { getDefaultSdkOptions } from './testing-utils';
 
 describe('signers', () => {
   let alice: KeyringPair;

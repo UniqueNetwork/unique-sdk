@@ -1,6 +1,6 @@
 import { validateSync } from '@unique-nft/sdk/validation';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk';
+import { SdkSigner } from '@unique-nft/sdk/types';
 import { SeedSignerOptions, SignerOptions, UriSignerOptions } from './types';
 import { SeedSigner } from './seed-signer';
 
