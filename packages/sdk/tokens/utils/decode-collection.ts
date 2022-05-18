@@ -1,43 +1,36 @@
 import {
-  UpDataStructsCollectionLimits,
-  UpDataStructsCreateCollectionData,
+  sponsoredDataRateLimitToNumber,
+  toBoolean,
+  toNumber,
+  bytesToString,
+  utf16ToString,
+  bytesToJson,
+} from '@unique-nft/sdk/utils';
+
+import type {
+  UpDataStructsCollection,
   UpDataStructsSponsorshipState,
-} from '@unique-nft/types/unique/types';
-import { Registry } from '@polkadot/types/types';
-import { UpDataStructsCollection } from '@unique-nft/types/unique';
-import { objectSpread } from '@polkadot/util';
+  UpDataStructsCollectionLimits,
+} from '@unique-nft/types/unique';
+
 import type {
   CollectionInfo,
   CollectionLimits,
   CollectionSponsorship,
 } from '@unique-nft/sdk/types';
-import {
-  sponsoredDataRateLimitToNumber,
-  toBoolean,
-  toNumber,
-} from './option.utils';
-import {
-  bytesToString,
-  utf16ToString,
-  stringToUTF16,
-  bytesToJson,
-} from './string.utils';
 
-export function decodeCollectionSponsorship(
+export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
-): CollectionSponsorship | null {
-  return sponsorship.isDisabled
+): CollectionSponsorship | null => sponsorship.isDisabled
     ? null
     : {
         address: sponsorship.value.toString(),
         isConfirmed: sponsorship.isConfirmed,
       };
-}
 
-export function decodeCollectionLimits(
+export const decodeCollectionLimits = (
   limits: UpDataStructsCollectionLimits,
-): CollectionLimits {
-  return {
+): CollectionLimits => ({
     accountTokenOwnershipLimit: toNumber(limits.accountTokenOwnershipLimit),
     sponsoredDataSize: toNumber(limits.sponsoredDataSize),
     sponsoredDataRateLimit: sponsoredDataRateLimitToNumber(
@@ -49,14 +42,12 @@ export function decodeCollectionLimits(
     ownerCanTransfer: toBoolean(limits.ownerCanTransfer),
     ownerCanDestroy: toBoolean(limits.ownerCanDestroy),
     transfersEnabled: toBoolean(limits.transfersEnabled),
-  };
-}
+  });
 
-export function decodeCollection(
+export const decodeCollection = (
   id: number,
   collection: UpDataStructsCollection,
-): CollectionInfo {
-  return {
+): CollectionInfo => ({
     id,
     mode: collection.mode.type,
     access: collection.access.type,
@@ -72,35 +63,4 @@ export function decodeCollection(
     metaUpdatePermission: collection.metaUpdatePermission.type,
     owner: collection.owner.toString(),
     limits: decodeCollectionLimits(collection.limits),
-  };
-}
-
-export function encodeCollection(
-  registry: Registry,
-  collectionInfo: Partial<CollectionInfo>,
-): UpDataStructsCreateCollectionData {
-  const params: object[] = [collectionInfo];
-
-  if (collectionInfo.name) {
-    params.push({ name: stringToUTF16(collectionInfo.name) });
-  }
-
-  if (collectionInfo.description) {
-    params.push({ description: stringToUTF16(collectionInfo.description) });
-  }
-
-  if (collectionInfo.tokenPrefix) {
-    params.push({ tokenPrefix: stringToUTF16(collectionInfo.tokenPrefix) });
-  }
-
-  if (collectionInfo.constOnChainSchema) {
-    params.push({
-      constOnChainSchema: JSON.stringify(collectionInfo.constOnChainSchema),
-    });
-  }
-
-  return registry.createType<UpDataStructsCreateCollectionData>(
-    'UpDataStructsCreateCollectionData',
-    objectSpread({}, ...params),
-  );
-}
+  });

@@ -2,9 +2,14 @@ import { Body, Controller, Get, Post, Query, UseFilters } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 
-import { Balance, TransferBuildArgs, AddressArg } from '@unique-nft/sdk/types';
+import {
+  Balance,
+  TransferBuildArgs,
+  AddressArg,
+  SubmitResult,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/types';
 import { ApiTags } from '@nestjs/swagger';
-import { SubmitResult, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)

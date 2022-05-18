@@ -8,7 +8,7 @@ import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
 import { SignerPayload } from '@polkadot/types/interfaces';
 import { BadSignatureError } from '@unique-nft/sdk/errors';
-import { UnsignedTxPayload } from './types';
+import { UnsignedTxPayload } from '@unique-nft/sdk/types';
 
 const getSignerPayloadHex = (
   api: ApiPromise,

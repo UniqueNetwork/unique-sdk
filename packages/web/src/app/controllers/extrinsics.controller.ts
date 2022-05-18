@@ -9,7 +9,7 @@ import {
   SubmitTxArgs,
   TxBuildArgs,
   UnsignedTxPayload,
-} from '@unique-nft/sdk/extrinsics';
+} from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)

@@ -1,10 +1,19 @@
-// eslint-disable-next-line max-classes-per-file
+/* eslint-disable max-classes-per-file */
+
 import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ISdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
+import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
+import {
+  SdkSigner,
+  SignTxArgs,
+  SignTxResult,
+  SubmitResult,
+  SubmitTxArgs,
+  TxBuildArgs,
+} from './arguments';
 
 export class ChainProperties {
   @ApiProperty({
@@ -152,12 +161,14 @@ export class TransferTokenArgs extends TokenIdArg {
 }
 
 export interface ISdkCollection {
+  get(args: CollectionIdArg): Promise<CollectionInfo | null>;
   create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload>;
   burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload>;
   transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdkToken {
+  get(args: TokenIdArg): Promise<TokenInfo | null>;
   create(token: CreateTokenArgs): Promise<UnsignedTxPayload>;
   burn(args: BurnTokenArgs): Promise<UnsignedTxPayload>;
   transfer(args: TransferTokenArgs): Promise<UnsignedTxPayload>;
@@ -170,8 +181,6 @@ export interface ISdkBalance {
 export interface ISdkQuery {
   chainProperties(): ChainProperties;
   balance(args: AddressArg): Promise<Balance>;
-  collection(args: CollectionIdArg): Promise<CollectionInfo | null>;
-  token(args: TokenIdArg): Promise<TokenInfo | null>;
 }
 
 export interface ISdk {
@@ -180,4 +189,21 @@ export interface ISdk {
   balance: ISdkBalance;
   collection: ISdkCollection;
   token: ISdkToken;
+}
+
+export class UnsignedTxPayload {
+  @ApiProperty()
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  @ApiProperty()
+  signerPayloadRaw: SignerPayloadRawDto;
+
+  @ApiProperty({ type: String })
+  signerPayloadHex: HexString;
+}
+
+export interface ISdkExtrinsics {
+  build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
+  sign(args: SignTxArgs, signer: SdkSigner | undefined): Promise<SignTxResult>;
+  submit(args: SubmitTxArgs): Promise<SubmitResult>;
 }
