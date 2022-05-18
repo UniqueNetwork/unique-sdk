@@ -4,8 +4,6 @@
 ![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-marketplace-frontend?style=flat-square)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 
-_нужен раздел че это такое, ссылки на публичные экзепмляры, докерхаб, на наш сайт_
-
 
 
 _так же расписать что концептульно апи собирает экстринсик, клиент должен его подписать и отправить обратно_ - ждем пояснений
@@ -15,10 +13,13 @@ _туду: будет вариант самоподписывающихся тр
 ## Table of Contents
 
 - [Prerequisites](#)
-- [Установка СДК (пока нет - ждем(варианты 1(публичный)-2(поднимать полностью))) :](#)
-  - [Шаг 1 -......](#)
-  - [.............](#)
-  - [Шаг N -......](#)
+  - [Instsall/Easy start](#)
+        - [Docker setup](#)
+    - [Environment Variables](#)
+       - [Production](#)
+       - [Staging](#)
+       - [Test](#)
+
 
 - [Unique SDK HTTP API Methods:](#)
   - [Main Methods](#)
@@ -46,28 +47,92 @@ _туду: будет вариант самоподписывающихся тр
 >  * Google Chrome Browser
 > * connected to wss://ws-quartz.unique.network
 
-## Instsall/Easy start
 
-_тут надо будет расписать: 
-1) запуск образа с докерхаба; 
-2) билд и запуск и репы; 
-3) использование наших публичных доменов_ - ждем Арсения
+## Instsall/Easy start
+### Docker setup
+
+https://hub.docker.com/r/uniquenetwork/web 
+
+Start container with command 
+
+```shell
+docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-quartz.unique.network uniquenetwork/web:latest
+```
+
+... or via docker-compose (.yml)
+
+```
+version: '3'
+
+services:
+  unique-web:
+    image: uniquenetwork/web:latest
+    ports:
+      - '3000:3000'
+    environment:
+      - CHAIN_WS_URL=wss://ws-quartz.unique.network
+```
+
+Explore available methods on
+```
+http://localhost:3000/swagger/
+```
+
+### Environment Variables
+
+#### Production
+```
+CHAIN_WS_URL=wss://ws-quartz.unique.network
+```
+#### Staging
+```
+CHAIN_WS_URL=wss://quartz.unique.network
+```
+
+```
+CHAIN_WS_URL=wss://eu-ws-quartz.unique.network
+```
+
+```
+CHAIN_WS_URL=wss://us-ws-quartz.unique.network
+```
+
+#### Test
+```
+CHAIN_WS_URL=wss://testnet2.unique.network
+```
+
 
 
 # Methods
 
 ## Main Methods
 
-### Extrinsic build
+### POST /extrinsic/build
 
 Назначение метода: *******
 
-POST /extrinsic/build
-
-Parameters - No parameters
-
 #### Request
+Curl example
+```
+curl -X 'POST' \
+  'https://web.uniquenetwork.dev/extrinsic/build' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "section": "balances",
+  "method": "transfer",
+  "args": [
+    "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
+    100000000
+  ],
+  "era": 64,
+  "isImmortal": false
+}'
+```
 
+Request body (Example Value, Schema)
 ```json
 {
 "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
@@ -82,18 +147,10 @@ Parameters - No parameters
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+Parameters - No parameters
 
 
-название   | комментарий
------------|------------
-address    | *********
-section    | *********
-method     | *********
-args       | *********
-era        | *********
-isImmortal | **********
-
+#### Response
 Успешный ответ - 201 OK и содержит тело:
 
 ```json
@@ -145,20 +202,46 @@ data | ***************
 type | ***************
 
 
-### Extrinsic submit
+### POST /extrinsic/submit
 
 Назначение метода: *******
 
-POST /extrinsic/submit
-
-Parameters - No parameters
-
 #### Request
+Curl example
+```
+curl -X 'POST' \
+  'https://web.uniquenetwork.dev/extrinsic/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+<details>
+   <summary>"signerPayloadJSON": </summary> {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  },
+  "signature": "string",
+  "signatureType": "sr25519"
+}'</details>
+```
 
+Request body (Example Value, Schema)
 ```json
 {
 "signature": "string",
-"signatureType": "sr25519",
+<details>
+  <summary>"signatureType": "sr25519",  </summary>
 "signerPayloadJSON": {
 "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
 "blockHash": "string",
@@ -175,27 +258,12 @@ Parameters - No parameters
 ],
 "version": 0
 }
-}
+}</details>
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+Parameters - No parameters
 
-название | ********
----------|------------
-signature | ********
-signatureType | ********
-signerPayloadJSON | ********
-address | ********
-blockHash | ********
-blockNumber | ********
-era | ********
-genesisHash | ********
-method | ********
-nonce | ********
-
-
-
-
+#### Response
 Успешный ответ - 201 OK и содержит тело:
 
 ```json
@@ -216,20 +284,20 @@ signerPayloadJSON | *********
 ## Additional Methods
 
 ### Сhain
-
-
 Назначение метода:*******
+
 
 #### Request
 
-_вот здесь лучше предлагать сразу пример курловый, и выделить как код типа_
-```shell
-curl -X GET https://web-quartz.unique.network/chain/properties
+Curl example
+```
+curl -X 'GET' \
+  'https://web.uniquenetwork.dev/chain/properties' \
+  -H 'accept: application/json'
 ```
 
 Parameters - No parameters
 
-_как то выделить Request, Response_
 
 #### Response
 
@@ -270,13 +338,22 @@ wsUrl      | url блокчейна
 Назначение метода:*******
 
 #### GET /balance
+#### Request
+
+Curl example
+```
+curl -X 'GET' \
+  'https://web.uniquenetwork.dev/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
+  -H 'accept: application/json'
+```
 
 Parameters
 Параметр | тип | комментарий
 ---------|-----|------------
 address  | string |
 
-Ответ:
+#### Response
+
 Успешный ответ - 200 OK и содержит тело:
 
 ```json
@@ -288,14 +365,27 @@ address  | string |
 
 Каждый элемент коллекции содержит следующую информацию:
 
-название | тип | комментарий
----------|-----|------------
-amount | *** |
-formatted | *** |
+название | комментарий
+---------|--------------
+amount | ***********
+formatted | **********
 
 #### POST /balance/transfer
 
-Parameters
+#### Request
+Curl example
+
+```
+curl -X 'POST' \
+  'https://web.uniquenetwork.dev/balance/transfer' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "destination": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "amount": 0.01
+}'
+```
 
 Request body (Example Value, Schema)
 ```
@@ -305,13 +395,16 @@ Request body (Example Value, Schema)
   "amount": 0.01
 }
 ```
+Parameters - No parameters
 
-Ответ:
+#### Response
+
 Успешный ответ - 201 OK и содержит тело:
 
 ```json
 {
-  "signerPayloadJSON": {
+<details>  
+     <summary>"signerPayloadJSON":  </summary> {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
     "blockNumber": "string",
@@ -333,49 +426,58 @@ Request body (Example Value, Schema)
     "type": "bytes"
   },
   "signerPayloadHex": "string"
-}
+}</details>
 ```
 
 Каждый элемент коллекции содержит следующую информацию:
 
 
-название | тип | комментарий
----------|-----|------------
-signerPayloadJSON | строка |
-address | строка |
-blockHash | строка |
-blockNumber | строка |
-era | строка |
-genesisHash | строка |
-method | строка |
-nonce | строка |
-specVersion | строка |
-tip | строка |
-transactionVersion | строка |
-signedExtensions | строка |
-version | число |
-signerPayloadRaw | строка |
-address | срока |
-data |строка |
-type | строка |
-signerPayloadHex | строка |
+название | комментарий
+---------|------------
+signerPayloadJSON | *************
+address | *************
+blockHash | *************
+blockNumber | *************
+era | *************
+genesisHash | *************
+method | *************
+nonce | *************
+specVersion | *************
+tip | *************
+transactionVersion | *************
+signedExtensions | *************
+version | *************
+signerPayloadRaw | *************
+address | *************
+data |*************
+type | *************
+signerPayloadHex | *************
 
 ### Collection
 
 Назначение метода: *******
 
 #### GET /collection
+#### Request
+Curl example
+
+```
+curl -X 'GET' \
+  'https://web.uniquenetwork.dev/collection?collectionId=1' \
+  -H 'accept: application/json'
+```
 
 Parameters
-Параметр | тип | комментарий
----------|-----|------------
-collectionId  | число |
+Параметр | комментарий
+---------|------------
+collectionId  | *************
 
-Ответ:
+#### Response
 Успешный ответ - 200 OK и содержит тело:
 ```
 {
-  "mode": "Nft",
+  <details>
+   <summary>"mode": "Nft", </summary>
   "access": "Normal",
   "schemaVersion": "ImageURL",
   "constOnChainSchema": {
@@ -419,59 +521,108 @@ collectionId  | число |
     "isConfirmed": true
   },
   "tokenPrefix": "string"
-}
+}</details>
 ```
 Каждый элемент коллекции содержит следующую информацию:
 
-название | тип | комментарий
----------|-----|------------
-mode | строка |
-access | строка |
-schemaVersion | строка |
-constOnChainSchema | ??? |
-nested | ??? |
-onChainMetaData | ??? |
-NFTMeta | ??? |
-fields | ??? |
-ipfsJson | ??? |
-id | число |
-rule | строка |
-type | строка |
-variableOnChainSchema | ??? |
-id | число |
-description | срока |
-limits | ??? |
-accountTokenOwnershipLimit | число |
-sponsoredDataSize | число |
-sponsoredDataRateLimit | число |
-tokenLimit | число |
-sponsorTransferTimeout | число |
-sponsorApproveTimeout | число |
-ownerCanTransfer | булево |
-ownerCanDestroy | булево |
-transfersEnabled | булево |
-metaUpdatePermission | ??? |
-mintMode | булево |
-name | строка |
-offchainSchema | булево |
-owner | строка |
-sponsorship | ??? |
-address | строка |
-isConfirmed | булево |
-tokenPrefix | строка |
+название |  комментарий
+---------|--------------
+mode | ***********
+access | ***********
+schemaVersion | ***********
+constOnChainSchema | ***********
+nested | ***********
+onChainMetaData |***********
+NFTMeta | ***********
+fields | ***********
+ipfsJson | ***********
+id | ***********
+rule | ***********
+type | ***********
+variableOnChainSchema | ***********
+id | ***********
+description | ***********
+limits | ***********
+accountTokenOwnershipLimit | ***********
+sponsoredDataSize | ***********
+sponsoredDataRateLimit |***********
+tokenLimit | ***********
+sponsorTransferTimeout | ***********
+sponsorApproveTimeout | ***********
+ownerCanTransfer | ***********
+ownerCanDestroy | ***********
+transfersEnabled | ***********
+metaUpdatePermission | ***********
+mintMode | ***********
+name | ***********
+offchainSchema | ***********
+owner | ***********
+sponsorship | ***********
+address | ***********
+isConfirmed | ***********
+tokenPrefix | ***********
 
-#### Ошибки
-
-***** - ошибка(?)
 
 #### POST /collection
+#### Request
+Curl example
 
-Parameters - No parameters
+```
+<details> <summary>curl -X 'POST' \ </summary>
+  'https://web.uniquenetwork.dev/collection' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "mode": "Nft",
+  "access": "Normal",
+  "schemaVersion": "ImageURL",
+  "name": "Sample collection name",
+  "description": "sample collection description",
+  "tokenPrefix": "TEST",
+  "mintMode": true,
+  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
+  "sponsorship": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "isConfirmed": true
+  },
+  "limits": {
+    "accountTokenOwnershipLimit": 0,
+    "sponsoredDataSize": 0,
+    "sponsoredDataRateLimit": 0,
+    "tokenLimit": 0,
+    "sponsorTransferTimeout": 0,
+    "sponsorApproveTimeout": 0,
+    "ownerCanTransfer": true,
+    "ownerCanDestroy": true,
+    "transfersEnabled": true
+  },
+  "constOnChainSchema": {
+    "nested": {
+      "onChainMetaData": {
+        "nested": {
+          "NFTMeta": {
+            "fields": {
+              "ipfsJson": {
+                "id": 1,
+                "rule": "required",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "variableOnChainSchema": {},
+  "metaUpdatePermission": "ItemOwner",
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
+}'</details>
+```
 
 Request body (Example Value, Schema)
 ```
 {
-  "mode": "Nft",
+   <details><summary>"mode": "Nft", </summary>
   "access": "Normal",
   "schemaVersion": "ImageURL",
   "constOnChainSchema": {
@@ -514,14 +665,16 @@ Request body (Example Value, Schema)
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "isConfirmed": true
   }
-}
+}</details>
 ```
 
-Ответ:
+Parameters - No parameters
+
+#### Response
 Успешный ответ - 201 OK и содержит тело:
 ```
 {
-  "signerPayloadHex": "string",
+  <details> <summary>"signerPayloadHex": "string",</summary>
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -543,39 +696,42 @@ Request body (Example Value, Schema)
     "data": "string",
     "type": {}
   }
-}
+}</details>
 ```
 Каждый элемент коллекции содержит следующую информацию:
 
-название | тип | комментарий
----------|-----|------------
-signerPayloadHex | строка |
-signerPayloadJSON | строка |
-address | строка |
-blockHash | строка |
-blockNumber | строка |
-era | строка |
-genesisHash | строка |
-method | строка |
-nonce | строка |
-specVersion | строка |
-tip | строка |
-transactionVersion | строка |
-signedExtensions | строка |
-version | строка |
-signerPayloadRaw | строка |
-address | строка |
-data | строка |
-type | строка |
+название |  комментарий
+---------|-------------
+signerPayloadHex | ***********
+signerPayloadJSON | ***********
+address | ***********
+blockHash | ***********
+blockNumber | ***********
+era | ***********
+genesisHash | ***********
+method | ***********
+nonce | ***********
+specVersion | ***********
+tip | ***********
+transactionVersion | ***********
+signedExtensions | ***********
+version | ***********
+signerPayloadRaw | ***********
+address | ***********
+data | ***********
+type | ***********
 
 
-#### Ошибки
 
-***** - ошибка(?)
 
 #### DELETE /collection
-
-Parameters - No parameters
+#### Request
+Curl example
+```
+curl -X 'DELETE' \
+  'https://web.uniquenetwork.dev/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
+  -H 'accept: application/json'
+```
 
 Request body (Example Value, Schema)
 ```
@@ -585,11 +741,14 @@ Request body (Example Value, Schema)
 }
 ```
 
-Ответ:
+Parameters - No parameters
+
+
+#### Response
 Успешный ответ - 200 OK и содержит тело:
 ```
 {
-  "signerPayloadHex": "string",
+  <details><summary>"signerPayloadHex": "string",</summary>
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -611,39 +770,47 @@ Request body (Example Value, Schema)
     "data": "string",
     "type": {}
   }
-}
+}</details>
 ```
 Каждый элемент коллекции содержит следующую информацию:
 
-название | тип | комментарий
----------|-----|------------
-signerPayloadHex | строка |
-signerPayloadJSON | строка |
-address | строка |
-blockHash | строка |
-blockNumber | строка |
-era | строка |
-genesisHash | строка |
-method | строка |
-nonce | строка |
-specVersion | строка |
-tip | строка |
-transactionVersion | строка |
-signedExtensions | строка |
-version | строка |
-signerPayloadRaw | строка |
-address | строка |
-data | строка |
-type | строка |
+название | комментарий
+---------|-------------
+signerPayloadHex | *************
+signerPayloadJSON | ***********
+address | ***********
+blockHash | ***********
+blockNumber | ***********
+era | ***********
+genesisHash | ***********
+method | ***********
+nonce | ***********
+specVersion | ***********
+tip | ***********
+transactionVersion | ***********
+signedExtensions | ***********
+version | ***********
+signerPayloadRaw | ***********
+address | ***********
+data | ***********
+type | ***********
 
 
-#### Ошибки
-
-***** - ошибка(?)
 
 #### PATCH /collection
-
-Parameters - No parameters
+#### Request
+Curl example
+```
+curl -X 'PATCH' \
+  'https://web.uniquenetwork.dev/collection/transfer' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 0,
+  "from": "string",
+  "to": "string"
+}'
+```
 
 Request body (Example Value, Schema)
 ```
@@ -654,11 +821,13 @@ Request body (Example Value, Schema)
 }
 ```
 
-Ответ:
+Parameters - No parameters
+
+#### Response
 Успешный ответ - 200 OK и содержит тело:
 ```
 {
-  "signerPayloadHex": "string",
+ <details>  <summary>"signerPayloadHex": "string", </summary>
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -680,45 +849,69 @@ Request body (Example Value, Schema)
     "data": "string",
     "type": {}
   }
-}
+}</details>
 ```
 Каждый элемент коллекции содержит следующую информацию:
 
-название | тип | комментарий
----------|-----|------------
-signerPayloadHex | строка |
-signerPayloadJSON | строка |
-address | строка |
-blockHash | строка |
-blockNumber | строка |
-era | строка |
-genesisHash | строка |
-method | строка |
-nonce | строка |
-specVersion | строка |
-tip | строка |
-transactionVersion | строка |
-signedExtensions | строка |
-version | строка |
-signerPayloadRaw | строка |
-address | строка |
-data | строка |
-type | строка |
-
-
-#### Ошибки
-
-***** - ошибка(?)
-
+название | комментарий
+---------|------------
+signerPayloadHex | ***********
+signerPayloadJSON | ***********
+address | ***********
+blockHash | ***********
+blockNumber | ***********
+era | ***********
+genesisHash | ***********
+method | ***********
+nonce | ***********
+specVersion | ***********
+tip | ***********
+transactionVersion | ***********
+signedExtensions | ***********
+version | ***********
+signerPayloadRaw | ***********
+address | ***********
+data | ***********
+type | ***********
 
 
 
 ### Token
+#### GET /token
+#### Request
+Curl example
+```
+curl -X 'GET' \
+  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1' \
+  -H 'accept: application/json'
+```
 
+Parameters
+Параметр | комментарий
+---------|------------
+collectionId  | ***********
+tokenId   | ***********
+
+#### Response
+Успешный ответ - 200 OK и содержит тело:
+```
+{}
+```
 
 #### POST /token
-
-Parameters - No parameters
+#### Request
+Curl example
+```
+curl -X 'POST' \
+  'https://web.uniquenetwork.dev/token' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 0,
+  "address": "string",
+  "constData": {}
+}'
+```
 
 Request body (Example Value, Schema)
 ```
@@ -729,12 +922,14 @@ Request body (Example Value, Schema)
 }
 ```
 
-Ответ:
+Parameters - No parameters
+
+#### Response
 Успешный ответ - 201 OK и содержит тело:
 
 ```
 {
-  "signerPayloadHex": "string",
+ <details>  <summary>"signerPayloadHex": "string", </summary>
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -756,38 +951,41 @@ Request body (Example Value, Schema)
     "data": "string",
     "type": {}
   }
-}
+}</details>
 ```
 
-название | тип | комментарий
----------|-----|------------
-mode | строка |
-nested | ??? |
-onChainMetaData | ??? |
-NFTMeta | ??? |
-fields | ??? |
-ipfsJson | ??? |
-id | число |
-rule | строка |
-type | строка |
-variableOnChainSchema | ??? |
-id | число |
-description | срока |
-limits | ??? |
-accountTokenOwnershipLimit | число
-owner | строка |
-sponsorship | ??? |
-address | строка |
-isConfirmed | булево |
-tokenPrefix | строка |
+название | комментарий
+---------|------------
+mode | ***********
+nested | ***********
+onChainMetaData | ***********
+NFTMeta | ***********
+fields | ***********
+ipfsJson | ***********
+id | ***********
+rule | ***********
+type | ***********
+variableOnChainSchema | ***********
+id | ***********
+description | ***********
+limits | ***********
+accountTokenOwnershipLimit | ***********
+owner | ***********
+sponsorship | ***********
+address | ***********
+isConfirmed | ***********
+tokenPrefix | ***********
 
-#### Ошибки
 
-***** - ошибка(?)
 
 #### DELETE /token
-
-Parameters - No parameters
+#### Request
+Curl example
+```
+curl -X 'DELETE' \
+  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
+  -H 'accept: application/json'
+```
 
 Request body (Example Value, Schema)
 ```
@@ -798,12 +996,14 @@ Request body (Example Value, Schema)
 }
 ```
 
-Ответ:
+Parameters - No parameters
+
+#### Response
 Успешный ответ - 200 OK и содержит тело:
 
 ```
 {
-  "signerPayloadHex": "string",
+ <details>  <summary>"signerPayloadHex": "string", </summary>
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -825,38 +1025,48 @@ Request body (Example Value, Schema)
     "data": "string",
     "type": {}
   }
-}
+}</details>
 ```
 
-название | тип | комментарий
----------|-----|------------
-mode | строка |
-nested | ??? |
-onChainMetaData | ??? |
-NFTMeta | ??? |
-fields | ??? |
-ipfsJson | ??? |
-id | число |
-rule | строка |
-type | строка |
-variableOnChainSchema | ??? |
-id | число |
-description | срока |
-limits | ??? |
-accountTokenOwnershipLimit | число
-owner | строка |
-sponsorship | ??? |
-address | строка |
-isConfirmed | булево |
-tokenPrefix | строка |
+название | комментарий
+---------|------------
+mode | ***********
+nested | ***********
+onChainMetaData | ***********
+NFTMeta | ***********
+fields | ***********
+ipfsJson | ***********
+id | ***********
+rule | ***********
+type | ***********
+variableOnChainSchema | ***********
+id | ***********
+description | ***********
+limits | ***********
+accountTokenOwnershipLimit | ***********
+owner | ***********
+sponsorship | ***********
+address | ***********
+isConfirmed | ***********
+tokenPrefix | ***********
 
-#### Ошибки
 
-***** - ошибка(?)
 
 #### PATCH /token
-
-Parameters - No parameters
+#### Request
+Curl example
+```
+curl -X 'PATCH' \
+  'https://web.uniquenetwork.dev/token/transfer' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 1,
+  "tokenId": 1,
+  "from": "string",
+  "to": "string"
+}'
+```
 
 Request body (Example Value, Schema)
 ```
@@ -868,12 +1078,14 @@ Request body (Example Value, Schema)
 }
 ```
 
-Ответ:
+Parameters - No parameters
+
+#### Response
 Успешный ответ - 200 OK и содержит тело:
 
 ```
 {
-  "signerPayloadHex": "string",
+ <details>  <summary>"signerPayloadHex": "string", </summary>
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -895,30 +1107,31 @@ Request body (Example Value, Schema)
     "data": "string",
     "type": {}
   }
-}
+}</details>
 ```
 
-название | тип | комментарий
----------|-----|------------
-mode | строка |
-nested | ??? |
-onChainMetaData | ??? |
-NFTMeta | ??? |
-fields | ??? |
-ipfsJson | ??? |
-id | число |
-rule | строка |
-type | строка |
-variableOnChainSchema | ??? |
-id | число |
-description | срока |
-limits | ??? |
-accountTokenOwnershipLimit | число
-owner | строка |
-sponsorship | ??? |
-address | строка |
-isConfirmed | булево |
-tokenPrefix | строка |
+название | комментарий
+---------|------------
+mode | ***********
+nested | ***********
+onChainMetaData | ***********
+NFTMeta | ***********
+fields | ***********
+ipfsJson | ***********
+id | ***********
+rule | ***********
+type | ***********
+variableOnChainSchema | ***********
+id | ***********
+description | ***********
+limits | ***********
+accountTokenOwnershipLimit | ***********
+owner | ***********
+sponsorship | ***********
+address | ***********
+isConfirmed | ***********
+tokenPrefix | ***********
+
 
 #### Ошибки
 
