@@ -150,7 +150,7 @@ describe(BalanceController.name, () => {
           })
           .send();
         expect(false).toEqual(ok);
-        expect(ErrorCodes.InvalidSigner).toEqual(body.error.code);
+        expect(ErrorCodes.Validation).toEqual(body.error.code);
       },
     );
 

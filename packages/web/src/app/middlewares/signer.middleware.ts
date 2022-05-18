@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable class-methods-use-this */
-import { NestMiddleware } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-namespace */
+import { NestMiddleware, UseFilters } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { SdkSigner } from '@unique-nft/sdk/extrinsics';
 import { createSignerByAuthHead } from '../utils/signers';
+import { SdkExceptionsFilter } from '../utils/exception-filter';
 
+@UseFilters(SdkExceptionsFilter)
 export class SignerMiddleware implements NestMiddleware {
   constructor() {}
 
