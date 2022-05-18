@@ -208,14 +208,14 @@ type | ***************
 
 #### Request
 Curl example
+<details> <summary> JSON </summary>
 ```
 curl -X 'POST' \
   'https://web.uniquenetwork.dev/extrinsic/submit' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-<details>
-   <summary>"signerPayloadJSON": </summary> {
+   "signerPayloadJSON": </summary> {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
     "blockNumber": "string",
@@ -233,8 +233,9 @@ curl -X 'POST' \
   },
   "signature": "string",
   "signatureType": "sr25519"
-}'</details>
+}'
 ```
+</details>
 
 Request body (Example Value, Schema)
 ```json
@@ -1133,6 +1134,6 @@ isConfirmed | ***********
 tokenPrefix | ***********
 
 
-#### Ошибки 
+#### Ошибки
 
 ***** - ошибка(?)
