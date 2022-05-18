@@ -117,11 +117,13 @@ https://web-quartz.unique.network/swagger
 
 ### POST /extrinsic/build
 
-Назначение метода: собирает экстринзик и дает в ответе разные варианты того как его можно подписать 
+Build and returns unsigned extrinsic.
+Next you must sign it and send with sign
+to [/extrinsic/submit](#post-extrinsicsubmit) method
+to apply the blockchain change.   
 
-#### Request
+#### Request body
 
-Request body
 ```json
 {
   "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
@@ -137,7 +139,7 @@ Request body
 ```
 
 <details>
- <summary>CURL Example</summary>
+ <summary>▶ CURL Example</summary>
   
   ```bash
   curl -X 'POST' \
@@ -160,10 +162,8 @@ Request body
 </details>
 
 #### Response
-Http Status 200 with body:
-
 <details>
-  <summary>Unsigned Extrinsic Response</summary>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
   ```json
   {
