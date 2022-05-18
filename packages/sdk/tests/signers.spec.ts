@@ -1,7 +1,11 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
-import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
+import {
+  BadSignatureError,
+  InvalidSignerError,
+  ValidationError,
+} from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {
   createSigner,
@@ -53,195 +57,167 @@ describe('signers', () => {
     return Sdk.create(options);
   }
 
-  // todo - replace with - await expect(myAwesomeThrowingFunc).rejects.toThrowError(/smth/)
-  async function tryAndExpectSdkError(
-    cb: () => Promise<void>,
-    code: ErrorCodes,
-    errorMessage?: string,
-  ) {
-    try {
-      await cb();
-      expect(true).toEqual(false);
-    } catch (err) {
-      const sdkError = err as SdkError;
-      console.log('sdkError', sdkError);
-      expect(sdkError.code).toEqual(code);
-      if (errorMessage) {
-        expect(sdkError.message).toEqual(errorMessage);
-      }
+  function getAddressByName(name: string): string {
+    switch (name) {
+      case 'alice':
+        return alice.address;
+      case 'bob':
+        return bob.address;
+      case 'testUser':
+        return testUser.keyfile.address;
+      default:
+        return '';
     }
   }
 
-  it('uri validate - ok', async () => {
-    await createSdk({
-      uri: '//Alice',
-    });
-  });
-
-  it('uri validate - fail', async () => {
-    await tryAndExpectSdkError(async () => {
+  describe('seed/uri', () => {
+    it('uri validate - ok', async () => {
       await createSdk({
-        uri: 'Alice',
+        uri: '//Alice',
       });
-    }, ErrorCodes.Validation);
+    });
+
+    it('uri validate - fail', async () => {
+      await expect(async () => {
+        await createSdk({
+          uri: 'Alice',
+        });
+      }).rejects.toThrowError(new ValidationError({}));
+    });
+
+    it.each([
+      ['alice', { uri: '//Alice' }],
+      ['testUser', { seed: testUser.seed }],
+    ])(
+      'sign ok - %s',
+      async (addressName: string, signerOptions: SignerOptions) => {
+        const sdk = await createSdk(signerOptions);
+        const { signerPayloadHex, signerPayloadJSON } =
+          await sdk.balance.transfer({
+            address: getAddressByName(addressName),
+            destination: bob.address,
+            amount: 0.001,
+          });
+
+        const { signature } = await sdk.extrinsics.sign({
+          signerPayloadHex,
+        });
+        expect(typeof signature).toBe('string');
+        await sdk.extrinsics.verifySignOrThrow({
+          signature,
+          signerPayloadJSON,
+        });
+      },
+    );
+
+    it.each([
+      ['bob', 'alice', { uri: '//Alice' }],
+      ['alice', 'bob', { seed: testUser.seed }],
+    ])(
+      'sign fail - %s->%s',
+      async (
+        addressName: string,
+        destinationName: string,
+        signerOptions: SignerOptions,
+      ) => {
+        const sdk = await createSdk(signerOptions);
+        const { signerPayloadHex, signerPayloadJSON } =
+          await sdk.balance.transfer({
+            address: getAddressByName(addressName),
+            destination: getAddressByName(destinationName),
+            amount: 0.001,
+          });
+
+        const { signature } = await sdk.extrinsics.sign({
+          signerPayloadHex,
+        });
+        await expect(async () => {
+          await sdk.extrinsics.verifySignOrThrow({
+            signature,
+            signerPayloadJSON,
+          });
+        }).rejects.toThrowError(new BadSignatureError());
+      },
+    );
   });
 
-  it('uri sign - ok', async () => {
-    const sdk = await createSdk({
-      uri: '//Alice',
-    });
-    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
-      address: alice.address,
-      destination: bob.address,
-      amount: 0.001,
-    });
-
-    const { signature } = await sdk.extrinsics.sign({
-      signerPayloadHex,
-    });
-    expect(typeof signature).toBe('string');
-    await sdk.extrinsics.verifySignOrThrow({
-      signature,
-      signerPayloadJSON,
-    });
-  });
-
-  it('uri sign - fail', async () => {
-    const sdk = await createSdk({
-      uri: '//Alice',
-    });
-    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
-      address: bob.address,
-      destination: alice.address,
-      amount: 0.001,
+  describe('keyfile', () => {
+    it('validate - fail', async () => {
+      await expect(async () => {
+        const keyfile: object = {};
+        await createSdk({
+          keyfile: keyfile as KeyringPair$Json,
+          passwordCallback() {
+            return Promise.resolve('');
+          },
+        });
+      }).rejects.toThrowError(new ValidationError({}));
     });
 
-    const { signature } = await sdk.extrinsics.sign({
-      signerPayloadHex,
-    });
-    await tryAndExpectSdkError(async () => {
-      await sdk.extrinsics.verifySignOrThrow({
-        signature,
-        signerPayloadJSON,
-      });
-    }, ErrorCodes.BadSignature);
-  });
-
-  it('seed sign - ok', async () => {
-    const sdk = await createSdk({
-      seed: testUser.seed,
-    });
-    const { signerPayloadHex } = await sdk.balance.transfer({
-      address: testUser.keyfile.address,
-      destination: bob.address,
-      amount: 0.001,
-    });
-
-    const { signature } = await sdk.extrinsics.sign({
-      signerPayloadHex,
-    });
-    expect(typeof signature).toBe('string');
-  });
-
-  it('seed sign - fail', async () => {
-    const sdk = await createSdk({
-      seed: testUser.seed,
-    });
-    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
-      address: alice.address,
-      destination: bob.address,
-      amount: 0.001,
-    });
-
-    const { signature } = await sdk.extrinsics.sign({
-      signerPayloadHex,
-    });
-    expect(typeof signature).toBe('string');
-
-    await tryAndExpectSdkError(async () => {
-      await sdk.extrinsics.verifySignOrThrow({
-        signature,
-        signerPayloadJSON,
-      });
-    }, ErrorCodes.BadSignature);
-  });
-
-  it('keyfile validate - fail', async () => {
-    await tryAndExpectSdkError(async () => {
-      const keyfile: object = {};
-      await createSdk({
-        keyfile: keyfile as KeyringPair$Json,
+    it('create - fail, pass empty', async () => {
+      const sdk = await createSdk({
+        keyfile: testUser.keyfile as KeyringPair$Json,
         passwordCallback() {
           return Promise.resolve('');
         },
       });
-    }, ErrorCodes.Validation);
-  });
-
-  it('keyfile create - fail, pass empty', async () => {
-    const sdk = await createSdk({
-      keyfile: testUser.keyfile as KeyringPair$Json,
-      passwordCallback() {
-        return Promise.resolve('');
-      },
-    });
-    await tryAndExpectSdkError(
-      async () => {
+      await expect(async () => {
         const signer = sdk.signer as KeyfileSigner;
         await signer.unlock();
-      },
-      ErrorCodes.InvalidSigner,
-      'Password was not received',
-    );
-  });
-
-  it('keyfile create - fail, pass invalid', async () => {
-    const sdk = await createSdk({
-      keyfile: testUser.keyfile as KeyringPair$Json,
-      passwordCallback() {
-        return Promise.resolve('123');
-      },
+      }).rejects.toThrowError(
+        new InvalidSignerError('Password was not received'),
+      );
     });
-    await tryAndExpectSdkError(
-      async () => {
+
+    it('create - fail, pass invalid', async () => {
+      const sdk = await createSdk({
+        keyfile: testUser.keyfile as KeyringPair$Json,
+        passwordCallback() {
+          return Promise.resolve('123');
+        },
+      });
+      await expect(async () => {
         const signer = sdk.signer as KeyfileSigner;
         await signer.unlock();
-      },
-      ErrorCodes.InvalidSigner,
-      'Unable to decode using the supplied passphrase',
-    );
-  });
-
-  it('keyfile create - ok', async () => {
-    await createSdk({
-      keyfile: testUser.keyfile as KeyringPair$Json,
-      passwordCallback() {
-        return Promise.resolve(testUser.password);
-      },
-    });
-  });
-
-  it('keyfile sign - ok', async () => {
-    const sdk = await createSdk({
-      keyfile: testUser.keyfile as KeyringPair$Json,
-      passwordCallback() {
-        return Promise.resolve(testUser.password);
-      },
+      }).rejects.toThrowError(
+        new InvalidSignerError(
+          'Unable to decode using the supplied passphrase',
+        ),
+      );
     });
 
-    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
-      address: testUser.keyfile.address,
-      destination: bob.address,
-      amount: 0.001,
+    it('create - ok', async () => {
+      await createSdk({
+        keyfile: testUser.keyfile as KeyringPair$Json,
+        passwordCallback() {
+          return Promise.resolve(testUser.password);
+        },
+      });
     });
 
-    const { signature } = await sdk.extrinsics.sign({
-      signerPayloadHex,
-    });
-    expect(typeof signature).toBe('string');
-    await sdk.extrinsics.verifySignOrThrow({
-      signature,
-      signerPayloadJSON,
+    it('sign - ok', async () => {
+      const sdk = await createSdk({
+        keyfile: testUser.keyfile as KeyringPair$Json,
+        passwordCallback() {
+          return Promise.resolve(testUser.password);
+        },
+      });
+
+      const { signerPayloadHex, signerPayloadJSON } =
+        await sdk.balance.transfer({
+          address: testUser.keyfile.address,
+          destination: bob.address,
+          amount: 0.001,
+        });
+
+      const { signature } = await sdk.extrinsics.sign({
+        signerPayloadHex,
+      });
+      expect(typeof signature).toBe('string');
+      await sdk.extrinsics.verifySignOrThrow({
+        signature,
+        signerPayloadJSON,
+      });
     });
   });
 });
