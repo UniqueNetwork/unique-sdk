@@ -1,19 +1,27 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable class-methods-use-this */
-import { Injectable, Scope, NestMiddleware } from '@nestjs/common';
+import { NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { createSignerByAuthorizationHead } from '@unique-nft/sdk/sign';
+import { SdkSigner } from '@unique-nft/sdk/extrinsics';
+import { createSignerByAuthHead } from '../utils/signers';
 
-@Injectable({ scope: Scope.REQUEST })
 export class SignerMiddleware implements NestMiddleware {
   constructor() {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const { authorization } = req.headers;
-    req.body.signer = authorization
-      ? createSignerByAuthorizationHead(authorization)
-      : null;
+    if (authorization) {
+      req.signer = createSignerByAuthHead(authorization);
+    }
     next();
+  }
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      signer?: SdkSigner;
+    }
   }
 }

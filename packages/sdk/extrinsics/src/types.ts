@@ -7,7 +7,6 @@ import {
   IsNotEmptyObject,
   IsOptional,
 } from 'class-validator';
-import { ValidAuthorizationHeader } from '@unique-nft/sdk/validation';
 import {
   SignatureType,
   SignerPayloadJSONDto,
@@ -34,25 +33,6 @@ export class SignTxArgs {
   signerPayloadHex: HexString;
 
   signer?: SdkSigner;
-}
-
-export class SignHeaders {
-  @ApiProperty({
-    type: String,
-    description: `You can use Seed or Uri authorization:
-<ul>
-<li><code>Authorization: Seed &lt;your mnemonic phrase&gt;</code> </li>
-<li><code>Authorization: Uri &lt;uri name&gt;</code></li>
-</ul>
-For example:
-<ul>
-<li><code>Authorization: Seed word1 word2 word3 ...</code> </li>
-<li><code>Authorization: Uri //Alice</code></li>
-</ul>
-`,
-  })
-  @ValidAuthorizationHeader()
-  authorization: string;
 }
 
 export class SignTxResult {

@@ -11,7 +11,7 @@ import {
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
 
-function createSignerSync(signerOptions: SignerOptions): SdkSigner {
+export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
   if ('seed' in signerOptions) {
     validateSync(signerOptions, SeedSignerOptions);
     try {
@@ -44,27 +44,5 @@ export async function createSigner(
   signerOptions: SignerOptions,
 ): Promise<SdkSigner> {
   await cryptoWaitReady();
-  return createSignerSync(signerOptions);
-}
-
-const authorizationReg = /^(Seed\s+(?<seed>.+))|(Uri\s+(?<uri>\/\/\w+))$/;
-export function createSignerByAuthorizationHead(
-  authorization: string,
-): SdkSigner | null {
-  const exec = authorizationReg.exec(authorization);
-  if (!exec || !exec.groups) {
-    throw new InvalidSignerError('Invalid authorization header');
-  }
-
-  const { seed, uri } = exec.groups;
-  let signerOptions;
-  if (seed) {
-    signerOptions = new SeedSignerOptions(seed);
-  } else if (uri) {
-    signerOptions = new UriSignerOptions(uri);
-  } else {
-    throw new InvalidSignerError('Invalid authorization header');
-  }
-
   return createSignerSync(signerOptions);
 }
