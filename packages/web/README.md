@@ -165,7 +165,7 @@ to apply the blockchain change.
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
   ```json
   {
@@ -280,7 +280,7 @@ curl -X 'POST' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -326,7 +326,7 @@ curl -X 'POST' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -405,7 +405,7 @@ curl -X 'POST' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -449,7 +449,7 @@ curl -X 'GET' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -499,7 +499,7 @@ curl -X 'GET' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -551,7 +551,7 @@ curl -X 'POST' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -635,7 +635,7 @@ curl -X 'GET' \
   
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -845,7 +845,7 @@ Purpose of the method: generates an unsigned extrusion to create a collection wi
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -928,7 +928,7 @@ curl -X 'DELETE' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -1020,7 +1020,7 @@ curl -X 'PATCH' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -1103,7 +1103,7 @@ curl -X 'GET' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {}
@@ -1144,7 +1144,7 @@ curl -X 'POST' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -1229,7 +1229,7 @@ curl -X 'DELETE' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
@@ -1320,7 +1320,7 @@ curl -X 'PATCH' \
 
 #### Response
 <details>
-  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
