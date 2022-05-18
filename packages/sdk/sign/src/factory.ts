@@ -1,3 +1,4 @@
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { validateSync } from '@unique-nft/sdk/validation';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk/types';
@@ -13,6 +14,8 @@ import { KeyfileSigner } from './keyfile-signer';
 export async function createSigner(
   signerOptions: SignerOptions,
 ): Promise<SdkSigner> {
+  await cryptoWaitReady();
+
   if ('seed' in signerOptions) {
     validateSync(signerOptions, SeedSignerOptions);
     try {

@@ -28,6 +28,11 @@ export class ExtrinsicsController {
     return this.sdk.extrinsics.sign(args);
   }
 
+  @Post('verify-sign')
+  async verifySign(@Body() args: SubmitTxArgs): Promise<void> {
+    await this.sdk.extrinsics.verifySign(args);
+  }
+
   @Post('submit')
   async submitTx(@Body() args: SubmitTxArgs): Promise<SubmitResult> {
     return this.sdk.extrinsics.submit(args);

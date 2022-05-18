@@ -105,7 +105,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     };
   }
 
-  verifySign(args: SubmitTxArgs) {
+  verifySign(args: SubmitTxArgs): void {
     verifyTxSignature(this.sdk.api, args.signerPayloadJSON, args.signature);
   }
 
