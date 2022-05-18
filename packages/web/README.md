@@ -8,98 +8,81 @@
 
 _так же расписать что концептульно апи собирает экстринсик, клиент должен его подписать и отправить обратно_ - ждем пояснений
 
+Экстринсик - это запрос наизменение данных в блокчейне
+Чтобы внести изменения в блокчейн, необходимо сформировать запрос (экстринсик) с определенными параметрами, который состоят из 3 частей:
+1) Секция блокчейна, фунционал
+2) Метод секции
+3) Массив аргументов
+
+После того как экстринзик был сформирован - он должен быть подписан, чтобы чейн выполнил запрошенные изменения
+
+
 ## Table of Contents
 
-- [Install/Easy start](#installeasy-start)
-    - [Choose install approach](#choose-install-approach)
-      - [Docker](#docker-setup)
-      - [Git](#git)
-      - [Use public endpoints](#use-public-endpoints)
-    - [Environment Variables](#environment-variables)
-    - [Swagger](#swagger)
+
+- [Instsall/Easy start](#)
+    - [Docker setup](#)
+    - [Environment Variables](#)
+       - [Production](#)
+       - [Staging](#)
+       - [Test](#)
 
 
-- [Unique SDK HTTP API Methods:](#methods)
-  - [Main Methods](#main-methods)
-    - [Extrinsic build](#post-extrinsicbuild)
-    - [Extrinsic submit](#post-extrinsicsubmit)
-    - [Extrinsic sign](#post-extrinsicsign)
-    - [Extrinsic verify-sign](#post-extrinsicverify-sign)
-  - [Additional Methods](#additional-methods)
-    - [Сhain](#chain)
-    - [Balance](#get-balance)
-    - [Collection](#get-collection)
-    - [Token](#get-token)
+- [Unique SDK HTTP API Methods:](#)
+  - [Main Methods](#)
+    - [Extrinsic build](#)
+    - [Extrinsic submit](#)
+    - [Extrinsic sign](#)
+    - [Extrinsic verify-sign](#)
+  - [Additional Methods](#)
+    - [Сhain](#)
+    - [Balance](#)
+    - [Collection](#)
+    - [Token](#)
+
+
+## Table of Contents
+
+
+- [Instsall/Easy start]([# SDK Deployment - Getting Started Guide](https://github.com/UniqueNetwork/unique-sdk/edit/New_Readme/packages/web/README.md#instsalleasy-start))
+    - [Docker setup] ( #Docker setup)
+    - [Environment Variables]( #Environment Variables)
+       - [Production]( #Production)
+       - [Swagger]( #Swagger)
+       
+- [Methods](#Methods)
+  - [Main Methods:](#Main Methods)
+    - [Extrinsic build](#POST /extrinsic/build)
+    - [Extrinsic submit](#POST /extrinsic/submit)
+  - [Additional Methods:](#Additional Methods)
+    - [Сhain](#Сhain)
+    - [Balance](#Balance)
+    - [Collection](#POST /collection)
+    - [Token](#Token)
+ 
+
+  
+
 
 # SDK Deployment - Getting Started Guide
 
 
-## Install/Easy start
+## Instsall/Easy start
+### Docker setup
 
-### Choose install approach
-
-#### Docker setup
-
-```bash
-docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwork/web:latest
-```
-
-<a href="https://hub.docker.com/r/uniquenetwork/web" target="_blank">See hub.docker.com page</a>
-
-#### Git
-
-```git
-git clone https://github.com/UniqueNetwork/unique-sdk
-cd unique-sdk
-npm install
-npm run build:web
-npm start
-```
-
-#### Use public endpoints
-
-You can use public endpoints for access Unique Web:
-
-##### Opal
-```
-https://web-opal.unique.network
-```
-
-##### Quartz
-```
-https://web-quartz.unique.network
-```
+https://hub.docker.com/r/uniquenetwork/web 
 
 ### Environment Variables
 
-#### Required
-```bash
-CHAIN_WS_URL=wss://quartz.unique.network
+#### Production
+```
+CHAIN_WS_URL=wss://ws-quartz.unique.network
 ```
 
-<a href="https://docs.unique.network/unique-and-quartz-wiki/build/get-started/testnet-and-mainnet" target="_blank">See official Unique Network documentation</a>
 
-#### Optional
-
-##### Use SIGNER_SEED or SIGNER_URI for [Sign](#post-extrinsicsign) method
-```bash
-SIGNER_SEED=type mnemonic here
-SIGNER_URI=//Alice
+#### Swagger
 ```
-
-##### Port (default 3000)
-```bash
-PORT=3000
-```
-
-##### IPFS Gateway
-```bash
-IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
-```
-
-### Swagger
-```
-https://web-quartz.unique.network/swagger
+https://web.uniquenetwork.dev/swagger/#/
 ```
 
 # Methods
@@ -108,13 +91,13 @@ https://web-quartz.unique.network/swagger
 
 ### POST /extrinsic/build
 
-Назначение метода: *******
+Назначение метода: собирает экстринзик и дает в ответе разные варианты того как его можно подписать 
 
 #### Request
 Curl example
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/build' \
+  'https://web.uniquenetwork.dev/extrinsic/build' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -137,9 +120,9 @@ Request body (Example Value, Schema)
   "section": "balances",
   "method": "transfer",
   "args": [
-    "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
-    100000000
-  ],
+  "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
+  100000000
+],
   "era": 64,
   "isImmortal": false
 }
@@ -157,26 +140,26 @@ Parameters - No parameters
 {
   "signerPayloadHex": "string",
   "signerPayloadJSON": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
-    ],
-      "version": 0
-  },
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "blockHash": "string",
+  "blockNumber": "string",
+  "era": "string",
+  "genesisHash": "string",
+  "method": "string",
+  "nonce": "string",
+  "specVersion": "string",
+  "tip": "string",
+  "transactionVersion": "string",
+  "signedExtensions": [
+  "string"
+],
+  "version": 0
+},
   "signerPayloadRaw": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "data": "string",
-    "type": {}
-  }
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "data": "string",
+  "type": {}
+}
 }
 ```
 </details>
@@ -205,7 +188,7 @@ type | ***************
 
 ### POST /extrinsic/submit
 
-Назначение метода: *******
+Назначение метода: отправить подписанный экстринзик в чейн
 
 #### Request
 Curl example
@@ -214,7 +197,7 @@ Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/submit' \
+  'https://web.uniquenetwork.dev/extrinsic/submit' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -249,21 +232,21 @@ Request body (Example Value, Schema)
   "signature": "string",
   "signatureType": "sr25519",
   "signerPayloadJSON": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
-    ],
-    "version": 0
-  }
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "blockHash": "string",
+  "blockNumber": "string",
+  "era": "string",
+  "genesisHash": "string",
+  "method": "string",
+  "nonce": "string",
+  "specVersion": "string",
+  "tip": "string",
+  "transactionVersion": "string",
+  "signedExtensions": [
+  "string"
+],
+  "version": 0
+}
 }
 ```
 </details>
@@ -289,19 +272,19 @@ signerPayloadJSON | *********
 
 ### POST /extrinsic/sign
 
-Назначение метода: *******
+Назначение метода: подписать экстринзик
 
 #### Request
 Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/sign' \
+  'https://web.uniquenetwork.dev/extrinsic/sign' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-    "signerPayloadHex": "string"
-  }'
+  "signerPayloadHex": "string"
+}'
 ```
 
 Request body (Example Value, Schema)
@@ -331,7 +314,7 @@ signature | *********
 
 ### POST /extrinsic/verify-sign
 
-Назначение метода: *******
+Назначение метода: проверить подпись экстринзика
 
 #### Request
 Curl example
@@ -340,7 +323,7 @@ Curl example
 
 ```json
 curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/verify-sign' \
+  'https://web.uniquenetwork.dev/extrinsic/verify-sign' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -370,7 +353,7 @@ Request body (Example Value, Schema)
 
 <details> <summary> JSON </summary>
 
-```json
+```bash
 {
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
@@ -418,8 +401,8 @@ message | *********
 
 ## Additional Methods
 
-### Сhain
-Назначение метода:*******
+### GET /chain/properties
+Назначение метода: запрашивает служебные поля, необходимые для работы с блокчейном
 
 
 #### Request
@@ -427,7 +410,7 @@ message | *********
 Curl example
 ```bash
 curl -X 'GET' \
-  'https://web-quartz.unique.network/chain/properties' \
+  'https://web.uniquenetwork.dev/chain/properties' \
   -H 'accept: application/json'
 ```
 
@@ -443,7 +426,7 @@ Parameters - No parameters
   "SS58Prefix": 255,
   "decimals": 18,
   "token": "QTZ",
-  "wsUrl": "wss://quartz.unique.network"
+  "wsUrl": "wss://ws-quartz.unique.network"
 }
 ```
 
@@ -459,15 +442,14 @@ wsUrl      | url блокчейна
 
 ### Balance
 
-Назначение метода:*******
-
 #### GET /balance
+Назначение метода: возвращает баланс счета в форматированном и неформатированном виде
 #### Request
 
 Curl example
 ```bash
 curl -X 'GET' \
-  'https://web-quartz.unique.network/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
+  'https://web.uniquenetwork.dev/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
   -H 'accept: application/json'
 ```
 
@@ -495,13 +477,13 @@ amount | ***********
 formatted | **********
 
 #### POST /balance/transfer
-
+Назначение метода: создает неподписанный экстринзик на странсфер определенной суммы коинов
 #### Request
 Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/balance/transfer' \
+  'https://web.uniquenetwork.dev/balance/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -582,15 +564,14 @@ signerPayloadHex | *************
 
 ### Collection
 
-Назначение метода: *******
-
 #### GET /collection
+Назначение метода: возвращает информацию о коллекции по id
 #### Request
 Curl example
 
 ```bash
 curl -X 'GET' \
-  'https://web-quartz.unique.network/collection?collectionId=1' \
+  'https://web.uniquenetwork.dev/collection?collectionId=1' \
   -H 'accept: application/json'
 ```
 
@@ -696,6 +677,7 @@ tokenPrefix | ***********
 
 
 #### POST /collection
+Назначение метода: формирует неподписанный экстринзик для создания коллекции с опредленными параметрами
 #### Request
 Curl example
 
@@ -703,7 +685,7 @@ Curl example
 
 ```bash
    curl -X 'POST' \ 
-  'https://web-quartz.unique.network/collection' \
+  'https://web.uniquenetwork.dev/collection' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -868,13 +850,14 @@ type | ***********
 
 
 #### DELETE /collection
+Назначение метода: формирует неподписанный экстринзик для удаления выбранной коллекции
 #### Request
 Curl example
 
 
 ```bash
 curl -X 'DELETE' \
-  'https://web-quartz.unique.network/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
+  'https://web.uniquenetwork.dev/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
   -H 'accept: application/json'
 ```
 
@@ -947,14 +930,16 @@ type | ***********
 
 
 
-#### PATCH /collection
+#### PATCH /collection/transfer
+Назначение метода: формирует неподписанный экстринзик для передачи прав на коллекции
+
 #### Request
 Curl example
 
 
 ```bash
 curl -X 'PATCH' \
-  'https://web-quartz.unique.network/collection/transfer' \
+  'https://web.uniquenetwork.dev/collection/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -1035,11 +1020,12 @@ type | ***********
 
 ### Token
 #### GET /token
+Назначение метода: возвращает информацию о токене по id коллекции и токена
 #### Request
 Curl example
 ```bash
 curl -X 'GET' \
-  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1' \
+  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1' \
   -H 'accept: application/json'
 ```
 
@@ -1056,11 +1042,12 @@ tokenId   | ***********
 ```
 
 #### POST /token
+Назначение метода: создает неподписанный экстринзик на создание токена внутри коллекции
 #### Request
 Curl example
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/token' \
+  'https://web.uniquenetwork.dev/token' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -1139,11 +1126,12 @@ tokenPrefix | ***********
 
 
 #### DELETE /token
+Назначение метода: формирует неподписанный экстринзик для удаления выбранного токена
 #### Request
 Curl example
 ```bash
 curl -X 'DELETE' \
-  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
+  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
   -H 'accept: application/json'
 ```
 
@@ -1216,11 +1204,12 @@ tokenPrefix | ***********
 
 
 #### PATCH /token
+Назначение метода: формирует неподписанный экстринзик для передачи прав на токен
 #### Request
 Curl example
 ```bash
 curl -X 'PATCH' \
-  'https://web-quartz.unique.network/token/transfer' \
+  'https://web.uniquenetwork.dev/token/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
