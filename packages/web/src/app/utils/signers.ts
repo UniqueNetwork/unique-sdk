@@ -4,8 +4,9 @@ import {
   SeedSignerOptions,
   UriSignerOptions,
 } from '@unique-nft/sdk/sign';
+import { SdkSigner } from '@unique-nft/sdk/types';
 
-export function createSignerByAuthHead(authorization: string) {
+export function createSignerByHeader(authorization: string): SdkSigner {
   const splitterIndex = authorization.indexOf(' ');
   const type = authorization.substring(0, splitterIndex);
   const value = authorization.substring(splitterIndex + 1);

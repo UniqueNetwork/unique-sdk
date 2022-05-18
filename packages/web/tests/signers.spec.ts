@@ -9,7 +9,6 @@ import { ErrorCodes } from '@unique-nft/sdk/errors';
 import * as process from 'process';
 import request from 'supertest';
 
-import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
 
 const testUser = {
@@ -32,7 +31,7 @@ const testUser = {
   },
 };
 
-describe(BalanceController.name, () => {
+describe('Web signers', () => {
   let app: INestApplication;
   let alice: KeyringPair;
   let bob: KeyringPair;
