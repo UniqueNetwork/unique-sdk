@@ -35,4 +35,4 @@ http://localhost:3000/swagger/
 CHAIN_WS_URL=wss://ws-quartz.unique.network
 ```
 
-Other variables are optional, full list is available in [WEB docs](../packages/web#sdk-deployment---getting-started-guide)
+Other variables are optional, full list is available in [WEB docs](https://github.com/UniqueNetwork/unique-sdk/tree/develop/packages/web#sdk-deployment---getting-started-guide)
