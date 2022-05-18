@@ -9,7 +9,6 @@ import { ErrorCodes } from '@unique-nft/sdk/errors';
 import * as process from 'process';
 import request from 'supertest';
 
-import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
 
 const testUser = {
@@ -32,7 +31,7 @@ const testUser = {
   },
 };
 
-describe(BalanceController.name, () => {
+describe('Web signers', () => {
   let app: INestApplication;
   let alice: KeyringPair;
   let bob: KeyringPair;
@@ -56,9 +55,23 @@ describe(BalanceController.name, () => {
     await app.init();
   }
 
+  function getAddressByName(name: string): string {
+    switch (name) {
+      case 'alice':
+        return alice.address;
+      case 'bot':
+        return bob.address;
+      case 'testUser':
+        return testUser.keyfile.address;
+      default:
+        return null;
+    }
+  }
+
   async function signAndVerify(
     from: string,
     to: string,
+    headers: object = {},
   ): Promise<request.Test> {
     const buildResponse = await request(app.getHttpServer())
       .post(`/api/balance/transfer`)
@@ -72,6 +85,7 @@ describe(BalanceController.name, () => {
 
     const signResponse = await request(app.getHttpServer())
       .post(`/api/extrinsic/sign`)
+      .set(headers)
       .send({
         signerPayloadHex,
       });
@@ -117,6 +131,55 @@ describe(BalanceController.name, () => {
       const { ok, body } = await signAndVerify(alice.address, bob.address);
       expect(false).toEqual(ok);
       expect(ErrorCodes.BadSignature).toEqual(body.error.code);
+    });
+  });
+
+  describe('signer header', () => {
+    beforeAll(async () => {
+      await createApp();
+    });
+
+    it.each(['Uri Alice', '//Alice', testUser.seed])(
+      'invalid token - %s',
+      async (headValue) => {
+        const { ok, body } = await request(app.getHttpServer())
+          .post(`/api/extrinsic/sign`)
+          .set({
+            Authorization: headValue,
+          })
+          .send();
+        expect(false).toEqual(ok);
+        expect(ErrorCodes.Validation).toEqual(body.error.code);
+      },
+    );
+
+    it.each([
+      ['Uri //Bob', 'alice'],
+      [`Seed ${testUser.seed}`, 'alice'],
+    ])('sign fail - %s', async (Authorization, addressName) => {
+      const { ok, body } = await signAndVerify(
+        getAddressByName(addressName),
+        bob.address,
+        {
+          Authorization,
+        },
+      );
+      expect(false).toEqual(ok);
+      expect(ErrorCodes.BadSignature).toEqual(body.error.code);
+    });
+
+    it.each([
+      ['Uri //Alice', 'alice'],
+      [`Seed ${testUser.seed}`, 'testUser'],
+    ])('sign ok - %s', async (Authorization, addressName) => {
+      const { ok } = await signAndVerify(
+        getAddressByName(addressName),
+        bob.address,
+        {
+          Authorization,
+        },
+      );
+      expect(true).toEqual(ok);
     });
   });
 });

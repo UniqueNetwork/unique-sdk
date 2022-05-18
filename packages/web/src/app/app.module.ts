@@ -1,4 +1,11 @@
-import { Module } from '@nestjs/common';
+/* eslint-disable class-methods-use-this */
+import {
+  Module,
+  NestModule,
+  RequestMethod,
+  MiddlewareConsumer,
+} from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { Sdk } from '@unique-nft/sdk';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -16,6 +23,8 @@ import {
   TokenController,
 } from './controllers';
 import { GlobalConfigModule, SignerConfig } from './config/config.module';
+import { SignerMiddleware } from './middlewares/signer.middleware';
+import { SdkExceptionsFilter } from './utils/exception-filter';
 
 function createSignerOptions(configService: ConfigService): SignerOptions {
   const { seed, uri } = configService.get<SignerConfig>('signer');
@@ -44,7 +53,7 @@ export const sdkProvider = {
 };
 
 @Module({
-  imports: [GlobalConfigModule],
+  imports: [GlobalConfigModule, SignerMiddleware],
   controllers: [
     ChainController,
     BalanceController,
@@ -52,6 +61,18 @@ export const sdkProvider = {
     CollectionController,
     TokenController,
   ],
-  providers: [sdkProvider],
+  providers: [
+    sdkProvider,
+    {
+      provide: APP_FILTER,
+      useClass: SdkExceptionsFilter,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SignerMiddleware)
+      .forRoutes({ path: '/extrinsic/*', method: RequestMethod.POST });
+  }
+}

@@ -11,11 +11,7 @@ import {
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
 
-export async function createSigner(
-  signerOptions: SignerOptions,
-): Promise<SdkSigner> {
-  await cryptoWaitReady();
-
+export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
   if ('seed' in signerOptions) {
     validateSync(signerOptions, SeedSignerOptions);
     try {
@@ -42,4 +38,11 @@ export async function createSigner(
   }
 
   throw new InvalidSignerError('Not known options');
+}
+
+export async function createSigner(
+  signerOptions: SignerOptions,
+): Promise<SdkSigner> {
+  await cryptoWaitReady();
+  return createSignerSync(signerOptions);
 }

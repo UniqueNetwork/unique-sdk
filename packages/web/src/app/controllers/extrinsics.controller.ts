@@ -1,8 +1,9 @@
-import { Body, Controller, Post, UseFilters } from '@nestjs/common';
+import { Body, Controller, Post, UseFilters, Headers } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import {
+  SdkSigner,
   SignTxArgs,
   SignTxResult,
   SubmitResult,
@@ -11,6 +12,8 @@ import {
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
+import { SignHeaders } from '../types/requests';
+import { Signer } from '../decorators/signer.decorator';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('extrinsic')
@@ -24,8 +27,12 @@ export class ExtrinsicsController {
   }
 
   @Post('sign')
-  sign(@Body() args: SignTxArgs): Promise<SignTxResult> {
-    return this.sdk.extrinsics.sign(args);
+  async sign(
+    @Body() args: SignTxArgs,
+    @Headers() headers: SignHeaders,
+    @Signer() signer?: SdkSigner,
+  ): Promise<SignTxResult> {
+    return this.sdk.extrinsics.sign(args, signer);
   }
 
   @Post('verify-sign')
