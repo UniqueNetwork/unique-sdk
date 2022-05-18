@@ -26,7 +26,7 @@ _так же расписать что концептульно апи соби�
     - [Extrinsic sign](#post-extrinsicsign)
     - [Extrinsic verify-sign](#post-extrinsicverify-sign)
   - [Additional Methods](#additional-methods)
-    - [Сhain](#chain)
+    - [Сhain](#hain-properties)
     - [Balance](#get-balance)
     - [Collection](#get-collection)
     - [Token](#get-token)
@@ -111,26 +111,8 @@ https://web-quartz.unique.network/swagger
 Назначение метода: *******
 
 #### Request
-Curl example
-```bash
-curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/build' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "section": "balances",
-  "method": "transfer",
-  "args": [
-    "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
-    100000000
-  ],
-  "era": 64,
-  "isImmortal": false
-}'
-```
 
-Request body (Example Value, Schema)
+Request body
 ```json
 {
   "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
@@ -145,63 +127,84 @@ Request body (Example Value, Schema)
 }
 ```
 
-Parameters - No parameters
-
-
-#### Response
-Успешный ответ - 201 OK и содержит тело:
-
-<details> <summary> JSON </summary>
-
-```json
-{
-  "signerPayloadHex": "string",
-  "signerPayloadJSON": {
+<details>
+ <summary>CURL Example</summary>
+  
+  ```bash
+  curl -X 'POST' \
+    'https://web-quartz.unique.network/extrinsic/build' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
+    "section": "balances",
+    "method": "transfer",
+    "args": [
+      "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
+      100000000
     ],
-      "version": 0
-  },
-  "signerPayloadRaw": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "data": "string",
-    "type": {}
-  }
-}
-```
+    "era": 64,
+    "isImmortal": false
+  }'
+  ```
+
 </details>
 
-Каждый элемент коллекции содержит следующую информацию:
+#### Response
+Http Status 200 with body:
 
-название |  комментарий
----------|------------
-signerPayloadHex | *************
-signerPayloadJSON | ***************
-address | ********************
-blockHash | *******************
-blockNumber | ***************
-era | ***************
-genesisHash | ***************
-method | ***************
-nonce | ***************
-specVersion | ***************
-transactionVersion | ***************
-signedExtensions | ***************
-version | ***************
-address | ***************
-data | ***************
-type | ***************
+<details>
+  <summary>Unsigned Extrinsic Response</summary>
 
+  ```json
+  {
+    "signerPayloadHex": "string",
+    "signerPayloadJSON": {
+      "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+      "blockHash": "string",
+      "blockNumber": "string",
+      "era": "string",
+      "genesisHash": "string",
+      "method": "string",
+      "nonce": "string",
+      "specVersion": "string",
+      "tip": "string",
+      "transactionVersion": "string",
+      "signedExtensions": [
+        "string"
+      ],
+        "version": 0
+    },
+    "signerPayloadRaw": {
+      "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+      "data": "string",
+      "type": {}
+    }
+  }
+  ```
+
+  ##### Unsigned Extrinsic fields:
+  
+  field |  comment
+  ---------|------------
+  signerPayloadHex | *************
+  signerPayloadJSON | ***************
+  address | ********************
+  blockHash | *******************
+  blockNumber | ***************
+  era | ***************
+  genesisHash | ***************
+  method | ***************
+  nonce | ***************
+  specVersion | ***************
+  transactionVersion | ***************
+  signedExtensions | ***************
+  version | ***************
+  address | ***************
+  data | ***************
+  type | ***************
+
+</details>
 
 ### POST /extrinsic/submit
 
@@ -418,7 +421,7 @@ message | *********
 
 ## Additional Methods
 
-### Сhain
+### Сhain Properties
 Назначение метода:*******
 
 
