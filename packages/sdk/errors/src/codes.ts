@@ -4,4 +4,5 @@ export enum ErrorCodes {
   SubmitExtrinsic = 'UN01003',
   Validation = 'UN01004',
   InvalidSigner = 'UN01005',
+  BadPayload = 'UN01006',
 }

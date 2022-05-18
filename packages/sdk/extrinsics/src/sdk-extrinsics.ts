@@ -19,7 +19,10 @@ import {
   SignTxResult,
   SdkSigner,
 } from '@unique-nft/sdk/types';
-import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
+import {
+  signerPayloadToUnsignedTxPayload,
+  verifyTxSignatureOrThrow,
+} from './tx';
 
 interface Sdk {
   api: ApiPromise;
@@ -105,8 +108,12 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     };
   }
 
-  verifySign(args: SubmitTxArgs): void {
-    verifyTxSignature(this.sdk.api, args.signerPayloadJSON, args.signature);
+  verifySignOrThrow(args: SubmitTxArgs): void {
+    verifyTxSignatureOrThrow(
+      this.sdk.api,
+      args.signerPayloadJSON,
+      args.signature,
+    );
   }
 
   async submit(args: SubmitTxArgs): Promise<SubmitResult> {
@@ -121,7 +128,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
           .toHex()
       : signature;
 
-    verifyTxSignature(this.sdk.api, signerPayloadJSON, signature);
+    verifyTxSignatureOrThrow(this.sdk.api, signerPayloadJSON, signature);
 
     // todo 'Extrinsic' -> enum ExtrinsicTypes {} ?
     const extrinsic = this.sdk.api.registry.createType('Extrinsic', {

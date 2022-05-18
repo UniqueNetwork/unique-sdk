@@ -53,6 +53,7 @@ describe('signers', () => {
     return Sdk.create(options);
   }
 
+  // todo - replace with - await expect(myAwesomeThrowingFunc).rejects.toThrowError(/smth/)
   async function tryAndExpectSdkError(
     cb: () => Promise<void>,
     code: ErrorCodes,
@@ -99,7 +100,7 @@ describe('signers', () => {
       signerPayloadHex,
     });
     expect(typeof signature).toBe('string');
-    await sdk.extrinsics.verifySign({
+    await sdk.extrinsics.verifySignOrThrow({
       signature,
       signerPayloadJSON,
     });
@@ -119,7 +120,7 @@ describe('signers', () => {
       signerPayloadHex,
     });
     await tryAndExpectSdkError(async () => {
-      await sdk.extrinsics.verifySign({
+      await sdk.extrinsics.verifySignOrThrow({
         signature,
         signerPayloadJSON,
       });
@@ -158,7 +159,7 @@ describe('signers', () => {
     expect(typeof signature).toBe('string');
 
     await tryAndExpectSdkError(async () => {
-      await sdk.extrinsics.verifySign({
+      await sdk.extrinsics.verifySignOrThrow({
         signature,
         signerPayloadJSON,
       });
@@ -238,7 +239,7 @@ describe('signers', () => {
       signerPayloadHex,
     });
     expect(typeof signature).toBe('string');
-    await sdk.extrinsics.verifySign({
+    await sdk.extrinsics.verifySignOrThrow({
       signature,
       signerPayloadJSON,
     });
