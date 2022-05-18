@@ -10,70 +10,94 @@ _так же расписать что концептульно апи соби�
 
 ## Table of Contents
 
+- [Install/Easy start](#installeasy-start)
+    - [Choose install approach](#choose-install-approach)
+      - [Docker](#docker-setup)
+      - [Git](#git)
+      - [Use public endpoints](#use-public-endpoints)
+    - [Environment Variables](#environment-variables)
+    - [Swagger](#swagger)
 
-- [Instsall/Easy start](#)
-    - [Docker setup](#)
-    - [Environment Variables](#)
-       - [Production](#)
-       - [Staging](#)
-       - [Test](#)
 
-
-- [Unique SDK HTTP API Methods:](#)
-  - [Main Methods](#)
-    - [Extrinsic build](#)
-    - [Extrinsic submit](#)
-    - [Extrinsic sign](#)
-    - [Extrinsic verify-sign](#)
-  - [Additional Methods](#)
+- [Unique SDK HTTP API Methods:](#methods)
+  - [Main Methods](#main-methods)
+    - [Extrinsic build](#post-extrinsicbuild)
+    - [Extrinsic submit](#post-extrinsicsubmit)
+    - [Extrinsic sign](#post-extrinsicsign)
+    - [Extrinsic verify-sign](#post-extrinsicverify-sign)
+  - [Additional Methods](#additional-methods)
     - [Сhain](#)
-    - [Balance](#)
-    - [Collection](#)
-    - [Token](#)
-
-
-## Table of Contents
-
-
-- [Instsall/Easy start]([# SDK Deployment - Getting Started Guide](https://github.com/UniqueNetwork/unique-sdk/edit/New_Readme/packages/web/README.md#instsalleasy-start))
-    - [Docker setup] ( #Docker setup)
-    - [Environment Variables]( #Environment Variables)
-       - [Production]( #Production)
-       - [Swagger]( #Swagger)
-       
-- [Methods](#Methods)
-  - [Main Methods:](#Main Methods)
-    - [Extrinsic build](#POST /extrinsic/build)
-    - [Extrinsic submit](#POST /extrinsic/submit)
-  - [Additional Methods:](#Additional Methods)
-    - [Сhain](#Сhain)
-    - [Balance](#Balance)
-    - [Collection](#POST /collection)
-    - [Token](#Token)
- 
-
-  
-
+    - [Balance](#get-balance)
+    - [Collection](#get-collection)
+    - [Token](#get-token)
 
 # SDK Deployment - Getting Started Guide
 
 
-## Instsall/Easy start
-### Docker setup
+## Install/Easy start
 
-https://hub.docker.com/r/uniquenetwork/web 
+### Choose install approach
+
+#### Docker setup
+
+```bash
+docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-quartz.unique.network uniquenetwork/web:latest
+```
+
+More info: https://hub.docker.com/r/uniquenetwork/web
+
+#### Git
+
+```git
+git clone https://github.com/UniqueNetwork/unique-sdk
+cd unique-sdk
+npm install
+npm run build:web
+npm start
+```
+
+#### Use public endpoints
+
+You can use public endpoints for access Unique Web:
+
+##### Opal
+```
+https://web-opal.unique.network
+```
+
+##### Quartz
+```
+https://web-quartz.unique.network
+```
 
 ### Environment Variables
 
-#### Production
-```
-CHAIN_WS_URL=wss://ws-quartz.unique.network
+#### Required
+```bash
+CHAIN_WS_URL=wss://quartz.unique.network
 ```
 
+#### Optional
 
-#### Swagger
+##### Use SIGNER_SEED or SIGNER_URI for [Sign](#post-extrinsicsign) method
+```bash
+SIGNER_SEED=type mnemonic here
+SIGNER_URI=//Alice
 ```
-https://web.uniquenetwork.dev/swagger/#/
+
+##### Port (default 3000)
+```bash
+PORT=3000
+```
+
+##### IPFS Gateway
+```bash
+IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
+```
+
+### Swagger
+```
+https://web-quartz.unique.network/swagger
 ```
 
 # Methods
