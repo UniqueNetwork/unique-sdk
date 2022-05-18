@@ -26,7 +26,7 @@ _так же расписать что концептульно апи соби�
     - [Extrinsic sign](#post-extrinsicsign)
     - [Extrinsic verify-sign](#post-extrinsicverify-sign)
   - [Additional Methods](#additional-methods)
-    - [Сhain](#)
+    - [Сhain](#chain)
     - [Balance](#get-balance)
     - [Collection](#get-collection)
     - [Token](#get-token)
@@ -137,9 +137,9 @@ Request body (Example Value, Schema)
   "section": "balances",
   "method": "transfer",
   "args": [
-  "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
-  100000000
-],
+    "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
+    100000000
+  ],
   "era": 64,
   "isImmortal": false
 }
@@ -157,26 +157,26 @@ Parameters - No parameters
 {
   "signerPayloadHex": "string",
   "signerPayloadJSON": {
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "blockHash": "string",
-  "blockNumber": "string",
-  "era": "string",
-  "genesisHash": "string",
-  "method": "string",
-  "nonce": "string",
-  "specVersion": "string",
-  "tip": "string",
-  "transactionVersion": "string",
-  "signedExtensions": [
-  "string"
-],
-  "version": 0
-},
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+      "version": 0
+  },
   "signerPayloadRaw": {
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "data": "string",
-  "type": {}
-}
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "data": "string",
+    "type": {}
+  }
 }
 ```
 </details>
@@ -249,21 +249,21 @@ Request body (Example Value, Schema)
   "signature": "string",
   "signatureType": "sr25519",
   "signerPayloadJSON": {
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "blockHash": "string",
-  "blockNumber": "string",
-  "era": "string",
-  "genesisHash": "string",
-  "method": "string",
-  "nonce": "string",
-  "specVersion": "string",
-  "tip": "string",
-  "transactionVersion": "string",
-  "signedExtensions": [
-  "string"
-],
-  "version": 0
-}
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  }
 }
 ```
 </details>
@@ -300,8 +300,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "signerPayloadHex": "string"
-}'
+    "signerPayloadHex": "string"
+  }'
 ```
 
 Request body (Example Value, Schema)
@@ -370,7 +370,7 @@ Request body (Example Value, Schema)
 
 <details> <summary> JSON </summary>
 
-```bash
+```json
 {
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
@@ -443,7 +443,7 @@ Parameters - No parameters
   "SS58Prefix": 255,
   "decimals": 18,
   "token": "QTZ",
-  "wsUrl": "wss://ws-quartz.unique.network"
+  "wsUrl": "wss://quartz.unique.network"
 }
 ```
 
