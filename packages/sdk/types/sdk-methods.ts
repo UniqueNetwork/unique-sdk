@@ -4,10 +4,7 @@ import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
-import {
-  SignerPayloadJSONDto,
-  SignerPayloadRawDto,
-} from '@unique-nft/sdk/types/signer-payload';
+import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
 import {
   SdkSigner,
