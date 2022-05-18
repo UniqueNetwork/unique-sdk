@@ -32,10 +32,7 @@ export class ExtrinsicsController {
     @Headers() headers: SignHeaders,
     @Signer() signer?: SdkSigner,
   ): Promise<SignTxResult> {
-    if (signer) {
-      return this.sdk.extrinsics.sign(args, signer);
-    }
-    return this.sdk.extrinsics.sign(args);
+    return this.sdk.extrinsics.sign(args, signer);
   }
 
   @Post('verify-sign')

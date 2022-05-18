@@ -31,8 +31,6 @@ export class SubmitResult {
 export class SignTxArgs {
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
-
-  signer?: SdkSigner;
 }
 
 export class SignTxResult {
