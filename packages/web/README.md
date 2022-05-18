@@ -8,6 +8,15 @@
 
 _так же расписать что концептульно апи собирает экстринсик, клиент должен его подписать и отправить обратно_ - ждем пояснений
 
+Экстринсик - это запрос наизменение данных в блокчейне
+Чтобы внести изменения в блокчейн, необходимо сформировать запрос (экстринсик) с определенными параметрами, который состоят из 3 частей:
+1) Секция блокчейна, фунционал
+2) Метод секции
+3) Массив аргументов
+
+После того как экстринзик был сформирован - он должен быть подписан, чтобы чейн выполнил запрошенные изменения
+
+
 ## Table of Contents
 
 - [Install/Easy start](#installeasy-start)
@@ -108,7 +117,7 @@ https://web-quartz.unique.network/swagger
 
 ### POST /extrinsic/build
 
-Назначение метода: *******
+Назначение метода: собирает экстринзик и дает в ответе разные варианты того как его можно подписать 
 
 #### Request
 
@@ -208,7 +217,7 @@ Http Status 200 with body:
 
 ### POST /extrinsic/submit
 
-Назначение метода: *******
+Назначение метода: отправить подписанный экстринзик в чейн
 
 #### Request
 Curl example
@@ -217,7 +226,7 @@ Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/submit' \
+  'https://web.uniquenetwork.dev/extrinsic/submit' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -292,7 +301,7 @@ signerPayloadJSON | *********
 
 ### POST /extrinsic/sign
 
-Назначение метода: *******
+Назначение метода: подписать экстринзик
 
 #### Request
 Curl example
@@ -334,7 +343,7 @@ signature | *********
 
 ### POST /extrinsic/verify-sign
 
-Назначение метода: *******
+Назначение метода: проверить подпись экстринзика
 
 #### Request
 Curl example
@@ -421,8 +430,8 @@ message | *********
 
 ## Additional Methods
 
-### Сhain Properties
-Назначение метода:*******
+### GET /chain/properties
+Назначение метода: запрашивает служебные поля, необходимые для работы с блокчейном
 
 
 #### Request
@@ -462,9 +471,8 @@ wsUrl      | url блокчейна
 
 ### Balance
 
-Назначение метода:*******
-
 #### GET /balance
+Назначение метода: возвращает баланс счета в форматированном и неформатированном виде
 #### Request
 
 Curl example
@@ -498,13 +506,13 @@ amount | ***********
 formatted | **********
 
 #### POST /balance/transfer
-
+Назначение метода: создает неподписанный экстринзик на странсфер определенной суммы коинов
 #### Request
 Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web-quartz.unique.network/balance/transfer' \
+  'https://web.uniquenetwork.dev/balance/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -585,15 +593,14 @@ signerPayloadHex | *************
 
 ### Collection
 
-Назначение метода: *******
-
 #### GET /collection
+Назначение метода: возвращает информацию о коллекции по id
 #### Request
 Curl example
 
 ```bash
 curl -X 'GET' \
-  'https://web-quartz.unique.network/collection?collectionId=1' \
+  'https://web.uniquenetwork.dev/collection?collectionId=1' \
   -H 'accept: application/json'
 ```
 
@@ -699,6 +706,7 @@ tokenPrefix | ***********
 
 
 #### POST /collection
+Назначение метода: формирует неподписанный экстринзик для создания коллекции с опредленными параметрами
 #### Request
 Curl example
 
@@ -871,13 +879,14 @@ type | ***********
 
 
 #### DELETE /collection
+Назначение метода: формирует неподписанный экстринзик для удаления выбранной коллекции
 #### Request
 Curl example
 
 
 ```bash
 curl -X 'DELETE' \
-  'https://web-quartz.unique.network/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
+  'https://web.uniquenetwork.dev/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
   -H 'accept: application/json'
 ```
 
@@ -950,7 +959,9 @@ type | ***********
 
 
 
-#### PATCH /collection
+#### PATCH /collection/transfer
+Назначение метода: формирует неподписанный экстринзик для передачи прав на коллекции
+
 #### Request
 Curl example
 
@@ -1038,6 +1049,7 @@ type | ***********
 
 ### Token
 #### GET /token
+Назначение метода: возвращает информацию о токене по id коллекции и токена
 #### Request
 Curl example
 ```bash
@@ -1059,6 +1071,7 @@ tokenId   | ***********
 ```
 
 #### POST /token
+Назначение метода: создает неподписанный экстринзик на создание токена внутри коллекции
 #### Request
 Curl example
 ```bash
@@ -1142,6 +1155,7 @@ tokenPrefix | ***********
 
 
 #### DELETE /token
+Назначение метода: формирует неподписанный экстринзик для удаления выбранного токена
 #### Request
 Curl example
 ```bash
@@ -1219,6 +1233,7 @@ tokenPrefix | ***********
 
 
 #### PATCH /token
+Назначение метода: формирует неподписанный экстринзик для передачи прав на токен
 #### Request
 Curl example
 ```bash
