@@ -1,7 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { validateSync } from '@unique-nft/sdk/validation';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk/extrinsics';
+import { SdkSigner } from '@unique-nft/sdk/types';
 import {
   KeyfileSignerOptions,
   SeedSignerOptions,

@@ -17,9 +17,9 @@ import {
   CollectionInfo,
   CreateCollectionArgs,
   TransferCollectionArgs,
+  UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { ApiTags } from '@nestjs/swagger';
-import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)
@@ -30,7 +30,7 @@ export class CollectionController {
 
   @Get()
   async getCollection(@Query() args: CollectionIdArg): Promise<CollectionInfo> {
-    const collection = await this.sdk.query.collection(args);
+    const collection = await this.sdk.collection.get(args);
 
     if (collection) return collection;
 

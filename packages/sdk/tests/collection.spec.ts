@@ -74,7 +74,7 @@ describe(Sdk.name, () => {
 
     const collectionId = await getLastCollectionId(sdk);
 
-    const newCollection = await sdk.query.collection({ collectionId });
+    const newCollection = await sdk.collection.get({ collectionId });
 
     expect(newCollection).toMatchObject(collectionInitial);
 
@@ -102,7 +102,7 @@ describe(Sdk.name, () => {
 
     await delay(30_000);
 
-    const newToken = await sdk.query.token({ collectionId, tokenId: 1 });
+    const newToken = await sdk.token.get({ collectionId, tokenId: 1 });
 
     expect(newToken).toMatchObject({
       owner: normalizeAddress(account.address, sdk.api.registry.chainSS58),

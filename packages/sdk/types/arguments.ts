@@ -1,23 +1,15 @@
-// eslint-disable-next-line max-classes-per-file
-import { ApiProperty } from '@nestjs/swagger';
+/* eslint-disable max-classes-per-file */
+
 import { HexString } from '@polkadot/util/types';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEnum,
   IsHexadecimal,
   IsNotEmptyObject,
   IsOptional,
 } from 'class-validator';
-import {
-  SignatureType,
-  SignerPayloadJSONDto,
-  SignerPayloadRawDto,
-} from './polkadot-types';
-
-export interface ISdkExtrinsics {
-  build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
-  sign(args: SignTxArgs, signer: SdkSigner | undefined): Promise<SignTxResult>;
-  submit(args: SubmitTxArgs): Promise<SubmitResult>;
-}
+import { SignatureType } from './polkadot-types';
+import { SignerPayloadJSONDto } from './signer-payload';
 
 export interface SdkSigner {
   sign(payload: string): Promise<HexString>;
@@ -106,15 +98,4 @@ export class TxBuildArgs {
     example: false,
   })
   isImmortal?: boolean;
-}
-
-export class UnsignedTxPayload {
-  @ApiProperty()
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  @ApiProperty()
-  signerPayloadRaw: SignerPayloadRawDto;
-
-  @ApiProperty({ type: String })
-  signerPayloadHex: HexString;
 }

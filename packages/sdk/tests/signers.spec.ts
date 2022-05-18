@@ -1,8 +1,7 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
-import { SdkOptions } from '@unique-nft/sdk/types';
+import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk/extrinsics';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {
   createSigner,
@@ -90,12 +89,11 @@ describe('signers', () => {
     const sdk = await createSdk({
       uri: '//Alice',
     });
-    const { signerPayloadHex, signerPayloadJSON } =
-      await sdk.balance.buildTransfer({
-        address: alice.address,
-        destination: bob.address,
-        amount: 0.001,
-      });
+    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
+      address: alice.address,
+      destination: bob.address,
+      amount: 0.001,
+    });
 
     const { signature } = await sdk.extrinsics.sign({
       signerPayloadHex,
@@ -111,12 +109,11 @@ describe('signers', () => {
     const sdk = await createSdk({
       uri: '//Alice',
     });
-    const { signerPayloadHex, signerPayloadJSON } =
-      await sdk.balance.buildTransfer({
-        address: bob.address,
-        destination: alice.address,
-        amount: 0.001,
-      });
+    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
+      address: bob.address,
+      destination: alice.address,
+      amount: 0.001,
+    });
 
     const { signature } = await sdk.extrinsics.sign({
       signerPayloadHex,
@@ -133,7 +130,7 @@ describe('signers', () => {
     const sdk = await createSdk({
       seed: testUser.seed,
     });
-    const { signerPayloadHex } = await sdk.balance.buildTransfer({
+    const { signerPayloadHex } = await sdk.balance.transfer({
       address: testUser.keyfile.address,
       destination: bob.address,
       amount: 0.001,
@@ -149,12 +146,11 @@ describe('signers', () => {
     const sdk = await createSdk({
       seed: testUser.seed,
     });
-    const { signerPayloadHex, signerPayloadJSON } =
-      await sdk.balance.buildTransfer({
-        address: alice.address,
-        destination: bob.address,
-        amount: 0.001,
-      });
+    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
+      address: alice.address,
+      destination: bob.address,
+      amount: 0.001,
+    });
 
     const { signature } = await sdk.extrinsics.sign({
       signerPayloadHex,
@@ -232,12 +228,11 @@ describe('signers', () => {
       },
     });
 
-    const { signerPayloadHex, signerPayloadJSON } =
-      await sdk.balance.buildTransfer({
-        address: testUser.keyfile.address,
-        destination: bob.address,
-        amount: 0.001,
-      });
+    const { signerPayloadHex, signerPayloadJSON } = await sdk.balance.transfer({
+      address: testUser.keyfile.address,
+      destination: bob.address,
+      amount: 0.001,
+    });
 
     const { signature } = await sdk.extrinsics.sign({
       signerPayloadHex,

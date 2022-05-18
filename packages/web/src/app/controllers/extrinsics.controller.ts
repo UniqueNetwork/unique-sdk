@@ -10,7 +10,7 @@ import {
   SubmitTxArgs,
   TxBuildArgs,
   UnsignedTxPayload,
-} from '@unique-nft/sdk/extrinsics';
+} from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
