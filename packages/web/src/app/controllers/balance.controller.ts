@@ -20,13 +20,13 @@ export class BalanceController {
 
   @Get()
   async getBalance(@Query() args: AddressArg): Promise<Balance> {
-    return this.sdk.query.balance(args);
+    return this.sdk.balance.get(args);
   }
 
   @Post('transfer')
   async transferBuild(
     @Body() args: TransferBuildArgs,
   ): Promise<UnsignedTxPayload | SubmitResult> {
-    return this.sdk.balance.buildTransfer(args);
+    return this.sdk.balance.transfer(args);
   }
 }

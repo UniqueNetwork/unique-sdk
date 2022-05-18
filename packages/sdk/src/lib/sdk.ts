@@ -7,15 +7,14 @@ import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   ISdk,
   ISdkBalance,
-  ISdkQuery,
   ISdkCollection,
   ISdkToken,
   SdkOptions,
   SdkSigner,
+  ChainProperties,
 } from '@unique-nft/sdk/types';
 import { SdkCollection, SdkToken } from '@unique-nft/sdk/tokens';
-import { SkdQuery } from './skd-query';
-import { SdkBalance } from './sdk-balance';
+import { SdkBalance } from '@unique-nft/sdk/balance';
 
 export class Sdk implements ISdk {
   readonly isReady: Promise<boolean>;
@@ -23,8 +22,6 @@ export class Sdk implements ISdk {
   readonly api: ApiPromise;
 
   readonly extrinsics: SdkExtrinsics;
-
-  readonly query: ISdkQuery;
 
   readonly balance: ISdkBalance;
 
@@ -56,9 +53,18 @@ export class Sdk implements ISdk {
     this.signer = this.options.signer;
 
     this.extrinsics = new SdkExtrinsics(this);
-    this.query = new SkdQuery(this);
     this.collection = new SdkCollection(this);
     this.token = new SdkToken(this);
     this.balance = new SdkBalance(this);
+  }
+
+  chainProperties(): ChainProperties {
+    return {
+      SS58Prefix: this.api.registry.chainSS58 || 0,
+      token: this.api.registry.chainTokens[0],
+      decimals: this.api.registry.chainDecimals[0],
+      wsUrl: this.options.chainWsUrl,
+      genesisHash: this.api.genesisHash.toHex(), // todo hex?
+    };
   }
 }

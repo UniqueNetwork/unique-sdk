@@ -2,11 +2,15 @@ import '@unique-nft/types/augment-api';
 
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-import { UnsignedTxPayload , ISdkCollection, TokenIdArg, TokenInfo } from '@unique-nft/sdk/types';
+import {
+  UnsignedTxPayload,
+  ISdkCollection,
+  TokenIdArg,
+  TokenInfo,
+} from '@unique-nft/sdk/types';
 import type {
   BurnTokenArgs,
   CreateTokenArgs,
-  ISdkQuery,
   ISdkToken,
   TransferTokenArgs,
   SdkOptions,
@@ -19,7 +23,6 @@ import { encodeToken } from './utils/encode-token';
 interface Sdk {
   api: ApiPromise;
   extrinsics: SdkExtrinsics;
-  query: ISdkQuery;
   options: SdkOptions;
   collection: ISdkCollection;
 }
