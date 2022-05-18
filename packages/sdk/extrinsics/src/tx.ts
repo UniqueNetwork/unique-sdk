@@ -50,7 +50,7 @@ export const verifyTxSignatureOrThrow = (
   api: ApiPromise,
   signerPayloadJSON: SignerPayloadJSON,
   signature: HexString,
-) => {
+): void => {
   let signerPayloadHex = '';
 
   try {
