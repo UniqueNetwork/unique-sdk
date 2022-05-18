@@ -1,4 +1,10 @@
-import { Module } from '@nestjs/common';
+/* eslint-disable class-methods-use-this */
+import {
+  Module,
+  NestModule,
+  RequestMethod,
+  MiddlewareConsumer,
+} from '@nestjs/common';
 import { Sdk } from '@unique-nft/sdk';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -16,6 +22,7 @@ import {
   TokenController,
 } from './controllers';
 import { GlobalConfigModule, SignerConfig } from './config/config.module';
+import { SignerMiddleware } from './middlewares/signer.middleware';
 
 function createSignerOptions(configService: ConfigService): SignerOptions {
   const { seed, uri } = configService.get<SignerConfig>('signer');
@@ -44,7 +51,7 @@ export const sdkProvider = {
 };
 
 @Module({
-  imports: [GlobalConfigModule],
+  imports: [GlobalConfigModule, SignerMiddleware],
   controllers: [
     ChainController,
     BalanceController,
@@ -54,4 +61,10 @@ export const sdkProvider = {
   ],
   providers: [sdkProvider],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SignerMiddleware)
+      .forRoutes({ path: '/extrinsic/*', method: RequestMethod.POST });
+  }
+}
