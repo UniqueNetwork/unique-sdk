@@ -3,33 +3,27 @@ import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import { validate } from '@unique-nft/sdk/validation';
 import {
+  UnsignedTxPayload,
+  ISdkBalance,
+  TransferBuildArgs,
   AddressArg,
   Balance,
-  ChainProperties,
-  ISdkQuery,
-  SdkOptions,
 } from '@unique-nft/sdk/types';
 
 interface Sdk {
   api: ApiPromise;
   extrinsics: SdkExtrinsics;
-  options: SdkOptions;
 }
 
-export class SkdQuery implements ISdkQuery {
-  constructor(private readonly sdk: Sdk) {}
+export class SdkBalance implements ISdkBalance {
+  private readonly multiplierToRaw: number;
 
-  chainProperties(): ChainProperties {
-    return {
-      SS58Prefix: this.sdk.api.registry.chainSS58 || 0,
-      token: this.sdk.api.registry.chainTokens[0],
-      decimals: this.sdk.api.registry.chainDecimals[0],
-      wsUrl: this.sdk.options.chainWsUrl,
-      genesisHash: this.sdk.api.genesisHash.toHex(), // todo hex?
-    };
+  constructor(private readonly sdk: Sdk) {
+    const tokenDecimals = this.sdk.api.registry.chainDecimals[0];
+    this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  async balance(args: AddressArg): Promise<Balance> {
+  async get(args: AddressArg): Promise<Balance> {
     await validate(args, AddressArg);
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
@@ -45,5 +39,16 @@ export class SkdQuery implements ISdkQuery {
       }),
       // todo formatted -> formatted, withUnit, as number?
     };
+  }
+
+  async transfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
+    await validate(args, TransferBuildArgs);
+    const amountRaw = BigInt(args.amount * this.multiplierToRaw);
+    return this.sdk.extrinsics.build({
+      address: args.address,
+      section: 'balances',
+      method: 'transfer',
+      args: [args.destination, amountRaw],
+    });
   }
 }

@@ -175,20 +175,16 @@ export interface ISdkToken {
 }
 
 export interface ISdkBalance {
-  buildTransfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
-}
-
-export interface ISdkQuery {
-  chainProperties(): ChainProperties;
-  balance(args: AddressArg): Promise<Balance>;
+  get(args: AddressArg): Promise<Balance>;
+  transfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdk {
-  query: ISdkQuery;
   extrinsics: ISdkExtrinsics;
   balance: ISdkBalance;
   collection: ISdkCollection;
   token: ISdkToken;
+  chainProperties(): ChainProperties;
 }
 
 export class UnsignedTxPayload {
