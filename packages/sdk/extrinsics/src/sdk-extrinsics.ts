@@ -9,7 +9,6 @@ import {
   SubmitExtrinsicError,
 } from '@unique-nft/sdk/errors';
 import { validate } from '@unique-nft/sdk/validation';
-import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
 import {
   ISdkExtrinsics,
   SubmitResult,
@@ -19,7 +18,8 @@ import {
   SignTxArgs,
   SignTxResult,
   SdkSigner,
-} from './types';
+} from '@unique-nft/sdk/types';
+import { signerPayloadToUnsignedTxPayload, verifyTxSignature } from './tx';
 
 interface Sdk {
   api: ApiPromise;

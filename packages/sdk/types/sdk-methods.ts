@@ -1,10 +1,22 @@
-// eslint-disable-next-line max-classes-per-file
+/* eslint-disable max-classes-per-file */
+
 import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ISdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
+import {
+  SignerPayloadJSONDto,
+  SignerPayloadRawDto,
+} from '@unique-nft/sdk/types/signer-payload';
 import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
+import {
+  SdkSigner,
+  SignTxArgs,
+  SignTxResult,
+  SubmitResult,
+  SubmitTxArgs,
+  TxBuildArgs,
+} from './arguments';
 
 export class ChainProperties {
   @ApiProperty({
@@ -180,4 +192,21 @@ export interface ISdk {
   balance: ISdkBalance;
   collection: ISdkCollection;
   token: ISdkToken;
+}
+
+export class UnsignedTxPayload {
+  @ApiProperty()
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  @ApiProperty()
+  signerPayloadRaw: SignerPayloadRawDto;
+
+  @ApiProperty({ type: String })
+  signerPayloadHex: HexString;
+}
+
+export interface ISdkExtrinsics {
+  build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
+  sign(args: SignTxArgs, signer: SdkSigner | undefined): Promise<SignTxResult>;
+  submit(args: SubmitTxArgs): Promise<SubmitResult>;
 }

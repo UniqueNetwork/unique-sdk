@@ -1,4 +1,4 @@
-import { SdkSigner } from '@unique-nft/sdk/extrinsics';
+import { SdkSigner } from './arguments';
 
 export interface SdkOptions {
   chainWsUrl: string;

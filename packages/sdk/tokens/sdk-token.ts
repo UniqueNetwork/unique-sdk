@@ -1,7 +1,8 @@
 import '@unique-nft/types/augment-api';
 
 import { ApiPromise } from '@polkadot/api';
-import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { UnsignedTxPayload , ISdkCollection, TokenIdArg, TokenInfo } from '@unique-nft/sdk/types';
 import type {
   BurnTokenArgs,
   CreateTokenArgs,
@@ -10,7 +11,6 @@ import type {
   TransferTokenArgs,
   SdkOptions,
 } from '@unique-nft/sdk/types';
-import { ISdkCollection, TokenIdArg, TokenInfo } from '@unique-nft/sdk/types';
 import { Option } from '@polkadot/types-codec';
 import { PalletNonfungibleItemData } from '@unique-nft/types';
 import { decodeToken } from './utils/decode-token';

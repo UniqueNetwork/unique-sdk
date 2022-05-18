@@ -3,7 +3,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
 import { u8aToHex } from '@polkadot/util';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk/extrinsics';
+import { SdkSigner } from '@unique-nft/sdk/types';
 import { KeyfileSignerOptions, SignType } from './types';
 
 export class KeyfileSigner implements SdkSigner {

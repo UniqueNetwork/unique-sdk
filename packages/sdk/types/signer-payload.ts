@@ -1,27 +1,10 @@
-// eslint-disable-next-line max-classes-per-file
-import { Header, Index } from '@polkadot/types/interfaces';
+/* eslint-disable max-classes-per-file */
+
 import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from '@polkadot/types/types/extrinsic';
 import { ApiProperty } from '@nestjs/swagger';
-
-export { HexString } from '@polkadot/util/types';
-export { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-export { AnyJson } from '@polkadot/types/types';
-
-export interface SingingInfo {
-  header: Header | null;
-  mortalLength: number;
-  nonce: Index;
-}
-
-export enum SignatureType {
-  Sr25519 = 'sr25519',
-  Ed25519 = 'ed25519',
-  Ecdsa = 'ecdsa',
-  Ethereum = 'ethereum',
-}
 
 export class SignerPayloadJSONDto implements SignerPayloadJSON {
   @ApiProperty({

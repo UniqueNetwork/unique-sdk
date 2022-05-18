@@ -1,8 +1,8 @@
-import { SdkExtrinsics, UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
+import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { UnsignedTxPayload , ISdkBalance, TransferBuildArgs } from '@unique-nft/sdk/types';
 import { ApiPromise } from '@polkadot/api';
 import { validate } from '@unique-nft/sdk/validation';
 
-import { ISdkBalance, TransferBuildArgs } from '@unique-nft/sdk/types';
 
 interface Sdk {
   api: ApiPromise;

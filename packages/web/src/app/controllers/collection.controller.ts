@@ -17,9 +17,9 @@ import {
   CollectionInfo,
   CreateCollectionArgs,
   TransferCollectionArgs,
+  UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { ApiTags } from '@nestjs/swagger';
-import { UnsignedTxPayload } from '@unique-nft/sdk/extrinsics';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
 @UseFilters(SdkExceptionsFilter)

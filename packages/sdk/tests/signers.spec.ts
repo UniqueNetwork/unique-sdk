@@ -1,8 +1,7 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
-import { SdkOptions } from '@unique-nft/sdk/types';
+import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
 import { ErrorCodes, SdkError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk/extrinsics';
 import {
   createSigner,
   KeyfileSigner,
