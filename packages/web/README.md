@@ -33,9 +33,9 @@ Once an extrusion has been generated, it must be signed in order for the chain t
 - [Unique SDK HTTP API Methods:](#methods)
   - [Main Methods](#main-methods)
     - [Extrinsic build](#post-extrinsicbuild)
-    - [Extrinsic submit](#post-extrinsicsubmit)
     - [Extrinsic sign](#post-extrinsicsign)
     - [Extrinsic verify-sign](#post-extrinsicverify-sign)
+    - [Extrinsic submit](#post-extrinsicsubmit)
   - [Additional Methods](#additional-methods)
     - [Сhain](#get-chainproperties)
     - [Balance](#get-balance)
@@ -217,86 +217,6 @@ to apply the blockchain change.
 
 </details>
 
-### POST /extrinsic/submit
-
-Purpose of the method: send the signed extrusion to the chain
-
-#### Request body
-
-```json
-{
-  "signature": "string",
-  "signatureType": "sr25519",
-  "signerPayloadJSON": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
-    ],
-    "version": 0
-  }
-}
-```
-
-<details>
- <summary>▶ CURL Example</summary>
-
-```bash
-curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/submit' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-   "signerPayloadJSON": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
-    ],
-    "version": 0
-  },
-  "signature": "string",
-  "signatureType": "sr25519"
-}'
-```
-</details>
-
-
-#### Response
-<details>
-  <summary>▶ Http Status 200</summary>
-
-```json
-{
-  "hash": "string"
-}
-```
-
-  ##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-signerPayloadHex | string
-signerPayloadJSON | string
-
-</details>
-
 
 ### POST /extrinsic/sign
 
@@ -423,6 +343,88 @@ message | string
 
 
 </details>
+
+### POST /extrinsic/submit
+
+Purpose of the method: send the signed extrusion to the chain
+
+#### Request body
+
+```json
+{
+  "signature": "string",
+  "signatureType": "sr25519",
+  "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  }
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'POST' \
+  'https://web-quartz.unique.network/extrinsic/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+   "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  },
+  "signature": "string",
+  "signatureType": "sr25519"
+}'
+```
+</details>
+
+
+#### Response
+<details>
+  <summary>▶ Http Status 200</summary>
+
+```json
+{
+  "hash": "string"
+}
+```
+
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
+---------|------------
+signerPayloadHex | string
+signerPayloadJSON | string
+
+</details>
+
+
   
 ## Additional Methods
 
@@ -536,7 +538,7 @@ Purpose of the method: creates an unsigned extrinsic for a transfer of a certain
 
 ```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/balance/transfer' \
+  'https://web-quartz.unique.network/balance/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -615,11 +617,11 @@ signerPayloadHex | string
 Purpose of the method: returns information about the collection by id
 
 #### Request body
-Parameters
+Query Parameters
 
-field |  comment
----------|------------
-collectionId  | string
+```
+- collectionId - id of collection
+```
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -627,7 +629,7 @@ collectionId  | string
 
 ```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/collection?collectionId=1' \
+  'https://web-quartz.unique.network/collection?collectionId=1' \
   -H 'accept: application/json'
 ```
 
@@ -919,7 +921,7 @@ Purpose of the method: generates an unsigned extrusion to delete the selected co
 
 ```bash
 curl -X 'DELETE' \
-  'https://web.uniquenetwork.dev/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
+  'https://web-quartz.unique.network/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
   -H 'accept: application/json'
 ```
 
