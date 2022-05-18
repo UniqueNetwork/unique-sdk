@@ -35,7 +35,7 @@ _так же расписать что концептульно апи соби�
     - [Extrinsic sign](#post-extrinsicsign)
     - [Extrinsic verify-sign](#post-extrinsicverify-sign)
   - [Additional Methods](#additional-methods)
-    - [Сhain](#hain-properties)
+    - [Сhain](#get-chainproperties)
     - [Balance](#get-balance)
     - [Collection](#get-collection)
     - [Token](#get-token)
