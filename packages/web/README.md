@@ -209,7 +209,8 @@ type | ***************
 #### Request
 Curl example
 <details> <summary> JSON </summary>
-```
+
+```json
 curl -X 'POST' \
   'https://web.uniquenetwork.dev/extrinsic/submit' \
   -H 'accept: application/json' \
@@ -238,6 +239,9 @@ curl -X 'POST' \
 </details>
 
 Request body (Example Value, Schema)
+
+<details> <summary> JSON </summary>
+
 ```json
 {
 "signature": "string",
@@ -259,8 +263,9 @@ Request body (Example Value, Schema)
 ],
 "version": 0
 }
-}</details>
+}
 ```
+</details>
 
 Parameters - No parameters
 
