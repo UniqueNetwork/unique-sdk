@@ -5,16 +5,18 @@
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 
 
+Extrasic is a request to change data in the blockchain.
 
-_так же расписать что концептульно апи собирает экстринсик, клиент должен его подписать и отправить обратно_ - ждем пояснений
+https://docs.substrate.io/v3/concepts/extrinsics/
 
-Экстринсик - это запрос наизменение данных в блокчейне
-Чтобы внести изменения в блокчейн, необходимо сформировать запрос (экстринсик) с определенными параметрами, который состоят из 3 частей:
-1) Секция блокчейна, фунционал
-2) Метод секции
-3) Массив аргументов
+https://polkadot.js.org/docs/substrate/extrinsics/
 
-После того как экстринзик был сформирован - он должен быть подписан, чтобы чейн выполнил запрошенные изменения
+To make changes to the blockchain, it is necessary to form a request (extrinsic) with certain parameters, which consists of 3 parts:
+1) Blockchain section, functional
+2) Section Method
+3) Array of arguments
+
+Once an extrusion has been generated, it must be signed in order for the chain to complete the requested changes.
 
 
 ## Table of Contents
@@ -196,33 +198,56 @@ to apply the blockchain change.
   
   field |  comment
   ---------|------------
-  signerPayloadHex | *************
-  signerPayloadJSON | ***************
-  address | ********************
-  blockHash | *******************
-  blockNumber | ***************
-  era | ***************
-  genesisHash | ***************
-  method | ***************
-  nonce | ***************
-  specVersion | ***************
-  transactionVersion | ***************
-  signedExtensions | ***************
-  version | ***************
-  address | ***************
-  data | ***************
-  type | ***************
+  signerPayloadHex | string
+  signerPayloadJSON | string
+  address | string
+  blockHash | string
+  blockNumber | string
+  era | string
+  genesisHash | string
+  method | string
+  nonce | string
+  specVersion | string
+  transactionVersion | string
+  signedExtensions | string
+  version | string
+  address | string
+  data | string
+  type | string
 
 </details>
 
 ### POST /extrinsic/submit
 
-Назначение метода: отправить подписанный экстринзик в чейн
+Purpose of the method: send the signed extrusion to the chain
 
-#### Request
-Curl example
+#### Request body
 
-<details> <summary> JSON </summary>
+```json
+{
+  "signature": "string",
+  "signatureType": "sr25519",
+  "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  }
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
 
 ```bash
 curl -X 'POST' \
@@ -252,14 +277,79 @@ curl -X 'POST' \
 ```
 </details>
 
-Request body (Example Value, Schema)
 
-<details> <summary> JSON </summary>
+#### Response
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
-  "signature": "string",
-  "signatureType": "sr25519",
+  "hash": "string"
+}
+```
+
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
+---------|------------
+signerPayloadHex | string
+signerPayloadJSON | string
+
+</details>
+
+
+### POST /extrinsic/sign
+
+Purpose of the method: sign an extrusion
+
+#### Request body
+
+```json
+{
+  "signerPayloadHex": "string"
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'POST' \
+  'https://web-quartz.unique.network/extrinsic/sign' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "signerPayloadHex": "string"
+  }'
+```
+</details>
+
+#### Response
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+
+```json
+{
+  "signature": "string"
+}
+```
+
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
+---------|------------
+signature | string
+
+</details>
+
+### POST /extrinsic/verify-sign
+
+Purpose of the method: check the signature of the extrusion
+
+#### Request body 
+
+```json
+{
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -275,82 +365,16 @@ Request body (Example Value, Schema)
       "string"
     ],
     "version": 0
-  }
-}
-```
-</details>
-
-Parameters - No parameters
-
-#### Response
-Успешный ответ - 201 OK и содержит тело:
-
-```json
-{
-  "hash": "string"
+  },
+  "signature": "string",
+  "signatureType": "sr25519"
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|------------
-signerPayloadHex | *********
-signerPayloadJSON | *********
-
-
-### POST /extrinsic/sign
-
-Назначение метода: подписать экстринзик
-
-#### Request
-Curl example
+<details>
+ <summary>▶ CURL Example</summary>
 
 ```bash
-curl -X 'POST' \
-  'https://web-quartz.unique.network/extrinsic/sign' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "signerPayloadHex": "string"
-  }'
-```
-
-Request body (Example Value, Schema)
-
-```json
-{
-  "signerPayloadHex": "string"
-}
-```
-
-Parameters - No parameters
-
-#### Response
-Успешный ответ - 201 OK и содержит тело:
-
-```json
-{
-  "signature": "string"
-}
-```
-
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|------------
-signature | *********
-
-### POST /extrinsic/verify-sign
-
-Назначение метода: проверить подпись экстринзика
-
-#### Request
-Curl example
-
-<details> <summary> JSON </summary>
-
-```json
 curl -X 'POST' \
   'https://web-quartz.unique.network/extrinsic/verify-sign' \
   -H 'accept: */*' \
@@ -378,39 +402,10 @@ curl -X 'POST' \
 ```
 </details>
 
-Request body (Example Value, Schema)
-
-<details> <summary> JSON </summary>
-
-```json
-{
-  "signerPayloadJSON": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
-    ],
-    "version": 0
-  },
-  "signature": "string",
-  "signatureType": "sr25519"
-}
-```
-</details>
-
-
-Parameters - No parameters
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -419,36 +414,42 @@ Parameters - No parameters
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+  ##### Unsigned Extrinsic fields:
 
-название | комментарий
+field |  comment
 ---------|------------
-statusCode | *********
-message | *********
+statusCode | string
+message | string
 
 
-
+</details>
+  
 ## Additional Methods
 
 ### GET /chain/properties
-Назначение метода: запрашивает служебные поля, необходимые для работы с блокчейном
+
+Purpose of the method: requests the service fields required to work with the blockchain
 
 
-#### Request
+#### Request body
+Parameters - No parameters
 
-Curl example
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
 ```bash
 curl -X 'GET' \
   'https://web-quartz.unique.network/chain/properties' \
   -H 'accept: application/json'
 ```
-
-Parameters - No parameters
+  
+</details>
 
 
 #### Response
-
-200 OK или default содержит тело:
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -458,38 +459,47 @@ Parameters - No parameters
   "wsUrl": "wss://quartz.unique.network"
 }
 ```
+  ##### Unsigned Extrinsic fields:
 
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
+field |  comment
 ---------|------------
-SS58Prefix | префикс чейна
-decimals   | предел коичества знаков после запятой
-token      | валюта токена
-wsUrl      | url блокчейна
+SS58Prefix | string
+decimals   | string
+token      | string
+wsUrl      | string
 
+
+</details>
+ 
 
 ### Balance
 
 #### GET /balance
-Назначение метода: возвращает баланс счета в форматированном и неформатированном виде
-#### Request
 
-Curl example
+Purpose of the method: returns the account balance in formatted and unformatted form
+
+#### Request body
+Parameters
+
+field |  comment
+---------|-------------
+address  | string
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
 ```bash
 curl -X 'GET' \
   'https://web-quartz.unique.network/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
   -H 'accept: application/json'
 ```
+  
+</details>
 
-Parameters
-Параметр | тип | комментарий
----------|-----|------------
-address  | string |
 
 #### Response
-
-Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -498,17 +508,31 @@ address  | string |
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+  ##### Unsigned Extrinsic fields:
 
-название | комментарий
+field |  comment
 ---------|--------------
-amount | ***********
-formatted | **********
+amount | string
+formatted | string
+
+</details>
 
 #### POST /balance/transfer
-Назначение метода: создает неподписанный экстринзик на странсфер определенной суммы коинов
-#### Request
-Curl example
+
+Purpose of the method: creates an unsigned extrinsic for a transfer of a certain amount of coins
+
+#### Request body
+
+```json
+{
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "destination": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "amount": 0.01
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
 
 ```bash
 curl -X 'POST' \
@@ -522,21 +546,12 @@ curl -X 'POST' \
 }'
 ```
 
-Request body (Example Value, Schema)
-```json
-{
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "destination": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "amount": 0.01
-}
-```
-Parameters - No parameters
+</details>
+
 
 #### Response
-
-Успешный ответ - 201 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -565,38 +580,50 @@ Parameters - No parameters
   "signerPayloadHex": "string"
 }
 ```
+
+  ##### Unsigned Extrinsic fields:
+
+
+field |  comment
+---------|------------
+signerPayloadJSON | string
+address | string
+blockHash | string
+blockNumber | string
+era | string
+genesisHash | string
+method | string
+nonce | string
+specVersion | string
+tip | string
+transactionVersion | string
+signedExtensions | string
+version | string
+signerPayloadRaw | string
+address | string
+data | string
+type | string
+signerPayloadHex | string
+
 </details>
 
-Каждый элемент коллекции содержит следующую информацию:
-
-
-название | комментарий
----------|------------
-signerPayloadJSON | *************
-address | *************
-blockHash | *************
-blockNumber | *************
-era | *************
-genesisHash | *************
-method | *************
-nonce | *************
-specVersion | *************
-tip | *************
-transactionVersion | *************
-signedExtensions | *************
-version | *************
-signerPayloadRaw | *************
-address | *************
-data |*************
-type | *************
-signerPayloadHex | *************
 
 ### Collection
 
 #### GET /collection
-Назначение метода: возвращает информацию о коллекции по id
-#### Request
-Curl example
+
+Purpose of the method: returns information about the collection by id
+
+#### Request body
+Parameters
+
+field |  comment
+---------|------------
+collectionId  | string
+
+<details>
+ <summary>▶ CURL Example</summary>
+
 
 ```bash
 curl -X 'GET' \
@@ -604,15 +631,11 @@ curl -X 'GET' \
   -H 'accept: application/json'
 ```
 
-Parameters
-Параметр | комментарий
----------|------------
-collectionId  | *************
-
+</details>
+  
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -663,54 +686,107 @@ collectionId  | *************
   "tokenPrefix": "string"
 }
 ```
-</details>
 
-Каждый элемент коллекции содержит следующую информацию:
 
-название |  комментарий
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|--------------
-mode | ***********
-access | ***********
-schemaVersion | ***********
-constOnChainSchema | ***********
-nested | ***********
-onChainMetaData |***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-sponsoredDataSize | ***********
-sponsoredDataRateLimit |***********
-tokenLimit | ***********
-sponsorTransferTimeout | ***********
-sponsorApproveTimeout | ***********
-ownerCanTransfer | ***********
-ownerCanDestroy | ***********
-transfersEnabled | ***********
-metaUpdatePermission | ***********
-mintMode | ***********
-name | ***********
-offchainSchema | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
+mode | string
+access | string
+schemaVersion | string
+constOnChainSchema | string
+nested | string
+onChainMetaData string
+NFTMeta | string
+fields | string
+ipfsJson | string
+id | string
+rule | string
+type | string
+variableOnChainSchema | string
+id | string
+description | string
+limits | string
+accountTokenOwnershipLimit | string
+sponsoredDataSize | string
+sponsoredDataRateLimit string
+tokenLimit | string
+sponsorTransferTimeout | string
+sponsorApproveTimeout | string
+ownerCanTransfer | string
+ownerCanDestroy | string
+transfersEnabled | string
+metaUpdatePermission | string
+mintMode | string
+name | string
+offchainSchema | string
+owner | string
+sponsorship | string
+address | string
+isConfirmed | string
+tokenPrefix | string
+
+</details>
 
 
 #### POST /collection
-Назначение метода: формирует неподписанный экстринзик для создания коллекции с опредленными параметрами
-#### Request
-Curl example
 
-<details> <summary> JSON </summary>
+Purpose of the method: generates an unsigned extrusion to create a collection with certain parameters
+
+#### Request body
+
+```json
+{
+  "mode": "Nft",
+  "access": "Normal",
+  "schemaVersion": "ImageURL",
+  "constOnChainSchema": {
+    "nested": {
+      "onChainMetaData": {
+        "nested": {
+          "NFTMeta": {
+            "fields": {
+              "ipfsJson": {
+                "id": 1,
+                "rule": "required",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "metaUpdatePermission": "ItemOwner",
+  "variableOnChainSchema": {},
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "name": "Sample collection name",
+  "description": "sample collection description",
+  "tokenPrefix": "TEST",
+  "limits": {
+    "accountTokenOwnershipLimit": 0,
+    "sponsoredDataSize": 0,
+    "sponsoredDataRateLimit": 0,
+    "tokenLimit": 0,
+    "sponsorTransferTimeout": 0,
+    "sponsorApproveTimeout": 0,
+    "ownerCanTransfer": true,
+    "ownerCanDestroy": true,
+    "transfersEnabled": true
+  },
+  "mintMode": true,
+  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
+  "sponsorship": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "isConfirmed": true
+  }
+}
+```
+
+
+<details>
+ <summary>▶ CURL Example</summary>
 
 ```bash
    curl -X 'POST' \ 
@@ -765,65 +841,11 @@ Curl example
 ```
 </details>
 
-Request body (Example Value, Schema)
 
-<details> <summary> JSON </summary>
-
-```json
-{
-  "mode": "Nft",
-  "access": "Normal",
-  "schemaVersion": "ImageURL",
-  "constOnChainSchema": {
-    "nested": {
-      "onChainMetaData": {
-        "nested": {
-          "NFTMeta": {
-            "fields": {
-              "ipfsJson": {
-                "id": 1,
-                "rule": "required",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "metaUpdatePermission": "ItemOwner",
-  "variableOnChainSchema": {},
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "name": "Sample collection name",
-  "description": "sample collection description",
-  "tokenPrefix": "TEST",
-  "limits": {
-    "accountTokenOwnershipLimit": 0,
-    "sponsoredDataSize": 0,
-    "sponsoredDataRateLimit": 0,
-    "tokenLimit": 0,
-    "sponsorTransferTimeout": 0,
-    "sponsorApproveTimeout": 0,
-    "ownerCanTransfer": true,
-    "ownerCanDestroy": true,
-    "transfersEnabled": true
-  },
-  "mintMode": true,
-  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
-  "sponsorship": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "isConfirmed": true
-  }
-}
-```
-</details>
-
-Parameters - No parameters
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -851,38 +873,49 @@ Parameters - No parameters
   }
 }
 ```
-</details>
-Каждый элемент коллекции содержит следующую информацию:
 
-название |  комментарий
+
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|-------------
-signerPayloadHex | ***********
-signerPayloadJSON | ***********
-address | ***********
-blockHash | ***********
-blockNumber | ***********
-era | ***********
-genesisHash | ***********
-method | ***********
-nonce | ***********
-specVersion | ***********
-tip | ***********
-transactionVersion | ***********
-signedExtensions | ***********
-version | ***********
-signerPayloadRaw | ***********
-address | ***********
-data | ***********
-type | ***********
+signerPayloadHex | string
+signerPayloadJSON | string
+address | string
+blockHash | string
+blockNumber | string
+era | string
+genesisHash | string
+method | string
+nonce | string
+specVersion | string
+tip | string
+transactionVersion | string
+signedExtensions | string
+version | string
+signerPayloadRaw | string
+address | string
+data | string
+type | string
 
-
+</details>
 
 
 #### DELETE /collection
-Назначение метода: формирует неподписанный экстринзик для удаления выбранной коллекции
-#### Request
-Curl example
 
+Purpose of the method: generates an unsigned extrusion to delete the selected collection
+
+#### Request body
+```json
+{
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "collectionId": 0
+}
+```
+  
+
+<details>
+ <summary>▶ CURL Example</summary>
 
 ```bash
 curl -X 'DELETE' \
@@ -890,21 +923,12 @@ curl -X 'DELETE' \
   -H 'accept: application/json'
 ```
 
-Request body (Example Value, Schema)
-```json
-{
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "collectionId": 0
-}
-```
-
-Parameters - No parameters
+</details>
 
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -932,39 +956,52 @@ Parameters - No parameters
   }
 }
 ```
-</details>
 
-Каждый элемент коллекции содержит следующую информацию:
 
-название | комментарий
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|-------------
-signerPayloadHex | *************
-signerPayloadJSON | ***********
-address | ***********
-blockHash | ***********
-blockNumber | ***********
-era | ***********
-genesisHash | ***********
-method | ***********
-nonce | ***********
-specVersion | ***********
-tip | ***********
-transactionVersion | ***********
-signedExtensions | ***********
-version | ***********
-signerPayloadRaw | ***********
-address | ***********
-data | ***********
-type | ***********
+signerPayloadHex | string
+signerPayloadJSON | string
+address | string
+blockHash | string
+blockNumber | string
+era | string
+genesisHash | string
+method | string
+nonce | string
+specVersion | string
+tip | string
+transactionVersion | string
+signedExtensions | string
+version | string
+signerPayloadRaw | string
+address | string
+data | string
+type | string
 
 
+</details>
+  
 
 #### PATCH /collection/transfer
-Назначение метода: формирует неподписанный экстринзик для передачи прав на коллекции
 
-#### Request
-Curl example
+Purpose of the method: generates an unsigned extrinsic for transferring rights to collections
 
+#### Request body
+  
+```json
+{
+  "collectionId": 0,
+  "from": "string",
+  "to": "string"
+}
+```
+  
+
+<details>
+ <summary>▶ CURL Example</summary>
 
 ```bash
 curl -X 'PATCH' \
@@ -978,21 +1015,12 @@ curl -X 'PATCH' \
 }'
 ```
 
-Request body (Example Value, Schema)
-```json
-{
-  "collectionId": 0,
-  "from": "string",
-  "to": "string"
-}
-```
-
-Parameters - No parameters
+</details>
+  
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -1020,60 +1048,85 @@ Parameters - No parameters
   }
 }
 ```
-</details>
 
-Каждый элемент коллекции содержит следующую информацию:
 
-название | комментарий
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|------------
-signerPayloadHex | ***********
-signerPayloadJSON | ***********
-address | ***********
-blockHash | ***********
-blockNumber | ***********
-era | ***********
-genesisHash | ***********
-method | ***********
-nonce | ***********
-specVersion | ***********
-tip | ***********
-transactionVersion | ***********
-signedExtensions | ***********
-version | ***********
-signerPayloadRaw | ***********
-address | ***********
-data | ***********
-type | ***********
+signerPayloadHex | string
+signerPayloadJSON | string
+address | string
+blockHash | string
+blockNumber | string
+era | string
+genesisHash | string
+method | string
+nonce | string
+specVersion | string
+tip | string
+transactionVersion | string
+signedExtensions | string
+version | string
+signerPayloadRaw | string
+address | string
+data | string
+type | string
 
-
+</details>
 
 ### Token
 #### GET /token
-Назначение метода: возвращает информацию о токене по id коллекции и токена
-#### Request
-Curl example
+
+Purpose of the method: returns information about the token by the id of the collection and token
+
+#### Request body
+Parameters
+
+field |  comment
+---------|------------
+collectionId  | string
+tokenId   | string
+
+
+<details>
+ <summary>▶ CURL Example</summary>
+
 ```bash
 curl -X 'GET' \
   'https://web-quartz.unique.network/token?collectionId=1&tokenId=1' \
   -H 'accept: application/json'
 ```
+  
+</details>
 
-Parameters
-Параметр | комментарий
----------|------------
-collectionId  | ***********
-tokenId   | ***********
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
+
 ```json
 {}
 ```
+</details>
 
 #### POST /token
-Назначение метода: создает неподписанный экстринзик на создание токена внутри коллекции
-#### Request
-Curl example
+
+Purpose of the method: creates an unsigned extrinsic to create a token inside the collection
+
+#### Request body
+
+```json
+{
+  "address": "string",
+  "collectionId": 0,
+  "constData": {}
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
 ```bash
 curl -X 'POST' \
   'https://web-quartz.unique.network/token' \
@@ -1086,21 +1139,12 @@ curl -X 'POST' \
 }'
 ```
 
-Request body (Example Value, Schema)
-```json
-{
-  "address": "string",
-  "collectionId": 0,
-  "constData": {}
-}
-```
-
-Parameters - No parameters
+</details>
+  
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -1128,43 +1172,41 @@ Parameters - No parameters
   }
 }
 ```
-</details>
 
-название | комментарий
+
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|------------
-mode | ***********
-nested | ***********
-onChainMetaData | ***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
+mode | string
+nested | string
+onChainMetaData | string
+NFTMeta | string
+fields | string
+ipfsJson | string
+id | string
+rule | string
+type | string
+variableOnChainSchema | string
+id | string
+description | string
+limits | string
+accountTokenOwnershipLimit | string
+owner | string
+sponsorship | string
+address | string
+isConfirmed | string
+tokenPrefix | string
 
+</details>
 
 
 #### DELETE /token
-Назначение метода: формирует неподписанный экстринзик для удаления выбранного токена
-#### Request
-Curl example
-```bash
-curl -X 'DELETE' \
-  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
-  -H 'accept: application/json'
-```
 
-Request body (Example Value, Schema)
+Purpose of the method: generates an unsigned extrusion to delete the selected token
+
+#### Request body
+
 ```json
 {
   "address": "string",
@@ -1173,12 +1215,21 @@ Request body (Example Value, Schema)
 }
 ```
 
-Parameters - No parameters
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'DELETE' \
+  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
+  -H 'accept: application/json'
+```
+
+</details>
+
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -1206,36 +1257,52 @@ Parameters - No parameters
   }
 }
 ```
-</details>
 
-название | комментарий
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|------------
-mode | ***********
-nested | ***********
-onChainMetaData | ***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
+mode | string
+nested | string
+onChainMetaData | string
+NFTMeta | string
+fields | string
+ipfsJson | string
+id | string
+rule | string
+type | string
+variableOnChainSchema | string
+id | string
+description | string
+limits | string
+accountTokenOwnershipLimit | string
+owner | string
+sponsorship | string
+address | string
+isConfirmed | string
+tokenPrefix | string
 
+</details>
 
 
 #### PATCH /token
-Назначение метода: формирует неподписанный экстринзик для передачи прав на токен
-#### Request
-Curl example
+
+Purpose of the method: generates an unsigned extrinsic for transferring rights to a token
+
+#### Request body
+
+```json
+{
+  "collectionId": 0,
+  "from": "string",
+  "to": "string",
+  "tokenId": 0
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
 ```bash
 curl -X 'PATCH' \
   'https://web-quartz.unique.network/token/transfer' \
@@ -1248,23 +1315,12 @@ curl -X 'PATCH' \
   "to": "string"
 }'
 ```
+</details>
 
-Request body (Example Value, Schema)
-```json
-{
-  "collectionId": 0,
-  "from": "string",
-  "to": "string",
-  "tokenId": 0
-}
-```
-
-Parameters - No parameters
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-
-<details> <summary> JSON </summary>
+<details>
+  <summary>▶ Http Status 200 with Unsigned Extrinsic</summary>
 
 ```json
 {
@@ -1292,27 +1348,29 @@ Parameters - No parameters
   }
 }
 ```
-</details>
 
-название | комментарий
+  ##### Unsigned Extrinsic fields:
+
+field |  comment
 ---------|------------
-mode | ***********
-nested | ***********
-onChainMetaData | ***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
+mode | string
+nested | string
+onChainMetaData | string
+NFTMeta | string
+fields | string
+ipfsJson | string
+id | string
+rule | string
+type | string
+variableOnChainSchema | string
+id | string
+description | string
+limits | string
+accountTokenOwnershipLimit | string
+owner | string
+sponsorship | string
+address | string
+isConfirmed | string
+tokenPrefix | string
 
+</details>
