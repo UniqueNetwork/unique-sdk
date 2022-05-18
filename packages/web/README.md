@@ -41,10 +41,10 @@ _так же расписать что концептульно апи соби�
 #### Docker setup
 
 ```bash
-docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-quartz.unique.network uniquenetwork/web:latest
+docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwork/web:latest
 ```
 
-More info: https://hub.docker.com/r/uniquenetwork/web
+<a href="https://hub.docker.com/r/uniquenetwork/web" target="_blank">See hub.docker.com page</a>
 
 #### Git
 
@@ -76,6 +76,8 @@ https://web-quartz.unique.network
 ```bash
 CHAIN_WS_URL=wss://quartz.unique.network
 ```
+
+<a href="https://docs.unique.network/unique-and-quartz-wiki/build/get-started/testnet-and-mainnet" target="_blank">See official Unique Network documentation</a>
 
 #### Optional
 
@@ -112,7 +114,7 @@ https://web-quartz.unique.network/swagger
 Curl example
 ```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/build' \
+  'https://web-quartz.unique.network/extrinsic/build' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -212,7 +214,7 @@ Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/submit' \
+  'https://web-quartz.unique.network/extrinsic/submit' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -294,7 +296,7 @@ Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/sign' \
+  'https://web-quartz.unique.network/extrinsic/sign' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -338,7 +340,7 @@ Curl example
 
 ```json
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/verify-sign' \
+  'https://web-quartz.unique.network/extrinsic/verify-sign' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -425,7 +427,7 @@ message | *********
 Curl example
 ```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/chain/properties' \
+  'https://web-quartz.unique.network/chain/properties' \
   -H 'accept: application/json'
 ```
 
@@ -465,7 +467,7 @@ wsUrl      | url блокчейна
 Curl example
 ```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
+  'https://web-quartz.unique.network/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
   -H 'accept: application/json'
 ```
 
@@ -499,7 +501,7 @@ Curl example
 
 ```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/balance/transfer' \
+  'https://web-quartz.unique.network/balance/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -588,7 +590,7 @@ Curl example
 
 ```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/collection?collectionId=1' \
+  'https://web-quartz.unique.network/collection?collectionId=1' \
   -H 'accept: application/json'
 ```
 
@@ -701,7 +703,7 @@ Curl example
 
 ```bash
    curl -X 'POST' \ 
-  'https://web.uniquenetwork.dev/collection' \
+  'https://web-quartz.unique.network/collection' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -872,7 +874,7 @@ Curl example
 
 ```bash
 curl -X 'DELETE' \
-  'https://web.uniquenetwork.dev/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
+  'https://web-quartz.unique.network/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
   -H 'accept: application/json'
 ```
 
@@ -952,7 +954,7 @@ Curl example
 
 ```bash
 curl -X 'PATCH' \
-  'https://web.uniquenetwork.dev/collection/transfer' \
+  'https://web-quartz.unique.network/collection/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -1037,7 +1039,7 @@ type | ***********
 Curl example
 ```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1' \
+  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1' \
   -H 'accept: application/json'
 ```
 
@@ -1058,7 +1060,7 @@ tokenId   | ***********
 Curl example
 ```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/token' \
+  'https://web-quartz.unique.network/token' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -1141,7 +1143,7 @@ tokenPrefix | ***********
 Curl example
 ```bash
 curl -X 'DELETE' \
-  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
+  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
   -H 'accept: application/json'
 ```
 
@@ -1218,7 +1220,7 @@ tokenPrefix | ***********
 Curl example
 ```bash
 curl -X 'PATCH' \
-  'https://web.uniquenetwork.dev/token/transfer' \
+  'https://web-quartz.unique.network/token/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
