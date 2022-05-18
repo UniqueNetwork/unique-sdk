@@ -43,3 +43,25 @@ export async function createSigner(
 
   throw new InvalidSignerError('Not known options');
 }
+
+const authorizationReg = /^(Seed\s+(?<seed>.+))|(Uri\s+(?<uri>\/\/\w+))$/;
+export function createSignerByAuthorizationHead(
+  authorization: string,
+): Promise<SdkSigner | null> {
+  const exec = authorizationReg.exec(authorization);
+  if (!exec || !exec.groups) {
+    throw new InvalidSignerError('Invalid authorization header');
+  }
+
+  const { seed, uri } = exec.groups;
+  let signerOptions;
+  if (seed) {
+    signerOptions = new SeedSignerOptions(seed);
+  } else if (uri) {
+    signerOptions = new UriSignerOptions(uri);
+  } else {
+    throw new InvalidSignerError('Invalid authorization header');
+  }
+
+  return createSigner(signerOptions);
+}
