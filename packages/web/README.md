@@ -927,9 +927,16 @@ Creates an unsigned extrinsic to create a token inside the collection
 
 ```json
 {
-  "address": "string",
-  "collectionId": 0,
-  "constData": {}
+  "collectionId": 1,
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "constData": {
+    "ipfsJson": "{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}",
+    "gender": "Male",
+    "traits": [
+      "TEETH_SMILE",
+      "UP_HAIR"
+    ]
+  }
 }
 ```
 
