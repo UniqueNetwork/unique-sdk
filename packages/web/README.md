@@ -5,7 +5,7 @@
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 
 
-Extrasic is a request to change data in the blockchain.
+Extrinsic is a request to change data in the blockchain.
 
 https://docs.substrate.io/v3/concepts/extrinsics/
 
@@ -16,7 +16,7 @@ To make changes to the blockchain, it is necessary to form a request (extrinsic)
 2) Section Method
 3) Array of arguments
 
-Once an extrusion has been generated, it must be signed in order for the chain to complete the requested changes.
+Once an extrinsic has been generated, it must be signed in order for the chain to complete the requested changes.
 
 
 ## Table of Contents
@@ -194,7 +194,7 @@ to apply the blockchain change.
   }
   ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
   
   field |  comment
   ---------|------------
@@ -220,7 +220,7 @@ to apply the blockchain change.
 
 ### POST /extrinsic/sign
 
-Sign an extrusion
+Sign an extrinsic
 
 #### Request body
 
@@ -254,7 +254,7 @@ curl -X 'POST' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -264,7 +264,7 @@ signature | string
 
 ### POST /extrinsic/verify-sign
 
-Check the signature of the extrusion
+Check the signature of the extrinsic
 
 #### Request body 
 
@@ -334,7 +334,7 @@ curl -X 'POST' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -346,7 +346,7 @@ message | string
 
 ### POST /extrinsic/submit
 
-Send the signed extrusion to the chain
+Send the signed extrinsic to the chain
 
 #### Request body
 
@@ -415,7 +415,7 @@ curl -X 'POST' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -456,7 +456,8 @@ curl -X 'GET' \
   "wsUrl": "wss://quartz.unique.network"
 }
 ```
-  ##### Unsigned Extrinsic fields:
+
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -502,7 +503,7 @@ curl -X 'GET' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|--------------
@@ -513,7 +514,7 @@ formatted | string
 
 #### POST /balance/transfer
 
-Creates an unsigned extrinsic for a transfer of a certain amount of coins
+Creates an unsigned extrinsic for a transfer of a certain amount of coins. The amount should be past in integer or fractional part of the coin (UNQ or QTZ), and **not in wei**.
 
 #### Request body
 
@@ -575,7 +576,7 @@ curl -X 'POST' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 
 field |  comment
@@ -610,7 +611,7 @@ Returns information about the collection by id
 
 #### Query Parameters
 
-- **collectionId** - collection identificator
+- **collectionId** - collection identifier
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -679,7 +680,7 @@ curl -X 'GET' \
 ```
 
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|--------------
@@ -723,7 +724,7 @@ tokenPrefix | string
 
 #### POST /collection
 
-Generates an unsigned extrusion to create a collection with certain parameters
+Generates an unsigned extrinsic to create a collection with certain parameters
 
 #### Request body
 
@@ -866,7 +867,7 @@ Generates an unsigned extrusion to create a collection with certain parameters
 ```
 
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|-------------
@@ -894,7 +895,7 @@ type | string
 
 #### DELETE /collection
 
-Generates an unsigned extrusion to delete the selected collection
+Generates an unsigned extrinsic to delete the selected collection
 
 #### Request body
 ```json
@@ -954,7 +955,7 @@ curl -X 'DELETE' \
 ```
 
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|-------------
@@ -1045,7 +1046,7 @@ curl -X 'PATCH' \
 ```
 
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -1179,7 +1180,7 @@ curl -X 'POST' \
 ```
 
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -1208,7 +1209,7 @@ tokenPrefix | string
 
 #### DELETE /token
 
-Generates an unsigned extrusion to delete the selected token
+Generates an unsigned extrinsic to delete the selected token
 
 #### Request body
 
@@ -1269,7 +1270,7 @@ curl -X 'DELETE' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
@@ -1360,7 +1361,7 @@ curl -X 'PATCH' \
 }
 ```
 
-  ##### Unsigned Extrinsic fields:
+##### Unsigned Extrinsic fields:
 
 field |  comment
 ---------|------------
