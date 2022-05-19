@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { HexString } from '@polkadot/util/types';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import {
   IsEnum,
   IsHexadecimal,
@@ -82,20 +82,14 @@ export class TxBuildArgs {
   args: Array<string | number | BigInt | Record<string, any>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
 
   /**
-   * todo required? why?
+   * todo - show this prop in schema, but hide from example
    */
-  @ApiProperty({
-    required: false,
-    example: 64,
-  })
+  @ApiHideProperty()
   era?: number;
 
   /**
-   * todo required? why?
+   * todo - show this prop in schema, but hide from example
    */
-  @ApiProperty({
-    required: false,
-    example: false,
-  })
+  @ApiHideProperty()
   isImmortal?: boolean;
 }
