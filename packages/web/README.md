@@ -633,7 +633,7 @@ curl -X 'GET' \
   
   "mode": "Nft",
   "access": "Normal",
-  "schemaVersion": "ImageURL",
+  "schemaVersion": "Unique",
   "constOnChainSchema": {
     "nested": {
       "onChainMetaData": {
