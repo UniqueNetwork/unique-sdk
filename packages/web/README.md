@@ -220,7 +220,7 @@ to apply the blockchain change.
 
 ### POST /extrinsic/sign
 
-Purpose of the method: sign an extrusion
+Sign an extrusion
 
 #### Request body
 
@@ -264,7 +264,7 @@ signature | string
 
 ### POST /extrinsic/verify-sign
 
-Purpose of the method: check the signature of the extrusion
+Check the signature of the extrusion
 
 #### Request body 
 
@@ -346,7 +346,7 @@ message | string
 
 ### POST /extrinsic/submit
 
-Purpose of the method: send the signed extrusion to the chain
+Send the signed extrusion to the chain
 
 #### Request body
 
@@ -430,7 +430,7 @@ signerPayloadJSON | string
 
 ### GET /chain/properties
 
-Purpose of the method: requests the service fields required to work with the blockchain
+Requests the service fields required to work with the blockchain
 
 
 #### Request body
@@ -478,14 +478,13 @@ wsUrl      | string
 
 #### GET /balance
 
-Purpose of the method: returns the account balance in formatted and unformatted form
+Returns the account balance in formatted and unformatted form
 
 #### Request body
-Parameters
 
-field |  comment
----------|-------------
-address  | string
+```
+- address - substrate account
+```
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -521,7 +520,7 @@ formatted | string
 
 #### POST /balance/transfer
 
-Purpose of the method: creates an unsigned extrinsic for a transfer of a certain amount of coins
+Creates an unsigned extrinsic for a transfer of a certain amount of coins
 
 #### Request body
 
@@ -614,7 +613,7 @@ signerPayloadHex | string
 
 #### GET /collection
 
-Purpose of the method: returns information about the collection by id
+Returns information about the collection by id
 
 #### Request body
 Query Parameters
@@ -734,7 +733,7 @@ tokenPrefix | string
 
 #### POST /collection
 
-Purpose of the method: generates an unsigned extrusion to create a collection with certain parameters
+Generates an unsigned extrusion to create a collection with certain parameters
 
 #### Request body
 
@@ -905,7 +904,7 @@ type | string
 
 #### DELETE /collection
 
-Purpose of the method: generates an unsigned extrusion to delete the selected collection
+Generates an unsigned extrusion to delete the selected collection
 
 #### Request body
 ```json
@@ -921,8 +920,13 @@ Purpose of the method: generates an unsigned extrusion to delete the selected co
 
 ```bash
 curl -X 'DELETE' \
-  'https://web-quartz.unique.network/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
-  -H 'accept: application/json'
+  'https://web.uniquenetwork.dev/collection' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 1,
+  "address": "string"
+}'
 ```
 
 </details>
@@ -988,8 +992,7 @@ type | string
   
 
 #### PATCH /collection/transfer
-
-Purpose of the method: generates an unsigned extrinsic for transferring rights to collections
+Generates an unsigned extrinsic for transferring rights to collections
 
 #### Request body
   
@@ -1080,16 +1083,14 @@ type | string
 ### Token
 #### GET /token
 
-Purpose of the method: returns information about the token by the id of the collection and token
+Returns information about the token by the id of the collection and token
 
 #### Request body
-Parameters
 
-field |  comment
----------|------------
-collectionId  | string
-tokenId   | string
-
+```bash
+- collectionId - id of collection
+- tokenId - id of token
+```
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -1127,7 +1128,7 @@ curl -X 'GET' \
 
 #### POST /token
 
-Purpose of the method: creates an unsigned extrinsic to create a token inside the collection
+Creates an unsigned extrinsic to create a token inside the collection
 
 #### Request body
 
@@ -1218,7 +1219,7 @@ tokenPrefix | string
 
 #### DELETE /token
 
-Purpose of the method: generates an unsigned extrusion to delete the selected token
+Generates an unsigned extrusion to delete the selected token
 
 #### Request body
 
@@ -1235,8 +1236,14 @@ Purpose of the method: generates an unsigned extrusion to delete the selected to
 
 ```bash
 curl -X 'DELETE' \
-  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
-  -H 'accept: application/json'
+  'https://web.uniquenetwork.dev/token' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 1,
+  "tokenId": 1,
+  "address": "string"
+}'
 ```
 
 </details>
@@ -1302,7 +1309,7 @@ tokenPrefix | string
 
 #### PATCH /token
 
-Purpose of the method: generates an unsigned extrinsic for transferring rights to a token
+Generates an unsigned extrinsic for transferring rights to a token
 
 #### Request body
 
