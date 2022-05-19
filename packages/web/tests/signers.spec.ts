@@ -59,7 +59,7 @@ describe('Web signers', () => {
     switch (name) {
       case 'alice':
         return alice.address;
-      case 'bot':
+      case 'bob':
         return bob.address;
       case 'testUser':
         return testUser.keyfile.address;
@@ -107,13 +107,14 @@ describe('Web signers', () => {
     });
 
     it('sign - ok', async () => {
-      const { ok } = await signAndVerify(alice.address, bob.address);
+      const { ok, body } = await signAndVerify(alice.address, bob.address);
       expect(true).toEqual(ok);
+      expect(true).toEqual(body.isValid);
     });
     it('sign - fail', async () => {
       const { ok, body } = await signAndVerify(bob.address, alice.address);
-      expect(false).toEqual(ok);
-      expect(ErrorCodes.BadSignature).toEqual(body.error.code);
+      expect(true).toEqual(ok);
+      expect(false).toEqual(body.isValid);
     });
   });
 
@@ -124,13 +125,17 @@ describe('Web signers', () => {
     });
 
     it('sign - ok', async () => {
-      const { ok } = await signAndVerify(testUser.keyfile.address, bob.address);
+      const { ok, body } = await signAndVerify(
+        testUser.keyfile.address,
+        bob.address,
+      );
       expect(true).toEqual(ok);
+      expect(true).toEqual(body.isValid);
     });
     it('sign - fail', async () => {
       const { ok, body } = await signAndVerify(alice.address, bob.address);
-      expect(false).toEqual(ok);
-      expect(ErrorCodes.BadSignature).toEqual(body.error.code);
+      expect(true).toEqual(ok);
+      expect(false).toEqual(body.isValid);
     });
   });
 
@@ -164,15 +169,15 @@ describe('Web signers', () => {
           Authorization,
         },
       );
-      expect(false).toEqual(ok);
-      expect(ErrorCodes.BadSignature).toEqual(body.error.code);
+      expect(true).toEqual(ok);
+      expect(false).toEqual(body.isValid);
     });
 
     it.each([
       ['Uri //Alice', 'alice'],
       [`Seed ${testUser.seed}`, 'testUser'],
     ])('sign ok - %s', async (Authorization, addressName) => {
-      const { ok } = await signAndVerify(
+      const { ok, body } = await signAndVerify(
         getAddressByName(addressName),
         bob.address,
         {
@@ -180,6 +185,7 @@ describe('Web signers', () => {
         },
       );
       expect(true).toEqual(ok);
+      expect(true).toEqual(body.isValid);
     });
   });
 });

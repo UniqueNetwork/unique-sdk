@@ -5,7 +5,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
-import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
+import {
+  AnyObject,
+  CollectionInfo,
+  CollectionInfoBase,
+  TokenInfo,
+} from './unique-types';
 import {
   SdkSigner,
   SignTxArgs,
@@ -143,8 +148,7 @@ export class CreateTokenArgs {
   address: string;
 
   @ApiProperty()
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  constData: Record<string, any>;
+  constData: AnyObject;
 }
 
 export class BurnTokenArgs extends TokenIdArg {

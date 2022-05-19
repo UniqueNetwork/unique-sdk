@@ -1,5 +1,6 @@
 import { ErrorCodes } from './codes';
 
+// todo - add some method like static wrapError(error: unknown) ?
 export class SdkError extends Error {
   constructor(
     public readonly code: ErrorCodes,

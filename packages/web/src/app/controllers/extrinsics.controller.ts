@@ -12,7 +12,7 @@ import {
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { SignHeaders } from '../types/requests';
+import { SignHeaders, VerificationResult } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
 
 @UseFilters(SdkExceptionsFilter)
@@ -36,8 +36,17 @@ export class ExtrinsicsController {
   }
 
   @Post('verify-sign')
-  async verifySign(@Body() args: SubmitTxArgs): Promise<void> {
-    await this.sdk.extrinsics.verifySign(args);
+  async verifySign(@Body() args: SubmitTxArgs): Promise<VerificationResult> {
+    try {
+      await this.sdk.extrinsics.verifySignOrThrow(args);
+
+      return { isValid: true, errorMessage: null };
+    } catch (e) {
+      return {
+        isValid: false,
+        errorMessage: e.toString(),
+      };
+    }
   }
 
   @Post('submit')

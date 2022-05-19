@@ -5,3 +5,4 @@ export * from './build-extrinsic';
 export * from './submit-extrinsic';
 export * from './validation';
 export * from './invalid-signer';
+export * from './bad-payload';

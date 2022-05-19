@@ -15,8 +15,10 @@ import {
   BurnTokenArgs,
   CreateTokenArgs,
   TokenIdArg,
+  TokenInfoDto,
   TransferTokenArgs,
- UnsignedTxPayload } from '@unique-nft/sdk/types';
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/types';
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
@@ -27,9 +29,7 @@ export class TokenController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  async getToken(@Query() args: TokenIdArg): Promise<any> {
-    // todo fix any
+  async getToken(@Query() args: TokenIdArg): Promise<TokenInfoDto> {
     const token = await this.sdk.token.get(args);
 
     if (token) return token;
@@ -45,7 +45,7 @@ export class TokenController {
   }
 
   @Delete()
-  async burnToken(@Query() args: BurnTokenArgs): Promise<UnsignedTxPayload> {
+  async burnToken(@Body() args: BurnTokenArgs): Promise<UnsignedTxPayload> {
     return this.sdk.token.burn(args);
   }
 
