@@ -40,32 +40,34 @@ export class CollectionSponsorship {
   isConfirmed: boolean;
 }
 
+const CollectionLimitItem = ApiProperty({ required: false, example: null });
+
 export class CollectionLimits {
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   accountTokenOwnershipLimit?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsoredDataSize?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsoredDataRateLimit?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   tokenLimit?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsorTransferTimeout?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsorApproveTimeout?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   ownerCanTransfer?: boolean | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   ownerCanDestroy?: boolean | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   transfersEnabled?: boolean | null;
 }
 
