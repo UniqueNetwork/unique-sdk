@@ -432,7 +432,6 @@ signerPayloadJSON | string
 
 Requests the service fields required to work with the blockchain
 
-
 <details>
  <summary>▶ CURL Example</summary>
   
@@ -479,7 +478,6 @@ Returns the account balance in formatted and unformatted form
 #### Query Parameters
 
 - **address** - substrate account
-
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -610,12 +608,9 @@ signerPayloadHex | string
 
 Returns information about the collection by id
 
-#### Request body
-Query Parameters
+#### Query Parameters
 
-```
-- collectionId - id of collection
-```
+- **collectionId** - collection identificator
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -1080,12 +1075,11 @@ type | string
 
 Returns information about the token by the id of the collection and token
 
-#### Request body
+#### Query Parameters
 
-```bash
-- collectionId - id of collection
-- tokenId - id of token
-```
+- **collectionId** - collection identificator
+- **tokenId** - id of token
+
 
 <details>
  <summary>▶ CURL Example</summary>
