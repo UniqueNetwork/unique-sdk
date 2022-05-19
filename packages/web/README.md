@@ -5,104 +5,113 @@
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 
 
+Extrinsic is a request to change data in the blockchain.
 
-_так же расписать что концептульно апи собирает экстринсик, клиент должен его подписать и отправить обратно_ - ждем пояснений
+https://docs.substrate.io/v3/concepts/extrinsics/
 
-_туду: будет вариант самоподписывающихся транзакций если мы передадим сид в апи_ - ждем
+https://polkadot.js.org/docs/substrate/extrinsics/
+
+To make changes to the blockchain, it is necessary to form a request (extrinsic) with certain parameters, which consists of 3 parts:
+1) Blockchain section, functional
+2) Section Method
+3) Array of arguments
+
+Once an extrinsic has been generated, it must be signed in order for the chain to complete the requested changes.
+
 
 ## Table of Contents
 
-- [Prerequisites](#)
-  - [Instsall/Easy start](#)
-        - [Docker setup](#)
-    - [Environment Variables](#)
-       - [Production](#)
-       - [Staging](#)
-       - [Test](#)
+- [Install/Easy start](#installeasy-start)
+    - [Choose install approach](#choose-install-approach)
+      - [Docker](#docker-setup)
+      - [Git](#git)
+      - [Use public endpoints](#use-public-endpoints)
+    - [Environment Variables](#environment-variables)
+    - [Swagger](#swagger)
 
 
-- [Unique SDK HTTP API Methods:](#)
-  - [Main Methods](#)
-    - [Extrinsic build](#)
-    - [Extrinsic submit](#)
-  - [Additional Methods](#)
-    - [Сhain](#)
-    - [Balance](#)
-    - [Collection](#)
-    - [Token](#)
-  - [Ошибки](#)
-
-
-  
-
+- [Unique SDK HTTP API Methods:](#methods)
+  - [Main Methods](#main-methods)
+    - [Extrinsic build](#post-extrinsicbuild)
+    - [Extrinsic sign](#post-extrinsicsign)
+    - [Extrinsic verify-sign](#post-extrinsicverify-sign)
+    - [Extrinsic submit](#post-extrinsicsubmit)
+  - [Additional Methods](#additional-methods)
+    - [Сhain](#get-chainproperties)
+    - [Balance](#get-balance)
+    - [Collection](#get-collection)
+    - [Token](#get-token)
 
 # SDK Deployment - Getting Started Guide
 
-## Prerequisites
 
->  * OS: Ubuntu 18.04 or 20.04
->  * docker CE 20.10 or up
->  * docker-compose 1.25 or up
->  * git
->  * Google Chrome Browser
-> * connected to wss://ws-quartz.unique.network
+## Install/Easy start
 
+### Choose install approach
 
-## Instsall/Easy start
-### Docker setup
+#### Docker setup
 
-https://hub.docker.com/r/uniquenetwork/web 
-
-Start container with command 
-
-```shell
-docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-quartz.unique.network uniquenetwork/web:latest
+```bash
+docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwork/web:latest
 ```
 
-... or via docker-compose (.yml)
+<a href="https://hub.docker.com/r/uniquenetwork/web" target="_blank">See hub.docker.com page</a>
 
-```
-version: '3'
+#### Git
 
-services:
-  unique-web:
-    image: uniquenetwork/web:latest
-    ports:
-      - '3000:3000'
-    environment:
-      - CHAIN_WS_URL=wss://ws-quartz.unique.network
+```git
+git clone https://github.com/UniqueNetwork/unique-sdk
+cd unique-sdk
+npm install
+npm run build:web
+npm start
 ```
 
-Explore available methods on
+#### Use public endpoints
+
+You can use public endpoints for access Unique Web:
+
+##### Opal
 ```
-http://localhost:3000/swagger/
+https://web-opal.unique.network
+```
+
+##### Quartz
+```
+https://web-quartz.unique.network
 ```
 
 ### Environment Variables
 
-#### Production
-```
-CHAIN_WS_URL=wss://ws-quartz.unique.network
-```
-#### Staging
-```
+#### Required
+```bash
 CHAIN_WS_URL=wss://quartz.unique.network
 ```
 
-```
-CHAIN_WS_URL=wss://eu-ws-quartz.unique.network
+<a href="https://docs.unique.network/unique-and-quartz-wiki/build/get-started/testnet-and-mainnet" target="_blank">See official Unique Network documentation</a>
+
+#### Optional
+
+##### Use SIGNER_SEED or SIGNER_URI for [Sign](#post-extrinsicsign) method
+```bash
+SIGNER_SEED=type mnemonic here
+SIGNER_URI=//Alice
 ```
 
-```
-CHAIN_WS_URL=wss://us-ws-quartz.unique.network
-```
-
-#### Test
-```
-CHAIN_WS_URL=wss://testnet2.unique.network
+##### Port (default 3000)
+```bash
+PORT=3000
 ```
 
+##### IPFS Gateway
+```bash
+IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
+```
 
+### Swagger
+```
+https://web-quartz.unique.network/swagger
+```
 
 # Methods
 
@@ -110,16 +119,15 @@ CHAIN_WS_URL=wss://testnet2.unique.network
 
 ### POST /extrinsic/build
 
-Назначение метода: *******
+Build and returns unsigned extrinsic.
+Next you must sign it and send with sign
+to [/extrinsic/submit](#post-extrinsicsubmit) method
+to apply the blockchain change.   
 
-#### Request
-Curl example
-```
-curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/build' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
+#### Request body
+
+```json
+{
   "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
   "section": "balances",
   "method": "transfer",
@@ -129,93 +137,113 @@ curl -X 'POST' \
   ],
   "era": 64,
   "isImmortal": false
-}'
-```
-
-Request body (Example Value, Schema)
-```json
-{
-"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-"section": "balances",
-"method": "transfer",
-"args": [
-"yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
-100000000
-],
-"era": 64,
-"isImmortal": false
 }
 ```
 
-Parameters - No parameters
+<details>
+ <summary>▶ CURL Example</summary>
+  
+  ```bash
+  curl -X 'POST' \
+    'https://web-quartz.unique.network/extrinsic/build' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "section": "balances",
+    "method": "transfer",
+    "args": [
+      "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
+      100000000
+    ],
+    "era": 64,
+    "isImmortal": false
+  }'
+  ```
 
+</details>
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
+
+  ```json
+  {
+    "signerPayloadHex": "string",
+    "signerPayloadJSON": {
+      "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+      "blockHash": "string",
+      "blockNumber": "string",
+      "era": "string",
+      "genesisHash": "string",
+      "method": "string",
+      "nonce": "string",
+      "specVersion": "string",
+      "tip": "string",
+      "transactionVersion": "string",
+      "signedExtensions": [
+        "string"
+      ],
+        "version": 0
+    },
+    "signerPayloadRaw": {
+      "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+      "data": "string",
+      "type": {}
+    }
+  }
+  ```
+
+</details>
+
+
+### POST /extrinsic/sign
+
+Sign an extrinsic
+
+#### Request body
 
 ```json
 {
-"signerPayloadHex": "string",
-"signerPayloadJSON": {
-"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-"blockHash": "string",
-"blockNumber": "string",
-"era": "string",
-"genesisHash": "string",
-"method": "string",
-"nonce": "string",
-"specVersion": "string",
-"tip": "string",
-"transactionVersion": "string",
-"signedExtensions": [
-"string"
-],
-"version": 0
-},
-"signerPayloadRaw": {
-"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-"data": "string",
-"type": {}
-}
+  "signerPayloadHex": "string"
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+<details>
+ <summary>▶ CURL Example</summary>
 
-название |  комментарий
----------|------------
-signerPayloadHex | *************
-signerPayloadJSON | ***************
-address | ********************
-blockHash | *******************
-blockNumber | ***************
-era | ***************
-genesisHash | ***************
-method | ***************
-nonce | ***************
-specVersion | ***************
-transactionVersion | ***************
-signedExtensions | ***************
-version | ***************
-address | ***************
-data | ***************
-type | ***************
-
-
-### POST /extrinsic/submit
-
-Назначение метода: *******
-
-#### Request
-Curl example
-```
+```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/extrinsic/submit' \
+  'https://web-quartz.unique.network/extrinsic/sign' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
+    "signerPayloadHex": "string"
+  }'
+```
+</details>
+
+#### Response
 <details>
-   <summary>"signerPayloadJSON": </summary> {
+  <summary>▶ Http Status 200</summary>
+
+```json
+{
+  "signature": "string"
+}
+```
+
+</details>
+
+### POST /extrinsic/verify-sign
+
+Check the signature of the extrinsic
+
+#### Request body 
+
+```json
+{
+  "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
     "blockNumber": "string",
@@ -233,151 +261,218 @@ curl -X 'POST' \
   },
   "signature": "string",
   "signatureType": "sr25519"
-}'</details>
-```
-
-Request body (Example Value, Schema)
-```json
-{
-"signature": "string",
-<details>
-  <summary>"signatureType": "sr25519",  </summary>
-"signerPayloadJSON": {
-"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-"blockHash": "string",
-"blockNumber": "string",
-"era": "string",
-"genesisHash": "string",
-"method": "string",
-"nonce": "string",
-"specVersion": "string",
-"tip": "string",
-"transactionVersion": "string",
-"signedExtensions": [
-"string"
-],
-"version": 0
 }
-}</details>
 ```
 
-Parameters - No parameters
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'POST' \
+  'https://web-quartz.unique.network/extrinsic/verify-sign' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  },
+  "signature": "string",
+  "signatureType": "sr25519"
+}'
+```
+</details>
+
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
-"hash": "string"
+  "statusCode": 500,
+  "message": "Internal server error"
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+</details>
 
-название | комментарий
----------|------------
-signerPayloadHex | *********
-signerPayloadJSON | *********
+### POST /extrinsic/submit
+
+Send the signed extrinsic to the chain
+
+#### Request body
+
+```json
+{
+  "signature": "string",
+  "signatureType": "sr25519",
+  "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  }
+}
+```
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'POST' \
+  'https://web-quartz.unique.network/extrinsic/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+   "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  },
+  "signature": "string",
+  "signatureType": "sr25519"
+}'
+```
+</details>
 
 
+#### Response
+<details>
+  <summary>▶ Http Status 200</summary>
 
+```json
+{
+  "hash": "string"
+}
+```
+
+</details>
+
+
+  
 ## Additional Methods
 
-### Сhain
-Назначение метода:*******
+### GET /chain/properties
 
+Requests the service fields required to work with the blockchain
 
-#### Request
-
-Curl example
-```
+<details>
+ <summary>▶ CURL Example</summary>
+  
+```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/chain/properties' \
+  'https://web-quartz.unique.network/chain/properties' \
   -H 'accept: application/json'
 ```
-
-Parameters - No parameters
+  
+</details>
 
 
 #### Response
-
-1) Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
   "SS58Prefix": 255,
   "decimals": 18,
   "token": "QTZ",
-  "wsUrl": "wss://ws-quartz.unique.network"
+  "wsUrl": "wss://quartz.unique.network"
 }
 ```
 
-2) Успешный ответ - default и содержит тело:
-
-```json
-{
-"SS58Prefix": 255,
-"decimals": 18,
-"token": "QTZ",
-"wsUrl": "wss://ws-quartz.unique.network"
-}
-```
-
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|------------
-SS58Prefix | префикс чейна
-decimals   | предел коичества знаков после запятой
-token      | валюта токена
-wsUrl      | url блокчейна
-
+</details>
+ 
 
 ### Balance
 
-Назначение метода:*******
-
 #### GET /balance
-#### Request
 
-Curl example
-```
+Returns the account balance in formatted and unformatted form
+
+#### Query Parameters
+
+- **address** - substrate account
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
+```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
+  'https://web-quartz.unique.network/balance?address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' \
   -H 'accept: application/json'
 ```
+  
+</details>
 
-Parameters
-Параметр | тип | комментарий
----------|-----|------------
-address  | string |
 
 #### Response
-
-Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
-"amount": "411348197000000000000",
-"formatted": "411.3481 QTZ"
+  "amount": "411348197000000000000",
+  "formatted": "411.3481 QTZ"
 }
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
-
-название | комментарий
----------|--------------
-amount | ***********
-formatted | **********
+</details>
 
 #### POST /balance/transfer
 
-#### Request
-Curl example
+Creates an unsigned extrinsic for a transfer of a certain amount of coins. The amount should be past in integer or fractional part of the coin (UNQ or QTZ), and **not in wei**.
 
+#### Request body
+
+```json
+{
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "destination": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "amount": 0.01
+}
 ```
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/balance/transfer' \
+  'https://web-quartz.unique.network/balance/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -387,24 +482,17 @@ curl -X 'POST' \
 }'
 ```
 
-Request body (Example Value, Schema)
-```
-{
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "destination": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "amount": 0.01
-}
-```
-Parameters - No parameters
+</details>
+
 
 #### Response
-
-Успешный ответ - 201 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
 ```json
 {
-<details>  
-     <summary>"signerPayloadJSON":  </summary> {
+  
+    "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
     "blockNumber": "string",
@@ -426,60 +514,44 @@ Parameters - No parameters
     "type": "bytes"
   },
   "signerPayloadHex": "string"
-}</details>
+}
 ```
 
-Каждый элемент коллекции содержит следующую информацию:
+</details>
 
-
-название | комментарий
----------|------------
-signerPayloadJSON | *************
-address | *************
-blockHash | *************
-blockNumber | *************
-era | *************
-genesisHash | *************
-method | *************
-nonce | *************
-specVersion | *************
-tip | *************
-transactionVersion | *************
-signedExtensions | *************
-version | *************
-signerPayloadRaw | *************
-address | *************
-data |*************
-type | *************
-signerPayloadHex | *************
 
 ### Collection
 
-Назначение метода: *******
-
 #### GET /collection
-#### Request
-Curl example
 
-```
+Returns information about the collection by id
+
+#### Query Parameters
+
+- **collectionId** - collection identifier
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+
+```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/collection?collectionId=1' \
+  'https://web-quartz.unique.network/collection?collectionId=1' \
   -H 'accept: application/json'
 ```
 
-Parameters
-Параметр | комментарий
----------|------------
-collectionId  | *************
-
+</details>
+  
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-```
+<details>
+  <summary>▶ Http Status 200</summary>
+
+```json
 {
-  <details>
-   <summary>"mode": "Nft", </summary>
+  
+  "mode": "Nft",
   "access": "Normal",
-  "schemaVersion": "ImageURL",
+  "schemaVersion": "Unique",
   "constOnChainSchema": {
     "nested": {
       "onChainMetaData": {
@@ -501,15 +573,15 @@ collectionId  | *************
   "id": 0,
   "description": "string",
   "limits": {
-    "accountTokenOwnershipLimit": 0,
-    "sponsoredDataSize": 0,
-    "sponsoredDataRateLimit": 0,
-    "tokenLimit": 0,
-    "sponsorTransferTimeout": 0,
-    "sponsorApproveTimeout": 0,
-    "ownerCanTransfer": true,
-    "ownerCanDestroy": true,
-    "transfersEnabled": true
+    "accountTokenOwnershipLimit": null,
+    "sponsoredDataSize": null,
+    "sponsoredDataRateLimit": null,
+    "tokenLimit": null,
+    "sponsorTransferTimeout": null,
+    "sponsorApproveTimeout": null,
+    "ownerCanTransfer": null,
+    "ownerCanDestroy": null,
+    "transfersEnabled": null
   },
   "metaUpdatePermission": {},
   "mintMode": true,
@@ -521,55 +593,73 @@ collectionId  | *************
     "isConfirmed": true
   },
   "tokenPrefix": "string"
-}</details>
+}
 ```
-Каждый элемент коллекции содержит следующую информацию:
 
-название |  комментарий
----------|--------------
-mode | ***********
-access | ***********
-schemaVersion | ***********
-constOnChainSchema | ***********
-nested | ***********
-onChainMetaData |***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-sponsoredDataSize | ***********
-sponsoredDataRateLimit |***********
-tokenLimit | ***********
-sponsorTransferTimeout | ***********
-sponsorApproveTimeout | ***********
-ownerCanTransfer | ***********
-ownerCanDestroy | ***********
-transfersEnabled | ***********
-metaUpdatePermission | ***********
-mintMode | ***********
-name | ***********
-offchainSchema | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
+</details>
 
 
 #### POST /collection
-#### Request
-Curl example
 
+Generates an unsigned extrinsic to create a collection with certain parameters
+
+#### Request body
+
+```json
+{
+  "mode": "Nft",
+  "access": "Normal",
+  "schemaVersion": "ImageURL",
+  "constOnChainSchema": {
+    "nested": {
+      "onChainMetaData": {
+        "nested": {
+          "NFTMeta": {
+            "fields": {
+              "ipfsJson": {
+                "id": 1,
+                "rule": "required",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "metaUpdatePermission": "ItemOwner",
+  "variableOnChainSchema": {},
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "name": "Sample collection name",
+  "description": "sample collection description",
+  "tokenPrefix": "TEST",
+  "limits": {
+    "accountTokenOwnershipLimit": 0,
+    "sponsoredDataSize": 0,
+    "sponsoredDataRateLimit": 0,
+    "tokenLimit": 0,
+    "sponsorTransferTimeout": 0,
+    "sponsorApproveTimeout": 0,
+    "ownerCanTransfer": true,
+    "ownerCanDestroy": true,
+    "transfersEnabled": true
+  },
+  "mintMode": true,
+  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
+  "sponsorship": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "isConfirmed": true
+  }
+}
 ```
-<details> <summary>curl -X 'POST' \ </summary>
-  'https://web.uniquenetwork.dev/collection' \
+
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+   curl -X 'POST' \ 
+  'https://web-quartz.unique.network/collection' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -616,65 +706,19 @@ Curl example
   "variableOnChainSchema": {},
   "metaUpdatePermission": "ItemOwner",
   "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
-}'</details>
+}'
 ```
+</details>
 
-Request body (Example Value, Schema)
-```
-{
-   <details><summary>"mode": "Nft", </summary>
-  "access": "Normal",
-  "schemaVersion": "ImageURL",
-  "constOnChainSchema": {
-    "nested": {
-      "onChainMetaData": {
-        "nested": {
-          "NFTMeta": {
-            "fields": {
-              "ipfsJson": {
-                "id": 1,
-                "rule": "required",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "metaUpdatePermission": "ItemOwner",
-  "variableOnChainSchema": {},
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "name": "Sample collection name",
-  "description": "sample collection description",
-  "tokenPrefix": "TEST",
-  "limits": {
-    "accountTokenOwnershipLimit": 0,
-    "sponsoredDataSize": 0,
-    "sponsoredDataRateLimit": 0,
-    "tokenLimit": 0,
-    "sponsorTransferTimeout": 0,
-    "sponsorApproveTimeout": 0,
-    "ownerCanTransfer": true,
-    "ownerCanDestroy": true,
-    "transfersEnabled": true
-  },
-  "mintMode": true,
-  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
-  "sponsorship": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "isConfirmed": true
-  }
-}</details>
-```
 
-Parameters - No parameters
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
-```
+<details>
+  <summary>▶ Http Status 200</summary>
+
+```json
 {
-  <details> <summary>"signerPayloadHex": "string",</summary>
+  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -696,59 +740,49 @@ Parameters - No parameters
     "data": "string",
     "type": {}
   }
-}</details>
+}
 ```
-Каждый элемент коллекции содержит следующую информацию:
 
-название |  комментарий
----------|-------------
-signerPayloadHex | ***********
-signerPayloadJSON | ***********
-address | ***********
-blockHash | ***********
-blockNumber | ***********
-era | ***********
-genesisHash | ***********
-method | ***********
-nonce | ***********
-specVersion | ***********
-tip | ***********
-transactionVersion | ***********
-signedExtensions | ***********
-version | ***********
-signerPayloadRaw | ***********
-address | ***********
-data | ***********
-type | ***********
-
-
+</details>
 
 
 #### DELETE /collection
-#### Request
-Curl example
-```
-curl -X 'DELETE' \
-  'https://web.uniquenetwork.dev/collection?collectionId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz7867' \
-  -H 'accept: application/json'
-```
 
-Request body (Example Value, Schema)
-```
+Generates an unsigned extrinsic to delete the selected collection
+
+#### Request body
+```json
 {
   "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
   "collectionId": 0
 }
 ```
+  
 
-Parameters - No parameters
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'DELETE' \
+  'https://web.uniquenetwork.dev/collection' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 1,
+  "address": "string"
+}'
+```
+
+</details>
 
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-```
+<details>
+  <summary>▶ Http Status 200</summary>
+
+```json
 {
-  <details><summary>"signerPayloadHex": "string",</summary>
+  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -770,39 +804,32 @@ Parameters - No parameters
     "data": "string",
     "type": {}
   }
-}</details>
+}
 ```
-Каждый элемент коллекции содержит следующую информацию:
 
-название | комментарий
----------|-------------
-signerPayloadHex | *************
-signerPayloadJSON | ***********
-address | ***********
-blockHash | ***********
-blockNumber | ***********
-era | ***********
-genesisHash | ***********
-method | ***********
-nonce | ***********
-specVersion | ***********
-tip | ***********
-transactionVersion | ***********
-signedExtensions | ***********
-version | ***********
-signerPayloadRaw | ***********
-address | ***********
-data | ***********
-type | ***********
+</details>
+  
 
+#### PATCH /collection/transfer
+Generates an unsigned extrinsic for transferring rights to collections
 
-
-#### PATCH /collection
-#### Request
-Curl example
+#### Request body
+  
+```json
+{
+  "collectionId": 0,
+  "from": "string",
+  "to": "string"
+}
 ```
+  
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
 curl -X 'PATCH' \
-  'https://web.uniquenetwork.dev/collection/transfer' \
+  'https://web-quartz.unique.network/collection/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -812,22 +839,16 @@ curl -X 'PATCH' \
 }'
 ```
 
-Request body (Example Value, Schema)
-```
-{
-  "collectionId": 0,
-  "from": "string",
-  "to": "string"
-}
-```
-
-Parameters - No parameters
+</details>
+  
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
-```
+<details>
+  <summary>▶ Http Status 200</summary>
+
+```json
 {
- <details>  <summary>"signerPayloadHex": "string", </summary>
+ "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -849,61 +870,76 @@ Parameters - No parameters
     "data": "string",
     "type": {}
   }
-}</details>
+}
 ```
-Каждый элемент коллекции содержит следующую информацию:
 
-название | комментарий
----------|------------
-signerPayloadHex | ***********
-signerPayloadJSON | ***********
-address | ***********
-blockHash | ***********
-blockNumber | ***********
-era | ***********
-genesisHash | ***********
-method | ***********
-nonce | ***********
-specVersion | ***********
-tip | ***********
-transactionVersion | ***********
-signedExtensions | ***********
-version | ***********
-signerPayloadRaw | ***********
-address | ***********
-data | ***********
-type | ***********
-
-
+</details>
 
 ### Token
 #### GET /token
-#### Request
-Curl example
-```
+
+Returns information about the token by the id of the collection and token
+
+#### Query Parameters
+
+- **collectionId** - collection identificator
+- **tokenId** - id of token
+
+
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
 curl -X 'GET' \
-  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1' \
+  'https://web-quartz.unique.network/token?collectionId=1&tokenId=1' \
   -H 'accept: application/json'
 ```
+  
+</details>
 
-Parameters
-Параметр | комментарий
----------|------------
-collectionId  | ***********
-tokenId   | ***********
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
+
+```json
+{
+  "id": 1,
+  "owner": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "collectionId": 1,
+  "constData": {
+    "ipfsJson": "{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}",
+    "gender": "Male",
+    "traits": [
+      "TEETH_SMILE",
+      "UP_HAIR"
+    ]
+  },
+  "url": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image1.png"
+}
 ```
-{}
-```
+</details>
 
 #### POST /token
-#### Request
-Curl example
+
+Creates an unsigned extrinsic to create a token inside the collection
+
+#### Request body
+
+```json
+{
+  "address": "string",
+  "collectionId": 0,
+  "constData": {}
+}
 ```
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
+```bash
 curl -X 'POST' \
-  'https://web.uniquenetwork.dev/token' \
+  'https://web-quartz.unique.network/token' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -913,23 +949,16 @@ curl -X 'POST' \
 }'
 ```
 
-Request body (Example Value, Schema)
-```
-{
-  "address": "string",
-  "collectionId": 0,
-  "constData": {}
-}
-```
-
-Parameters - No parameters
+</details>
+  
 
 #### Response
-Успешный ответ - 201 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
-```
+```json
 {
- <details>  <summary>"signerPayloadHex": "string", </summary>
+  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -951,44 +980,19 @@ Parameters - No parameters
     "data": "string",
     "type": {}
   }
-}</details>
+}
 ```
 
-название | комментарий
----------|------------
-mode | ***********
-nested | ***********
-onChainMetaData | ***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
-
+</details>
 
 
 #### DELETE /token
-#### Request
-Curl example
-```
-curl -X 'DELETE' \
-  'https://web.uniquenetwork.dev/token?collectionId=1&tokenId=1&address=yGCyN3eydMkze4EPtz59Tn7obwbU32438FRdemTaLwm' \
-  -H 'accept: application/json'
-```
 
-Request body (Example Value, Schema)
-```
+Generates an unsigned extrinsic to delete the selected token
+
+#### Request body
+
+```json
 {
   "address": "string",
   "collectionId": 0,
@@ -996,14 +1000,31 @@ Request body (Example Value, Schema)
 }
 ```
 
-Parameters - No parameters
+<details>
+ <summary>▶ CURL Example</summary>
+
+```bash
+curl -X 'DELETE' \
+  'https://web.uniquenetwork.dev/token' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "collectionId": 1,
+  "tokenId": 1,
+  "address": "string"
+}'
+```
+
+</details>
+
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
-```
+```json
 {
- <details>  <summary>"signerPayloadHex": "string", </summary>
+  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -1025,39 +1046,33 @@ Parameters - No parameters
     "data": "string",
     "type": {}
   }
-}</details>
+}
 ```
 
-название | комментарий
----------|------------
-mode | ***********
-nested | ***********
-onChainMetaData | ***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
-
+</details>
 
 
 #### PATCH /token
-#### Request
-Curl example
+
+Generates an unsigned extrinsic for transferring rights to a token
+
+#### Request body
+
+```json
+{
+  "collectionId": 0,
+  "from": "string",
+  "to": "string",
+  "tokenId": 0
+}
 ```
+
+<details>
+ <summary>▶ CURL Example</summary>
+  
+```bash
 curl -X 'PATCH' \
-  'https://web.uniquenetwork.dev/token/transfer' \
+  'https://web-quartz.unique.network/token/transfer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -1067,25 +1082,16 @@ curl -X 'PATCH' \
   "to": "string"
 }'
 ```
+</details>
 
-Request body (Example Value, Schema)
-```
-{
-  "collectionId": 0,
-  "from": "string",
-  "to": "string",
-  "tokenId": 0
-}
-```
-
-Parameters - No parameters
 
 #### Response
-Успешный ответ - 200 OK и содержит тело:
+<details>
+  <summary>▶ Http Status 200</summary>
 
-```
+```json
 {
- <details>  <summary>"signerPayloadHex": "string", </summary>
+  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -1107,32 +1113,8 @@ Parameters - No parameters
     "data": "string",
     "type": {}
   }
-}</details>
+}
 ```
 
-название | комментарий
----------|------------
-mode | ***********
-nested | ***********
-onChainMetaData | ***********
-NFTMeta | ***********
-fields | ***********
-ipfsJson | ***********
-id | ***********
-rule | ***********
-type | ***********
-variableOnChainSchema | ***********
-id | ***********
-description | ***********
-limits | ***********
-accountTokenOwnershipLimit | ***********
-owner | ***********
-sponsorship | ***********
-address | ***********
-isConfirmed | ***********
-tokenPrefix | ***********
 
-
-#### Ошибки
-
-***** - ошибка(?)
+</details>
