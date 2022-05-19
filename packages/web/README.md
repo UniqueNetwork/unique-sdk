@@ -1108,7 +1108,20 @@ curl -X 'GET' \
   <summary>▶ Http Status 200</summary>
 
 ```json
-{}
+{
+  "id": 1,
+  "owner": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "collectionId": 1,
+  "constData": {
+    "ipfsJson": "{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}",
+    "gender": "Male",
+    "traits": [
+      "TEETH_SMILE",
+      "UP_HAIR"
+    ]
+  },
+  "url": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image1.png"
+}
 ```
 </details>
 
