@@ -433,10 +433,6 @@ signerPayloadJSON | string
 Requests the service fields required to work with the blockchain
 
 
-#### Request body
-Parameters - No parameters
-
-
 <details>
  <summary>▶ CURL Example</summary>
   
@@ -480,11 +476,10 @@ wsUrl      | string
 
 Returns the account balance in formatted and unformatted form
 
-#### Request body
+#### Query Parameters
 
-```
-- address - substrate account
-```
+- **address** - substrate account
+
 
 <details>
  <summary>▶ CURL Example</summary>
