@@ -34,14 +34,11 @@ describe(Sdk.name, () => {
 
     const { signerPayloadJSON, signerPayloadHex } = txPayload;
 
-    const signatureU8a = alice.sign(signerPayloadHex, {
-      withType: true,
-    });
-
-    const signature = u8aToHex(signatureU8a);
+    const signature = u8aToHex(alice.sign(signerPayloadHex));
 
     const submitPromise = sdk.extrinsics.submit({
       signature,
+      signatureType: alice.type,
       signerPayloadJSON,
     });
 
