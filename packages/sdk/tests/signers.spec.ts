@@ -99,12 +99,14 @@ describe('signers', () => {
             amount: 0.001,
           });
 
-        const { signature } = await sdk.extrinsics.sign({
+        const { signature, signatureType } = await sdk.extrinsics.sign({
           signerPayloadHex,
         });
+
         expect(typeof signature).toBe('string');
         await sdk.extrinsics.verifySignOrThrow({
           signature,
+          signatureType,
           signerPayloadJSON,
         });
       },
@@ -128,12 +130,14 @@ describe('signers', () => {
             amount: 0.001,
           });
 
-        const { signature } = await sdk.extrinsics.sign({
+        const { signature, signatureType } = await sdk.extrinsics.sign({
           signerPayloadHex,
         });
+
         await expect(async () => {
           await sdk.extrinsics.verifySignOrThrow({
             signature,
+            signatureType,
             signerPayloadJSON,
           });
         }).rejects.toThrowError(new BadSignatureError());
@@ -210,12 +214,15 @@ describe('signers', () => {
           amount: 0.001,
         });
 
-      const { signature } = await sdk.extrinsics.sign({
+      const { signature, signatureType } = await sdk.extrinsics.sign({
         signerPayloadHex,
       });
+
       expect(typeof signature).toBe('string');
+
       await sdk.extrinsics.verifySignOrThrow({
         signature,
+        signatureType,
         signerPayloadJSON,
       });
     });
