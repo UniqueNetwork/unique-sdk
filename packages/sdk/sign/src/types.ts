@@ -1,13 +1,15 @@
 // eslint-disable-next-line max-classes-per-file
 import 'reflect-metadata';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { ValidSeed, ValidUri } from '@unique-nft/sdk/validation';
 import { IsNotEmptyObject, IsEnum, IsOptional } from 'class-validator';
 
 export type SignerOptions =
   | SeedSignerOptions
   | UriSignerOptions
-  | KeyfileSignerOptions;
+  | KeyfileSignerOptions
+  | PolkadotSignerOptions;
 
 export enum SignType {
   ed25519 = 'ed25519',
@@ -51,4 +53,10 @@ export class KeyfileSignerOptions {
   @IsEnum(SignType)
   @IsOptional()
   type?: SignType;
+}
+
+export class PolkadotSignerOptions {
+  choosePolkadotAccount: (
+    accounts: InjectedAccountWithMeta[],
+  ) => Promise<InjectedAccountWithMeta>;
 }

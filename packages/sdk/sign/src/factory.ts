@@ -4,12 +4,14 @@ import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import {
   KeyfileSignerOptions,
+  PolkadotSignerOptions,
   SeedSignerOptions,
   SignerOptions,
   UriSignerOptions,
 } from './types';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
+import { PolkadotSigner } from './polkadot-signer';
 
 export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
   if ('seed' in signerOptions) {
@@ -32,6 +34,15 @@ export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
     validateSync(signerOptions, KeyfileSignerOptions);
     try {
       return new KeyfileSigner(signerOptions);
+    } catch (err: any) {
+      throw new InvalidSignerError(err.message);
+    }
+  }
+
+  if ('choosePolkadotAccount' in signerOptions) {
+    validateSync(signerOptions, PolkadotSignerOptions);
+    try {
+      return new PolkadotSigner(signerOptions);
     } catch (err: any) {
       throw new InvalidSignerError(err.message);
     }
