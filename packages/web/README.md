@@ -4,6 +4,7 @@
 ![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-marketplace-frontend?style=flat-square)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 
+# Intro
 
 Extrinsic is a request to change data in the blockchain.
 
@@ -12,8 +13,8 @@ https://docs.substrate.io/v3/concepts/extrinsics/
 https://polkadot.js.org/docs/substrate/extrinsics/
 
 To make changes to the blockchain, it is necessary to form a request (extrinsic) with certain parameters, which consists of 3 parts:
-1) Blockchain section, functional
-2) Section Method
+1) Blockchain section
+2) Method section
 3) Array of arguments
 
 Once an extrinsic has been generated, it must be signed in order for the chain to complete the requested changes.
@@ -21,23 +22,20 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 
 ## Table of Contents
 
-- [Install/Easy start](#installeasy-start)
-    - [Choose install approach](#choose-install-approach)
-      - [Docker](#docker-setup)
-      - [Git](#git)
-      - [Use public endpoints](#use-public-endpoints)
-    - [Environment Variables](#environment-variables)
-    - [Swagger](#swagger)
+- [Getting started](#sdk-deployment---getting-started-guide)
+  - [Install](#install)
+  - [Environment Variables](#environment-variables)
+  - [Swagger](#swagger)
 
 
 - [Unique SDK HTTP API Methods:](#methods)
   - [Main Methods](#main-methods)
-    - [Extrinsic build](#post-extrinsicbuild)
-    - [Extrinsic sign](#post-extrinsicsign)
-    - [Extrinsic verify-sign](#post-extrinsicverify-sign)
-    - [Extrinsic submit](#post-extrinsicsubmit)
+    - [Extrinsic build](#build-unsigned-extrinsic)
+    - [Extrinsic sign](#sign-an-extrinsic)
+    - [Extrinsic verify-sign](#verify-sign)
+    - [Extrinsic submit](#submit-extrinsic)
   - [Additional Methods](#additional-methods)
-    - [Сhain](#get-chainproperties)
+    - [Сhain](#get-chain-properties)
     - [Balance](#get-balance)
     - [Collection](#get-collection)
     - [Token](#get-token)
@@ -45,11 +43,13 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 # SDK Deployment - Getting Started Guide
 
 
-## Install/Easy start
+- [How to install](#install)
+- [How to configure – environment variables](#environment-variables)
+- [Where to try - Swagger](#swagger)
+## Install
+Choose install approach: [Docker](#docker-setup), [Source code](#git) or [Public endpoints](#use-public-endpoints)
 
-### Choose install approach
-
-#### Docker setup
+### Docker
 
 ```bash
 docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwork/web:latest
@@ -57,7 +57,7 @@ docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwor
 
 <a href="https://hub.docker.com/r/uniquenetwork/web" target="_blank">See hub.docker.com page</a>
 
-#### Git
+### Git
 
 ```git
 git clone https://github.com/UniqueNetwork/unique-sdk
@@ -67,21 +67,21 @@ npm run build:web
 npm start
 ```
 
-#### Use public endpoints
+### Public endpoints
 
 You can use public endpoints for access Unique Web:
 
-##### Opal
+#### Opal
 ```
 https://web-opal.unique.network
 ```
 
-##### Quartz
+#### Quartz
 ```
 https://web-quartz.unique.network
 ```
 
-### Environment Variables
+## Environment Variables
 
 #### Required
 ```bash
@@ -108,21 +108,32 @@ PORT=3000
 IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
 ```
 
-### Swagger
+## Swagger
 ```
 https://web-quartz.unique.network/swagger
 ```
 
 # Methods
 
-## Main Methods
+## Main methods
 
-### POST /extrinsic/build
+Using these universal methods, you can create any extrinsic you want.
+
+- [Build extrinsic](#build-unsigned-extrinsic)
+- [Sign extrinsic](#sign-an-extrinsic)
+- [Verify sign](#verify-sign)
+- [Submit extrinsic](#submit-extrinsic)
+
+### Build unsigned extrinsic
+
+```
+POST /extrinsic/build
+```
 
 Build and returns unsigned extrinsic.
 Next you must sign it and send with sign
 to [/extrinsic/submit](#post-extrinsicsubmit) method
-to apply the blockchain change.   
+to apply the blockchain change.
 
 #### Request body
 
@@ -192,9 +203,19 @@ to apply the blockchain change.
 
 </details>
 
-### POST /extrinsic/sign
+---
 
-Sign an extrinsic
+### Sign an extrinsic
+
+```
+POST /extrinsic/sign
+```
+
+In order to execute request you have two options:
+- You may set `SIGNER_SEED` or `SIGNER_URI` environment variable.
+- Or you may set the `Authorization` request header to the mnemonic seed phrase: `Seed <Mnemonic seed phrase here>`
+
+Returns sign for extrinsic. Next, you need to add a signature to the transaction object to be sent to the blockchain using `/extrinsic/submit` method. 
 
 #### Request body
 
@@ -230,7 +251,13 @@ curl -X 'POST' \
 
 </details>
 
-### POST /extrinsic/verify-sign
+---
+
+### Verify sign
+
+```
+POST /extrinsic/verify-sign
+```
 
 Check the signature of the extrinsic
 
@@ -304,9 +331,15 @@ curl -X 'POST' \
 
 </details>
 
-### POST /extrinsic/submit
+---
 
-Send the signed extrinsic to the chain
+### Submit extrinsic
+
+```
+POST /extrinsic/submit
+```
+
+Send the signed extrinsic to the chain.
 
 #### Request body
 
@@ -381,7 +414,17 @@ curl -X 'POST' \
   
 ## Additional Methods
 
-### GET /chain/properties
+Syntactic sugar for the most important methods.
+
+- [Chain](#get-chain-properties)
+- [Balance](#get-balance)
+- [Collection](#get-collection)
+- [Token](#get-token)
+
+### Get chain properties
+```
+GET /chain/properties
+```
 
 Requests the service fields required to work with the blockchain
 
@@ -413,10 +456,13 @@ curl -X 'GET' \
 
 </details>
  
+---
 
-### Balance
+### Get balance
 
-#### GET /balance
+```
+GET /balance
+```
 
 Returns the account balance in formatted and unformatted form
 
@@ -449,7 +495,13 @@ curl -X 'GET' \
 
 </details>
 
-#### POST /balance/transfer
+---
+
+### Transfer coins
+
+```
+POST /balance/transfer
+```
 
 Creates an unsigned extrinsic for a transfer of a certain amount of coins. The amount should be past in integer or fractional part of the coin (UNQ or QTZ), and **not in wei**.
 
@@ -514,10 +566,13 @@ curl -X 'POST' \
 
 </details>
 
+---
 
-### Collection
+### Get collection
 
-#### GET /collection
+```
+GET /collection
+```
 
 Returns information about the collection by id
 
@@ -592,8 +647,13 @@ curl -X 'GET' \
 
 </details>
 
+---
 
-#### POST /collection
+### Create collection
+
+```
+POST /collection
+```
 
 Generates an unsigned extrinsic to create a collection with certain parameters
 
@@ -636,44 +696,6 @@ Generates an unsigned extrinsic to create a collection with certain parameters
   "tokenPrefix": "string"
 }
 ```
-
-</details>
-
-
-#### POST /collection
-
-Generates an unsigned extrinsic to create a collection with certain parameters
-
-#### Request body
-
-```json
-{
-  "mode": "Nft",
-  "access": "Normal",
-  "schemaVersion": "ImageURL",
-  "constOnChainSchema": {
-    "nested": {
-      "onChainMetaData": {
-        "nested": {
-          "NFTMeta": {
-            "fields": {
-              "ipfsJson": {
-                "id": 1,
-                "rule": "required",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "variableOnChainSchema": {},
-  "metaUpdatePermission": "ItemOwner",
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
-}
-```
-
 
 <details>
  <summary>▶ CURL Example</summary>
@@ -766,8 +788,13 @@ Generates an unsigned extrinsic to create a collection with certain parameters
 
 </details>
 
+---
 
-#### DELETE /collection
+### Burn collection
+
+```
+DELETE /collection
+```
 
 Generates an unsigned extrinsic to delete the selected collection
 
@@ -829,9 +856,15 @@ curl -X 'DELETE' \
 ```
 
 </details>
-  
 
-#### PATCH /collection/transfer
+---
+
+### Transfer collection
+
+```
+PATCH /collection/transfer
+```
+
 Generates an unsigned extrinsic for transferring rights to collections
 
 #### Request body
@@ -896,8 +929,13 @@ curl -X 'PATCH' \
 
 </details>
 
-### Token
-#### GET /token
+---
+
+### Get token
+
+```
+GET /token
+```
 
 Returns information about the token by the id of the collection and token
 
@@ -941,7 +979,13 @@ curl -X 'GET' \
 ```
 </details>
 
-#### POST /token
+---
+
+### Create token
+
+```
+POST /token
+```
 
 Creates an unsigned extrinsic to create a token inside the collection
 
@@ -1013,8 +1057,13 @@ curl -X 'POST' \
 
 </details>
 
+---
 
-#### DELETE /token
+### Burn token
+
+```
+DELETE /token
+```
 
 Generates an unsigned extrinsic to delete the selected token
 
@@ -1079,8 +1128,12 @@ curl -X 'DELETE' \
 
 </details>
 
+---
 
-#### PATCH /token
+### Transfer token
+```
+PATCH /token
+```
 
 Generates an unsigned extrinsic for transferring rights to a token
 
