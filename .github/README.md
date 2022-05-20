@@ -1,6 +1,6 @@
 # unique-sdk
 
-## Readme is under construction, please refer [here](packages/web/README.md) for now
+## Readme is under construction, please refer [here](../packages/web) for now
 
 ## local development
 
