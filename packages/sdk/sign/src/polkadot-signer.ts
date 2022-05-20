@@ -27,7 +27,7 @@ export class PolkadotSigner implements SdkSigner {
       case 0:
         throw new BadSignatureError('Polkadot account not found');
       case 1:
-        account = allAccounts[0];
+        [account] = allAccounts;
         break;
       default:
         account = await this.options.choosePolkadotAccount(allAccounts);
@@ -35,15 +35,15 @@ export class PolkadotSigner implements SdkSigner {
     }
     const injector = await web3FromSource(account.meta.source);
     const signRaw = injector?.signer?.signRaw;
-    if (!!signRaw) {
+    if (signRaw) {
       const { signature } = await signRaw({
         address: account.address,
         data: payload,
         type: 'bytes',
       });
       return signature;
-    } else {
-      throw new BadSignatureError('Fail sign message');
     }
+
+    throw new BadSignatureError('Fail sign message');
   }
 }
