@@ -167,32 +167,32 @@ to apply the blockchain change.
 <details>
   <summary>▶ Http Status 200</summary>
 
-  ```json
-  {
-    "signerPayloadHex": "string",
-    "signerPayloadJSON": {
-      "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-      "blockHash": "string",
-      "blockNumber": "string",
-      "era": "string",
-      "genesisHash": "string",
-      "method": "string",
-      "nonce": "string",
-      "specVersion": "string",
-      "tip": "string",
-      "transactionVersion": "string",
-      "signedExtensions": [
-        "string"
-      ],
-        "version": 0
-    },
-    "signerPayloadRaw": {
-      "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-      "data": "string",
-      "type": {}
-    }
-  }
-  ```
+```json
+ {
+  "signerPayloadJSON": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "blockHash": "string",
+    "blockNumber": "string",
+    "era": "string",
+    "genesisHash": "string",
+    "method": "string",
+    "nonce": "string",
+    "specVersion": "string",
+    "tip": "string",
+    "transactionVersion": "string",
+    "signedExtensions": [
+      "string"
+    ],
+    "version": 0
+  },
+  "signerPayloadRaw": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "data": "string",
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
+}
+```
 
 ##### Unsigned Extrinsic fields:
   
@@ -329,8 +329,8 @@ curl -X 'POST' \
 
 ```json
 {
-  "statusCode": 500,
-  "message": "Internal server error"
+  "isValid": true,
+  "errorMessage": "string"
 }
 ```
 
@@ -352,8 +352,6 @@ Send the signed extrinsic to the chain
 
 ```json
 {
-  "signature": "string",
-  "signatureType": "sr25519",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -369,7 +367,9 @@ Send the signed extrinsic to the chain
       "string"
     ],
     "version": 0
-  }
+  },
+  "signature": "string",
+  "signatureType": "sr25519"
 }
 ```
 
@@ -451,9 +451,10 @@ curl -X 'GET' \
 ```json
 {
   "SS58Prefix": 255,
-  "decimals": 18,
   "token": "QTZ",
-  "wsUrl": "wss://quartz.unique.network"
+  "decimals": 18,
+  "wsUrl": "wss://ws-quartz.unique.network",
+  "genesisHash": "0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39"
 }
 ```
 
@@ -550,8 +551,7 @@ curl -X 'POST' \
 
 ```json
 {
-  
-    "signerPayloadJSON": {
+  "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
     "blockNumber": "string",
@@ -631,10 +631,29 @@ curl -X 'GET' \
 
 ```json
 {
-  
   "mode": "Nft",
   "access": "Normal",
-  "schemaVersion": "Unique",
+  "schemaVersion": "ImageURL",
+  "name": "Sample collection name",
+  "description": "sample collection description",
+  "tokenPrefix": "TEST",
+  "mintMode": true,
+  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
+  "sponsorship": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "isConfirmed": true
+  },
+  "limits": {
+    "accountTokenOwnershipLimit": null,
+    "sponsoredDataSize": null,
+    "sponsoredDataRateLimit": null,
+    "tokenLimit": null,
+    "sponsorTransferTimeout": null,
+    "sponsorApproveTimeout": null,
+    "ownerCanTransfer": null,
+    "ownerCanDestroy": null,
+    "transfersEnabled": null
+  },
   "constOnChainSchema": {
     "nested": {
       "onChainMetaData": {
@@ -653,8 +672,35 @@ curl -X 'GET' \
     }
   },
   "variableOnChainSchema": {},
-  "id": 0,
-  "description": "string",
+  "metaUpdatePermission": "ItemOwner",
+  "id": 1,
+  "owner": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
+}
+```
+
+</details>
+
+
+#### POST /collection
+
+Generates an unsigned extrinsic to create a collection with certain parameters
+
+#### Request body
+
+```json
+{
+  "mode": "Nft",
+  "access": "Normal",
+  "schemaVersion": "ImageURL",
+  "name": "Sample collection name",
+  "description": "sample collection description",
+  "tokenPrefix": "TEST",
+  "mintMode": true,
+  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
+  "sponsorship": {
+    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+    "isConfirmed": true
+  },
   "limits": {
     "accountTokenOwnershipLimit": null,
     "sponsoredDataSize": null,
@@ -750,29 +796,9 @@ Generates an unsigned extrinsic to create a collection with certain parameters
       }
     }
   },
-  "metaUpdatePermission": "ItemOwner",
   "variableOnChainSchema": {},
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "name": "Sample collection name",
-  "description": "sample collection description",
-  "tokenPrefix": "TEST",
-  "limits": {
-    "accountTokenOwnershipLimit": 0,
-    "sponsoredDataSize": 0,
-    "sponsoredDataRateLimit": 0,
-    "tokenLimit": 0,
-    "sponsorTransferTimeout": 0,
-    "sponsorApproveTimeout": 0,
-    "ownerCanTransfer": true,
-    "ownerCanDestroy": true,
-    "transfersEnabled": true
-  },
-  "mintMode": true,
-  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
-  "sponsorship": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "isConfirmed": true
-  }
+  "metaUpdatePermission": "ItemOwner",
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
 }
 ```
 
@@ -841,7 +867,6 @@ Generates an unsigned extrinsic to create a collection with certain parameters
 
 ```json
 {
-  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -861,8 +886,9 @@ Generates an unsigned extrinsic to create a collection with certain parameters
   "signerPayloadRaw": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "data": "string",
-    "type": {}
-  }
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
 }
 ```
 
@@ -900,8 +926,8 @@ Generates an unsigned extrinsic to delete the selected collection
 #### Request body
 ```json
 {
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-  "collectionId": 0
+  "collectionId": 1,
+  "address": "string"
 }
 ```
   
@@ -929,7 +955,6 @@ curl -X 'DELETE' \
 
 ```json
 {
-  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -949,8 +974,9 @@ curl -X 'DELETE' \
   "signerPayloadRaw": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "data": "string",
-    "type": {}
-  }
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
 }
 ```
 
@@ -1020,7 +1046,6 @@ curl -X 'PATCH' \
 
 ```json
 {
- "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -1040,8 +1065,9 @@ curl -X 'PATCH' \
   "signerPayloadRaw": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "data": "string",
-    "type": {}
-  }
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
 }
 ```
 
@@ -1124,9 +1150,16 @@ Creates an unsigned extrinsic to create a token inside the collection
 
 ```json
 {
-  "address": "string",
-  "collectionId": 0,
-  "constData": {}
+  "collectionId": 1,
+  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+  "constData": {
+    "ipfsJson": "{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}",
+    "gender": "Male",
+    "traits": [
+      "TEETH_SMILE",
+      "UP_HAIR"
+    ]
+  }
 }
 ```
 
@@ -1154,7 +1187,6 @@ curl -X 'POST' \
 
 ```json
 {
-  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -1174,8 +1206,9 @@ curl -X 'POST' \
   "signerPayloadRaw": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "data": "string",
-    "type": {}
-  }
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
 }
 ```
 
@@ -1215,9 +1248,9 @@ Generates an unsigned extrinsic to delete the selected token
 
 ```json
 {
-  "address": "string",
-  "collectionId": 0,
-  "tokenId": 0
+  "collectionId": 1,
+  "tokenId": 1,
+  "address": "string"
 }
 ```
 
@@ -1245,7 +1278,6 @@ curl -X 'DELETE' \
 
 ```json
 {
-  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -1265,8 +1297,9 @@ curl -X 'DELETE' \
   "signerPayloadRaw": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "data": "string",
-    "type": {}
-  }
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
 }
 ```
 
@@ -1305,10 +1338,10 @@ Generates an unsigned extrinsic for transferring rights to a token
 
 ```json
 {
-  "collectionId": 0,
+  "collectionId": 1,
+  "tokenId": 1,
   "from": "string",
-  "to": "string",
-  "tokenId": 0
+  "to": "string"
 }
 ```
 
@@ -1336,7 +1369,6 @@ curl -X 'PATCH' \
 
 ```json
 {
-  "signerPayloadHex": "string",
   "signerPayloadJSON": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "blockHash": "string",
@@ -1356,8 +1388,9 @@ curl -X 'PATCH' \
   "signerPayloadRaw": {
     "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
     "data": "string",
-    "type": {}
-  }
+    "type": "bytes"
+  },
+  "signerPayloadHex": "string"
 }
 ```
 
