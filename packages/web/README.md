@@ -155,9 +155,7 @@ to apply the blockchain change.
     "args": [
       "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
       100000000
-    ],
-    "era": 64,
-    "isImmortal": false
+    ]
   }'
   ```
 
@@ -194,30 +192,6 @@ to apply the blockchain change.
 }
 ```
 
-##### Unsigned Extrinsic fields:
-  
-  field |  comment
-  ---------|------------
-  signerPayloadHex | string
-  signerPayloadJSON | string
-  address | string
-  blockHash | string
-  blockNumber | string
-  era | string
-  genesisHash | string
-  method | string
-  nonce | string
-  specVersion | string
-  transactionVersion | string
-  signedExtensions | string
-  version | string
-  address | string
-  data | string
-  type | string
-
-</details>
-
-
 ### POST /extrinsic/sign
 
 Sign an extrinsic
@@ -253,12 +227,6 @@ curl -X 'POST' \
   "signature": "string"
 }
 ```
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-signature | string
 
 </details>
 
@@ -334,14 +302,6 @@ curl -X 'POST' \
 }
 ```
 
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-statusCode | string
-message | string
-
-
 </details>
 
 ### POST /extrinsic/submit
@@ -415,13 +375,6 @@ curl -X 'POST' \
 }
 ```
 
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-signerPayloadHex | string
-signerPayloadJSON | string
-
 </details>
 
 
@@ -458,16 +411,6 @@ curl -X 'GET' \
 }
 ```
 
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-SS58Prefix | string
-decimals   | string
-token      | string
-wsUrl      | string
-
-
 </details>
  
 
@@ -503,13 +446,6 @@ curl -X 'GET' \
   "formatted": "411.3481 QTZ"
 }
 ```
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|--------------
-amount | string
-formatted | string
 
 </details>
 
@@ -575,30 +511,6 @@ curl -X 'POST' \
   "signerPayloadHex": "string"
 }
 ```
-
-##### Unsigned Extrinsic fields:
-
-
-field |  comment
----------|------------
-signerPayloadJSON | string
-address | string
-blockHash | string
-blockNumber | string
-era | string
-genesisHash | string
-method | string
-nonce | string
-specVersion | string
-tip | string
-transactionVersion | string
-signedExtensions | string
-version | string
-signerPayloadRaw | string
-address | string
-data | string
-type | string
-signerPayloadHex | string
 
 </details>
 
@@ -724,46 +636,6 @@ Generates an unsigned extrinsic to create a collection with certain parameters
   "tokenPrefix": "string"
 }
 ```
-
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|--------------
-mode | string
-access | string
-schemaVersion | string
-constOnChainSchema | string
-nested | string
-onChainMetaData string
-NFTMeta | string
-fields | string
-ipfsJson | string
-id | string
-rule | string
-type | string
-variableOnChainSchema | string
-id | string
-description | string
-limits | string
-accountTokenOwnershipLimit | string
-sponsoredDataSize | string
-sponsoredDataRateLimit string
-tokenLimit | string
-sponsorTransferTimeout | string
-sponsorApproveTimeout | string
-ownerCanTransfer | string
-ownerCanDestroy | string
-transfersEnabled | string
-metaUpdatePermission | string
-mintMode | string
-name | string
-offchainSchema | string
-owner | string
-sponsorship | string
-address | string
-isConfirmed | string
-tokenPrefix | string
 
 </details>
 
@@ -892,30 +764,6 @@ Generates an unsigned extrinsic to create a collection with certain parameters
 }
 ```
 
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|-------------
-signerPayloadHex | string
-signerPayloadJSON | string
-address | string
-blockHash | string
-blockNumber | string
-era | string
-genesisHash | string
-method | string
-nonce | string
-specVersion | string
-tip | string
-transactionVersion | string
-signedExtensions | string
-version | string
-signerPayloadRaw | string
-address | string
-data | string
-type | string
-
 </details>
 
 
@@ -979,31 +827,6 @@ curl -X 'DELETE' \
   "signerPayloadHex": "string"
 }
 ```
-
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|-------------
-signerPayloadHex | string
-signerPayloadJSON | string
-address | string
-blockHash | string
-blockNumber | string
-era | string
-genesisHash | string
-method | string
-nonce | string
-specVersion | string
-tip | string
-transactionVersion | string
-signedExtensions | string
-version | string
-signerPayloadRaw | string
-address | string
-data | string
-type | string
-
 
 </details>
   
@@ -1070,30 +893,6 @@ curl -X 'PATCH' \
   "signerPayloadHex": "string"
 }
 ```
-
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-signerPayloadHex | string
-signerPayloadJSON | string
-address | string
-blockHash | string
-blockNumber | string
-era | string
-genesisHash | string
-method | string
-nonce | string
-specVersion | string
-tip | string
-transactionVersion | string
-signedExtensions | string
-version | string
-signerPayloadRaw | string
-address | string
-data | string
-type | string
 
 </details>
 
@@ -1212,31 +1011,6 @@ curl -X 'POST' \
 }
 ```
 
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-mode | string
-nested | string
-onChainMetaData | string
-NFTMeta | string
-fields | string
-ipfsJson | string
-id | string
-rule | string
-type | string
-variableOnChainSchema | string
-id | string
-description | string
-limits | string
-accountTokenOwnershipLimit | string
-owner | string
-sponsorship | string
-address | string
-isConfirmed | string
-tokenPrefix | string
-
 </details>
 
 
@@ -1302,30 +1076,6 @@ curl -X 'DELETE' \
   "signerPayloadHex": "string"
 }
 ```
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-mode | string
-nested | string
-onChainMetaData | string
-NFTMeta | string
-fields | string
-ipfsJson | string
-id | string
-rule | string
-type | string
-variableOnChainSchema | string
-id | string
-description | string
-limits | string
-accountTokenOwnershipLimit | string
-owner | string
-sponsorship | string
-address | string
-isConfirmed | string
-tokenPrefix | string
 
 </details>
 
@@ -1393,29 +1143,5 @@ curl -X 'PATCH' \
   "signerPayloadHex": "string"
 }
 ```
-
-##### Unsigned Extrinsic fields:
-
-field |  comment
----------|------------
-mode | string
-nested | string
-onChainMetaData | string
-NFTMeta | string
-fields | string
-ipfsJson | string
-id | string
-rule | string
-type | string
-variableOnChainSchema | string
-id | string
-description | string
-limits | string
-accountTokenOwnershipLimit | string
-owner | string
-sponsorship | string
-address | string
-isConfirmed | string
-tokenPrefix | string
 
 </details>
