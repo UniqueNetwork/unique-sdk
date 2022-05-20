@@ -2,17 +2,12 @@
 
 import { HexString } from '@polkadot/util/types';
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsHexadecimal,
-  IsNotEmptyObject,
-  IsOptional,
-} from 'class-validator';
-import { SignatureType } from './polkadot-types';
+import { IsEnum, IsHexadecimal, IsNotEmptyObject } from 'class-validator';
+import { SignatureType, SignResult } from './polkadot-types';
 import { SignerPayloadJSONDto } from './signer-payload';
 
 export interface SdkSigner {
-  sign(payload: string): Promise<HexString>;
+  sign(payload: string): Promise<SignResult>;
 }
 
 export class SubmitResult {
@@ -25,9 +20,12 @@ export class SignTxArgs {
   signerPayloadHex: HexString;
 }
 
-export class SignTxResult {
+export class SignTxResult implements SignResult {
   @ApiProperty({ type: String })
   signature: HexString;
+
+  @ApiProperty({ enum: SignatureType })
+  signatureType: SignatureType;
 }
 
 export class SubmitTxArgs {
@@ -39,13 +37,12 @@ export class SubmitTxArgs {
   @ApiProperty({ type: String })
   signature: HexString;
 
-  @IsOptional()
   @IsEnum(SignatureType)
   @ApiProperty({
     enum: SignatureType,
     required: false,
   })
-  signatureType?: SignatureType | `${SignatureType}`;
+  signatureType: SignatureType | `${SignatureType}`;
 }
 
 export class TxBuildArgs {

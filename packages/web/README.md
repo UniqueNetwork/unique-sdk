@@ -245,7 +245,8 @@ curl -X 'POST' \
 
 ```json
 {
-  "signature": "string"
+  "signature": "string",
+  "signatureType": "sr25519"
 }
 ```
 

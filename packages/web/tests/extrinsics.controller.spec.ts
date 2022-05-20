@@ -45,16 +45,13 @@ describe(ExtrinsicsController.name, () => {
 
       const { signerPayloadJSON } = payloadResponse.body;
 
-      const badSignature = u8aToHex(
-        alice.sign('not_a_payload_hex', {
-          withType: true,
-        }),
-      );
+      const badSignature = u8aToHex(alice.sign('not_a_payload_hex'));
 
       const badSubmit = await request(app.getHttpServer())
         .post(`/api/extrinsic/submit`)
         .send({
           signerPayloadJSON,
+          signatureType: alice.type,
           signature: badSignature,
         });
 
