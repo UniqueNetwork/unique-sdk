@@ -22,13 +22,10 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 
 ## Table of Contents
 
-- [Install/Easy start](#installeasy-start)
-    - [Choose install approach](#choose-install-approach)
-      - [Docker](#docker-setup)
-      - [Git](#git)
-      - [Use public endpoints](#use-public-endpoints)
-    - [Environment Variables](#environment-variables)
-    - [Swagger](#swagger)
+- [Getting started](#sdk-deployment---getting-started-guide)
+  - [Install](#install)
+  - [Environment Variables](#environment-variables)
+  - [Swagger](#swagger)
 
 
 - [Unique SDK HTTP API Methods:](#methods)
@@ -46,8 +43,10 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 # SDK Deployment - Getting Started Guide
 
 
-## Install/Easy start
-
+- [How to install](#install)
+- [How to configure – environment variables](#environment-variables)
+- [Where to try - Swagger](#swagger)
+## Install
 Choose install approach: [Docker](#docker-setup), [Source code](#git) or [Public endpoints](#use-public-endpoints)
 
 ### Docker
@@ -68,7 +67,7 @@ npm run build:web
 npm start
 ```
 
-### Use public endpoints
+### Public endpoints
 
 You can use public endpoints for access Unique Web:
 
