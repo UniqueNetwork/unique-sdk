@@ -1,0 +1,51 @@
+name: Release Candidate
+
+on:
+  push:
+    branches:
+      - release/**
+      - hotfix/**
+  workflow_dispatch:
+    inputs:
+      publish_rc:
+        description: 'True to print to publish RC'
+        required: true
+        type: boolean
+
+jobs:
+  build-and-publish:
+    name: Build and publish package
+    runs-on: ubuntu-latest
+    if:  ${{ github.event.inputs.publish_rc == 'true' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Initialize git user
+        run: git init&& git config user.name "Unique" && git config user.email "sdk@unique.network"
+      - name: Install project dependencies
+        run: npm install
+      - name: Extract version
+        shell: bash
+        id: version
+        run: |
+          TAG=${GITHUB_REF#*/v*}
+          LATEST_VER=$(npm view @unique-nft/sdk versions --json | sed -n "/$TAG-rc/p" | tail -1)
+          SUFF=${LATEST_VER#*-rc*}
+          LATEST_RC=${SUFF%\"*}
+          RC=$((LATEST_RC + 1))
+          echo "##[set-output name=version;]${TAG}-rc${RC}"
+      - name: NPM Build
+        shell: bash
+        run: |
+          npm ci
+          npm run build:sdk
+      - name: NPM Publish
+        working-directory: ./dist/packages/sdk
+        shell: bash
+        run: |
+          npm version ${{ steps.version.outputs.version }}
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+          npm publish

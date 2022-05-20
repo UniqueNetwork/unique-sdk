@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"],
+    "allowJs": true,
+    "paths": {
+      "@unique-nft/sdk/*": ["packages/sdk/*"],
+      "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
+    }
+  },
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
+}
