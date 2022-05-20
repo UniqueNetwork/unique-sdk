@@ -190,6 +190,8 @@ to apply the blockchain change.
 }
 ```
 
+</details>
+
 ### POST /extrinsic/sign
 
 Sign an extrinsic
