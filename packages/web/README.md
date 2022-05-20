@@ -211,7 +211,11 @@ to apply the blockchain change.
 POST /extrinsic/sign
 ```
 
-Returns sign for extrinsic. Next, you need to add a signature with the transaction object to be sent to the blockchain. 
+In order to execute request you have two options:
+- You may set `SIGNER_SEED` or `SIGNER_URI` environment variable.
+- Or you may set the `Authorization` request header to the mnemonic seed phrase: `Seed <Mnemonic seed phrase here>`
+
+Returns sign for extrinsic. Next, you need to add a signature to the transaction object to be sent to the blockchain using `/extrinsic/submit` method. 
 
 #### Request body
 
@@ -335,7 +339,7 @@ curl -X 'POST' \
 POST /extrinsic/submit
 ```
 
-Send the signed extrinsic to the chain
+Send the signed extrinsic to the chain.
 
 #### Request body
 
