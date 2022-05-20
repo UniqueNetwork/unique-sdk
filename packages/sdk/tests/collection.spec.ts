@@ -1,16 +1,16 @@
 import { u8aToHex } from '@polkadot/util';
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
+import { CreateCollectionArgs } from '@unique-nft/sdk/types';
+import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '../src/lib/sdk';
-import { CreateCollectionArgs } from '../src/types';
 import {
   delay,
   getDefaultSdkOptions,
   getKeyringPairs,
   getLastCollectionId,
   TestAccounts,
-} from './utils';
-import { normalizeAddress } from '../src/utils';
+} from './testing-utils';
 
 const constOnChainSchema: INamespace = {
   nested: {
@@ -74,7 +74,7 @@ describe(Sdk.name, () => {
 
     const collectionId = await getLastCollectionId(sdk);
 
-    const newCollection = await sdk.query.collection({ collectionId });
+    const newCollection = await sdk.collection.get({ collectionId });
 
     expect(newCollection).toMatchObject(collectionInitial);
 
@@ -102,7 +102,7 @@ describe(Sdk.name, () => {
 
     await delay(30_000);
 
-    const newToken = await sdk.query.token({ collectionId, tokenId: 1 });
+    const newToken = await sdk.token.get({ collectionId, tokenId: 1 });
 
     expect(newToken).toMatchObject({
       owner: normalizeAddress(account.address, sdk.api.registry.chainSS58),

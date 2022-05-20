@@ -5,7 +5,7 @@ import { Keyring } from '@polkadot/keyring';
 import { waitReady } from '@polkadot/wasm-crypto';
 import request from 'supertest';
 import { u8aToHex } from '@polkadot/util';
-import { ErrorCodes } from '@unique-nft/sdk';
+import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { BalanceController } from '../src/app/controllers';
 import { AppModule } from '../src/app/app.module';
