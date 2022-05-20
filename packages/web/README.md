@@ -118,12 +118,18 @@ https://web-quartz.unique.network/swagger
 
 ## Main Methods
 
-### POST /extrinsic/build
+Using these universal methods, you can create any extrinsic you want
+
+### Build unsigned extrinsic
+
+```
+POST /extrinsic/build
+```
 
 Build and returns unsigned extrinsic.
 Next you must sign it and send with sign
 to [/extrinsic/submit](#post-extrinsicsubmit) method
-to apply the blockchain change.   
+to apply the blockchain change.
 
 #### Request body
 
@@ -193,9 +199,15 @@ to apply the blockchain change.
 
 </details>
 
-### POST /extrinsic/sign
+---
 
-Sign an extrinsic
+### Sign an extrinsic
+
+```
+POST /extrinsic/sign
+```
+
+Returns sign for extrinsic. Next, you need to add a signature with the transaction object to be sent to the blockchain. 
 
 #### Request body
 
@@ -231,7 +243,13 @@ curl -X 'POST' \
 
 </details>
 
-### POST /extrinsic/verify-sign
+---
+
+### Verify sign
+
+```
+POST /extrinsic/verify-sign
+```
 
 Check the signature of the extrinsic
 
@@ -305,7 +323,13 @@ curl -X 'POST' \
 
 </details>
 
-### POST /extrinsic/submit
+---
+
+### Submit extrinsic
+
+```
+POST /extrinsic/submit
+```
 
 Send the signed extrinsic to the chain
 
@@ -382,7 +406,12 @@ curl -X 'POST' \
   
 ## Additional Methods
 
-### GET /chain/properties
+Syntactic sugar for the most important methods.
+
+### Get chain properties
+```
+GET /chain/properties
+```
 
 Requests the service fields required to work with the blockchain
 
@@ -414,10 +443,13 @@ curl -X 'GET' \
 
 </details>
  
+---
 
-### Balance
+### Get balance
 
-#### GET /balance
+```
+GET /balance
+```
 
 Returns the account balance in formatted and unformatted form
 
@@ -450,7 +482,13 @@ curl -X 'GET' \
 
 </details>
 
-#### POST /balance/transfer
+---
+
+### Transfer coins
+
+```
+POST /balance/transfer
+```
 
 Creates an unsigned extrinsic for a transfer of a certain amount of coins. The amount should be past in integer or fractional part of the coin (UNQ or QTZ), and **not in wei**.
 
@@ -515,10 +553,13 @@ curl -X 'POST' \
 
 </details>
 
+---
 
-### Collection
+### Get collection
 
-#### GET /collection
+```
+GET /collection
+```
 
 Returns information about the collection by id
 
@@ -593,8 +634,13 @@ curl -X 'GET' \
 
 </details>
 
+---
 
-#### POST /collection
+### Create collection
+
+```
+POST /collection
+```
 
 Generates an unsigned extrinsic to create a collection with certain parameters
 
@@ -640,135 +686,13 @@ Generates an unsigned extrinsic to create a collection with certain parameters
 
 </details>
 
+---
 
-#### POST /collection
+### Burn collection
 
-Generates an unsigned extrinsic to create a collection with certain parameters
-
-#### Request body
-
-```json
-{
-  "mode": "Nft",
-  "access": "Normal",
-  "schemaVersion": "ImageURL",
-  "constOnChainSchema": {
-    "nested": {
-      "onChainMetaData": {
-        "nested": {
-          "NFTMeta": {
-            "fields": {
-              "ipfsJson": {
-                "id": 1,
-                "rule": "required",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "variableOnChainSchema": {},
-  "metaUpdatePermission": "ItemOwner",
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
-}
 ```
-
-
-<details>
- <summary>▶ CURL Example</summary>
-
-```bash
-   curl -X 'POST' \ 
-  'https://web-quartz.unique.network/collection' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "mode": "Nft",
-  "access": "Normal",
-  "schemaVersion": "ImageURL",
-  "name": "Sample collection name",
-  "description": "sample collection description",
-  "tokenPrefix": "TEST",
-  "mintMode": true,
-  "offchainSchema": "https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png",
-  "sponsorship": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "isConfirmed": true
-  },
-  "limits": {
-    "accountTokenOwnershipLimit": 0,
-    "sponsoredDataSize": 0,
-    "sponsoredDataRateLimit": 0,
-    "tokenLimit": 0,
-    "sponsorTransferTimeout": 0,
-    "sponsorApproveTimeout": 0,
-    "ownerCanTransfer": true,
-    "ownerCanDestroy": true,
-    "transfersEnabled": true
-  },
-  "constOnChainSchema": {
-    "nested": {
-      "onChainMetaData": {
-        "nested": {
-          "NFTMeta": {
-            "fields": {
-              "ipfsJson": {
-                "id": 1,
-                "rule": "required",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "variableOnChainSchema": {},
-  "metaUpdatePermission": "ItemOwner",
-  "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
-}'
+DELETE /collection
 ```
-</details>
-
-
-
-#### Response
-<details>
-  <summary>▶ Http Status 200</summary>
-
-```json
-{
-  "signerPayloadJSON": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "blockHash": "string",
-    "blockNumber": "string",
-    "era": "string",
-    "genesisHash": "string",
-    "method": "string",
-    "nonce": "string",
-    "specVersion": "string",
-    "tip": "string",
-    "transactionVersion": "string",
-    "signedExtensions": [
-      "string"
-    ],
-    "version": 0
-  },
-  "signerPayloadRaw": {
-    "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
-    "data": "string",
-    "type": "bytes"
-  },
-  "signerPayloadHex": "string"
-}
-```
-
-</details>
-
-
-#### DELETE /collection
 
 Generates an unsigned extrinsic to delete the selected collection
 
@@ -830,9 +754,15 @@ curl -X 'DELETE' \
 ```
 
 </details>
-  
 
-#### PATCH /collection/transfer
+---
+
+### Transfer collection
+
+```
+PATCH /collection/transfer
+```
+
 Generates an unsigned extrinsic for transferring rights to collections
 
 #### Request body
@@ -897,8 +827,13 @@ curl -X 'PATCH' \
 
 </details>
 
-### Token
-#### GET /token
+---
+
+### Get token
+
+```
+GET /token
+```
 
 Returns information about the token by the id of the collection and token
 
@@ -942,7 +877,13 @@ curl -X 'GET' \
 ```
 </details>
 
-#### POST /token
+---
+
+### Create token
+
+```
+POST /token
+```
 
 Creates an unsigned extrinsic to create a token inside the collection
 
@@ -1014,8 +955,13 @@ curl -X 'POST' \
 
 </details>
 
+---
 
-#### DELETE /token
+### Burn token
+
+```
+DELETE /token
+```
 
 Generates an unsigned extrinsic to delete the selected token
 
@@ -1080,8 +1026,12 @@ curl -X 'DELETE' \
 
 </details>
 
+---
 
-#### PATCH /token
+### Transfer token
+```
+PATCH /token
+```
 
 Generates an unsigned extrinsic for transferring rights to a token
 
