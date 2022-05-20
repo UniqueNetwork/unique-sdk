@@ -5,7 +5,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
 import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
-import { CollectionInfo, CollectionInfoBase, TokenInfo } from './unique-types';
+import {
+  AnyObject,
+  CollectionInfo,
+  CollectionInfoBase,
+  TokenInfo,
+} from './unique-types';
 import {
   SdkSigner,
   SignTxArgs,
@@ -14,6 +19,11 @@ import {
   SubmitTxArgs,
   TxBuildArgs,
 } from './arguments';
+
+const AddressApiProperty = ApiProperty({
+  description: 'The ss-58 encoded address',
+  example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+});
 
 export class ChainProperties {
   @ApiProperty({
@@ -63,17 +73,11 @@ export class TransferBuildArgs {
   @IsString()
   @ValidAddress()
   @NotYourselfAddress('destination')
-  @ApiProperty({
-    description: 'The ss-58 encoded address',
-    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
-  })
+  @AddressApiProperty
   address: string;
 
   @ValidAddress()
-  @ApiProperty({
-    description: 'The ss-58 encoded address',
-    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
-  })
+  @AddressApiProperty
   destination: string;
 
   @IsNumber()
@@ -106,10 +110,7 @@ export class AddressArg {
 }
 
 export class CreateCollectionArgs extends CollectionInfoBase {
-  @ApiProperty({
-    description: 'The ss-58 encoded address',
-    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
-  })
+  @AddressApiProperty
   address: string;
 }
 
@@ -120,7 +121,7 @@ export class BurnCollectionArgs {
   collectionId: number;
 
   @ValidAddress()
-  @ApiProperty()
+  @AddressApiProperty
   address: string;
 }
 export class TransferCollectionArgs {
@@ -135,28 +136,34 @@ export class TransferCollectionArgs {
 }
 
 export class CreateTokenArgs {
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   collectionId: number;
 
   @ValidAddress()
-  @ApiProperty()
+  @AddressApiProperty
   address: string;
 
-  @ApiProperty()
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  constData: Record<string, any>;
+  @ApiProperty({
+    example: {
+      ipfsJson:
+        '{"ipfs":"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb","type":"image"}',
+      gender: 'Male',
+      traits: ['TEETH_SMILE', 'UP_HAIR'],
+    },
+  })
+  constData: AnyObject;
 }
 
 export class BurnTokenArgs extends TokenIdArg {
   @ValidAddress()
-  @ApiProperty()
+  @AddressApiProperty
   address: string;
 }
 export class TransferTokenArgs extends TokenIdArg {
-  @ApiProperty()
+  @AddressApiProperty
   from: string;
 
-  @ApiProperty()
+  @AddressApiProperty
   to: string;
 }
 

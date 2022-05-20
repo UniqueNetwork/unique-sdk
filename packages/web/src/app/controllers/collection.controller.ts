@@ -46,7 +46,7 @@ export class CollectionController {
 
   @Delete()
   async burnCollection(
-    @Query() args: BurnCollectionArgs,
+    @Body() args: BurnCollectionArgs,
   ): Promise<UnsignedTxPayload> {
     return this.sdk.collection.burn(args);
   }

@@ -56,8 +56,8 @@ export const sdkProvider = {
   imports: [GlobalConfigModule, SignerMiddleware],
   controllers: [
     ChainController,
-    BalanceController,
     ExtrinsicsController,
+    BalanceController,
     CollectionController,
     TokenController,
   ],

@@ -4,6 +4,9 @@ import { INamespace } from 'protobufjs';
 import { ApiProperty } from '@nestjs/swagger';
 import { DEFAULT_CONST_SCHEMA } from './constants';
 
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
+export type AnyObject = Record<string, any>;
+
 export enum CollectionMode {
   Nft = 'Nft',
   Fungible = 'Fungible',
@@ -37,32 +40,34 @@ export class CollectionSponsorship {
   isConfirmed: boolean;
 }
 
+const CollectionLimitItem = ApiProperty({ required: false, example: null });
+
 export class CollectionLimits {
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   accountTokenOwnershipLimit?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsoredDataSize?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsoredDataRateLimit?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   tokenLimit?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsorTransferTimeout?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   sponsorApproveTimeout?: number | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   ownerCanTransfer?: boolean | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   ownerCanDestroy?: boolean | null;
 
-  @ApiProperty({ required: false })
+  @CollectionLimitItem
   transfersEnabled?: boolean | null;
 }
 
@@ -122,7 +127,9 @@ export class CollectionInfoBase {
 }
 
 export class CollectionInfo extends CollectionInfoBase {
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+  })
   id: number;
 
   @ApiProperty({
@@ -132,24 +139,62 @@ export class CollectionInfo extends CollectionInfoBase {
   owner: string;
 }
 
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 export interface TokenInfo {
   id: number;
   collectionId: number;
   url: string | null;
-  constData: Record<string, any> | null;
+  constData: AnyObject | null;
   variableData: string | null;
   owner: string;
 }
 
+export class TokenInfoDto implements TokenInfo {
+  @ApiProperty({
+    example: 1,
+  })
+  id: number;
+
+  @ApiProperty({
+    description: 'The ss-58 encoded address',
+    example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+  })
+  owner: string;
+
+  @ApiProperty({
+    example: 1,
+  })
+  collectionId: number;
+
+  @ApiProperty({
+    example: {
+      ipfsJson:
+        '{"ipfs":"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb","type":"image"}',
+      gender: 'Male',
+      traits: ['TEETH_SMILE', 'UP_HAIR'],
+    },
+  })
+  constData: AnyObject | null;
+
+  @ApiProperty({
+    description: 'URL of the token content on IPFS node (if available)',
+    example:
+      'https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image1.png',
+  })
+  url: string | null;
+
+  variableData: string | null;
+}
+
 export type TokenPayload =
   | {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       NFT: any;
     }
   | {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       Fungible: any;
     }
   | {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       ReFungible: any;
     };

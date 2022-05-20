@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SignHeaders {
@@ -16,4 +17,12 @@ For example:
 `,
   })
   authorization: string;
+}
+
+export class VerificationResult {
+  @ApiProperty()
+  isValid: boolean;
+
+  @ApiProperty()
+  errorMessage: string | null;
 }
