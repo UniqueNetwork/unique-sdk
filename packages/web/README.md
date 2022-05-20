@@ -4,6 +4,7 @@
 ![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-marketplace-frontend?style=flat-square)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 
+# Intro
 
 Extrinsic is a request to change data in the blockchain.
 
@@ -12,8 +13,8 @@ https://docs.substrate.io/v3/concepts/extrinsics/
 https://polkadot.js.org/docs/substrate/extrinsics/
 
 To make changes to the blockchain, it is necessary to form a request (extrinsic) with certain parameters, which consists of 3 parts:
-1) Blockchain section, functional
-2) Section Method
+1) Blockchain section
+2) Method section
 3) Array of arguments
 
 Once an extrinsic has been generated, it must be signed in order for the chain to complete the requested changes.
@@ -47,9 +48,9 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 
 ## Install/Easy start
 
-### Choose install approach
+Choose install approach: [Docker](#docker-setup), [Source code](#git) or [Public endpoints](#use-public-endpoints)
 
-#### Docker setup
+### Docker
 
 ```bash
 docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwork/web:latest
@@ -57,7 +58,7 @@ docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwor
 
 <a href="https://hub.docker.com/r/uniquenetwork/web" target="_blank">See hub.docker.com page</a>
 
-#### Git
+### Git
 
 ```git
 git clone https://github.com/UniqueNetwork/unique-sdk
@@ -67,21 +68,21 @@ npm run build:web
 npm start
 ```
 
-#### Use public endpoints
+### Use public endpoints
 
 You can use public endpoints for access Unique Web:
 
-##### Opal
+#### Opal
 ```
 https://web-opal.unique.network
 ```
 
-##### Quartz
+#### Quartz
 ```
 https://web-quartz.unique.network
 ```
 
-### Environment Variables
+## Environment Variables
 
 #### Required
 ```bash
@@ -108,7 +109,7 @@ PORT=3000
 IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
 ```
 
-### Swagger
+## Swagger
 ```
 https://web-quartz.unique.network/swagger
 ```
