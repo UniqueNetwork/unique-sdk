@@ -134,9 +134,7 @@ to apply the blockchain change.
   "args": [
     "yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK",
     100000000
-  ],
-  "era": 64,
-  "isImmortal": false
+  ]
 }
 ```
 
