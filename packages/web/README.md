@@ -30,12 +30,12 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 
 - [Unique SDK HTTP API Methods:](#methods)
   - [Main Methods](#main-methods)
-    - [Extrinsic build](#post-extrinsicbuild)
-    - [Extrinsic sign](#post-extrinsicsign)
-    - [Extrinsic verify-sign](#post-extrinsicverify-sign)
-    - [Extrinsic submit](#post-extrinsicsubmit)
+    - [Extrinsic build](#build-unsigned-extrinsic)
+    - [Extrinsic sign](#sign-an-extrinsic)
+    - [Extrinsic verify-sign](#verify-sign)
+    - [Extrinsic submit](#submit-extrinsic)
   - [Additional Methods](#additional-methods)
-    - [Сhain](#get-chainproperties)
+    - [Сhain](#get-chain-properties)
     - [Balance](#get-balance)
     - [Collection](#get-collection)
     - [Token](#get-token)
@@ -115,9 +115,14 @@ https://web-quartz.unique.network/swagger
 
 # Methods
 
-## Main Methods
+## Main methods
 
-Using these universal methods, you can create any extrinsic you want
+Using these universal methods, you can create any extrinsic you want.
+
+- [Build extrinsic](#build-unsigned-extrinsic)
+- [Sign extrinsic](#sign-an-extrinsic)
+- [Verify sign](#verify-sign)
+- [Submit extrinsic](#submit-extrinsic)
 
 ### Build unsigned extrinsic
 
@@ -406,6 +411,11 @@ curl -X 'POST' \
 ## Additional Methods
 
 Syntactic sugar for the most important methods.
+
+- [Chain](#get-chain-properties)
+- [Balance](#get-balance)
+- [Collection](#get-collection)
+- [Token](#get-token)
 
 ### Get chain properties
 ```
