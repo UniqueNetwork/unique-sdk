@@ -4,11 +4,11 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { waitReady } from '@polkadot/wasm-crypto';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { SignType } from '@unique-nft/sdk/sign';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
+import { SignatureType } from '@unique-nft/sdk/types';
 import * as process from 'process';
-import request from 'supertest';
 
+import request from 'supertest';
 import { AppModule } from '../src/app/app.module';
 
 const testUser = {
@@ -39,8 +39,8 @@ describe('Web signers', () => {
   beforeAll(async () => {
     await cryptoWaitReady();
 
-    alice = new Keyring({ type: SignType.sr25519 }).addFromUri('//Alice');
-    bob = new Keyring({ type: SignType.sr25519 }).addFromUri('//Bob');
+    alice = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Alice');
+    bob = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Bob');
   });
 
   async function createApp() {
