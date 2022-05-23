@@ -15,7 +15,7 @@ import {
 import { Sdk } from '../src/lib/sdk';
 import { getDefaultSdkOptions } from './testing-utils';
 
-describe('signers', () => {
+describe('Sdk signers', () => {
   let alice: KeyringPair;
   let bob: KeyringPair;
 

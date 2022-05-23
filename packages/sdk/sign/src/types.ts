@@ -1,9 +1,13 @@
 // eslint-disable-next-line max-classes-per-file
 import 'reflect-metadata';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { ValidSeed } from '@unique-nft/sdk/validation';
-import { IsNotEmptyObject, IsEnum, IsOptional } from 'class-validator';
+import {
+  IsNotEmptyObject,
+  IsEnum,
+  IsOptional,
+  IsDefined,
+} from 'class-validator';
 import { SignatureType } from '@unique-nft/sdk/types';
 
 export type SignerOptions =
@@ -35,8 +39,24 @@ export class KeyfileSignerOptions {
   type?: SignatureType;
 }
 
+export class PolkadotExtensionDApp {
+  @IsDefined()
+  web3Accounts: () => Promise<any[]>;
+
+  @IsDefined()
+  web3Enable: (appName: string) => Promise<any[]>;
+
+  @IsDefined()
+  web3FromSource: (data: any) => any;
+
+  @IsDefined()
+  isWeb3Injected: boolean;
+}
+
 export class PolkadotSignerOptions {
-  choosePolkadotAccount: (
-    accounts: InjectedAccountWithMeta[],
-  ) => Promise<InjectedAccountWithMeta>;
+  @IsDefined()
+  extensionDApp: PolkadotExtensionDApp;
+
+  @IsDefined()
+  choosePolkadotAccount: (accounts: any[]) => Promise<any>;
 }

@@ -78,7 +78,7 @@ describe('Web signers', () => {
       .send({
         address: from,
         destination: to,
-        amount: 0.001,
+        amount: 0.000001,
       });
     expect(true).toEqual(buildResponse.ok);
     const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
