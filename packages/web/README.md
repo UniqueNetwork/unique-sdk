@@ -47,7 +47,7 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 - [How to configure – environment variables](#environment-variables)
 - [Where to try - Swagger](#swagger)
 ## Install
-Choose install approach: [Docker](#docker-setup), [Source code](#git) or [Public endpoints](#use-public-endpoints)
+Choose install approach: [Docker](#docker), [Source code](#git) or [Public endpoints](#public-endpoints)
 
 ### Docker
 
@@ -92,7 +92,7 @@ CHAIN_WS_URL=wss://quartz.unique.network
 
 #### Optional
 
-##### Use SIGNER_SEED or SIGNER_URI for [Sign](#post-extrinsicsign) method
+##### Use `SIGNER_SEED` or `SIGNER_URI` for [sign](#sign-an-extrinsic) method
 ```bash
 SIGNER_SEED=type mnemonic here
 SIGNER_URI=//Alice
