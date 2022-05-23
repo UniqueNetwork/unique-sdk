@@ -37,7 +37,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     const signingInfo = await this.sdk.api.derive.tx.signingInfo(
       address,
-      undefined,
+      -1,
       buildArgs.isImmortal ? 0 : undefined,
     );
 
