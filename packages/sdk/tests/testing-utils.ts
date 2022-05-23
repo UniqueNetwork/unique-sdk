@@ -46,6 +46,6 @@ export const delay = (ms = 1000) =>
   });
 
 export const getDefaultSdkOptions = (): SdkOptions => ({
-  chainWsUrl: 'wss://ws-quartz-dev.comecord.com',
+  chainWsUrl: 'wss://ws-quartz-dev.unique.network',
   ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
 });

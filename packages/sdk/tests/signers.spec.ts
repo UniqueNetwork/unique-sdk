@@ -15,7 +15,7 @@ import {
 import { Sdk } from '../src/lib/sdk';
 import { getDefaultSdkOptions } from './testing-utils';
 
-describe('signers', () => {
+describe('Sdk signers', () => {
   let alice: KeyringPair;
   let bob: KeyringPair;
 
@@ -73,20 +73,20 @@ describe('signers', () => {
   describe('seed/uri', () => {
     it('uri validate - ok', async () => {
       await createSdk({
-        uri: '//Alice',
+        seed: '//Alice',
       });
     });
 
     it('uri validate - fail', async () => {
       await expect(async () => {
         await createSdk({
-          uri: 'Alice',
+          seed: 'Alice',
         });
       }).rejects.toThrowError(new ValidationError({}));
     });
 
     it.each([
-      ['alice', { uri: '//Alice' }],
+      ['alice', { seed: '//Alice' }],
       ['testUser', { seed: testUser.seed }],
     ])(
       'sign ok - %s',
@@ -96,7 +96,7 @@ describe('signers', () => {
           await sdk.balance.transfer({
             address: getAddressByName(addressName),
             destination: bob.address,
-            amount: 0.001,
+            amount: 0.000001,
           });
 
         const { signature, signatureType } = await sdk.extrinsics.sign({
@@ -113,7 +113,7 @@ describe('signers', () => {
     );
 
     it.each([
-      ['bob', 'alice', { uri: '//Alice' }],
+      ['bob', 'alice', { seed: '//Alice' }],
       ['alice', 'bob', { seed: testUser.seed }],
     ])(
       'sign fail - %s->%s',
@@ -127,7 +127,7 @@ describe('signers', () => {
           await sdk.balance.transfer({
             address: getAddressByName(addressName),
             destination: getAddressByName(destinationName),
-            amount: 0.001,
+            amount: 0.000001,
           });
 
         const { signature, signatureType } = await sdk.extrinsics.sign({
@@ -211,7 +211,7 @@ describe('signers', () => {
         await sdk.balance.transfer({
           address: testUser.keyfile.address,
           destination: bob.address,
-          amount: 0.001,
+          amount: 0.000001,
         });
 
       const { signature, signatureType } = await sdk.extrinsics.sign({

@@ -92,10 +92,10 @@ CHAIN_WS_URL=wss://quartz.unique.network
 
 #### Optional
 
-##### Use `SIGNER_SEED` or `SIGNER_URI` for [sign](#sign-an-extrinsic) method
+##### Use `SIGNER_SEED` for [sign](#sign-an-extrinsic) method
 ```bash
 SIGNER_SEED=type mnemonic here
-SIGNER_URI=//Alice
+SIGNER_SEED=//Alice
 ```
 
 ##### Port (default 3000)
@@ -212,7 +212,7 @@ POST /extrinsic/sign
 ```
 
 In order to execute request you have two options:
-- You may set `SIGNER_SEED` or `SIGNER_URI` environment variable.
+- You may set `SIGNER_SEED` environment variable.
 - Or you may set the `Authorization` request header to the mnemonic seed phrase: `Seed <Mnemonic seed phrase here>`
 
 Returns sign for extrinsic. Next, you need to add a signature to the transaction object to be sent to the blockchain using `/extrinsic/submit` method. 

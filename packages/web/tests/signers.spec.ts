@@ -78,7 +78,7 @@ describe('Web signers', () => {
       .send({
         address: from,
         destination: to,
-        amount: 0.001,
+        amount: 0.000001,
       });
     expect(true).toEqual(buildResponse.ok);
     const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
@@ -102,7 +102,7 @@ describe('Web signers', () => {
 
   describe('signer env/uri', () => {
     beforeAll(async () => {
-      process.env.SIGNER_URI = '//Alice';
+      process.env.SIGNER_SEED = '//Alice';
       await createApp();
     });
 
@@ -144,7 +144,7 @@ describe('Web signers', () => {
       await createApp();
     });
 
-    it.each(['Uri Alice', '//Alice', testUser.seed])(
+    it.each(['Seed Alice', '//Alice', testUser.seed])(
       'invalid token - %s',
       async (headValue) => {
         const { ok, body } = await request(app.getHttpServer())
@@ -159,7 +159,7 @@ describe('Web signers', () => {
     );
 
     it.each([
-      ['Uri //Bob', 'alice'],
+      ['Seed //Bob', 'alice'],
       [`Seed ${testUser.seed}`, 'alice'],
     ])('sign fail - %s', async (Authorization, addressName) => {
       const { ok, body } = await signAndVerify(
@@ -174,7 +174,7 @@ describe('Web signers', () => {
     });
 
     it.each([
-      ['Uri //Alice', 'alice'],
+      ['Seed //Alice', 'alice'],
       [`Seed ${testUser.seed}`, 'testUser'],
     ])('sign ok - %s', async (Authorization, addressName) => {
       const { ok, body } = await signAndVerify(

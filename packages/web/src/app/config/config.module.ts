@@ -13,7 +13,6 @@ export type Config = {
 
 export type SignerConfig = {
   seed?: string;
-  uri?: string;
 };
 
 const loadConfig = (): Config => ({
@@ -26,7 +25,6 @@ const loadConfig = (): Config => ({
     process.env.IPFS_GATEWAY_URL || 'https://ipfs.unique.network/ipfs/',
   signer: {
     seed: process.env.SIGNER_SEED || undefined,
-    uri: process.env.SIGNER_URI || undefined,
   },
 });
 

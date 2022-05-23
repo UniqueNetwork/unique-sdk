@@ -11,7 +11,6 @@ import { ConfigService } from '@nestjs/config';
 import {
   SeedSignerOptions,
   SignerOptions,
-  UriSignerOptions,
   createSigner,
 } from '@unique-nft/sdk/sign';
 
@@ -27,9 +26,8 @@ import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
 
 function createSignerOptions(configService: ConfigService): SignerOptions {
-  const { seed, uri } = configService.get<SignerConfig>('signer');
+  const { seed } = configService.get<SignerConfig>('signer');
   if (seed) return new SeedSignerOptions(seed);
-  if (uri) return new UriSignerOptions(uri);
   return null;
 }
 
