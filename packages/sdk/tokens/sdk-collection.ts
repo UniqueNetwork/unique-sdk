@@ -2,7 +2,8 @@ import '@unique-nft/types/augment-api';
 
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-import { UnsignedTxPayload ,
+import {
+  UnsignedTxPayload,
   BurnCollectionArgs,
   CollectionIdArg,
   CollectionInfo,
@@ -27,9 +28,20 @@ export class SdkCollection implements ISdkCollection {
     const collectionOption = await this.sdk.api.rpc.unique.collectionById(
       collectionId,
     );
+
     const collection = collectionOption.unwrapOr(null);
 
-    return collection ? decodeCollection(collectionId, collection) : collection;
+    if (!collection) return null;
+
+    const tokensCount = await this.sdk.api.rpc.unique.lastTokenId(collectionId);
+    const decoded = decodeCollection(collection);
+
+    return {
+      ...decoded,
+      id: collectionId,
+      tokensCount: tokensCount.toNumber(),
+      owner: collection.owner.toString(),
+    };
   }
 
   async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {

@@ -137,6 +137,11 @@ export class CollectionInfo extends CollectionInfoBase {
     example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
   })
   owner: string;
+
+  @ApiProperty({
+    example: 100,
+  })
+  tokensCount: number;
 }
 
 export interface TokenInfo {
