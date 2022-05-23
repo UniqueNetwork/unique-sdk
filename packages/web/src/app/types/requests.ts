@@ -7,12 +7,12 @@ export class SignHeaders {
     description: `You can use Seed or Uri authorization:
 <ul>
 <li><code>Authorization: Seed &lt;your mnemonic phrase&gt;</code> </li>
-<li><code>Authorization: Uri &lt;uri name&gt;</code></li>
+<li><code>Authorization: Seed &lt;uri name&gt;</code></li>
 </ul>
 For example:
 <ul>
 <li><code>Authorization: Seed word1 word2 word3 ...</code> </li>
-<li><code>Authorization: Uri //Alice</code></li>
+<li><code>Authorization: Seed //Alice</code></li>
 </ul>
 `,
   })

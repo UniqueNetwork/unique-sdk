@@ -7,47 +7,48 @@ import {
   PolkadotSignerOptions,
   SeedSignerOptions,
   SignerOptions,
-  UriSignerOptions,
 } from './types';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
 import { PolkadotSigner } from './polkadot-signer';
 
+type OptionsType<T> = {
+  new (...args: any[]): T;
+};
+type SignerType<T> = {
+  new (options: T): any;
+};
+function validateAndCreate<T extends object>(
+  options: T,
+  OptionsClass: OptionsType<T>,
+  SignerClass: SignerType<T>,
+): SdkSigner {
+  validateSync(options, OptionsClass);
+  try {
+    return new SignerClass(options);
+  } catch (err: any) {
+    throw new InvalidSignerError(err.message);
+  }
+}
+
 export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
   if ('seed' in signerOptions) {
-    validateSync(signerOptions, SeedSignerOptions);
-    try {
-      return new SeedSigner(signerOptions.seed, signerOptions.type);
-    } catch (err: any) {
-      throw new InvalidSignerError(err.message);
-    }
-  }
-  if ('uri' in signerOptions) {
-    validateSync(signerOptions, UriSignerOptions);
-    try {
-      return new SeedSigner(signerOptions.uri, signerOptions.type);
-    } catch (err: any) {
-      throw new InvalidSignerError(err.message);
-    }
+    return validateAndCreate(signerOptions, SeedSignerOptions, SeedSigner);
   }
   if ('keyfile' in signerOptions) {
-    validateSync(signerOptions, KeyfileSignerOptions);
-    try {
-      return new KeyfileSigner(signerOptions);
-    } catch (err: any) {
-      throw new InvalidSignerError(err.message);
-    }
+    return validateAndCreate(
+      signerOptions,
+      KeyfileSignerOptions,
+      KeyfileSigner,
+    );
   }
-
   if ('choosePolkadotAccount' in signerOptions) {
-    validateSync(signerOptions, PolkadotSignerOptions);
-    try {
-      return new PolkadotSigner(signerOptions);
-    } catch (err: any) {
-      throw new InvalidSignerError(err.message);
-    }
+    return validateAndCreate(
+      signerOptions,
+      PolkadotSignerOptions,
+      PolkadotSigner,
+    );
   }
-
   throw new InvalidSignerError('Not known options');
 }
 

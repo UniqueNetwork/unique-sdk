@@ -1,9 +1,5 @@
 import { ValidationError } from '@unique-nft/sdk/errors';
-import {
-  createSignerSync,
-  SeedSignerOptions,
-  UriSignerOptions,
-} from '@unique-nft/sdk/sign';
+import { createSignerSync, SeedSignerOptions } from '@unique-nft/sdk/sign';
 import { SdkSigner } from '@unique-nft/sdk/types';
 
 export function createSignerByHeader(authorization: string): SdkSigner {
@@ -14,9 +10,6 @@ export function createSignerByHeader(authorization: string): SdkSigner {
   switch (type) {
     case 'Seed':
       signerOptions = new SeedSignerOptions(value);
-      break;
-    case 'Uri':
-      signerOptions = new UriSignerOptions(value);
       break;
     default:
       throw new ValidationError('Invalid authorization header');
