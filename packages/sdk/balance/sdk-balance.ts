@@ -4,7 +4,6 @@ import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import { validate } from '@unique-nft/sdk/validation';
 import {
   UnsignedTxPayload,
-  ISdkBalance,
   TransferBuildArgs,
   AddressArg,
   Balance,
@@ -15,7 +14,7 @@ interface Sdk {
   extrinsics: SdkExtrinsics;
 }
 
-export class SdkBalance implements ISdkBalance {
+export class SdkBalance {
   private readonly multiplierToRaw: number;
 
   constructor(private readonly sdk: Sdk) {

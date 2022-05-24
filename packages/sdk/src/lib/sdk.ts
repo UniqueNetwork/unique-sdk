@@ -5,8 +5,6 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 
 import {
-  ISdk,
-  ISdkBalance,
   ISdkCollection,
   ISdkToken,
   SdkOptions,
@@ -14,16 +12,13 @@ import {
   ChainProperties,
 } from '@unique-nft/sdk/types';
 import { SdkCollection, SdkToken } from '@unique-nft/sdk/tokens';
-import { SdkBalance } from '@unique-nft/sdk/balance';
 
-export class Sdk implements ISdk {
+export class Sdk {
   readonly isReady: Promise<boolean>;
 
   readonly api: ApiPromise;
 
   readonly extrinsics: SdkExtrinsics;
-
-  readonly balance: ISdkBalance;
 
   collection: ISdkCollection;
 
@@ -55,7 +50,6 @@ export class Sdk implements ISdk {
     this.extrinsics = new SdkExtrinsics(this);
     this.collection = new SdkCollection(this);
     this.token = new SdkToken(this);
-    this.balance = new SdkBalance(this);
   }
 
   chainProperties(): ChainProperties {
@@ -67,4 +61,23 @@ export class Sdk implements ISdk {
       genesisHash: this.api.genesisHash.toHex(), // todo hex?
     };
   }
+}
+
+type Constructor<T> = new (...args: any[]) => T;
+
+export function addFeature<T>(
+  key: string,
+  FeatureConstructor: Constructor<T>,
+): void {
+  const privateKey = `_${key}`;
+
+  Object.defineProperty(Sdk.prototype, key, {
+    get(): T {
+      if (!this[privateKey]) {
+        this[privateKey] = new FeatureConstructor(this);
+      }
+
+      return this[privateKey];
+    },
+  });
 }
