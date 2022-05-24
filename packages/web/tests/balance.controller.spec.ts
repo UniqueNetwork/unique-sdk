@@ -1,14 +1,12 @@
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
-import { waitReady } from '@polkadot/wasm-crypto';
 import request from 'supertest';
 import { u8aToHex } from '@polkadot/util';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { BalanceController } from '../src/app/controllers';
-import { AppModule } from '../src/app/app.module';
+import { createApp } from './utils.test';
 
 describe(BalanceController.name, () => {
   let app: INestApplication;
@@ -17,15 +15,7 @@ describe(BalanceController.name, () => {
   let emptyUser: KeyringPair;
 
   beforeAll(async () => {
-    const testingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    await waitReady();
-
-    app = testingModule.createNestApplication();
-    app.setGlobalPrefix('/api');
-    await app.init();
+    app = await createApp();
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');

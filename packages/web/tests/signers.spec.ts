@@ -1,15 +1,13 @@
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
-import { waitReady } from '@polkadot/wasm-crypto';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 import { SignatureType } from '@unique-nft/sdk/types';
 import * as process from 'process';
 
 import request from 'supertest';
-import { AppModule } from '../src/app/app.module';
+import { createApp } from './utils.test';
 
 const testUser = {
   seed: 'bus ahead nation nice damp recall place dance guide media clap language',
@@ -32,7 +30,6 @@ const testUser = {
 };
 
 describe('Web signers', () => {
-  let app: INestApplication;
   let alice: KeyringPair;
   let bob: KeyringPair;
 
@@ -42,18 +39,6 @@ describe('Web signers', () => {
     alice = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Alice');
     bob = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Bob');
   });
-
-  async function createApp() {
-    const testingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    await waitReady();
-
-    app = testingModule.createNestApplication();
-    app.setGlobalPrefix('/api');
-    await app.init();
-  }
 
   function getAddressByName(name: string): string {
     switch (name) {
@@ -69,6 +54,7 @@ describe('Web signers', () => {
   }
 
   async function signAndVerify(
+    app: INestApplication,
     from: string,
     to: string,
     headers: object = {},
@@ -101,31 +87,34 @@ describe('Web signers', () => {
   }
 
   describe('signer env/uri', () => {
+    let app: INestApplication;
     beforeAll(async () => {
       process.env.SIGNER_SEED = '//Alice';
-      await createApp();
+      app = await createApp();
     });
 
     it('sign - ok', async () => {
-      const { ok, body } = await signAndVerify(alice.address, bob.address);
+      const { ok, body } = await signAndVerify(app, alice.address, bob.address);
       expect(true).toEqual(ok);
       expect(true).toEqual(body.isValid);
     });
     it('sign - fail', async () => {
-      const { ok, body } = await signAndVerify(bob.address, alice.address);
+      const { ok, body } = await signAndVerify(app, bob.address, alice.address);
       expect(true).toEqual(ok);
       expect(false).toEqual(body.isValid);
     });
   });
 
   describe('signer env/seed', () => {
+    let app: INestApplication;
     beforeAll(async () => {
       process.env.SIGNER_SEED = testUser.seed;
-      await createApp();
+      app = await createApp();
     });
 
     it('sign - ok', async () => {
       const { ok, body } = await signAndVerify(
+        app,
         testUser.keyfile.address,
         bob.address,
       );
@@ -133,15 +122,16 @@ describe('Web signers', () => {
       expect(true).toEqual(body.isValid);
     });
     it('sign - fail', async () => {
-      const { ok, body } = await signAndVerify(alice.address, bob.address);
+      const { ok, body } = await signAndVerify(app, alice.address, bob.address);
       expect(true).toEqual(ok);
       expect(false).toEqual(body.isValid);
     });
   });
 
   describe('signer header', () => {
+    let app: INestApplication;
     beforeAll(async () => {
-      await createApp();
+      app = await createApp();
     });
 
     it.each(['Seed Alice', '//Alice', testUser.seed])(
@@ -163,6 +153,7 @@ describe('Web signers', () => {
       [`Seed ${testUser.seed}`, 'alice'],
     ])('sign fail - %s', async (Authorization, addressName) => {
       const { ok, body } = await signAndVerify(
+        app,
         getAddressByName(addressName),
         bob.address,
         {
@@ -178,6 +169,7 @@ describe('Web signers', () => {
       [`Seed ${testUser.seed}`, 'testUser'],
     ])('sign ok - %s', async (Authorization, addressName) => {
       const { ok, body } = await signAndVerify(
+        app,
         getAddressByName(addressName),
         bob.address,
         {

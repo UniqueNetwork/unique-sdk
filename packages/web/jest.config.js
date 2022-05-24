@@ -15,4 +15,5 @@ module.exports = {
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/web',
+  testPathIgnorePatterns: ['./utils.test.ts'],
 };
