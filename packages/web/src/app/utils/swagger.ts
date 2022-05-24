@@ -6,6 +6,12 @@ export const addSwagger = (app: INestApplication) => {
   const configService = app.get(ConfigService);
 
   const config = new DocumentBuilder()
+    .addSecurity('SeedAuth', {
+      description: 'Example: "Seed phrase1 phrase2 phrase3 ..."',
+      type: 'apiKey',
+      in: 'header',
+      name: 'Authorization',
+    })
     .setTitle('Unique SDK')
     .setDescription(
       [
