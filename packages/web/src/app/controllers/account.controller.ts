@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { Body, Controller, Post, UseFilters } from '@nestjs/common';
+import { Body, Query, Controller, Post, Get, UseFilters } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   Account,
@@ -15,13 +15,13 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 @ApiTags('account')
 @Controller('account')
 export class AccountController {
+  @Get()
+  async getAccount(@Query() args: GetAccountArgs): Promise<Account> {
+    return getAccountFromMnemonic(args);
+  }
+
   @Post('generate')
   async generate(@Body() args: GenerateAccountArgs): Promise<Account> {
     return generateAccount(args);
-  }
-
-  @Post('create')
-  async create(@Body() args: GetAccountArgs): Promise<Account> {
-    return getAccountFromMnemonic(args);
   }
 }

@@ -27,11 +27,12 @@ describe('Web Accounts', () => {
     const mnemonic =
       'say carbon neutral afford cupboard choice company desk forum advance twelve help';
     const { ok, body } = await request(app.getHttpServer())
-      .post(`/api/account/create`)
-      .send({
+      .get(`/api/account`)
+      .query({
         password,
         mnemonic,
-      });
+      })
+      .send();
     expect(true).toEqual(ok);
     expectAccount(body);
   });
@@ -46,11 +47,12 @@ describe('Web Accounts', () => {
     ],
   ])('validation fail - %s/%s', async (password, mnemonic) => {
     const { ok, body } = await request(app.getHttpServer())
-      .post(`/api/account/create`)
-      .send({
+      .get(`/api/account`)
+      .query({
         password,
         mnemonic,
-      });
+      })
+      .send();
     expect(false).toEqual(ok);
     expect(body.error.code).toEqual(ErrorCodes.Validation);
   });
