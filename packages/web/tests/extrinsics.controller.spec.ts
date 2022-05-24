@@ -1,29 +1,19 @@
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
-import { waitReady } from '@polkadot/wasm-crypto';
 import { u8aToHex } from '@polkadot/util';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 import request from 'supertest';
 
 import { ExtrinsicsController } from '../src/app/controllers';
-import { AppModule } from '../src/app/app.module';
+import { createApp } from './utils.test';
 
 describe(ExtrinsicsController.name, () => {
   let app: INestApplication;
   let alice: KeyringPair;
 
   beforeAll(async () => {
-    const testingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    await waitReady();
-
-    app = testingModule.createNestApplication();
-    app.setGlobalPrefix('/api');
-    await app.init();
+    app = await createApp();
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
   });

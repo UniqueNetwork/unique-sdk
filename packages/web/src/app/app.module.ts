@@ -20,6 +20,7 @@ import {
   CollectionController,
   ExtrinsicsController,
   TokenController,
+  AccountController,
 } from './controllers';
 import { GlobalConfigModule, SignerConfig } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
@@ -58,6 +59,7 @@ export const sdkProvider = {
     BalanceController,
     CollectionController,
     TokenController,
+    AccountController,
   ],
   providers: [
     sdkProvider,

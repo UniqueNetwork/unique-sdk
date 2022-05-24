@@ -2,12 +2,13 @@
 import 'reflect-metadata';
 import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
-import { ValidSeed } from '@unique-nft/sdk/validation';
+import { ValidMnemonic, ValidSeed } from '@unique-nft/sdk/validation';
 import {
   IsNotEmptyObject,
   IsEnum,
   IsOptional,
   IsDefined,
+  IsNotEmpty,
 } from 'class-validator';
 import { SignatureType } from '@unique-nft/sdk/types';
 
@@ -62,18 +63,29 @@ export class PolkadotSignerOptions {
   choosePolkadotAccount: (accounts: any[]) => Promise<any>;
 }
 
-export interface GenerateAccountArgs {
+export class GenerateAccountArgs {
+  @IsDefined()
+  @IsNotEmpty()
   password: string;
+
+  @IsEnum(SignatureType)
+  @IsOptional()
   pairType?: SignatureType;
+
+  @IsOptional()
   meta?: KeyringPair$Meta;
 }
-export interface GetAccountArgs extends GenerateAccountArgs {
+export class GetAccountArgs extends GenerateAccountArgs {
+  @ValidMnemonic()
   mnemonic: string;
 }
 
 export interface Account {
   mnemonic: string;
+
   seed: HexString;
+
   publicKey: HexString;
+
   keyfile: KeyringPair$Json;
 }

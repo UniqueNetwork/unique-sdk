@@ -3,21 +3,18 @@ import { KeyringPair$Json } from '@polkadot/keyring/types';
 import {
   mnemonicGenerate,
   mnemonicToMiniSecret,
-  mnemonicValidate,
   naclBoxPairFromSecret,
 } from '@polkadot/util-crypto';
 import { u8aToHex } from '@polkadot/util';
-import { ValidationError } from '@unique-nft/sdk/errors';
+import { validate } from '@unique-nft/sdk/validation';
 
 import { Account, GenerateAccountArgs, GetAccountArgs } from './types';
 
 export async function getAccountFromMnemonic(
   args: GetAccountArgs,
 ): Promise<Account> {
+  await validate(args, GetAccountArgs);
   const { mnemonic, password, pairType, meta } = args;
-  if (!mnemonicValidate(mnemonic)) {
-    throw new ValidationError({ mnemonic }, 'Invalid mnemonic phrase');
-  }
   const seed = mnemonicToMiniSecret(mnemonic, password);
   const { publicKey } = naclBoxPairFromSecret(seed);
   const account = new Keyring({ type: pairType }).addFromSeed(
