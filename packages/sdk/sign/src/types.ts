@@ -64,9 +64,8 @@ export class PolkadotSignerOptions {
 }
 
 export class GenerateAccountArgs {
-  @IsDefined()
-  @IsNotEmpty()
-  password: string;
+  @IsOptional()
+  password?: string;
 
   @IsEnum(SignatureType)
   @IsOptional()

@@ -41,10 +41,6 @@ describe('Web Accounts', () => {
     [undefined, undefined],
     ['pass123', undefined],
     ['pass123', '12345'],
-    [
-      undefined,
-      'say carbon neutral afford cupboard choice company desk forum advance twelve help',
-    ],
   ])('validation fail - %s/%s', async (password, mnemonic) => {
     const { ok, body } = await request(app.getHttpServer())
       .get(`/api/account`)

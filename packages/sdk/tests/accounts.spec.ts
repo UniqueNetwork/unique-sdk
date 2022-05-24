@@ -9,9 +9,8 @@ describe('Sdk Accounts', () => {
     await cryptoWaitReady();
   });
 
-  it('generate ok', async () => {
+  it.each([undefined, '', 'pass1'])('generate ok - %s', async (password) => {
     await expect(async () => {
-      const password = '1234567890';
       const newAccount = await generateAccount({ password });
 
       const account = new Keyring({ type: 'sr25519' }).addFromJson(
