@@ -1,6 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import 'reflect-metadata';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
+import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
+import { HexString } from '@polkadot/util/types';
 import { ValidSeed } from '@unique-nft/sdk/validation';
 import {
   IsNotEmptyObject,
@@ -59,4 +60,20 @@ export class PolkadotSignerOptions {
 
   @IsDefined()
   choosePolkadotAccount: (accounts: any[]) => Promise<any>;
+}
+
+export interface GenerateAccountArgs {
+  password: string;
+  pairType?: SignatureType;
+  meta?: KeyringPair$Meta;
+}
+export interface GetAccountArgs extends GenerateAccountArgs {
+  mnemonic: string;
+}
+
+export interface Account {
+  mnemonic: string;
+  seed: HexString;
+  publicKey: HexString;
+  keyfile: KeyringPair$Json;
 }
