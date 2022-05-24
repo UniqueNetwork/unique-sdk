@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseFilters, Headers } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import {
   SdkSigner,
   SignTxArgs,
@@ -27,6 +27,7 @@ export class ExtrinsicsController {
   }
 
   @Post('sign')
+  @ApiBearerAuth('SeedAuth')
   async sign(
     @Body() args: SignTxArgs,
     @Headers() headers: SignHeaders,
