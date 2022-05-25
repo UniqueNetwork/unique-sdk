@@ -1,13 +1,10 @@
 import { ConfigService } from '@nestjs/config';
 import { Provider } from '@nestjs/common';
-import {
-  createSigner,
-  SeedSignerOptions,
-  SignerOptions,
-} from '@unique-nft/sdk/sign';
+import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '@unique-nft/sdk';
 
 import '@unique-nft/sdk/balance';
+import '@unique-nft/sdk/tokens';
 
 import { SignerConfig } from './config/config.module';
 
