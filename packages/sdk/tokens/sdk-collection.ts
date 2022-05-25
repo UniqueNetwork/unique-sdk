@@ -4,12 +4,12 @@ import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   UnsignedTxPayload,
-  BurnCollectionArgs,
-  CollectionIdArg,
+  BurnCollectionArguments,
+  CollectionIdArguments,
   CollectionInfo,
-  CreateCollectionArgs,
+  CreateCollectionArguments,
   ISdkCollection,
-  TransferCollectionArgs,
+  TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
 
 import { decodeCollection } from './utils/decode-collection';
@@ -23,7 +23,9 @@ interface Sdk {
 export class SdkCollection implements ISdkCollection {
   constructor(readonly sdk: Sdk) {}
 
-  async get({ collectionId }: CollectionIdArg): Promise<CollectionInfo | null> {
+  async get({
+    collectionId,
+  }: CollectionIdArguments): Promise<CollectionInfo | null> {
     const collectionOption = await this.sdk.api.rpc.unique.collectionById(
       collectionId,
     );
@@ -43,7 +45,9 @@ export class SdkCollection implements ISdkCollection {
     };
   }
 
-  async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
+  async create(
+    collection: CreateCollectionArguments,
+  ): Promise<UnsignedTxPayload> {
     const { address, ...rest } = collection;
 
     const encodedCollection = encodeCollection(
@@ -59,7 +63,7 @@ export class SdkCollection implements ISdkCollection {
     });
   }
 
-  transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload> {
+  transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
       address: args.from,
       section: 'unique',
@@ -68,7 +72,7 @@ export class SdkCollection implements ISdkCollection {
     });
   }
 
-  burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload> {
+  burn(args: BurnCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
       address: args.address,
       section: 'unique',

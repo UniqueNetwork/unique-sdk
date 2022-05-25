@@ -6,10 +6,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { validate } from '../validation';
 import {
-  AddressArgDto,
-  BalanceDto,
-  TransferBuildArgsDto,
-  UnsignedTxPayloadDto,
+  AddressQuery,
+  BalanceResponse,
+  TransferBuildBody,
+  UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 
 @UseFilters(SdkExceptionsFilter)
@@ -19,16 +19,16 @@ export class BalanceController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getBalance(@Query() args: AddressArgDto): Promise<BalanceDto> {
-    await validate(args, AddressArgDto);
+  async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
+    await validate(args, AddressQuery);
     return this.sdk.balance.get(args);
   }
 
   @Post('transfer')
   async transferBuild(
-    @Body() args: TransferBuildArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
-    await validate(args, TransferBuildArgsDto);
+    @Body() args: TransferBuildBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    await validate(args, TransferBuildBody);
     return this.sdk.balance.transfer(args);
   }
 }

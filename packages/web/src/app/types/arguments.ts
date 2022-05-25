@@ -3,25 +3,25 @@ import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { IsEnum, IsHexadecimal, IsNotEmptyObject } from 'class-validator';
 import {
   SignatureType,
-  SignTxArgs,
+  SignTxArguments,
   SignTxResult,
   SubmitResult,
-  SubmitTxArgs,
-  TxBuildArgs,
+  SubmitTxArguments,
+  TxBuildArguments,
 } from '@unique-nft/sdk/types';
 import { SignerPayloadJSONDto } from './signer-payload';
 
-export class SubmitResultDto implements SubmitResult {
+export class SubmitResultResponse implements SubmitResult {
   @ApiProperty({ type: String })
   hash: HexString;
 }
 
-export class SignTxArgsDto implements SignTxArgs {
+export class SignTxBody implements SignTxArguments {
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
 }
 
-export class SignTxResultDto implements SignTxResult {
+export class SignTxResultResponse implements SignTxResult {
   @ApiProperty({ type: String })
   signature: HexString;
 
@@ -29,7 +29,7 @@ export class SignTxResultDto implements SignTxResult {
   signatureType: SignatureType;
 }
 
-export class SubmitTxArgsDto implements SubmitTxArgs {
+export class SubmitTxBody implements SubmitTxArguments {
   @IsNotEmptyObject()
   @ApiProperty()
   signerPayloadJSON: SignerPayloadJSONDto;
@@ -46,7 +46,7 @@ export class SubmitTxArgsDto implements SubmitTxArgs {
   signatureType: SignatureType | `${SignatureType}`;
 }
 
-export class TxBuildArgsDto implements TxBuildArgs {
+export class TxBuildBody implements TxBuildArguments {
   @ApiProperty({
     description: 'The ss-58 encoded address',
     example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',

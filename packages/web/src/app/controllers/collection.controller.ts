@@ -14,14 +14,14 @@ import { Sdk } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import {
-  BurnCollectionArgsDto,
-  CollectionIdArgDto,
-  CreateCollectionArgsDto,
-  TransferCollectionArgsDto,
-  UnsignedTxPayloadDto,
+  BurnCollectionBody,
+  CollectionIdQuery,
+  CreateCollectionBody,
+  TransferCollectionBody,
+  UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 import { validate } from '../validation';
-import { CollectionInfoDto } from '../types/unique-types';
+import { CollectionInfoResponse } from '../types/unique-types';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('collection')
@@ -31,8 +31,8 @@ export class CollectionController {
 
   @Get()
   async getCollection(
-    @Query() args: CollectionIdArgDto,
-  ): Promise<CollectionInfoDto> {
+    @Query() args: CollectionIdQuery,
+  ): Promise<CollectionInfoResponse> {
     const collection = await this.sdk.collection.get(args);
 
     if (collection) return collection;
@@ -42,23 +42,23 @@ export class CollectionController {
 
   @Post()
   async createCollection(
-    @Body() args: CreateCollectionArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
-    await validate(args, CreateCollectionArgsDto);
+    @Body() args: CreateCollectionBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    await validate(args, CreateCollectionBody);
     return this.sdk.collection.create(args);
   }
 
   @Delete()
   async burnCollection(
-    @Body() args: BurnCollectionArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
+    @Body() args: BurnCollectionBody,
+  ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.collection.burn(args);
   }
 
   @Patch('transfer')
   async transferCollection(
-    @Body() args: TransferCollectionArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
+    @Body() args: TransferCollectionBody,
+  ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.collection.transfer(args);
   }
 }

@@ -4,8 +4,8 @@ import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   UnsignedTxPayload,
   ISdkBalance,
-  TransferBuildArgs,
-  AddressArg,
+  TransferBuildArguments,
+  AddressArguments,
   Balance,
 } from '@unique-nft/sdk/types';
 
@@ -22,7 +22,7 @@ export class SdkBalance implements ISdkBalance {
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  async get(args: AddressArg): Promise<Balance> {
+  async get(args: AddressArguments): Promise<Balance> {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
     const { availableBalance } = await this.sdk.api.derive.balances.all(
@@ -39,7 +39,7 @@ export class SdkBalance implements ISdkBalance {
     };
   }
 
-  async transfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
+  async transfer(args: TransferBuildArguments): Promise<UnsignedTxPayload> {
     const amountRaw = BigInt(args.amount * this.multiplierToRaw);
     return this.sdk.extrinsics.build({
       address: args.address,

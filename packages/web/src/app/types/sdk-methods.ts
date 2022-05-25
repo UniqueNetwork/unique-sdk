@@ -1,19 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import {
-  AddressArg,
+  AddressArguments,
   AnyObject,
   Balance,
-  BurnCollectionArgs,
-  BurnTokenArgs,
+  BurnCollectionArguments,
+  BurnTokenArguments,
   ChainProperties,
-  CollectionIdArg,
-  CreateCollectionArgs,
-  CreateTokenArgs,
-  TokenIdArg,
-  TransferBuildArgs,
-  TransferCollectionArgs,
-  TransferTokenArgs,
+  CollectionIdArguments,
+  CreateCollectionArguments,
+  CreateTokenArguments,
+  TokenIdArguments,
+  TransferBuildArguments,
+  TransferCollectionArguments,
+  TransferTokenArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { HexString } from '@polkadot/util/types';
@@ -27,7 +27,7 @@ const AddressApiProperty = ApiProperty({
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
 });
 
-export class ChainPropertiesDto implements ChainProperties {
+export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({
     example: 255,
   })
@@ -55,7 +55,7 @@ export class ChainPropertiesDto implements ChainProperties {
   genesisHash: HexString;
 }
 
-export class BalanceDto implements Balance {
+export class BalanceResponse implements Balance {
   @ApiProperty({
     example: '411348197000000000000',
   })
@@ -71,7 +71,7 @@ export class BalanceDto implements Balance {
   // todo withUnit: string
 }
 
-export class TransferBuildArgsDto implements TransferBuildArgs {
+export class TransferBuildBody implements TransferBuildArguments {
   @IsString()
   @ValidAddress()
   @NotYourselfAddress('destination')
@@ -91,35 +91,38 @@ export class TransferBuildArgsDto implements TransferBuildArgs {
   amount: number;
 }
 
-export class CollectionIdArgDto implements CollectionIdArg {
+export class CollectionIdQuery implements CollectionIdArguments {
   @ApiProperty({
     example: 1,
   })
   collectionId: number;
 }
 
-export class TokenIdArgDto extends CollectionIdArgDto implements TokenIdArg {
+export class TokenIdQuery
+  extends CollectionIdQuery
+  implements TokenIdArguments
+{
   @ApiProperty({
     example: 1,
   })
   tokenId: number;
 }
 
-export class AddressArgDto implements AddressArg {
+export class AddressQuery implements AddressArguments {
   @ValidAddress()
   @ApiProperty()
   address: string;
 }
 
-export class CreateCollectionArgsDto
+export class CreateCollectionBody
   extends CollectionInfoBaseDto
-  implements CreateCollectionArgs
+  implements CreateCollectionArguments
 {
   @AddressApiProperty
   address: string;
 }
 
-export class BurnCollectionArgsDto implements BurnCollectionArgs {
+export class BurnCollectionBody implements BurnCollectionArguments {
   @ApiProperty({
     example: 1,
   })
@@ -130,7 +133,7 @@ export class BurnCollectionArgsDto implements BurnCollectionArgs {
   address: string;
 }
 
-export class TransferCollectionArgsDto implements TransferCollectionArgs {
+export class TransferCollectionBody implements TransferCollectionArguments {
   @ApiProperty()
   collectionId: number;
 
@@ -141,7 +144,7 @@ export class TransferCollectionArgsDto implements TransferCollectionArgs {
   to: string;
 }
 
-export class CreateTokenArgsDto implements CreateTokenArgs {
+export class CreateTokenBody implements CreateTokenArguments {
   @ApiProperty({ example: 1 })
   collectionId: number;
 
@@ -160,14 +163,14 @@ export class CreateTokenArgsDto implements CreateTokenArgs {
   constData: AnyObject;
 }
 
-export class BurnTokenArgsDto extends TokenIdArgDto implements BurnTokenArgs {
+export class BurnTokenBody extends TokenIdQuery implements BurnTokenArguments {
   @ValidAddress()
   @AddressApiProperty
   address: string;
 }
-export class TransferTokenArgsDto
-  extends TokenIdArgDto
-  implements TransferTokenArgs
+export class TransferTokenBody
+  extends TokenIdQuery
+  implements TransferTokenArguments
 {
   @AddressApiProperty
   from: string;
@@ -176,7 +179,7 @@ export class TransferTokenArgsDto
   to: string;
 }
 
-export class UnsignedTxPayloadDto implements UnsignedTxPayload {
+export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
   @ApiProperty()
   signerPayloadJSON: SignerPayloadJSONDto;
 

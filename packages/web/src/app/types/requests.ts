@@ -19,7 +19,7 @@ For example:
   authorization: string;
 }
 
-export class VerificationResult {
+export class VerificationResultResponse {
   @ApiProperty()
   isValid: boolean;
 

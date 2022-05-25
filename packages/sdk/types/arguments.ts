@@ -10,7 +10,7 @@ export interface SubmitResult {
   hash: HexString;
 }
 
-export interface SignTxArgs {
+export interface SignTxArguments {
   signerPayloadHex: HexString;
 }
 
@@ -19,13 +19,13 @@ export interface SignTxResult extends SignResult {
   signatureType: SignatureType;
 }
 
-export interface SubmitTxArgs {
+export interface SubmitTxArguments {
   signerPayloadJSON: SignerPayloadJSON;
   signature: HexString;
   signatureType: SignatureType | `${SignatureType}`;
 }
 
-export interface TxBuildArgs {
+export interface TxBuildArguments {
   address: string;
   section: string;
   method: string;

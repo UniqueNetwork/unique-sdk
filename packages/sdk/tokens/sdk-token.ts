@@ -5,14 +5,14 @@ import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   UnsignedTxPayload,
   ISdkCollection,
-  TokenIdArg,
+  TokenIdArguments,
   TokenInfo,
 } from '@unique-nft/sdk/types';
 import type {
-  BurnTokenArgs,
-  CreateTokenArgs,
+  BurnTokenArguments,
+  CreateTokenArguments,
   ISdkToken,
-  TransferTokenArgs,
+  TransferTokenArguments,
   SdkOptions,
 } from '@unique-nft/sdk/types';
 import { Option } from '@polkadot/types-codec';
@@ -30,7 +30,10 @@ interface Sdk {
 export class SdkToken implements ISdkToken {
   constructor(readonly sdk: Sdk) {}
 
-  async get({ collectionId, tokenId }: TokenIdArg): Promise<TokenInfo | null> {
+  async get({
+    collectionId,
+    tokenId,
+  }: TokenIdArguments): Promise<TokenInfo | null> {
     const collection = await this.sdk.collection.get({ collectionId });
 
     if (!collection) return null;
@@ -45,7 +48,7 @@ export class SdkToken implements ISdkToken {
     return decodeToken(collection, tokenId, tokenData, this.sdk.options);
   }
 
-  async create(token: CreateTokenArgs): Promise<UnsignedTxPayload> {
+  async create(token: CreateTokenArguments): Promise<UnsignedTxPayload> {
     const { address, collectionId, constData } = token;
 
     const collection = await this.sdk.collection.get({ collectionId });
@@ -69,7 +72,7 @@ export class SdkToken implements ISdkToken {
     to,
     collectionId,
     tokenId,
-  }: TransferTokenArgs): Promise<UnsignedTxPayload> {
+  }: TransferTokenArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
       address: from,
       section: 'unique',
@@ -82,7 +85,7 @@ export class SdkToken implements ISdkToken {
     address,
     collectionId,
     tokenId,
-  }: BurnTokenArgs): Promise<UnsignedTxPayload> {
+  }: BurnTokenArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
       address,
       section: 'unique',

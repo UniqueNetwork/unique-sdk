@@ -4,16 +4,16 @@ import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { SignHeaders, VerificationResult } from '../types/requests';
+import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
 import { validate } from '../validation';
-import { UnsignedTxPayloadDto } from '../types/sdk-methods';
+import { UnsignedTxPayloadResponse } from '../types/sdk-methods';
 import {
-  SignTxArgsDto,
-  SignTxResultDto,
-  SubmitResultDto,
-  SubmitTxArgsDto,
-  TxBuildArgsDto,
+  SignTxBody,
+  SignTxResultResponse,
+  SubmitResultResponse,
+  SubmitTxBody,
+  TxBuildBody,
 } from '../types/arguments';
 
 @UseFilters(SdkExceptionsFilter)
@@ -23,22 +23,24 @@ export class ExtrinsicsController {
   constructor(private readonly sdk: Sdk) {}
 
   @Post('build')
-  async buildTx(@Body() args: TxBuildArgsDto): Promise<UnsignedTxPayloadDto> {
+  async buildTx(@Body() args: TxBuildBody): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.extrinsics.build(args);
   }
 
   @Post('sign')
   @ApiBearerAuth('SeedAuth')
   async sign(
-    @Body() args: SignTxArgsDto,
+    @Body() args: SignTxBody,
     @Headers() headers: SignHeaders,
     @Signer() signer?: SdkSigner,
-  ): Promise<SignTxResultDto> {
+  ): Promise<SignTxResultResponse> {
     return this.sdk.extrinsics.sign(args, signer);
   }
 
   @Post('verify-sign')
-  async verifySign(@Body() args: SubmitTxArgsDto): Promise<VerificationResult> {
+  async verifySign(
+    @Body() args: SubmitTxBody,
+  ): Promise<VerificationResultResponse> {
     try {
       await this.sdk.extrinsics.verifySignOrThrow(args);
 
@@ -52,8 +54,8 @@ export class ExtrinsicsController {
   }
 
   @Post('submit')
-  async submitTx(@Body() args: SubmitTxArgsDto): Promise<SubmitResultDto> {
-    await validate(args, SubmitTxArgsDto);
+  async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
+    await validate(args, SubmitTxBody);
     return this.sdk.extrinsics.submit(args);
   }
 }

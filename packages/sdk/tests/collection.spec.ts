@@ -1,7 +1,7 @@
 import { u8aToHex } from '@polkadot/util';
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { CreateCollectionArgs } from '@unique-nft/sdk/types';
+import { CreateCollectionArguments } from '@unique-nft/sdk/types';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '../src/lib/sdk';
 import {
@@ -37,7 +37,7 @@ const constOnChainSchema: INamespace = {
 
 const constData = { ipfsJson: 'aaa', name: 'bbb' };
 
-const collectionInitial: Omit<CreateCollectionArgs, 'address'> = {
+const collectionInitial: Omit<CreateCollectionArguments, 'address'> = {
   name: `foo_${Math.floor(Math.random() * 1000)}`,
   description: 'bar',
   tokenPrefix: 'BAZ',

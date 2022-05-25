@@ -13,13 +13,13 @@ import {
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { TokenInfoDto } from '../types/unique-types';
+import { TokenInfoResponse } from '../types/unique-types';
 import {
-  BurnTokenArgsDto,
-  CreateTokenArgsDto,
-  TokenIdArgDto,
-  TransferTokenArgsDto,
-  UnsignedTxPayloadDto,
+  BurnTokenBody,
+  CreateTokenBody,
+  TokenIdQuery,
+  TransferTokenBody,
+  UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 
 @UseFilters(SdkExceptionsFilter)
@@ -29,7 +29,7 @@ export class TokenController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getToken(@Query() args: TokenIdArgDto): Promise<TokenInfoDto> {
+  async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
     const token = await this.sdk.token.get(args);
 
     if (token) return token;
@@ -41,22 +41,22 @@ export class TokenController {
 
   @Post()
   async createToken(
-    @Body() args: CreateTokenArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
+    @Body() args: CreateTokenBody,
+  ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.token.create(args);
   }
 
   @Delete()
   async burnToken(
-    @Body() args: BurnTokenArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
+    @Body() args: BurnTokenBody,
+  ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.token.burn(args);
   }
 
   @Patch('transfer')
   async transferToken(
-    @Body() args: TransferTokenArgsDto,
-  ): Promise<UnsignedTxPayloadDto> {
+    @Body() args: TransferTokenBody,
+  ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.token.transfer(args);
   }
 }

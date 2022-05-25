@@ -11,11 +11,11 @@ import {
 } from './unique-types';
 import {
   SdkSigner,
-  SignTxArgs,
+  SignTxArguments,
   SignTxResult,
   SubmitResult,
-  SubmitTxArgs,
-  TxBuildArgs,
+  SubmitTxArguments,
+  TxBuildArguments,
 } from './arguments';
 
 export interface ChainProperties {
@@ -35,69 +35,69 @@ export interface Balance {
   // todo withUnit: string
 }
 
-export interface TransferBuildArgs {
+export interface TransferBuildArguments {
   address: string;
   destination: string;
   amount: number;
 }
 
-export interface CollectionIdArg {
+export interface CollectionIdArguments {
   collectionId: number;
 }
 
-export interface TokenIdArg extends CollectionIdArg {
+export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
 }
 
-export interface AddressArg {
+export interface AddressArguments {
   address: string;
 }
 
-export interface CreateCollectionArgs extends CollectionInfoBase {
+export interface CreateCollectionArguments extends CollectionInfoBase {
   address: string;
 }
 
-export interface BurnCollectionArgs {
+export interface BurnCollectionArguments {
   collectionId: number;
   address: string;
 }
-export interface TransferCollectionArgs {
+export interface TransferCollectionArguments {
   collectionId: number;
   from: string;
   to: string;
 }
 
-export interface CreateTokenArgs {
+export interface CreateTokenArguments {
   collectionId: number;
   address: string;
   constData: AnyObject;
 }
 
-export interface BurnTokenArgs extends TokenIdArg {
+export interface BurnTokenArguments extends TokenIdArguments {
   address: string;
 }
-export interface TransferTokenArgs extends TokenIdArg {
+export interface TransferTokenArguments extends TokenIdArguments {
   from: string;
   to: string;
 }
 
 export interface ISdkCollection {
-  get(args: CollectionIdArg): Promise<CollectionInfo | null>;
-  create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload>;
-  burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload>;
-  transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload>;
+  get(args: CollectionIdArguments): Promise<CollectionInfo | null>;
+  create(collection: CreateCollectionArguments): Promise<UnsignedTxPayload>;
+  burn(args: BurnCollectionArguments): Promise<UnsignedTxPayload>;
+  transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdkToken {
-  get(args: TokenIdArg): Promise<TokenInfo | null>;
-  create(token: CreateTokenArgs): Promise<UnsignedTxPayload>;
-  burn(args: BurnTokenArgs): Promise<UnsignedTxPayload>;
-  transfer(args: TransferTokenArgs): Promise<UnsignedTxPayload>;
+  get(args: TokenIdArguments): Promise<TokenInfo | null>;
+  create(token: CreateTokenArguments): Promise<UnsignedTxPayload>;
+  burn(args: BurnTokenArguments): Promise<UnsignedTxPayload>;
+  transfer(args: TransferTokenArguments): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdkBalance {
-  get(args: AddressArg): Promise<Balance>;
-  transfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
+  get(args: AddressArguments): Promise<Balance>;
+  transfer(buildArgs: TransferBuildArguments): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdk {
@@ -115,7 +115,10 @@ export interface UnsignedTxPayload {
 }
 
 export interface ISdkExtrinsics {
-  build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
-  sign(args: SignTxArgs, signer: SdkSigner | undefined): Promise<SignTxResult>;
-  submit(args: SubmitTxArgs): Promise<SubmitResult>;
+  build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload>;
+  sign(
+    args: SignTxArguments,
+    signer: SdkSigner | undefined,
+  ): Promise<SignTxResult>;
+  submit(args: SubmitTxArguments): Promise<SubmitResult>;
 }

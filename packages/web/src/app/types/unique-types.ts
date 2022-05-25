@@ -113,7 +113,7 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
 }
 
-export class CollectionInfoDto extends CollectionInfoBaseDto {
+export class CollectionInfoResponse extends CollectionInfoBaseDto {
   @ApiProperty({
     example: 1,
   })
@@ -131,7 +131,7 @@ export class CollectionInfoDto extends CollectionInfoBaseDto {
   tokensCount: number;
 }
 
-export class TokenInfoDto implements TokenInfo {
+export class TokenInfoResponse implements TokenInfo {
   @ApiProperty({
     example: 1,
   })
