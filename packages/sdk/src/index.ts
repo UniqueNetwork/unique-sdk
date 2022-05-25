@@ -1,1 +1,2 @@
-export { Sdk, addFeature } from './lib/sdk';
+export { Sdk } from './lib/sdk';
+export { addFeature } from './lib/add-feature';
