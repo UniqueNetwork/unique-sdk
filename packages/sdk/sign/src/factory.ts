@@ -1,53 +1,24 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk/types';
-import {
-  KeyfileSignerOptions,
-  PolkadotSignerOptions,
-  SeedSignerOptions,
-  SignerOptions,
-} from './types';
+import { SignerOptions } from './types';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
 import { PolkadotSigner } from './polkadot-signer';
 
-type OptionsType<T> = {
-  new (...args: any[]): T;
-};
-type SignerType<T> = {
-  new (options: T): any;
-};
-function validateAndCreate<T extends object>(
-  options: T,
-  OptionsClass: OptionsType<T>,
-  SignerClass: SignerType<T>,
-): SdkSigner {
-  // todo @ApiProperty validateSync in sign factory
-  //validateSync(options, OptionsClass);
+export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
   try {
-    return new SignerClass(options);
+    if ('seed' in signerOptions) {
+      return new SeedSigner(signerOptions);
+    }
+    if ('keyfile' in signerOptions) {
+      return new KeyfileSigner(signerOptions);
+    }
+    if ('choosePolkadotAccount' in signerOptions) {
+      return new PolkadotSigner(signerOptions);
+    }
   } catch (err: any) {
     throw new InvalidSignerError(err.message);
-  }
-}
-
-export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
-  if ('seed' in signerOptions) {
-    return validateAndCreate(signerOptions, SeedSignerOptions, SeedSigner);
-  }
-  if ('keyfile' in signerOptions) {
-    return validateAndCreate(
-      signerOptions,
-      KeyfileSignerOptions,
-      KeyfileSigner,
-    );
-  }
-  if ('choosePolkadotAccount' in signerOptions) {
-    return validateAndCreate(
-      signerOptions,
-      PolkadotSignerOptions,
-      PolkadotSigner,
-    );
   }
   throw new InvalidSignerError('Not known options');
 }

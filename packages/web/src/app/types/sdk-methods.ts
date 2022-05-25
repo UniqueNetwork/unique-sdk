@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
 import {

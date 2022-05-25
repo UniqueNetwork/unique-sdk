@@ -7,10 +7,14 @@ import {
 } from '@polkadot/util-crypto';
 import { u8aToHex } from '@polkadot/util';
 
-import { Account, GenerateAccountArgs, GetAccountArgs } from './types';
+import {
+  Account,
+  GenerateAccountArguments,
+  GetAccountArguments,
+} from './types';
 
 export async function getAccountFromMnemonic(
-  args: GetAccountArgs,
+  args: GetAccountArguments,
 ): Promise<Account> {
   const { mnemonic, password, pairType, meta } = args;
   const seed = mnemonicToMiniSecret(mnemonic, password);
@@ -30,7 +34,7 @@ export async function getAccountFromMnemonic(
 }
 
 export async function generateAccount(
-  args: GenerateAccountArgs,
+  args: GenerateAccountArguments,
 ): Promise<Account> {
   const mnemonic = mnemonicGenerate();
   return getAccountFromMnemonic({

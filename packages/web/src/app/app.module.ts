@@ -8,11 +8,7 @@ import {
 import { APP_FILTER } from '@nestjs/core';
 import { Sdk } from '@unique-nft/sdk';
 import { ConfigService } from '@nestjs/config';
-import {
-  SeedSignerOptions,
-  SignerOptions,
-  createSigner,
-} from '@unique-nft/sdk/sign';
+import { SignerOptions, createSigner } from '@unique-nft/sdk/sign';
 
 import {
   BalanceController,
@@ -28,7 +24,7 @@ import { SdkExceptionsFilter } from './utils/exception-filter';
 
 function createSignerOptions(configService: ConfigService): SignerOptions {
   const { seed } = configService.get<SignerConfig>('signer');
-  if (seed) return new SeedSignerOptions(seed);
+  if (seed) return { seed };
   return null;
 }
 

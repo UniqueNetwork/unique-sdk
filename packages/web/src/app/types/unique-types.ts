@@ -2,7 +2,6 @@
 import { AnyJson } from '@polkadot/types/types';
 import { INamespace } from 'protobufjs';
 import { ApiProperty } from '@nestjs/swagger';
-import { DEFAULT_CONST_SCHEMA } from './constants';
 import {
   CollectionAccess,
   CollectionInfoBase,
@@ -12,6 +11,8 @@ import {
   MetaUpdatePermission,
   TokenInfo,
 } from '@unique-nft/sdk/types';
+
+import { DEFAULT_CONST_SCHEMA } from './constants';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;

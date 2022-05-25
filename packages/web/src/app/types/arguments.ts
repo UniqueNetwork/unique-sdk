@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { HexString } from '@polkadot/util/types';
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { IsEnum, IsHexadecimal, IsNotEmptyObject } from 'class-validator';
