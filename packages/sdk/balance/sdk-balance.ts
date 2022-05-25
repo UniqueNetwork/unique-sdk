@@ -3,7 +3,6 @@ import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   UnsignedTxPayload,
-  ISdkBalance,
   TransferBuildArguments,
   AddressArguments,
   Balance,
@@ -14,7 +13,7 @@ interface Sdk {
   extrinsics: SdkExtrinsics;
 }
 
-export class SdkBalance implements ISdkBalance {
+export class SdkBalance {
   private readonly multiplierToRaw: number;
 
   constructor(private readonly sdk: Sdk) {
