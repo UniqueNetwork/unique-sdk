@@ -1,6 +1,7 @@
 import { ValidationError } from '@unique-nft/sdk/errors';
 import { createSignerSync, SignerOptions } from '@unique-nft/sdk/sign';
 import { SdkSigner } from '@unique-nft/sdk/types';
+import { validateSeed } from '../validation';
 
 export function createSignerByHeader(authorization: string): SdkSigner {
   const splitterIndex = authorization.indexOf(' ');
@@ -9,6 +10,9 @@ export function createSignerByHeader(authorization: string): SdkSigner {
   let signerOptions: SignerOptions;
   switch (type) {
     case 'Seed':
+      if (!validateSeed(value)) {
+        throw new ValidationError('Invalid seed value');
+      }
       signerOptions = { seed: value };
       break;
     default:

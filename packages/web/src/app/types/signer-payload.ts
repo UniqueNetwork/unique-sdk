@@ -14,6 +14,7 @@ import {
   GenerateAccountArguments,
   GetAccountArguments,
 } from '@unique-nft/sdk/sign';
+import { ValidMnemonic } from '../validation';
 
 export class GenerateAccountBody implements GenerateAccountArguments {
   @IsOptional()
@@ -30,6 +31,7 @@ export class GetAccountQuery
   extends GenerateAccountBody
   implements GetAccountArguments
 {
+  @ValidMnemonic()
   mnemonic: string;
 }
 

@@ -1,11 +1,7 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
-import {
-  BadSignatureError,
-  InvalidSignerError,
-  ValidationError,
-} from '@unique-nft/sdk/errors';
+import { BadSignatureError, InvalidSignerError } from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {
   createSigner,
@@ -71,20 +67,6 @@ describe('Sdk signers', () => {
   }
 
   describe('seed/uri', () => {
-    it('uri validate - ok', async () => {
-      await createSdk({
-        seed: '//Alice',
-      });
-    });
-
-    it('uri validate - fail', async () => {
-      await expect(async () => {
-        await createSdk({
-          seed: 'Alice',
-        });
-      }).rejects.toThrowError(new ValidationError({}));
-    });
-
     it.each([
       ['alice', { seed: '//Alice' }],
       ['testUser', { seed: testUser.seed }],
@@ -146,18 +128,6 @@ describe('Sdk signers', () => {
   });
 
   describe('keyfile', () => {
-    it('validate - fail', async () => {
-      await expect(async () => {
-        const keyfile: object = {};
-        await createSdk({
-          keyfile: keyfile as KeyringPair$Json,
-          passwordCallback() {
-            return Promise.resolve('');
-          },
-        });
-      }).rejects.toThrowError(new ValidationError({}));
-    });
-
     it('create - fail, pass empty', async () => {
       const sdk = await createSdk({
         keyfile: testUser.keyfile as KeyringPair$Json,
