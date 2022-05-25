@@ -11,7 +11,6 @@ import {
   ISdkCollection,
   TransferCollectionArgs,
 } from '@unique-nft/sdk/types';
-import { validate } from '@unique-nft/sdk/validation';
 
 import { decodeCollection } from './utils/decode-collection';
 import { encodeCollection } from './utils/encode-collection';
@@ -45,7 +44,6 @@ export class SdkCollection implements ISdkCollection {
   }
 
   async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
-    await validate(collection, CreateCollectionArgs);
     const { address, ...rest } = collection;
 
     const encodedCollection = encodeCollection(

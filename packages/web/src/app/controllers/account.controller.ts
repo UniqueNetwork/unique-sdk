@@ -10,6 +10,7 @@ import {
 } from '@unique-nft/sdk/sign';
 
 import { SdkExceptionsFilter } from '../utils/exception-filter';
+import { validate } from '../validation';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('account')
@@ -17,11 +18,13 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 export class AccountController {
   @Get()
   async getAccount(@Query() args: GetAccountArgs): Promise<Account> {
+    await validate(args, GetAccountArgs);
     return getAccountFromMnemonic(args);
   }
 
   @Post('generate')
   async generate(@Body() args: GenerateAccountArgs): Promise<Account> {
+    await validate(args, GetAccountArgs);
     return generateAccount(args);
   }
 }

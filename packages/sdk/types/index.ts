@@ -4,4 +4,3 @@ export * from './unique-types';
 export * from './constants';
 export * from './arguments';
 export * from './polkadot-types';
-export * from './signer-payload';

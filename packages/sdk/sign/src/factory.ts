@@ -1,5 +1,4 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { validateSync } from '@unique-nft/sdk/validation';
 import { InvalidSignerError } from '@unique-nft/sdk/errors';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import {
@@ -23,7 +22,8 @@ function validateAndCreate<T extends object>(
   OptionsClass: OptionsType<T>,
   SignerClass: SignerType<T>,
 ): SdkSigner {
-  validateSync(options, OptionsClass);
+  // todo @ApiProperty validateSync in sign factory
+  //validateSync(options, OptionsClass);
   try {
     return new SignerClass(options);
   } catch (err: any) {
