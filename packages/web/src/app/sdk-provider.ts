@@ -13,7 +13,7 @@ import { SignerConfig } from './config/config.module';
 
 function createSignerOptions(configService: ConfigService): SignerOptions {
   const { seed } = configService.get<SignerConfig>('signer');
-  if (seed) return new SeedSignerOptions(seed);
+  if (seed) return { seed };
   return null;
 }
 

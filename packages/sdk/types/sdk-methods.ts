@@ -1,10 +1,8 @@
-/* eslint-disable max-classes-per-file */
-
-import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
-import { NotYourselfAddress, ValidAddress } from '@unique-nft/sdk/validation';
-import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
+import {
+  SignerPayloadJSON,
+  SignerPayloadRaw,
+} from '@polkadot/types/types/extrinsic';
 import {
   AnyObject,
   CollectionInfo,
@@ -13,55 +11,23 @@ import {
 } from './unique-types';
 import {
   SdkSigner,
-  SignTxArgs,
+  SignTxArguments,
   SignTxResult,
   SubmitResult,
-  SubmitTxArgs,
-  TxBuildArgs,
+  SubmitTxArguments,
+  TxBuildArguments,
 } from './arguments';
 
-const AddressApiProperty = ApiProperty({
-  description: 'The ss-58 encoded address',
-  example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
-});
-
-export class ChainProperties {
-  @ApiProperty({
-    example: 255,
-  })
+export interface ChainProperties {
   SS58Prefix: number;
-
-  @ApiProperty({
-    example: 'QTZ',
-  })
   token: string;
-
-  @ApiProperty({
-    example: 18,
-  })
   decimals: number;
-
-  @ApiProperty({
-    example: 'wss://ws-quartz.unique.network',
-  })
   wsUrl: string;
-
-  @ApiProperty({
-    example:
-      '0xe9fa5b65a927e85627d87572161f0d86ef65d1432152d59b7a679fb6c7fd3b39',
-  })
   genesisHash: HexString;
 }
 
-export class Balance {
-  @ApiProperty({
-    example: '411348197000000000000',
-  })
+export interface Balance {
   amount: string;
-
-  @ApiProperty({
-    example: '411.3481 QTZ',
-  })
   formatted: string;
 
   // todo see sdk.ts line 50
@@ -69,121 +35,69 @@ export class Balance {
   // todo withUnit: string
 }
 
-export class TransferBuildArgs {
-  @IsString()
-  @ValidAddress()
-  @NotYourselfAddress('destination')
-  @AddressApiProperty
+export interface TransferBuildArguments {
   address: string;
-
-  @ValidAddress()
-  @AddressApiProperty
   destination: string;
-
-  @IsNumber()
-  @IsPositive()
-  @NotEquals(0)
-  @ApiProperty({
-    example: 0.01,
-  })
   amount: number;
 }
 
-export class CollectionIdArg {
-  @ApiProperty({
-    example: 1,
-  })
+export interface CollectionIdArguments {
   collectionId: number;
 }
 
-export class TokenIdArg extends CollectionIdArg {
-  @ApiProperty({
-    example: 1,
-  })
+export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
 }
 
-export class AddressArg {
-  @ValidAddress()
-  @ApiProperty()
+export interface AddressArguments {
   address: string;
 }
 
-export class CreateCollectionArgs extends CollectionInfoBase {
-  @AddressApiProperty
+export interface CreateCollectionArguments extends CollectionInfoBase {
   address: string;
 }
 
-export class BurnCollectionArgs {
-  @ApiProperty({
-    example: 1,
-  })
+export interface BurnCollectionArguments {
   collectionId: number;
-
-  @ValidAddress()
-  @AddressApiProperty
   address: string;
 }
-export class TransferCollectionArgs {
-  @ApiProperty()
+export interface TransferCollectionArguments {
   collectionId: number;
-
-  @ApiProperty()
   from: string;
-
-  @ApiProperty()
   to: string;
 }
 
-export class CreateTokenArgs {
-  @ApiProperty({ example: 1 })
+export interface CreateTokenArguments {
   collectionId: number;
-
-  @ValidAddress()
-  @AddressApiProperty
   address: string;
-
-  @ApiProperty({
-    example: {
-      ipfsJson:
-        '{"ipfs":"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb","type":"image"}',
-      gender: 'Male',
-      traits: ['TEETH_SMILE', 'UP_HAIR'],
-    },
-  })
   constData: AnyObject;
 }
 
-export class BurnTokenArgs extends TokenIdArg {
-  @ValidAddress()
-  @AddressApiProperty
+export interface BurnTokenArguments extends TokenIdArguments {
   address: string;
 }
-export class TransferTokenArgs extends TokenIdArg {
-  @AddressApiProperty
+export interface TransferTokenArguments extends TokenIdArguments {
   from: string;
-
-  @AddressApiProperty
   to: string;
 }
 
 export interface ISdkCollection {
-  get(args: CollectionIdArg): Promise<CollectionInfo | null>;
-  create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload>;
-  burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload>;
-  transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload>;
+  get(args: CollectionIdArguments): Promise<CollectionInfo | null>;
+  create(collection: CreateCollectionArguments): Promise<UnsignedTxPayload>;
+  burn(args: BurnCollectionArguments): Promise<UnsignedTxPayload>;
+  transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdkToken {
-  get(args: TokenIdArg): Promise<TokenInfo | null>;
-  create(token: CreateTokenArgs): Promise<UnsignedTxPayload>;
-  burn(args: BurnTokenArgs): Promise<UnsignedTxPayload>;
-  transfer(args: TransferTokenArgs): Promise<UnsignedTxPayload>;
+  get(args: TokenIdArguments): Promise<TokenInfo | null>;
+  create(token: CreateTokenArguments): Promise<UnsignedTxPayload>;
+  burn(args: BurnTokenArguments): Promise<UnsignedTxPayload>;
+  transfer(args: TransferTokenArguments): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdkBalance {
-  get(args: AddressArg): Promise<Balance>;
-  transfer(buildArgs: TransferBuildArgs): Promise<UnsignedTxPayload>;
+  get(args: AddressArguments): Promise<Balance>;
+  transfer(buildArgs: TransferBuildArguments): Promise<UnsignedTxPayload>;
 }
 
 export interface ISdk {
@@ -194,19 +108,17 @@ export interface ISdk {
   chainProperties(): ChainProperties;
 }
 
-export class UnsignedTxPayload {
-  @ApiProperty()
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  @ApiProperty()
-  signerPayloadRaw: SignerPayloadRawDto;
-
-  @ApiProperty({ type: String })
+export interface UnsignedTxPayload {
+  signerPayloadJSON: SignerPayloadJSON;
+  signerPayloadRaw: SignerPayloadRaw;
   signerPayloadHex: HexString;
 }
 
 export interface ISdkExtrinsics {
-  build(buildArgs: TxBuildArgs): Promise<UnsignedTxPayload>;
-  sign(args: SignTxArgs, signer: SdkSigner | undefined): Promise<SignTxResult>;
-  submit(args: SubmitTxArgs): Promise<SubmitResult>;
+  build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload>;
+  sign(
+    args: SignTxArguments,
+    signer: SdkSigner | undefined,
+  ): Promise<SignTxResult>;
+  submit(args: SubmitTxArguments): Promise<SubmitResult>;
 }

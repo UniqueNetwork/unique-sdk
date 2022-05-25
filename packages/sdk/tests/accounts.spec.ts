@@ -61,6 +61,8 @@ describe('Sdk Accounts', () => {
         mnemonic,
         password: 'pass1',
       });
-    }).rejects.toThrowError(new ValidationError({}));
+    }).rejects.toThrowError(
+      new ValidationError({}, 'Invalid bip39 mnemonic specified'),
+    );
   });
 });

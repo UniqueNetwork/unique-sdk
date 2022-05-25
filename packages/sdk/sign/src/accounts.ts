@@ -6,14 +6,16 @@ import {
   naclBoxPairFromSecret,
 } from '@polkadot/util-crypto';
 import { u8aToHex } from '@polkadot/util';
-import { validate } from '@unique-nft/sdk/validation';
 
-import { Account, GenerateAccountArgs, GetAccountArgs } from './types';
+import {
+  Account,
+  GenerateAccountArguments,
+  GetAccountArguments,
+} from './types';
 
 export async function getAccountFromMnemonic(
-  args: GetAccountArgs,
+  args: GetAccountArguments,
 ): Promise<Account> {
-  await validate(args, GetAccountArgs);
   const { mnemonic, password, pairType, meta } = args;
   const seed = mnemonicToMiniSecret(mnemonic, password);
   const { publicKey } = naclBoxPairFromSecret(seed);
@@ -32,7 +34,7 @@ export async function getAccountFromMnemonic(
 }
 
 export async function generateAccount(
-  args: GenerateAccountArgs,
+  args: GenerateAccountArguments,
 ): Promise<Account> {
   const mnemonic = mnemonicGenerate();
   return getAccountFromMnemonic({
