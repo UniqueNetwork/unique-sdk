@@ -33,6 +33,7 @@ export class CollectionController {
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
+    await validate(args, CollectionIdQuery);
     const collection = await this.sdk.collection.get(args);
 
     if (collection) return collection;
@@ -52,6 +53,7 @@ export class CollectionController {
   async burnCollection(
     @Body() args: BurnCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
+    await validate(args, BurnCollectionBody);
     return this.sdk.collection.burn(args);
   }
 
@@ -59,6 +61,7 @@ export class CollectionController {
   async transferCollection(
     @Body() args: TransferCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
+    await validate(args, TransferCollectionBody);
     return this.sdk.collection.transfer(args);
   }
 }

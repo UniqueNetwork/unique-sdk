@@ -1,6 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsNumber,
+  IsPositive,
+  IsInt,
+  NotEquals,
+} from 'class-validator';
 import {
   AddressArguments,
   AnyObject,
@@ -93,6 +100,9 @@ export class TransferBuildBody implements TransferBuildArguments {
 }
 
 export class CollectionIdQuery implements CollectionIdArguments {
+  @Type(() => Number)
+  @IsPositive()
+  @IsInt()
   @ApiProperty({
     example: 1,
   })
@@ -124,6 +134,8 @@ export class CreateCollectionBody
 }
 
 export class BurnCollectionBody implements BurnCollectionArguments {
+  @IsPositive()
+  @IsInt()
   @ApiProperty({
     example: 1,
   })
@@ -135,13 +147,16 @@ export class BurnCollectionBody implements BurnCollectionArguments {
 }
 
 export class TransferCollectionBody implements TransferCollectionArguments {
+  @IsPositive()
   @ApiProperty()
   collectionId: number;
 
-  @ApiProperty()
+  @ValidAddress()
+  @AddressApiProperty
   from: string;
 
-  @ApiProperty()
+  @ValidAddress()
+  @AddressApiProperty
   to: string;
 }
 
