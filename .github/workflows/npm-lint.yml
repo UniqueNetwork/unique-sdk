@@ -33,7 +33,7 @@ jobs:
         run: npm list
 
       - name: Install project dependencies
-        run: npm install
+        run: npm ci
 
       - name: NPM LINT
         run: npm run lint
