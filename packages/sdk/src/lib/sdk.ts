@@ -2,7 +2,6 @@ import '@unique-nft/types/augment-api';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 
 import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
 
@@ -10,8 +9,6 @@ export class Sdk {
   readonly isReady: Promise<boolean>;
 
   readonly api: ApiPromise;
-
-  readonly extrinsics: SdkExtrinsics;
 
   signer?: SdkSigner;
 
@@ -35,8 +32,6 @@ export class Sdk {
     this.isReady = this.api.isReady.then(() => true);
 
     this.signer = this.options.signer;
-
-    this.extrinsics = new SdkExtrinsics(this);
   }
 
   chainProperties(): ChainProperties {

@@ -1,16 +1,15 @@
 import { Sdk } from './sdk';
 
-type Constructor<T> = new (sdk: Sdk) => T;
-
+type Constructor<T, S> = new (sdk: S) => T;
 
 /**
  * add feature to Sdk
  * @param key
  * @param FeatureConstructor
  */
-export function addFeature<T>(
+export function addFeature<T, S = Sdk>(
   key: string,
-  FeatureConstructor: Constructor<T>,
+  FeatureConstructor: Constructor<T, S>,
 ): void {
   const privateKey = `_${key}`;
 
