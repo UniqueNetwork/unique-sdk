@@ -3,8 +3,9 @@ import { Provider } from '@nestjs/common';
 import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '@unique-nft/sdk';
 
-import '@unique-nft/sdk/balance';
+import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
+import '@unique-nft/sdk/balance';
 
 import { SignerConfig } from './config/config.module';
 
