@@ -1,10 +1,10 @@
-name: Tests
+name: Lint and build
 
 on: [push]
 
 jobs:
   tests:
-    name: Run build and tests
+    name: Run Lint and builds
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
