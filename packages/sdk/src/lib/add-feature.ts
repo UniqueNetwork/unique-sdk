@@ -2,6 +2,12 @@ import { Sdk } from './sdk';
 
 type Constructor<T> = new (sdk: Sdk) => T;
 
+
+/**
+ * add feature to Sdk
+ * @param key
+ * @param FeatureConstructor
+ */
 export function addFeature<T>(
   key: string,
   FeatureConstructor: Constructor<T>,
