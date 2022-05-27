@@ -15,7 +15,7 @@ jobs:
   build-and-publish:
     name: Build and publish package
     runs-on: ubuntu-latest
-    if:  ${{ github.event.inputs.publish == 'true' }}
+#    if:  ${{ github.event.inputs.publish == 'true' }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
