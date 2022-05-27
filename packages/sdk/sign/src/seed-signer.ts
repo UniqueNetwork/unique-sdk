@@ -15,7 +15,7 @@ export class SeedSigner implements SdkSigner {
   }
 
   public sign(payload: HexString): Promise<SignResult> {
-    const signatureU8a = this.pair.sign(payload, { withType: true });
+    const signatureU8a = this.pair.sign(payload);
 
     return Promise.resolve({
       signature: u8aToHex(signatureU8a),
