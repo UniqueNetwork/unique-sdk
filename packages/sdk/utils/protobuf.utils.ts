@@ -15,6 +15,7 @@ export function serializeConstData(
 
   const message = NFTMeta.create(transformedPayload);
 
+  // todo - finish() should return Uint8Array, but in fact return Buffer, so we use this workaround for now
   return Uint8Array.from(NFTMeta.encode(message).finish());
 }
 
