@@ -122,7 +122,7 @@ describe('Web signers', () => {
     });
   }
 
-  describe('sign and submit', function () {
+  describe('sign and submit', () => {
     let app: INestApplication;
     beforeAll(async () => {
       app = await createApp();
