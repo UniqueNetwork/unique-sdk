@@ -33,3 +33,16 @@ export interface TxBuildArguments {
   era?: number;
   isImmortal?: boolean;
 }
+
+export enum QueryController {
+  rpc = 'rpc',
+  derive = 'derive',
+  chain = 'chain',
+}
+
+export interface QueryArguments {
+  controller: QueryController;
+  section: string;
+  method: string;
+  args: Array<string | number | BigInt | Record<string, any>>;
+}

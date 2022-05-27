@@ -2,15 +2,18 @@ import { formatBalance } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
-  UnsignedTxPayload,
-  TransferBuildArguments,
   AddressArguments,
   Balance,
+  QueryController,
+  TransferBuildArguments,
+  UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
+import { SdkStateQueries } from '@unique-nft/sdk/state-queries';
 
 interface Sdk {
   api: ApiPromise;
   extrinsics: SdkExtrinsics;
+  stateQueries: SdkStateQueries;
 }
 
 export class SdkBalance {
@@ -24,9 +27,12 @@ export class SdkBalance {
   async get(args: AddressArguments): Promise<Balance> {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
-    const { availableBalance } = await this.sdk.api.derive.balances.all(
-      args.address,
-    );
+    const { availableBalance } = await this.sdk.stateQueries.execute({
+      controller: QueryController.derive,
+      section: 'balances',
+      method: 'all',
+      args: [args.address],
+    });
 
     return {
       amount: availableBalance.toBigInt().toString(),
