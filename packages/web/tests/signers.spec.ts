@@ -53,12 +53,12 @@ describe('Web signers', () => {
     }
   }
 
-  async function signAndVerify(
+  async function transferAndSign(
     app: INestApplication,
     from: string,
     to: string,
     headers: object = {},
-  ): Promise<request.Test> {
+  ): Promise<{ signature: string; signerPayloadJSON: object }> {
     const buildResponse = await request(app.getHttpServer())
       .post(`/api/balance/transfer`)
       .send({
@@ -78,6 +78,22 @@ describe('Web signers', () => {
     expect(true).toEqual(signResponse.ok);
     const { signature } = signResponse.body;
 
+    return { signature, signerPayloadJSON };
+  }
+
+  async function signAndVerify(
+    app: INestApplication,
+    from: string,
+    to: string,
+    headers: object = {},
+  ): Promise<request.Test> {
+    const { signature, signerPayloadJSON } = await transferAndSign(
+      app,
+      from,
+      to,
+      headers,
+    );
+
     return request(app.getHttpServer())
       .post(`/api/extrinsic/verify-sign`)
       .send({
@@ -85,6 +101,48 @@ describe('Web signers', () => {
         signerPayloadJSON,
       });
   }
+
+  async function signAndSubmit(
+    app: INestApplication,
+    from: string,
+    to: string,
+    headers: object = {},
+  ): Promise<request.Test> {
+    const { signature, signerPayloadJSON } = await transferAndSign(
+      app,
+      from,
+      to,
+      headers,
+    );
+
+    return request(app.getHttpServer()).post(`/api/extrinsic/submit`).send({
+      signature,
+      signerPayloadJSON,
+      signatureType: SignatureType.Sr25519,
+    });
+  }
+
+  describe('sign and submit', () => {
+    let app: INestApplication;
+    beforeAll(async () => {
+      app = await createApp();
+    });
+
+    it('submit ok', async () => {
+      const { ok, body } = await signAndSubmit(
+        app,
+        alice.address,
+        bob.address,
+        {
+          Authorization: 'Seed //Alice',
+        },
+      );
+      expect(true).toEqual(ok);
+      expect(body).toMatchObject({
+        hash: expect.any(String),
+      });
+    });
+  });
 
   describe('signer env/uri', () => {
     let app: INestApplication;

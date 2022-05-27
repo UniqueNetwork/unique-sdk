@@ -31,7 +31,7 @@ export class KeyfileSigner implements SdkSigner {
 
   public async sign(payload: HexString): Promise<SignResult> {
     await this.unlock();
-    const signatureU8a = this.pair.sign(payload, { withType: false });
+    const signatureU8a = this.pair.sign(payload);
 
     return {
       signature: u8aToHex(signatureU8a),
