@@ -11,6 +11,9 @@
       "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
     }
   },
+  "angularCompilerOptions": {
+    "enableIvy": false
+  },
   "include": ["**/*.ts"],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }
