@@ -2,15 +2,15 @@ import '@unique-nft/types/augment-api';
 
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-import { UnsignedTxPayload ,
-  BurnCollectionArgs,
-  CollectionIdArg,
+import {
+  UnsignedTxPayload,
+  BurnCollectionArguments,
+  CollectionIdArguments,
   CollectionInfo,
-  CreateCollectionArgs,
+  CreateCollectionArguments,
   ISdkCollection,
-  TransferCollectionArgs,
+  TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
-import { validate } from '@unique-nft/sdk/validation';
 
 import { decodeCollection } from './utils/decode-collection';
 import { encodeCollection } from './utils/encode-collection';
@@ -23,17 +23,31 @@ interface Sdk {
 export class SdkCollection implements ISdkCollection {
   constructor(readonly sdk: Sdk) {}
 
-  async get({ collectionId }: CollectionIdArg): Promise<CollectionInfo | null> {
+  async get({
+    collectionId,
+  }: CollectionIdArguments): Promise<CollectionInfo | null> {
     const collectionOption = await this.sdk.api.rpc.unique.collectionById(
       collectionId,
     );
+
     const collection = collectionOption.unwrapOr(null);
 
-    return collection ? decodeCollection(collectionId, collection) : collection;
+    if (!collection) return null;
+
+    const tokensCount = await this.sdk.api.rpc.unique.lastTokenId(collectionId);
+    const decoded = decodeCollection(collection);
+
+    return {
+      ...decoded,
+      id: collectionId,
+      tokensCount: tokensCount.toNumber(),
+      owner: collection.owner.toString(),
+    };
   }
 
-  async create(collection: CreateCollectionArgs): Promise<UnsignedTxPayload> {
-    await validate(collection, CreateCollectionArgs);
+  async create(
+    collection: CreateCollectionArguments,
+  ): Promise<UnsignedTxPayload> {
     const { address, ...rest } = collection;
 
     const encodedCollection = encodeCollection(
@@ -49,7 +63,7 @@ export class SdkCollection implements ISdkCollection {
     });
   }
 
-  transfer(args: TransferCollectionArgs): Promise<UnsignedTxPayload> {
+  transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
       address: args.from,
       section: 'unique',
@@ -58,7 +72,7 @@ export class SdkCollection implements ISdkCollection {
     });
   }
 
-  burn(args: BurnCollectionArgs): Promise<UnsignedTxPayload> {
+  burn(args: BurnCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
       address: args.address,
       section: 'unique',

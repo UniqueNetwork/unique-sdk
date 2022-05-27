@@ -5,7 +5,7 @@ import { hexToU8a, isHex } from '@polkadot/util';
 export function ValidAddress(validationOptions?: ValidationOptions) {
   return (object: object, propertyName: string) => {
     registerDecorator({
-      name: 'NotYourselfAddress',
+      name: 'Address',
       target: object.constructor,
       propertyName,
       constraints: [],

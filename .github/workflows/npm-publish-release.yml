@@ -5,11 +5,11 @@ on:
     tags:
       - 'v*.*.*'
   workflow_dispatch:
-    inputs:
-      publish:
-        description: 'True to print to publish RC'
-        required: true
-        type: boolean
+#    inputs:
+#      publish:
+#        description: 'True to print to publish RC'
+#        required: true
+#        type: boolean
 
 jobs:
   build-and-publish:

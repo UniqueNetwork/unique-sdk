@@ -1,15 +1,13 @@
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
-import { waitReady } from '@polkadot/wasm-crypto';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { SignType } from '@unique-nft/sdk/sign';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
+import { SignatureType } from '@unique-nft/sdk/types';
 import * as process from 'process';
-import request from 'supertest';
 
-import { AppModule } from '../src/app/app.module';
+import request from 'supertest';
+import { createApp } from './utils.test';
 
 const testUser = {
   seed: 'bus ahead nation nice damp recall place dance guide media clap language',
@@ -32,28 +30,15 @@ const testUser = {
 };
 
 describe('Web signers', () => {
-  let app: INestApplication;
   let alice: KeyringPair;
   let bob: KeyringPair;
 
   beforeAll(async () => {
     await cryptoWaitReady();
 
-    alice = new Keyring({ type: SignType.sr25519 }).addFromUri('//Alice');
-    bob = new Keyring({ type: SignType.sr25519 }).addFromUri('//Bob');
+    alice = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Alice');
+    bob = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Bob');
   });
-
-  async function createApp() {
-    const testingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    await waitReady();
-
-    app = testingModule.createNestApplication();
-    app.setGlobalPrefix('/api');
-    await app.init();
-  }
 
   function getAddressByName(name: string): string {
     switch (name) {
@@ -68,17 +53,18 @@ describe('Web signers', () => {
     }
   }
 
-  async function signAndVerify(
+  async function transferAndSign(
+    app: INestApplication,
     from: string,
     to: string,
     headers: object = {},
-  ): Promise<request.Test> {
+  ): Promise<{ signature: string; signerPayloadJSON: object }> {
     const buildResponse = await request(app.getHttpServer())
       .post(`/api/balance/transfer`)
       .send({
         address: from,
         destination: to,
-        amount: 0.001,
+        amount: 0.000001,
       });
     expect(true).toEqual(buildResponse.ok);
     const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
@@ -92,6 +78,22 @@ describe('Web signers', () => {
     expect(true).toEqual(signResponse.ok);
     const { signature } = signResponse.body;
 
+    return { signature, signerPayloadJSON };
+  }
+
+  async function signAndVerify(
+    app: INestApplication,
+    from: string,
+    to: string,
+    headers: object = {},
+  ): Promise<request.Test> {
+    const { signature, signerPayloadJSON } = await transferAndSign(
+      app,
+      from,
+      to,
+      headers,
+    );
+
     return request(app.getHttpServer())
       .post(`/api/extrinsic/verify-sign`)
       .send({
@@ -100,32 +102,77 @@ describe('Web signers', () => {
       });
   }
 
-  describe('signer env/uri', () => {
+  async function signAndSubmit(
+    app: INestApplication,
+    from: string,
+    to: string,
+    headers: object = {},
+  ): Promise<request.Test> {
+    const { signature, signerPayloadJSON } = await transferAndSign(
+      app,
+      from,
+      to,
+      headers,
+    );
+
+    return request(app.getHttpServer()).post(`/api/extrinsic/submit`).send({
+      signature,
+      signerPayloadJSON,
+      signatureType: SignatureType.Sr25519,
+    });
+  }
+
+  describe('sign and submit', () => {
+    let app: INestApplication;
     beforeAll(async () => {
-      process.env.SIGNER_URI = '//Alice';
-      await createApp();
+      app = await createApp();
+    });
+
+    it('submit ok', async () => {
+      const { ok, body } = await signAndSubmit(
+        app,
+        alice.address,
+        bob.address,
+        {
+          Authorization: 'Seed //Alice',
+        },
+      );
+      expect(true).toEqual(ok);
+      expect(body).toMatchObject({
+        hash: expect.any(String),
+      });
+    });
+  });
+
+  describe('signer env/uri', () => {
+    let app: INestApplication;
+    beforeAll(async () => {
+      process.env.SIGNER_SEED = '//Alice';
+      app = await createApp();
     });
 
     it('sign - ok', async () => {
-      const { ok, body } = await signAndVerify(alice.address, bob.address);
+      const { ok, body } = await signAndVerify(app, alice.address, bob.address);
       expect(true).toEqual(ok);
       expect(true).toEqual(body.isValid);
     });
     it('sign - fail', async () => {
-      const { ok, body } = await signAndVerify(bob.address, alice.address);
+      const { ok, body } = await signAndVerify(app, bob.address, alice.address);
       expect(true).toEqual(ok);
       expect(false).toEqual(body.isValid);
     });
   });
 
   describe('signer env/seed', () => {
+    let app: INestApplication;
     beforeAll(async () => {
       process.env.SIGNER_SEED = testUser.seed;
-      await createApp();
+      app = await createApp();
     });
 
     it('sign - ok', async () => {
       const { ok, body } = await signAndVerify(
+        app,
         testUser.keyfile.address,
         bob.address,
       );
@@ -133,18 +180,19 @@ describe('Web signers', () => {
       expect(true).toEqual(body.isValid);
     });
     it('sign - fail', async () => {
-      const { ok, body } = await signAndVerify(alice.address, bob.address);
+      const { ok, body } = await signAndVerify(app, alice.address, bob.address);
       expect(true).toEqual(ok);
       expect(false).toEqual(body.isValid);
     });
   });
 
   describe('signer header', () => {
+    let app: INestApplication;
     beforeAll(async () => {
-      await createApp();
+      app = await createApp();
     });
 
-    it.each(['Uri Alice', '//Alice', testUser.seed])(
+    it.each(['Seed Alice', '//Alice', testUser.seed])(
       'invalid token - %s',
       async (headValue) => {
         const { ok, body } = await request(app.getHttpServer())
@@ -154,15 +202,17 @@ describe('Web signers', () => {
           })
           .send();
         expect(false).toEqual(ok);
-        expect(ErrorCodes.Validation).toEqual(body.error.code);
+        expect(body.error.code).toEqual(ErrorCodes.Validation);
+        expect(body.error.message).toEqual('Invalid authorization header');
       },
     );
 
     it.each([
-      ['Uri //Bob', 'alice'],
+      ['Seed //Bob', 'alice'],
       [`Seed ${testUser.seed}`, 'alice'],
     ])('sign fail - %s', async (Authorization, addressName) => {
       const { ok, body } = await signAndVerify(
+        app,
         getAddressByName(addressName),
         bob.address,
         {
@@ -174,10 +224,11 @@ describe('Web signers', () => {
     });
 
     it.each([
-      ['Uri //Alice', 'alice'],
+      ['Seed //Alice', 'alice'],
       [`Seed ${testUser.seed}`, 'testUser'],
     ])('sign ok - %s', async (Authorization, addressName) => {
       const { ok, body } = await signAndVerify(
+        app,
         getAddressByName(addressName),
         bob.address,
         {

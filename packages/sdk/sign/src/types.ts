@@ -1,54 +1,52 @@
 // eslint-disable-next-line max-classes-per-file
 import 'reflect-metadata';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { ValidSeed, ValidUri } from '@unique-nft/sdk/validation';
-import { IsNotEmptyObject, IsEnum, IsOptional } from 'class-validator';
+import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
+import { HexString } from '@polkadot/util/types';
+import { SignatureType } from '@unique-nft/sdk/types';
 
 export type SignerOptions =
   | SeedSignerOptions
-  | UriSignerOptions
-  | KeyfileSignerOptions;
+  | KeyfileSignerOptions
+  | PolkadotSignerOptions;
 
-export enum SignType {
-  ed25519 = 'ed25519',
-  sr25519 = 'sr25519',
-  ecdsa = 'ecdsa',
-  ethereum = 'ethereum',
-}
-
-export class SeedSignerOptions {
-  @ValidSeed()
+export interface SeedSignerOptions {
   seed: string;
-
-  @IsEnum(SignType)
-  @IsOptional()
-  type?: SignType;
-
-  constructor(seed: string) {
-    this.seed = seed;
-  }
+  type?: SignatureType;
 }
 
-export class UriSignerOptions {
-  @ValidUri()
-  uri: string;
-
-  @IsEnum(SignType)
-  @IsOptional()
-  type?: SignType;
-
-  constructor(uri: string) {
-    this.uri = uri;
-  }
-}
-
-export class KeyfileSignerOptions {
-  @IsNotEmptyObject()
+export interface KeyfileSignerOptions {
   keyfile: KeyringPair$Json;
-
   passwordCallback: () => Promise<string>;
+  type?: SignatureType;
+}
 
-  @IsEnum(SignType)
-  @IsOptional()
-  type?: SignType;
+export interface PolkadotExtensionDApp {
+  web3Accounts: () => Promise<any[]>;
+  web3Enable: (appName: string) => Promise<any[]>;
+  web3FromSource: (data: any) => any;
+  isWeb3Injected: boolean;
+}
+
+export interface PolkadotSignerOptions {
+  extensionDApp: PolkadotExtensionDApp;
+  choosePolkadotAccount: (accounts: any[]) => Promise<any>;
+}
+
+export interface GenerateAccountArguments {
+  password?: string;
+  pairType?: SignatureType;
+  meta?: KeyringPair$Meta;
+}
+export interface GetAccountArguments extends GenerateAccountArguments {
+  mnemonic: string;
+}
+
+export interface Account {
+  mnemonic: string;
+
+  seed: HexString;
+
+  publicKey: HexString;
+
+  keyfile: KeyringPair$Json;
 }

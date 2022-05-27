@@ -1,11 +1,7 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
-import {
-  BadSignatureError,
-  InvalidSignerError,
-  ValidationError,
-} from '@unique-nft/sdk/errors';
+import { BadSignatureError, InvalidSignerError } from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {
   createSigner,
@@ -15,7 +11,7 @@ import {
 import { Sdk } from '../src/lib/sdk';
 import { getDefaultSdkOptions } from './testing-utils';
 
-describe('signers', () => {
+describe('Sdk signers', () => {
   let alice: KeyringPair;
   let bob: KeyringPair;
 
@@ -71,22 +67,8 @@ describe('signers', () => {
   }
 
   describe('seed/uri', () => {
-    it('uri validate - ok', async () => {
-      await createSdk({
-        uri: '//Alice',
-      });
-    });
-
-    it('uri validate - fail', async () => {
-      await expect(async () => {
-        await createSdk({
-          uri: 'Alice',
-        });
-      }).rejects.toThrowError(new ValidationError({}));
-    });
-
     it.each([
-      ['alice', { uri: '//Alice' }],
+      ['alice', { seed: '//Alice' }],
       ['testUser', { seed: testUser.seed }],
     ])(
       'sign ok - %s',
@@ -96,22 +78,24 @@ describe('signers', () => {
           await sdk.balance.transfer({
             address: getAddressByName(addressName),
             destination: bob.address,
-            amount: 0.001,
+            amount: 0.000001,
           });
 
-        const { signature } = await sdk.extrinsics.sign({
+        const { signature, signatureType } = await sdk.extrinsics.sign({
           signerPayloadHex,
         });
+
         expect(typeof signature).toBe('string');
         await sdk.extrinsics.verifySignOrThrow({
           signature,
+          signatureType,
           signerPayloadJSON,
         });
       },
     );
 
     it.each([
-      ['bob', 'alice', { uri: '//Alice' }],
+      ['bob', 'alice', { seed: '//Alice' }],
       ['alice', 'bob', { seed: testUser.seed }],
     ])(
       'sign fail - %s->%s',
@@ -125,15 +109,17 @@ describe('signers', () => {
           await sdk.balance.transfer({
             address: getAddressByName(addressName),
             destination: getAddressByName(destinationName),
-            amount: 0.001,
+            amount: 0.000001,
           });
 
-        const { signature } = await sdk.extrinsics.sign({
+        const { signature, signatureType } = await sdk.extrinsics.sign({
           signerPayloadHex,
         });
+
         await expect(async () => {
           await sdk.extrinsics.verifySignOrThrow({
             signature,
+            signatureType,
             signerPayloadJSON,
           });
         }).rejects.toThrowError(new BadSignatureError());
@@ -142,18 +128,6 @@ describe('signers', () => {
   });
 
   describe('keyfile', () => {
-    it('validate - fail', async () => {
-      await expect(async () => {
-        const keyfile: object = {};
-        await createSdk({
-          keyfile: keyfile as KeyringPair$Json,
-          passwordCallback() {
-            return Promise.resolve('');
-          },
-        });
-      }).rejects.toThrowError(new ValidationError({}));
-    });
-
     it('create - fail, pass empty', async () => {
       const sdk = await createSdk({
         keyfile: testUser.keyfile as KeyringPair$Json,
@@ -207,15 +181,18 @@ describe('signers', () => {
         await sdk.balance.transfer({
           address: testUser.keyfile.address,
           destination: bob.address,
-          amount: 0.001,
+          amount: 0.000001,
         });
 
-      const { signature } = await sdk.extrinsics.sign({
+      const { signature, signatureType } = await sdk.extrinsics.sign({
         signerPayloadHex,
       });
+
       expect(typeof signature).toBe('string');
+
       await sdk.extrinsics.verifySignOrThrow({
         signature,
+        signatureType,
         signerPayloadJSON,
       });
     });

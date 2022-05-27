@@ -1,10 +1,49 @@
 /* eslint-disable max-classes-per-file */
 
+import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
+import { HexString } from '@polkadot/util/types';
+import { IsEnum, IsOptional } from 'class-validator';
 import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from '@polkadot/types/types/extrinsic';
 import { ApiProperty } from '@nestjs/swagger';
+import { SignatureType } from '@unique-nft/sdk/types';
+import {
+  Account,
+  GenerateAccountArguments,
+  GetAccountArguments,
+} from '@unique-nft/sdk/sign';
+import { ValidMnemonic } from '../validation';
+
+export class GenerateAccountBody implements GenerateAccountArguments {
+  @IsOptional()
+  password?: string;
+
+  @IsEnum(SignatureType)
+  @IsOptional()
+  pairType?: SignatureType;
+
+  @IsOptional()
+  meta?: KeyringPair$Meta;
+}
+export class GetAccountQuery
+  extends GenerateAccountBody
+  implements GetAccountArguments
+{
+  @ValidMnemonic()
+  mnemonic: string;
+}
+
+export class AccountResponse implements Account {
+  mnemonic: string;
+
+  seed: HexString;
+
+  publicKey: HexString;
+
+  keyfile: KeyringPair$Json;
+}
 
 export class SignerPayloadJSONDto implements SignerPayloadJSON {
   @ApiProperty({

@@ -1,14 +1,12 @@
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
-import { waitReady } from '@polkadot/wasm-crypto';
 import request from 'supertest';
 import { u8aToHex } from '@polkadot/util';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { BalanceController } from '../src/app/controllers';
-import { AppModule } from '../src/app/app.module';
+import { createApp } from './utils.test';
 
 describe(BalanceController.name, () => {
   let app: INestApplication;
@@ -17,15 +15,7 @@ describe(BalanceController.name, () => {
   let emptyUser: KeyringPair;
 
   beforeAll(async () => {
-    const testingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    await waitReady();
-
-    app = testingModule.createNestApplication();
-    app.setGlobalPrefix('/api');
-    await app.init();
+    app = await createApp();
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
@@ -40,13 +30,11 @@ describe(BalanceController.name, () => {
     from: KeyringPair,
     to: KeyringPair,
   ): request.Test {
-    return request(app.getHttpServer())
-      .post(`/api/balance/transfer`)
-      .send({
-        address: from.address,
-        destination: to.address,
-        amount,
-      });
+    return request(app.getHttpServer()).post(`/api/balance/transfer`).send({
+      address: from.address,
+      destination: to.address,
+      amount,
+    });
   }
   async function transfer(
     amount: number,
@@ -61,13 +49,11 @@ describe(BalanceController.name, () => {
     });
 
     const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
-    const signatureU8a = from.sign(signerPayloadHex, {
-      withType: true,
-    });
-    const signature = u8aToHex(signatureU8a);
+    const signature = u8aToHex(from.sign(signerPayloadHex));
 
     return request(app.getHttpServer()).post(`/api/extrinsic/submit`).send({
       signature,
+      signatureType: from.type,
       signerPayloadJSON,
     });
   }
@@ -96,11 +82,14 @@ describe(BalanceController.name, () => {
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
       const submitResponse = await transfer(0.001, alice, bob);
+
       expect(submitResponse.ok).toEqual(true);
+
       expect(submitResponse.body).toMatchObject({
         hash: expect.any(String),
       });
     });
+
     it('balance too low', async () => {
       const balanceResponse = await getBalance(emptyUser.address);
       const currentAmount = +balanceResponse.body.amount;
@@ -109,16 +98,20 @@ describe(BalanceController.name, () => {
         emptyUser,
         alice,
       );
+
       expect(submitResponse.ok).toEqual(false);
+
       expect(submitResponse.body.error.code).toEqual(
         ErrorCodes.SubmitExtrinsic,
       );
     });
+
     it.each([-1, 0])('invalid amount: %d', async (amount) => {
       const buildResponse = await transferBuild(amount, alice, bob);
       expect(buildResponse.ok).toEqual(false);
       expect(buildResponse.body.error.code).toEqual(ErrorCodes.Validation);
     });
+
     it('invalid transfer to myself', async () => {
       const buildResponse = await transferBuild(1, alice, alice);
       expect(buildResponse.ok).toEqual(false);

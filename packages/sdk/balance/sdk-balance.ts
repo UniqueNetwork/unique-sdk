@@ -1,12 +1,10 @@
 import { formatBalance } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-import { validate } from '@unique-nft/sdk/validation';
 import {
   UnsignedTxPayload,
-  ISdkBalance,
-  TransferBuildArgs,
-  AddressArg,
+  TransferBuildArguments,
+  AddressArguments,
   Balance,
 } from '@unique-nft/sdk/types';
 
@@ -15,7 +13,7 @@ interface Sdk {
   extrinsics: SdkExtrinsics;
 }
 
-export class SdkBalance implements ISdkBalance {
+export class SdkBalance {
   private readonly multiplierToRaw: number;
 
   constructor(private readonly sdk: Sdk) {
@@ -23,8 +21,7 @@ export class SdkBalance implements ISdkBalance {
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  async get(args: AddressArg): Promise<Balance> {
-    await validate(args, AddressArg);
+  async get(args: AddressArguments): Promise<Balance> {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
     const { availableBalance } = await this.sdk.api.derive.balances.all(
@@ -41,8 +38,7 @@ export class SdkBalance implements ISdkBalance {
     };
   }
 
-  async transfer(args: TransferBuildArgs): Promise<UnsignedTxPayload> {
-    await validate(args, TransferBuildArgs);
+  async transfer(args: TransferBuildArguments): Promise<UnsignedTxPayload> {
     const amountRaw = BigInt(args.amount * this.multiplierToRaw);
     return this.sdk.extrinsics.build({
       address: args.address,

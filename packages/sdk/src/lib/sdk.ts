@@ -2,32 +2,13 @@ import '@unique-nft/types/augment-api';
 import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 
-import {
-  ISdk,
-  ISdkBalance,
-  ISdkCollection,
-  ISdkToken,
-  SdkOptions,
-  SdkSigner,
-  ChainProperties,
-} from '@unique-nft/sdk/types';
-import { SdkCollection, SdkToken } from '@unique-nft/sdk/tokens';
-import { SdkBalance } from '@unique-nft/sdk/balance';
+import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
 
-export class Sdk implements ISdk {
+export class Sdk {
   readonly isReady: Promise<boolean>;
 
   readonly api: ApiPromise;
-
-  readonly extrinsics: SdkExtrinsics;
-
-  readonly balance: ISdkBalance;
-
-  collection: ISdkCollection;
-
-  token: ISdkToken;
 
   signer?: SdkSigner;
 
@@ -51,11 +32,6 @@ export class Sdk implements ISdk {
     this.isReady = this.api.isReady.then(() => true);
 
     this.signer = this.options.signer;
-
-    this.extrinsics = new SdkExtrinsics(this);
-    this.collection = new SdkCollection(this);
-    this.token = new SdkToken(this);
-    this.balance = new SdkBalance(this);
   }
 
   chainProperties(): ChainProperties {

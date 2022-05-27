@@ -1,8 +1,12 @@
-export * from './sdk-collection';
-export * from './sdk-token';
+import { addFeature } from '@unique-nft/sdk';
 
-export * from './utils/encode-token';
-export * from './utils/decode-token';
+import { SdkCollection } from './sdk-collection';
+import { SdkToken } from './sdk-token';
+import './augment-sdk';
 
-export * from './utils/encode-collection';
-export * from './utils/decode-collection';
+export * from './utils';
+export { SdkCollection } from './sdk-collection';
+export { SdkToken } from './sdk-token';
+
+addFeature('collection', SdkCollection);
+addFeature('token', SdkToken);
