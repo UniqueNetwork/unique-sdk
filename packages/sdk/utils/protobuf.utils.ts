@@ -1,4 +1,4 @@
-import { Root, INamespace, Enum } from 'protobufjs';
+import { Root, INamespace } from 'protobufjs';
 
 export function serializeConstData(
   /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -8,14 +8,14 @@ export function serializeConstData(
   const root = Root.fromJSON(schema);
   const NFTMeta = root.lookupType('onChainMetaData.NFTMeta');
 
-  const errMsg = NFTMeta.verify(payload);
+  const transformedPayload = { ...NFTMeta.fromObject(payload) };
 
-  if (errMsg) {
-    throw Error(errMsg);
-  }
+  const errMsg = NFTMeta.verify(transformedPayload);
+  if (errMsg) throw Error(errMsg);
 
-  const message = NFTMeta.create(payload);
+  const message = NFTMeta.create(transformedPayload);
 
+  // todo - finish() should return Uint8Array, but in fact return Buffer, so we use this workaround for now
   return Uint8Array.from(NFTMeta.encode(message).finish());
 }
 
@@ -27,20 +27,7 @@ export const decodeConstData = (
   const root = Root.fromJSON(schema);
 
   const NFTMeta = root.lookupType('onChainMetaData.NFTMeta');
-  const parsedToken = NFTMeta.decode(tokenConstData).toJSON();
+  const parsedToken = NFTMeta.decode(tokenConstData);
 
-  Object.keys(parsedToken).forEach((field) => {
-    let existingEnum: Enum | null = null;
-    try {
-      existingEnum = root.lookupEnum(field);
-    } catch (e) {
-      // do nothing
-    }
-
-    if (existingEnum) {
-      parsedToken[field] = existingEnum.getOption(parsedToken[field]);
-    }
-  });
-
-  return parsedToken;
+  return NFTMeta.toObject(parsedToken, { enums: String });
 };
