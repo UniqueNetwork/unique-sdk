@@ -1,5 +1,8 @@
-import { HexString } from '@polkadot/util/types';
-import { SdkSigner, SignatureType, SignResult } from '@unique-nft/sdk/types';
+import {
+  SdkSigner,
+  SignResult,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/types';
 import { BadSignatureError } from '@unique-nft/sdk/errors';
 import { PolkadotSignerOptions } from './types';
 
@@ -20,7 +23,7 @@ export class PolkadotSigner implements SdkSigner {
     return this.options.extensionDApp.web3Accounts();
   }
 
-  public async sign(payload: HexString): Promise<SignResult> {
+  public async sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult> {
     const allAccounts = await this.getAccounts();
     let account: any;
     switch (allAccounts.length) {
@@ -36,16 +39,14 @@ export class PolkadotSigner implements SdkSigner {
     const injector = await this.options.extensionDApp.web3FromSource(
       account.meta.source,
     );
-    const signRaw = injector?.signer?.signRaw;
-    if (signRaw) {
-      const { signature } = await signRaw({
-        address: account.address,
-        data: payload,
-        type: 'bytes',
-      });
+    const signPayload = injector?.signer?.signPayload;
+    if (signPayload) {
+      const { signature } = await signPayload(
+        unsignedTxPayload.signerPayloadJSON,
+      );
       return {
         signature,
-        signatureType: SignatureType.Sr25519,
+        signatureType: account.type,
       };
     }
 

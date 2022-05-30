@@ -1,4 +1,4 @@
-import { SdkSigner } from './arguments';
+import { SdkSigner } from './sdk-methods';
 
 export interface SdkOptions {
   chainWsUrl: string;

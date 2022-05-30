@@ -1,14 +1,18 @@
-import { u8aToHex } from '@polkadot/util';
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { CreateCollectionArguments } from '@unique-nft/sdk/types';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
+import '@unique-nft/sdk/balance';
+import '@unique-nft/sdk/extrinsics';
+import '@unique-nft/sdk/tokens';
+
 import { Sdk } from '../src/lib/sdk';
 import {
   delay,
   getDefaultSdkOptions,
   getKeyringPairs,
   getLastCollectionId,
+  signWithAccount,
   TestAccounts,
 } from './testing-utils';
 
@@ -62,12 +66,11 @@ describe(Sdk.name, () => {
       constOnChainSchema,
     });
 
-    const signature = u8aToHex(account.sign(txPayload.signerPayloadHex));
+    const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
 
     await sdk.extrinsics.submit({
       signerPayloadJSON: txPayload.signerPayloadJSON,
       signature,
-      signatureType: account.type,
     });
 
     await delay(30_000);
@@ -92,12 +95,11 @@ describe(Sdk.name, () => {
       constData,
     });
 
-    const signature = u8aToHex(account.sign(txPayload.signerPayloadHex));
+    const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
 
     await sdk.extrinsics.submit({
       signerPayloadJSON: txPayload.signerPayloadJSON,
       signature,
-      signatureType: account.type,
     });
 
     await delay(30_000);
