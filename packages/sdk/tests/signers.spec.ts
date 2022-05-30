@@ -82,7 +82,6 @@ describe('Sdk signers', () => {
           destination: bob.address,
           amount: 0.000001,
         });
-        console.log('unsignedTxPayload', unsignedTxPayload);
         const { signerPayloadJSON } = unsignedTxPayload;
 
         const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
