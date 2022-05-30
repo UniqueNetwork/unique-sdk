@@ -33,7 +33,7 @@ describe(CollectionController.name, () => {
     );
   });
 
-  describe.skip('POST /api/collection', () => {
+  describe('POST /api/collection', () => {
     let generatedCollection;
     it('generate collection', async () => {
       const { ok, body } = await request(app.getHttpServer())

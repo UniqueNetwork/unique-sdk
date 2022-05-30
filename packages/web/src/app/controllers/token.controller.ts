@@ -21,6 +21,7 @@ import {
   TransferTokenBody,
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
+import { validate } from '../validation';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
@@ -30,6 +31,7 @@ export class TokenController {
 
   @Get()
   async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
+    await validate(args, TokenIdQuery);
     const token = await this.sdk.token.get(args);
 
     if (token) return token;

@@ -113,6 +113,9 @@ export class TokenIdQuery
   extends CollectionIdQuery
   implements TokenIdArguments
 {
+  @Type(() => Number)
+  @IsPositive()
+  @IsInt()
   @ApiProperty({
     example: 1,
   })
