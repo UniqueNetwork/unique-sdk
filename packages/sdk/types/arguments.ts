@@ -2,10 +2,6 @@ import { SignerPayloadJSON } from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
 import { SignatureType, SignResult } from './polkadot-types';
 
-export interface SdkSigner {
-  sign(payload: string): Promise<SignResult>;
-}
-
 export interface SubmitResult {
   hash: HexString;
 }
@@ -22,7 +18,6 @@ export interface SignTxResult extends SignResult {
 export interface SubmitTxArguments {
   signerPayloadJSON: SignerPayloadJSON;
   signature: HexString;
-  signatureType: SignatureType | `${SignatureType}`;
 }
 
 export interface TxBuildArguments {

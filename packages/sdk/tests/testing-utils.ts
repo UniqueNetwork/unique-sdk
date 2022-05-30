@@ -1,6 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
+import { HexString } from '@polkadot/util/types';
 import { SdkOptions } from '@unique-nft/sdk/types';
 import { Sdk } from '../src/lib/sdk';
 
@@ -49,3 +50,14 @@ export const getDefaultSdkOptions = (): SdkOptions => ({
   chainWsUrl: 'wss://ws-quartz-dev.unique.network',
   ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
 });
+
+export function signWithAccount(
+  sdk: Sdk,
+  account: KeyringPair,
+  signerPayloadHex: HexString,
+): HexString {
+  return sdk.extrinsics.packSignatureType(
+    account.sign(signerPayloadHex),
+    account.type,
+  );
+}

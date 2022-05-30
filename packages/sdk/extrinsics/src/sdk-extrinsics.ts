@@ -1,6 +1,7 @@
 import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
+import { HexString } from '@polkadot/util/types';
 import { objectSpread } from '@polkadot/util';
 import {
   BuildExtrinsicError,
@@ -13,9 +14,9 @@ import {
   SubmitTxArguments,
   TxBuildArguments,
   UnsignedTxPayload,
-  SignTxArguments,
   SignTxResult,
   SdkSigner,
+  SignatureType,
 } from '@unique-nft/sdk/types';
 import {
   signerPayloadToUnsignedTxPayload,
@@ -95,12 +96,12 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   async sign(
-    args: SignTxArguments,
+    args: UnsignedTxPayload,
     signer: SdkSigner | undefined = this.sdk.signer,
   ): Promise<SignTxResult> {
     if (!signer) throw new InvalidSignerError();
 
-    return signer.sign(args.signerPayloadHex);
+    return signer.sign(args);
   }
 
   verifySignOrThrow(args: SubmitTxArguments): void {
@@ -111,14 +112,18 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     );
   }
 
-  async submit(args: SubmitTxArguments): Promise<SubmitResult> {
-    const { signerPayloadJSON, signature, signatureType } = args;
-    const { method, version, address } = signerPayloadJSON;
-
-    // todo 'ExtrinsicSignature' -> enum ExtrinsicTypes {} ?
-    const signatureWithType = this.sdk.api.registry
+  packSignatureType(
+    signature: HexString | Uint8Array,
+    signatureType: SignatureType | `${SignatureType}`,
+  ): HexString {
+    return this.sdk.api.registry
       .createType('ExtrinsicSignature', { [signatureType]: signature })
       .toHex();
+  }
+
+  async submit(args: SubmitTxArguments): Promise<SubmitResult> {
+    const { signerPayloadJSON, signature } = args;
+    const { method, version, address } = signerPayloadJSON;
 
     verifyTxSignatureOrThrow(this.sdk.api, signerPayloadJSON, signature);
 
@@ -128,7 +133,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       version,
     });
 
-    extrinsic.addSignature(address, signatureWithType, signerPayloadJSON);
+    extrinsic.addSignature(address, signature, signerPayloadJSON);
 
     try {
       const hash = await this.sdk.api.rpc.author.submitExtrinsic(extrinsic);

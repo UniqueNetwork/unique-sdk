@@ -36,15 +36,11 @@ export class SubmitTxBody implements SubmitTxArguments {
   signerPayloadJSON: SignerPayloadJSONDto;
 
   @IsHexadecimal()
-  @ApiProperty({ type: String })
-  signature: HexString;
-
-  @IsEnum(SignatureType)
   @ApiProperty({
-    enum: SignatureType,
-    required: false,
+    type: String,
+    description: 'Warning: Signature must be with SignatureType!',
   })
-  signatureType: SignatureType | `${SignatureType}`;
+  signature: HexString;
 }
 
 export class TxBuildBody implements TxBuildArguments {
