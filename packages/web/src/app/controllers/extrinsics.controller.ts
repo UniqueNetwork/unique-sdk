@@ -7,9 +7,11 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
 import { validate } from '../validation';
-import { UnsignedTxPayloadResponse } from '../types/sdk-methods';
 import {
-  SignTxBody,
+  UnsignedTxPayloadBody,
+  UnsignedTxPayloadResponse,
+} from '../types/sdk-methods';
+import {
   SignTxResultResponse,
   SubmitResultResponse,
   SubmitTxBody,
@@ -30,7 +32,7 @@ export class ExtrinsicsController {
   @Post('sign')
   @ApiBearerAuth('SeedAuth')
   async sign(
-    @Body() args: UnsignedTxPayload,
+    @Body() args: UnsignedTxPayloadBody,
     @Headers() headers: SignHeaders,
     @Signer() signer?: SdkSigner,
   ): Promise<SignTxResultResponse> {
