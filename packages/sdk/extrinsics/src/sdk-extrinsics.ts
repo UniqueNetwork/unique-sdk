@@ -1,4 +1,3 @@
-import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { objectSpread } from '@polkadot/util';
@@ -17,18 +16,30 @@ import {
   SignTxResult,
   SdkSigner,
 } from '@unique-nft/sdk/types';
+import { Sdk } from '@unique-nft/sdk';
+import {
+  ExtrinsicResult,
+  processDefault,
+} from '@unique-nft/sdk/extrinsics/src/extrinsic-result-utils';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
 } from './tx';
 
-interface Sdk {
-  api: ApiPromise;
-  signer?: SdkSigner;
-}
+import { ExtrinsicWatcher } from './extrinsic-watcher';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
-  constructor(readonly sdk: Sdk) {}
+  readonly extrinsicWatcher: ExtrinsicWatcher | null;
+
+  constructor(readonly sdk: Sdk) {
+    this.extrinsicWatcher = sdk.cache
+      ? new ExtrinsicWatcher(sdk.api, sdk.cache)
+      : null;
+
+    console.log(
+      `${SdkExtrinsics.name} - created ${sdk.cache ? 'with' : 'without'} cache`,
+    );
+  }
 
   async build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload> {
     const { address, section, method, args } = buildArgs;
@@ -111,7 +122,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     );
   }
 
-  async submit(args: SubmitTxArguments): Promise<SubmitResult> {
+  async submit(args: SubmitTxArguments): Promise<ExtrinsicResult> {
     const { signerPayloadJSON, signature, signatureType } = args;
     const { method, version, address } = signerPayloadJSON;
 
@@ -131,12 +142,33 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     extrinsic.addSignature(address, signatureWithType, signerPayloadJSON);
 
     try {
+      if (this.extrinsicWatcher) {
+        return await this.extrinsicWatcher.submitAndWatch(extrinsic);
+      }
+
       const hash = await this.sdk.api.rpc.author.submitExtrinsic(extrinsic);
-      return { hash: hash.toHex() };
+
+      return processDefault(hash, false);
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
       throw new SubmitExtrinsicError(errorMessage);
     }
+  }
+
+  async getStatus(submitResult: SubmitResult): Promise<ExtrinsicResult> {
+    if (!this.sdk.cache) {
+      throw new Error('no cache');
+    }
+
+    const extrinsicResult = await this.sdk.cache.get<ExtrinsicResult>(
+      submitResult.hash,
+    );
+
+    if (!extrinsicResult) {
+      throw new Error('no cached result');
+    }
+
+    return extrinsicResult;
   }
 }

@@ -11,10 +11,41 @@ import {
   TxBuildArguments,
 } from '@unique-nft/sdk/types';
 import { SignerPayloadJSONDto } from './signer-payload';
+import {
+  ExtrinsicResult,
+  ExtrinsicStatusOrUnknown,
+} from '@unique-nft/sdk/extrinsics/src/extrinsic-result-utils';
+import { EventRecord } from '@polkadot/types/interfaces';
 
 export class SubmitResultResponse implements SubmitResult {
   @ApiProperty({ type: String })
   hash: HexString;
+}
+
+export class ExtrinsicResultResponse implements ExtrinsicResult {
+  @ApiProperty()
+  extrinsicHash: string;
+
+  @ApiProperty({ type: String, example: 'unknown' })
+  extrinsicStatus: ExtrinsicStatusOrUnknown;
+
+  @ApiProperty({ required: false })
+  blockHash?: string;
+
+  @ApiProperty({ required: false })
+  blockNumber?: number;
+
+  @ApiProperty({ required: false })
+  extrinsicIndex?: number;
+
+  @ApiProperty({ required: false })
+  events?: EventRecord[];
+
+  @ApiProperty()
+  isSubscribed: boolean;
+
+  @ApiProperty({ example: 'pending' })
+  shortResult: 'pending' | 'success' | 'fail';
 }
 
 export class SignTxBody implements SignTxArguments {

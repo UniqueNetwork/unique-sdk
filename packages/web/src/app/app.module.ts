@@ -4,6 +4,7 @@ import {
   NestModule,
   RequestMethod,
   MiddlewareConsumer,
+  CacheModule,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 
@@ -21,7 +22,11 @@ import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
 
 @Module({
-  imports: [GlobalConfigModule, SignerMiddleware],
+  imports: [
+    GlobalConfigModule,
+    SignerMiddleware,
+    CacheModule.register({ ttl: 60 }),
+  ],
   controllers: [
     ChainController,
     ExtrinsicsController,

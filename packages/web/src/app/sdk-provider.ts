@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Provider } from '@nestjs/common';
+import { CACHE_MANAGER, Provider, CacheStore } from '@nestjs/common';
 import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '@unique-nft/sdk';
 
@@ -16,9 +16,9 @@ function createSignerOptions(configService: ConfigService): SignerOptions {
 }
 
 export const sdkProvider: Provider = {
-  inject: [ConfigService],
+  inject: [ConfigService, CACHE_MANAGER],
   provide: Sdk,
-  useFactory: async (configService: ConfigService) => {
+  useFactory: async (configService: ConfigService, cache: CacheStore) => {
     const signerOptions: SignerOptions = createSignerOptions(configService);
     const signer = signerOptions ? await createSigner(signerOptions) : null;
 
@@ -27,6 +27,8 @@ export const sdkProvider: Provider = {
       chainWsUrl: configService.get('chainWsUrl'),
       ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
     });
+
+    sdk.useCache(cache);
 
     await sdk.isReady;
 

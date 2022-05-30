@@ -4,8 +4,9 @@ import { unique } from '@unique-nft/types/definitions';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 
 import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
+import { WithCache } from './with-cache';
 
-export class Sdk {
+export class Sdk extends WithCache {
   readonly isReady: Promise<boolean>;
 
   readonly api: ApiPromise;
@@ -20,6 +21,7 @@ export class Sdk {
   }
 
   constructor(public readonly options: SdkOptions) {
+    super();
     const provider = new WsProvider(this.options.chainWsUrl);
 
     this.api = new ApiPromise({

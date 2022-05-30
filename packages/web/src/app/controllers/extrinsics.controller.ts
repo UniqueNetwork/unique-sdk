@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseFilters, Headers } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseFilters,
+  Headers,
+  Query,
+  Get,
+} from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
@@ -9,6 +17,7 @@ import { Signer } from '../decorators/signer.decorator';
 import { validate } from '../validation';
 import { UnsignedTxPayloadResponse } from '../types/sdk-methods';
 import {
+  ExtrinsicResultResponse,
   SignTxBody,
   SignTxResultResponse,
   SubmitResultResponse,
@@ -54,8 +63,15 @@ export class ExtrinsicsController {
   }
 
   @Post('submit')
-  async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
+  async submitTx(@Body() args: SubmitTxBody): Promise<ExtrinsicResultResponse> {
     await validate(args, SubmitTxBody);
     return this.sdk.extrinsics.submit(args);
+  }
+
+  @Get('status')
+  async getStatus(
+    @Query() args: SubmitResultResponse,
+  ): Promise<ExtrinsicResultResponse> {
+    return this.sdk.extrinsics.getStatus(args);
   }
 }

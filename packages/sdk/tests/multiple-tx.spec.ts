@@ -1,8 +1,9 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 
 import { u8aToHex } from '@polkadot/util';
+import { Sdk } from '@unique-nft/sdk';
+import { ExtrinsicResult } from '@unique-nft/sdk/extrinsics/src/extrinsic-result-utils';
 import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
-import { Sdk } from '../src/lib/sdk';
 
 describe('multiple TXs', () => {
   let sdk: Sdk;
@@ -15,7 +16,7 @@ describe('multiple TXs', () => {
     sdk = await Sdk.create(getDefaultSdkOptions());
   });
 
-  const makeTransfer = async (amount: number): Promise<void> => {
+  const makeTransfer = async (amount: number): Promise<ExtrinsicResult> => {
     const { signerPayloadJSON, signerPayloadHex } = await sdk.balance.transfer({
       address: eve.address,
       destination: ferdie.address,
@@ -24,7 +25,7 @@ describe('multiple TXs', () => {
 
     const signature = u8aToHex(eve.sign(signerPayloadHex));
 
-    await sdk.extrinsics.submit({
+    return sdk.extrinsics.submit({
       signerPayloadJSON,
       signature,
       signatureType: eve.type,
@@ -32,13 +33,17 @@ describe('multiple TXs', () => {
   };
 
   it('3 transfers', async () => {
+    const results: ExtrinsicResult[] = [];
+
     const makeMultipleTransfers = async () => {
-      await makeTransfer(100);
-      await makeTransfer(100 + 1);
-      await makeTransfer(100 + 2);
+      results.push(await makeTransfer(10));
+      results.push(await makeTransfer(20));
+      results.push(await makeTransfer(30));
     };
 
     await expect(makeMultipleTransfers()).resolves.not.toThrowError();
+
+    expect(results.length).toBe(3);
   }, 10_000);
 
   afterAll(async () => {

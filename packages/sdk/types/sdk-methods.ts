@@ -3,6 +3,7 @@ import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from '@polkadot/types/types/extrinsic';
+import { ExtrinsicResult } from '@unique-nft/sdk/extrinsics/src/extrinsic-result-utils';
 import {
   AnyObject,
   CollectionInfo,
@@ -120,5 +121,6 @@ export interface ISdkExtrinsics {
     args: SignTxArguments,
     signer: SdkSigner | undefined,
   ): Promise<SignTxResult>;
-  submit(args: SubmitTxArguments): Promise<SubmitResult>;
+  submit(args: SubmitTxArguments): Promise<ExtrinsicResult>;
+  getStatus(submitResult: SubmitResult): Promise<any>;
 }
