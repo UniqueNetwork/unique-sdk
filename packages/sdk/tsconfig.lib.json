@@ -10,7 +10,8 @@
       "@unique-nft/sdk/*": ["packages/sdk/*"],
       "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
     },
-    "module": "ESNext"
+    "module": "es2015",
+    "target": "es2017"
   },
   "angularCompilerOptions": {
     "enableIvy": false

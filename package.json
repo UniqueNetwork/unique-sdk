@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
-    "build:sdk": "nx build sdk",
+    "build:sdk:old": "nx build sdk",
+    "ng-packagr": "ng-packagr",
+    "build:sdk": "ng-packagr -p packages/sdk/ng-package.json -c packages/sdk/tsconfig.lib.json",
     "build:web": "nx build web",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
