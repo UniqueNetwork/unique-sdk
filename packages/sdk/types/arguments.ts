@@ -29,8 +29,13 @@ export interface TxBuildArguments {
   isImmortal?: boolean;
 }
 
+export enum QueryControllers {
+  derive = 'derive',
+  rpc = 'rpc',
+  query = 'query',
+}
 export interface QueryArguments {
-  controller: string;
+  controller: QueryControllers;
   section: string;
   method: string;
   args: Array<string | number | BigInt | Record<string, any>>;

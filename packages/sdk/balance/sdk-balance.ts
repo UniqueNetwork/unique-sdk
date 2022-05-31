@@ -4,6 +4,7 @@ import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import {
   AddressArguments,
   Balance,
+  QueryControllers,
   TransferBuildArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
@@ -27,7 +28,7 @@ export class SdkBalance {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
     const { availableBalance } = await this.sdk.stateQueries.execute({
-      controller: 'derive',
+      controller: QueryControllers.derive,
       section: 'balances',
       method: 'all',
       args: [args.address],

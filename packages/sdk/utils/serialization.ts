@@ -1,8 +1,11 @@
+/* eslint-disable  @typescript-eslint/no-use-before-define */
 import { Codec } from '@polkadot/types-codec/types';
 
 function serializeCodec(data: Codec): object {
   return {
     rawType: data.toRawType(),
+    isEmpty: data.isEmpty,
+    hash: data.hash?.toHex(),
     human: data.toHuman ? data.toHuman() : undefined,
     json: data.toJSON ? data.toJSON() : undefined,
     hex: data.toHex ? data.toHex() : undefined,
@@ -20,6 +23,7 @@ function serializeObject(data: any): any {
 
   return Object.keys(data).reduce(
     (serializedData: any, key: string): object => {
+      // eslint-disable-next-line  no-param-reassign
       serializedData[key] = serialize(data[key]);
       return serializedData;
     },

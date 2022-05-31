@@ -1,7 +1,8 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
-import { BuildQueryError, ErrorCodes } from '@unique-nft/sdk/errors';
+import { BuildQueryError } from '@unique-nft/sdk/errors';
+import { QueryControllers } from '@unique-nft/sdk/types';
 import '@unique-nft/sdk/state-queries';
 
 import { getDefaultSdkOptions } from './testing-utils';
@@ -20,7 +21,7 @@ describe('Sdk Queries', () => {
 
   it('derive.balances.all', async () => {
     const result = await sdk.stateQueries.execute({
-      controller: 'derive',
+      controller: QueryControllers.derive,
       section: 'balances',
       method: 'all',
       args: [alice.address],
@@ -32,7 +33,7 @@ describe('Sdk Queries', () => {
 
   it('derive.accounts.accountId', async () => {
     const result = await sdk.stateQueries.execute({
-      controller: 'derive',
+      controller: QueryControllers.derive,
       section: 'accounts',
       method: 'accountId',
       args: [alice.address],
@@ -46,13 +47,17 @@ describe('Sdk Queries', () => {
   });
 
   it.each([
-    ['derive1', 'balances', 'all', 'Invalid controller: "derive1"'],
-    ['derive', 'balances1', 'all', 'Invalid section: "balances1"'],
-    ['derive', 'balances', 'all1', 'Invalid method: "all1"'],
+    [
+      QueryControllers.derive,
+      'balances1',
+      'all',
+      'Invalid section: "balances1"',
+    ],
+    [QueryControllers.derive, 'balances', 'all1', 'Invalid method: "all1"'],
   ])(
     'fail - %s.%s.%s',
     async (
-      controller: string,
+      controller: QueryControllers,
       section: string,
       method: string,
       errorMessage: string,

@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { SignatureType } from '@unique-nft/sdk/types';
+import { QueryControllers, SignatureType } from '@unique-nft/sdk/types';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 import request from 'supertest';
 
@@ -30,7 +30,7 @@ describe('Web Queries', () => {
 
   it('derive.accounts.accountId', async () => {
     await executeQuery({
-      controller: 'derive',
+      controller: QueryControllers.derive,
       section: 'accounts',
       method: 'accountId',
       args: [alice.address],
@@ -39,7 +39,7 @@ describe('Web Queries', () => {
 
   it('derive.balances.all', async () => {
     await executeQuery({
-      controller: 'derive',
+      controller: QueryControllers.derive,
       section: 'balances',
       method: 'all',
       args: [alice.address],
@@ -47,11 +47,10 @@ describe('Web Queries', () => {
   });
 
   it.each([
-    ['derive1', 'balances', 'all', 'Invalid controller: "derive1"'],
     ['derive', 'balances1', 'all', 'Invalid section: "balances1"'],
     ['derive', 'balances', 'all1', 'Invalid method: "all1"'],
   ])(
-    'fail - %s.%s.%s',
+    'invalid query - %s.%s.%s',
     async (
       controller: string,
       section: string,
@@ -64,10 +63,24 @@ describe('Web Queries', () => {
           controller,
           section,
           method,
+          args: [],
         });
       expect(false).toEqual(ok);
       expect(body.error.code).toEqual(ErrorCodes.BuildQuery);
       expect(body.error.message).toEqual(errorMessage);
     },
   );
+
+  it.each([
+    { controller: 'derive', section: 'balances', method: 'all' },
+    { controller: '_derive', section: 'balances', method: 'all', args: [] },
+    { controller: 'derive', section: 1, method: 'all', args: [] },
+    { controller: 'derive', section: 'balances', method: 1, args: [] },
+  ])('validation fail - %j', async (data: object) => {
+    const { ok, body } = await request(app.getHttpServer())
+      .post(`/api/query`)
+      .send(data);
+    expect(false).toEqual(ok);
+    expect(body.error.code).toEqual(ErrorCodes.Validation);
+  });
 });
