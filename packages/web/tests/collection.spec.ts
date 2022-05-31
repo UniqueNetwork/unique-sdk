@@ -63,7 +63,7 @@ describe(CollectionController.name, () => {
       signResponse = body;
     });
 
-    it('submit collection', async () => {
+    it.skip('submit collection', async () => {
       const { signature } = signResponse;
       const { signerPayloadJSON } = generatedCollection;
       const { ok, body } = await request(app.getHttpServer())

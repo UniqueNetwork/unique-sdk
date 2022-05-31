@@ -7,6 +7,7 @@ import {
   IsPositive,
   IsInt,
   NotEquals,
+  IsNumberString,
 } from 'class-validator';
 import {
   AddressArguments,
@@ -64,11 +65,13 @@ export class ChainPropertiesResponse implements ChainProperties {
 }
 
 export class BalanceResponse implements Balance {
+  @IsNumberString()
   @ApiProperty({
     example: '411348197000000000000',
   })
   amount: string;
 
+  @IsString()
   @ApiProperty({
     example: '411.3481 QTZ',
   })
@@ -92,7 +95,6 @@ export class TransferBuildBody implements TransferBuildArguments {
 
   @IsNumber()
   @IsPositive()
-  @NotEquals(0)
   @ApiProperty({
     example: 0.01,
   })
@@ -151,7 +153,10 @@ export class BurnCollectionBody implements BurnCollectionArguments {
 
 export class TransferCollectionBody implements TransferCollectionArguments {
   @IsPositive()
-  @ApiProperty()
+  @IsInt()
+  @ApiProperty({
+    example: 1,
+  })
   collectionId: number;
 
   @ValidAddress()
@@ -164,7 +169,11 @@ export class TransferCollectionBody implements TransferCollectionArguments {
 }
 
 export class CreateTokenBody implements CreateTokenArguments {
-  @ApiProperty({ example: 1 })
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({
+    example: 1,
+  })
   collectionId: number;
 
   @ValidAddress()
@@ -187,13 +196,16 @@ export class BurnTokenBody extends TokenIdQuery implements BurnTokenArguments {
   @AddressApiProperty
   address: string;
 }
+
 export class TransferTokenBody
   extends TokenIdQuery
   implements TransferTokenArguments
 {
+  @ValidAddress()
   @AddressApiProperty
   from: string;
 
+  @ValidAddress()
   @AddressApiProperty
   to: string;
 }
