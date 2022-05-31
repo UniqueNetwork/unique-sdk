@@ -1,7 +1,13 @@
 import { KeyringPair } from '@polkadot/keyring/types';
+import '@unique-nft/sdk/extrinsics';
+import '@unique-nft/sdk/tokens';
+import '@unique-nft/sdk/balance';
 
-import { u8aToHex } from '@polkadot/util';
-import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
+import {
+  getDefaultSdkOptions,
+  getKeyringPairs,
+  signWithAccount,
+} from './testing-utils';
 import { Sdk } from '../src/lib/sdk';
 
 describe('multiple TXs', () => {
@@ -22,12 +28,11 @@ describe('multiple TXs', () => {
       amount,
     });
 
-    const signature = u8aToHex(eve.sign(signerPayloadHex));
+    const signature = signWithAccount(sdk, eve, signerPayloadHex);
 
     await sdk.extrinsics.submit({
       signerPayloadJSON,
       signature,
-      signatureType: eve.type,
     });
   };
 

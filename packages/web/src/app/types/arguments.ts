@@ -1,10 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { HexString } from '@polkadot/util/types';
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
-import { IsEnum, IsHexadecimal, IsNotEmptyObject } from 'class-validator';
+import { IsHexadecimal, IsNotEmptyObject } from 'class-validator';
 import {
   SignatureType,
-  SignTxArguments,
   SignTxResult,
   SubmitResult,
   SubmitTxArguments,
@@ -15,11 +14,6 @@ import { SignerPayloadJSONDto } from './signer-payload';
 export class SubmitResultResponse implements SubmitResult {
   @ApiProperty({ type: String })
   hash: HexString;
-}
-
-export class SignTxBody implements SignTxArguments {
-  @ApiProperty({ type: String })
-  signerPayloadHex: HexString;
 }
 
 export class SignTxResultResponse implements SignTxResult {
@@ -36,15 +30,11 @@ export class SubmitTxBody implements SubmitTxArguments {
   signerPayloadJSON: SignerPayloadJSONDto;
 
   @IsHexadecimal()
-  @ApiProperty({ type: String })
-  signature: HexString;
-
-  @IsEnum(SignatureType)
   @ApiProperty({
-    enum: SignatureType,
-    required: false,
+    type: String,
+    description: 'Warning: Signature must be with SignatureType!',
   })
-  signatureType: SignatureType | `${SignatureType}`;
+  signature: HexString;
 }
 
 export class TxBuildBody implements TxBuildArguments {

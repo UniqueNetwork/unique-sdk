@@ -2,14 +2,16 @@ import { Body, Controller, Post, UseFilters, Headers } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { SdkSigner } from '@unique-nft/sdk/types';
+import { SdkSigner, UnsignedTxPayload } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
 import { validate } from '../validation';
-import { UnsignedTxPayloadResponse } from '../types/sdk-methods';
 import {
-  SignTxBody,
+  UnsignedTxPayloadBody,
+  UnsignedTxPayloadResponse,
+} from '../types/sdk-methods';
+import {
   SignTxResultResponse,
   SubmitResultResponse,
   SubmitTxBody,
@@ -30,7 +32,7 @@ export class ExtrinsicsController {
   @Post('sign')
   @ApiBearerAuth('SeedAuth')
   async sign(
-    @Body() args: SignTxBody,
+    @Body() args: UnsignedTxPayloadBody,
     @Headers() headers: SignHeaders,
     @Signer() signer?: SdkSigner,
   ): Promise<SignTxResultResponse> {

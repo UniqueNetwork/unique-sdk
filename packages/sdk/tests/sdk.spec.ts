@@ -1,8 +1,11 @@
-import { u8aToHex } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
+import '@unique-nft/sdk/extrinsics';
+import '@unique-nft/sdk/tokens';
+import '@unique-nft/sdk/balance';
+
 import { Sdk } from '../src/lib/sdk';
-import { getDefaultSdkOptions } from './testing-utils';
+import { getDefaultSdkOptions, signWithAccount } from './testing-utils';
 
 describe(Sdk.name, () => {
   let sdk: Sdk;
@@ -34,11 +37,10 @@ describe(Sdk.name, () => {
 
     const { signerPayloadJSON, signerPayloadHex } = txPayload;
 
-    const signature = u8aToHex(alice.sign(signerPayloadHex));
+    const signature = signWithAccount(sdk, alice, signerPayloadHex);
 
     const submitPromise = sdk.extrinsics.submit({
       signature,
-      signatureType: alice.type,
       signerPayloadJSON,
     });
 

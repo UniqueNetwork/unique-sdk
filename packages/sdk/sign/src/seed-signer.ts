@@ -1,8 +1,12 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { HexString } from '@polkadot/util/types';
 import { u8aToHex } from '@polkadot/util';
-import { SdkSigner, SignatureType, SignResult } from '@unique-nft/sdk/types';
+import {
+  SdkSigner,
+  SignatureType,
+  SignResult,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/types';
 import { SeedSignerOptions } from './types';
 
 export class SeedSigner implements SdkSigner {
@@ -14,8 +18,10 @@ export class SeedSigner implements SdkSigner {
     }).addFromMnemonic(options.seed);
   }
 
-  public sign(payload: HexString): Promise<SignResult> {
-    const signatureU8a = this.pair.sign(payload);
+  public sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult> {
+    const signatureU8a = this.pair.sign(unsignedTxPayload.signerPayloadHex, {
+      withType: true,
+    });
 
     return Promise.resolve({
       signature: u8aToHex(signatureU8a),
