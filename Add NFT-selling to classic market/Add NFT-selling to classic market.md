@@ -1,133 +1,725 @@
-﻿**Add NFT-selling to classic market**
+Who is this document for:
 
+This guide is intended for marketplace owners and developers who wish to
+trade NFT through their website.
 
+To connect the marketplace to the Polkadot blockchain, you need a REST-
+api (unique-SDK) to work with the Unique infrastructure (
+[*https://github.com/UniqueNetwork/unique-sdk*](https://github.com/UniqueNetwork/unique-sdk)
+).
 
-To connect the marketplace to the Polkadot blockchain, we need a REST-api (unique-SDK) to work with the Unique infrastructure ( <https://github.com/UniqueNetwork/unique-sdk> ).
+You also need to familiarize yourself with the corresponding methods of
+this library (
+[*https://github.com/UniqueNetwork/unique-sdk/blob/develop/packages/web/README.md*](https://github.com/UniqueNetwork/unique-sdk/blob/develop/packages/web/README.md)
+) .
 
-You also need to familiarize yourself with the corresponding methods of this library ( <https://github.com/UniqueNetwork/unique-sdk/blob/develop/packages/web/README.md> ) .
+Method examples are also available in Swagger (
+*https://web-quartz.unique.network/swagger/\#/* ).
 
-Sample methods are also available in Swagger ( <https://web.uniquenetwork.dev/swagger/#/> ).
+Separately, there is an api for loading images for NFT, from where we
+will need one method:
 
-There is a separate library for loading images for NFT, from where we will need one method:
+[*https://image-uploader.unique.network/api/docs/*](https://image-uploader.unique.network/api/docs/)
 
-<https://image-uploader.unique.network/api/docs/>
+How the market and blockchain work.
 
-Previously, it is necessary to provide a button or a link on the marketplace resource for buying NFT near (under) the image of the physical (real) picture.
+![](media/image1.png){width="5.9534722222222225in"
+height="5.604782370953631in"}
 
-Also, in order to connect to the Polkadot blockchain, you need to create a substrate address for your resource (STEP 1). The registration procedure takes place separately at https://polkadot.js.org or <https://wallet.unique.network/> .
+TABLE OF CONTENTS:
 
-After registering for Polkadot.JS, you can create your own collections. 
+STEP 1
 
-You need to create your own collection for an existing art gallery in accordance with the rule “A picture is an NFT digital token” (STEP 2).
+STEP 2
 
-To create a collection, you can use the web interface:
+STEP 3
 
-Log in to minter <https://minter-quartz.unique.network/#/builder/collections> 
+STEP 4
 
-Make sure that there are funds on the account and click the “Create collection” button
+STEP 5
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.001.png)
+STEP 1.
 
-Fill in the required fields and click the “Confirm” button
+To carry out transactions with NFT, it is necessary to have a
+Polkadot\\Unique substrate address.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.002.png)
+To do this, you need to use the resources:
+[*https://polkadot.js.org*](https://polkadot.js.org) ,
+[*https://wallet.unique.network/*](https://wallet.unique.network/) or
+use the API:
+[*https://polkadot.js.org/docs/ui-keyring/*](https://polkadot.js.org/docs/ui-keyring/)
+.
 
-Select and upload an image up to 10 mb and click the “Confirm” button
+First, consider creating a substrate address using
+https://wallet.unique.network/ as an example:
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.003.png)
+STEP 1.1.
 
+Go to [*https://wallet.unique.network/*](https://wallet.unique.network/)
+and click on the "Create substrate account" button
 
+![](media/image2.png){width="6.496527777777778in"
+height="3.2569444444444446in"}
 
-Fill in the required fields and click the “Confirm” button
+STEP 1.2.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.004.png)
+When creating an account, the type "Mnemonic" is selected and a secret
+phrase of 12 words is automatically generated.
 
-Sign the transaction by entering the password and clicking the “Sign and Submit” button
+You need to write down these words for yourself in a safe place and keep
+them.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.005.png)
+After that, mark the checkbox "I have saved my mnemonic seed safely" and
+press the "NEXT" button![](media/image3.png){width="5.726228127734033in"
+height="5.688889982502187in"}
 
-CREATE NFT (via web)
+STEP 1.3.
 
-We now have a collection created for which we can create our first NFT by clicking on the “Create NFT” button
+Think up and enter your name and password. After that, the "NEXT" button
+is pressed.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.006.png)
+![](media/image4.png){width="4.710859580052493in"
+height="5.716666666666667in"}
 
-Upload an image and fill in the fields, then click the “Confirm” button
+STEP 1.4.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.007.png)
+Log in to your account using your credentials (credentials already
+entered). Press the "SAVE"
+button.![](media/image5.png){width="4.6826760717410325in"
+height="5.4757666229221345in"}
 
-Sign the transaction by entering the password and clicking the “Sign and Submit” button
+You now have your substrate address!
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.008.png)
+![](media/image6.png){width="8.162769028871391in"
+height="3.6165529308836395in"}
 
-Now in our collection 1 item
+STEP 2.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.009.png)
+The next stage of work will be the creation of a collection to
+accommodate the NFT.
 
-If we want to view our token, we need to log in to the wall using the link <https://wallet.unique.network/#/myStuff/nft> 
+STEP 2.1.
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.010.png)
+To do this, using our authorization data, go to the minter at:
+[*https://minter-quartz.unique.network/*](https://minter-quartz.unique.network/)
+and click on the "Add account via" button
 
-Click on the image of the token and open the full list of parameters
+![](media/image7.png){width="8.605251531058618in"
+height="3.9379002624671915in"}
 
-![](Aspose.Words.126ef526-4778-4da5-be84-9d036c121bce.011.png) 
+STEP 2.2.
 
-Or use the API.
+On the page that opens, enter your secret phrase, select the checkbox
+and press the "NEXT" button.
 
-The procedural sequence is divided into the following steps:
+![](media/image8.png){width="4.74412510936133in"
+height="4.849706911636045in"}
 
-\- collection minting (minter collection can be viewed here: <https://minter-quartz.unique.network/> )
+STEP 2.3.
 
-\- minting / sending a token - confirmation of sending a token here ( <https://uniquescan.io/QUARTZ> )
+Next, enter your account name and password. Press the "NEXT" button.
 
-\- for testing, you can use the Opal test network ( https://wallet.dev.uniquenetwork.dev, https://minter-opal.unique.network/ and <https://wallet-opal.unique.network/> )
+![](media/image9.png){width="4.749206036745407in"
+height="5.4246806649168855in"}
 
-\- to receive funds on opal - use the bot ( <https://t.me/unique2faucet_opal_bot> )
+STEP 2.4.
 
-An example of creating a collection:
+A page with your details opens. Press the "SAVE" button.
 
-Procedurally:
+![](media/image10.png){width="5.0474825021872265in"
+height="5.894868766404199in"}
 
-\- extrinsic building (<https://web.uniquenetwork.dev/swagger/#/extrinsic/ExtrinsicsController_buildTx> )
+STEP 2.5.
 
-\- extrinsic signature (<https://web.uniquenetwork.dev/swagger/#/extrinsic/ExtrinsicsController_sign> )
+Now you are authorized in the minter and can create NFT collections and
+NFT tokens.
 
-\- sending an extrinsic to the chain (<https://web.uniquenetwork.dev/swagger/#/extrinsic/ExtrinsicsController_submitTx> )
+Attention! To create collections, you must have QTZ coins in your
+account!
 
-POST\collection method
+To get QTZ coins, you can request them using the bot:
+[*https://t.me/unique2faucet\_opal\_bot*](https://t.me/unique2faucet_opal_bot)
 
-<https://github.com/UniqueNetwork/uniquesdk/blob/develop/packages/web/README.md> 
+![](media/image11.png){width="10.118055555555555in"
+height="1.6111111111111112in"}
 
-Swagger:
+To create a collection, click the "Create new" button.
 
-<https://web.uniquenetwork.dev/swagger/#/collection/CollectionController_createCollection> 
+![](media/image12.png){width="6.0256944444444445in"
+height="2.908333333333333in"}
 
-Next, we create a digital token, for which we use the POST \api\images\upload method ( <https://image-uploader.unique.network/api/docs/#/default/ImageController_uploadImage> ) and first upload the image, we get an encrypted link to image (STEP 3.1)
+STEP 2.6.
 
-And then using the POST \Token method (example: <https://web.uniquenetwork.dev/swagger/#/token/TokenController_createToken> ) (STEP 3.2), using the previously received encrypted link to the image - create a token of this image, NFT is ready for sale on the marketplace.
+Next, you need to enter the name of your collection, a description of
+the collection, and a short name for the collection tokens.
 
-Requirements for the NFT buyer.
+Press the "Confirm" button.
 
-The NFT buyer must also have a substrate address in the Polkadot\Unique network (Registration at https://polkadot.js.org ). Otherwise, the creation of a substrate address is done by analogy (link to an example of work - <https://wallet.dev.uniquenetwork.dev> - or -  <https://github.com/UniqueNetwork/unique-sdk/tree/develop/recipes/add-nft-selling-to-classic-market/src> .
+![](media/image13.png){width="4.437863079615048in"
+height="4.8638987314085735in"}
 
-In the NFT purchase menu, it is necessary to provide a field for entering the client's substrate address, to which the token will be received after payment for fiat.
+STEP 2.7.
 
-The purchase mechanism is assumed to be as follows:
+Next, you need to load the collection icon.
 
-\- the client selects the NFT he would like to purchase;
+Click on the "Confirm" button.
 
-\- a menu opens where he enters his substrate address and data for paying for fiat;
+![](media/image14.png){width="4.6052799650043745in"
+height="3.774083552055993in"}
 
-\- the client pays for the purchase in fiat and NFT is sent to his substrate address.
+![](media/image15.png){width="4.45338145231846in"
+height="3.707665135608049in"}
 
-At this time, the token is created (STEP 1-3.2) and then:
+STEP 2.8.
 
-\- when fiats are credited to the seller's account, NFT ownership rights are transferred from the seller's substrate address to the substrate address specified by the buyer. (method PATCH \token\transfer) - similar to creating a token:
+Next, you need to set the names of the fields in future tokens and click
+the "Confirm" button.
 
-\- form an extrusion
+![](media/image16.png){width="7.347509842519685in"
+height="3.9111351706036745in"}
 
-\- sign
+STEP 2.9.
 
-\- send to chain
+Next, signing the transaction, you must enter your password and click
+the "Sign and submit" button.
 
-An example of a transfer is provided in Swagger - <https://web.uniquenetwork.dev/swagger/#/token/TokenController_transferToken> .
+![](media/image17.png){width="4.927771216097987in"
+height="2.5836942257217848in"}
+
+You need to wait about 1 minute. Then your collection will appear.
+
+You are now the owner of an empty NFT collection!
+
+![](media/image18.png){width="8.599992344706912in"
+height="2.3811056430446196in"}
+
+STEP 3.
+
+Creation of the NFT token.
+
+STEP 3.1.
+
+To create an NFT token, you need to click on the “Create NFT” button.
+
+![](media/image19.png){width="9.093313648293963in"
+height="3.1829713473315837in"}
+
+STEP 3.2.
+
+Next, you need to upload your NFT image, enter the name of the image and
+click the "Confirm" button.
+
+![](media/image20.png){width="6.800589457567804in"
+height="4.075353237095363in"}
+
+Then sign our transaction for the creation of the NFT, similar to step
+2.8.
+
+You now have your first NFT token, which can be seen here:
+
+![](media/image21.png){width="9.95972331583552in"
+height="2.87540135608049in"}
+
+After that, our collection and the NFT token appear in our substrate
+address:
+
+![](media/image22.png){width="7.944083552055993in"
+height="3.842820428696413in"}
+
+![](media/image23.png){width="8.56712489063867in"
+height="4.1918350831146105in"}
+
+It is now possible to connect NFT token trading to your marketplace.
+
+To do this, we must use the swagger
+https://web-quartz.unique.network/swagger/\#/ and as a guide to action -
+the REST API documentation:
+https://github.com/UniqueNetwork/unique-sdk/blob/
+develop/packages/web/README.md .
+
+You need to do the following:
+
+STEP 4.
+
+Creation and signing of an extrinsic.
+
+For requests to change the status of a token in the blockchain, you must
+use an extrinsic.
+
+STEP 4.1.
+
+To create an extrinsic, use PATCH /token for transfer NFT\
+\
+Request Body
+
+{
+
+"collectionId": 1,
+
+"tokenId": 1,
+
+"from": "string",
+
+"to": "string"
+
+}
+
+CURL Example
+
+curl -X 'PATCH' \\
+
+'https://web-quartz.unique.network/token/transfer' \\
+
+-H 'accept: application/json' \\
+
+-H 'Content-Type: application/json' \\
+
+-d '{
+
+"collectionId": 1,
+
+"tokenId": 1,
+
+"from": "string",
+
+"to": "string"
+
+}'
+
+Response
+
+Http Status 200
+
+{
+
+"signerPayloadJSON": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"blockHash": "string",
+
+"blockNumber": "string",
+
+"era": "string",
+
+"genesisHash": "string",
+
+"method": "string",
+
+"nonce": "string",
+
+"specVersion": "string",
+
+"tip": "string",
+
+"transactionVersion": "string",
+
+"signedExtensions": \[
+
+"string"
+
+\],
+
+"version": 0
+
+},
+
+"signerPayloadRaw": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"data": "string",
+
+"type": "bytes"
+
+},
+
+"signerPayloadHex": "string"
+
+}
+
+So we created the extrinsic.
+
+STEP 4.2.
+
+Signing extrinsic.
+
+To sign an extrinsic, use the POST /extrinsic/sign method
+
+Request body
+
+{
+
+"signerPayloadHex": "string"
+
+}
+
+CURL Example
+
+curl -X 'POST' \\
+
+'https://web-quartz.unique.network/extrinsic/sign' \\
+
+-H 'accept: application/json' \\
+
+-H 'Content-Type: application/json' \\
+
+-d '{
+
+"signerPayloadHex": "string"
+
+}'
+
+Response
+
+Http Status 200
+
+{
+
+"signature": "string",
+
+"signatureType": "sr25519"
+
+}
+
+Так мы подписали экстринзик.
+
+STEP 4.3.
+
+Confirm the extrinsic in the chain.
+
+For this, the POST /extrinsic/submit method is used.
+
+Request body
+
+{
+
+"signerPayloadJSON": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"blockHash": "string",
+
+"blockNumber": "string",
+
+"era": "string",
+
+"genesisHash": "string",
+
+"method": "string",
+
+"nonce": "string",
+
+"specVersion": "string",
+
+"tip": "string",
+
+"transactionVersion": "string",
+
+"signedExtensions": \[
+
+"string"
+
+\],
+
+"version": 0
+
+},
+
+"signature": "string",
+
+"signatureType": "sr25519"
+
+}
+
+CURL Example
+
+curl -X 'POST' \\
+
+'https://web-quartz.unique.network/extrinsic/submit' \\
+
+-H 'accept: application/json' \\
+
+-H 'Content-Type: application/json' \\
+
+-d '{
+
+"signerPayloadJSON": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"blockHash": "string",
+
+"blockNumber": "string",
+
+"era": "string",
+
+"genesisHash": "string",
+
+"method": "string",
+
+"nonce": "string",
+
+"specVersion": "string",
+
+"tip": "string",
+
+"transactionVersion": "string",
+
+"signedExtensions": \[
+
+"string"
+
+\],
+
+"version": 0
+
+},
+
+"signature": "string",
+
+"signatureType": "sr25519"
+
+}'
+
+Response
+
+Http Status 200
+
+{
+
+"hash": "string"
+
+}
+
+STEP 5.
+
+Now there is the possibility of transactions with NFT tokens.
+
+To work with NFT tokens on the marketplace, the following interaction
+scheme is offered:
+
+(precondition – the marketplace client has a substrate address)
+
+- The marketplace client wants to buy an NFT token of his physical
+picture;
+
+- He selects his painting and presses the "buy NFT" button (must exist);
+
+- Next, the client pays for the NFT in fiat, upon receipt of payment,
+the marketplace owner creates an NFT token on the blockchain and
+transfers the ownership of the token to the buyer.
+
+For this:
+
+STEP 5.1.
+
+Creation of NFT token (if you create NFT tokens in minter, you can skip
+this step).
+
+POST /token
+
+Request body
+
+{
+
+"collectionId": 1,
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"constData": {
+
+"ipfsJson":
+"{\\"ipfs\\":\\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\\",\\"type\\":\\"image\\"}",
+
+"gender": "Male",
+
+"traits": \[
+
+"TEETH\_SMILE",
+
+"UP\_HAIR"
+
+\]
+
+}
+
+}
+
+CURL Example
+
+curl -X 'POST' \\
+
+'https://web-quartz.unique.network/token' \\
+
+-H 'accept: application/json' \\
+
+-H 'Content-Type: application/json' \\
+
+-d '{
+
+"collectionId": 0,
+
+"address": "string",
+
+"constData": {}
+
+}'
+
+Response
+
+Http Status 200
+
+{
+
+"signerPayloadJSON": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"blockHash": "string",
+
+"blockNumber": "string",
+
+"era": "string",
+
+"genesisHash": "string",
+
+"method": "string",
+
+"nonce": "string",
+
+"specVersion": "string",
+
+"tip": "string",
+
+"transactionVersion": "string",
+
+"signedExtensions": \[
+
+"string"
+
+\],
+
+"version": 0
+
+},
+
+"signerPayloadRaw": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"data": "string",
+
+"type": "bytes"
+
+},
+
+"signerPayloadHex": "string"
+
+}
+
+Your token has been created!\
+\
+*After executing this method, you must follow method POST
+/extrinsic/sign and method POST /extrinsic/submit*
+
+STEP 5.2.
+
+Transfer of ownership of the NFT token to the buyer.
+
+PATCH /token
+
+Request body
+
+{
+
+"collectionId": 1,
+
+"tokenId": 1,
+
+"from": "string",
+
+"to": "string"
+
+}
+
+CURL Example
+
+curl -X 'PATCH' \\
+
+'https://web-quartz.unique.network/token/transfer' \\
+
+-H 'accept: application/json' \\
+
+-H 'Content-Type: application/json' \\
+
+-d '{
+
+"collectionId": 1,
+
+"tokenId": 1,
+
+"from": "string",
+
+"to": "string"
+
+}'
+
+Response
+
+Http Status 200
+
+{
+
+"signerPayloadJSON": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"blockHash": "string",
+
+"blockNumber": "string",
+
+"era": "string",
+
+"genesisHash": "string",
+
+"method": "string",
+
+"nonce": "string",
+
+"specVersion": "string",
+
+"tip": "string",
+
+"transactionVersion": "string",
+
+"signedExtensions": \[
+
+"string"
+
+\],
+
+"version": 0
+
+},
+
+"signerPayloadRaw": {
+
+"address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm",
+
+"data": "string",
+
+"type": "bytes"
+
+},
+
+"signerPayloadHex": "string"
+
+}
+
+*After executing this method, you must follow method POST
+/extrinsic/sign and method POST /extrinsic/submit*
+
+You have transferred the token to the client!
+
+This is how you work with tokens on the marketplace.
