@@ -3,6 +3,8 @@ import { ApiPromise } from '@polkadot/api';
 import { QueryArguments } from '@unique-nft/sdk/types';
 import { BuildQueryError } from '@unique-nft/sdk/errors';
 
+import { serialize } from '@unique-nft/sdk/utils';
+
 interface Sdk {
   api: ApiPromise;
 }
@@ -37,6 +39,6 @@ export class SdkStateQueries {
         error && error instanceof Error ? error.message : undefined;
       throw new BuildQueryError({ query }, errorMessage);
     }
-    return result;
+    return serialize(result);
   }
 }

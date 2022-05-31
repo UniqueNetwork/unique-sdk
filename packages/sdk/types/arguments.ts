@@ -29,14 +29,8 @@ export interface TxBuildArguments {
   isImmortal?: boolean;
 }
 
-export enum QueryController {
-  rpc = 'rpc',
-  derive = 'derive',
-  chain = 'chain',
-}
-
 export interface QueryArguments {
-  controller: QueryController;
+  controller: string;
   section: string;
   method: string;
   args: Array<string | number | BigInt | Record<string, any>>;

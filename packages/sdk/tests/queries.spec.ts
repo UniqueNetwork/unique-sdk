@@ -1,15 +1,12 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
-import { QueryController } from '@unique-nft/sdk/types';
-import { SdkStateQueries } from '@unique-nft/sdk/state-queries';
-import { BuildQueryError } from '@unique-nft/sdk/errors';
+import { BuildQueryError, ErrorCodes } from '@unique-nft/sdk/errors';
+import '@unique-nft/sdk/state-queries';
 
 import { getDefaultSdkOptions } from './testing-utils';
 
-console.log('SdkStateQueries', SdkStateQueries);
-
-describe('Queries', () => {
+describe('Sdk Queries', () => {
   let sdk: Sdk;
   let alice: KeyringPair;
   let bob: KeyringPair;
@@ -21,9 +18,9 @@ describe('Queries', () => {
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
   });
 
-  it('query ok', async () => {
+  it('derive.balances.all', async () => {
     const result = await sdk.stateQueries.execute({
-      controller: QueryController.derive,
+      controller: 'derive',
       section: 'balances',
       method: 'all',
       args: [alice.address],
@@ -33,18 +30,43 @@ describe('Queries', () => {
     });
   });
 
-  it('query fail', async () => {
-    await expect(async () => {
-      await sdk.stateQueries.execute({
-        controller: QueryController.derive,
-        section: 'balance',
-        method: 'all',
-        args: [alice.address],
-      });
-    }).rejects.toThrowError(
-      new BuildQueryError({}, 'Invalid section: "balance"'),
-    );
+  it('derive.accounts.accountId', async () => {
+    const result = await sdk.stateQueries.execute({
+      controller: 'derive',
+      section: 'accounts',
+      method: 'accountId',
+      args: [alice.address],
+    });
+    expect(result).toMatchObject({
+      rawType: 'AccountId',
+      human: expect.any(String),
+      json: expect.any(String),
+      hex: expect.any(String),
+    });
   });
+
+  it.each([
+    ['derive1', 'balances', 'all', 'Invalid controller: "derive1"'],
+    ['derive', 'balances1', 'all', 'Invalid section: "balances1"'],
+    ['derive', 'balances', 'all1', 'Invalid method: "all1"'],
+  ])(
+    'fail - %s.%s.%s',
+    async (
+      controller: string,
+      section: string,
+      method: string,
+      errorMessage: string,
+    ) => {
+      await expect(async () => {
+        await sdk.stateQueries.execute({
+          controller,
+          section,
+          method,
+          args: [alice.address],
+        });
+      }).rejects.toThrowError(new BuildQueryError({}, errorMessage));
+    },
+  );
 
   afterAll(async () => {
     await sdk.api.disconnect();
