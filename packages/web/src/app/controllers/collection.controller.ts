@@ -8,6 +8,8 @@ import {
   Post,
   Query,
   UseFilters,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
@@ -30,6 +32,12 @@ export class CollectionController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
