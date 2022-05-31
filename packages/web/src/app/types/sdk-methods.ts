@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import {
   IsString,
   IsNumber,
@@ -102,9 +101,8 @@ export class TransferBuildBody implements TransferBuildArguments {
 }
 
 export class CollectionIdQuery implements CollectionIdArguments {
-  @Type(() => Number)
-  @IsPositive()
   @IsInt()
+  @IsPositive()
   @ApiProperty({
     example: 1,
   })
@@ -115,7 +113,6 @@ export class TokenIdQuery
   extends CollectionIdQuery
   implements TokenIdArguments
 {
-  @Type(() => Number)
   @IsPositive()
   @IsInt()
   @ApiProperty({

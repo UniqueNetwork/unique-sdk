@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
@@ -22,6 +23,7 @@ import {
 } from '../types/sdk-methods';
 import { validate } from '../validation';
 import { CollectionInfoResponse } from '../types/unique-types';
+import { CustomValidationPipe } from '../utils/validation.pipe';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('collection')
@@ -30,6 +32,7 @@ export class CollectionController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
+  @UsePipes(new CustomValidationPipe({}))
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
