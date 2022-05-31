@@ -23,8 +23,7 @@ will need one method:
 
 How the market and blockchain work.
 
-![](media/image1.png){width="5.9534722222222225in"
-height="5.604782370953631in"}
+![](image1.png)
 
 TABLE OF CONTENTS:
 
@@ -58,8 +57,7 @@ STEP 1.1.
 Go to [*https://wallet.unique.network/*](https://wallet.unique.network/)
 and click on the "Create substrate account" button
 
-![](media/image2.png){width="6.496527777777778in"
-height="3.2569444444444446in"}
+![](image2.png)
 
 STEP 1.2.
 
@@ -70,28 +68,25 @@ You need to write down these words for yourself in a safe place and keep
 them.
 
 After that, mark the checkbox "I have saved my mnemonic seed safely" and
-press the "NEXT" button![](media/image3.png){width="5.726228127734033in"
-height="5.688889982502187in"}
+press the "NEXT" butto
+![](image3.png)
 
 STEP 1.3.
 
 Think up and enter your name and password. After that, the "NEXT" button
 is pressed.
 
-![](media/image4.png){width="4.710859580052493in"
-height="5.716666666666667in"}
+![](image4.png)
 
 STEP 1.4.
 
 Log in to your account using your credentials (credentials already
 entered). Press the "SAVE"
-button.![](media/image5.png){width="4.6826760717410325in"
-height="5.4757666229221345in"}
+button.![](image5.png)
 
 You now have your substrate address!
 
-![](media/image6.png){width="8.162769028871391in"
-height="3.6165529308836395in"}
+![](image6.png)
 
 STEP 2.
 
@@ -104,30 +99,24 @@ To do this, using our authorization data, go to the minter at:
 [*https://minter-quartz.unique.network/*](https://minter-quartz.unique.network/)
 and click on the "Add account via" button
 
-![](media/image7.png){width="8.605251531058618in"
-height="3.9379002624671915in"}
-
+![](image7.png)
 STEP 2.2.
 
 On the page that opens, enter your secret phrase, select the checkbox
 and press the "NEXT" button.
 
-![](media/image8.png){width="4.74412510936133in"
-height="4.849706911636045in"}
+![](image8.png)
 
 STEP 2.3.
 
 Next, enter your account name and password. Press the "NEXT" button.
 
-![](media/image9.png){width="4.749206036745407in"
-height="5.4246806649168855in"}
-
+![](image9.png)
 STEP 2.4.
 
 A page with your details opens. Press the "SAVE" button.
 
-![](media/image10.png){width="5.0474825021872265in"
-height="5.894868766404199in"}
+![](image10.png)
 
 STEP 2.5.
 
@@ -140,13 +129,11 @@ account!
 To get QTZ coins, you can request them using the bot:
 [*https://t.me/unique2faucet\_opal\_bot*](https://t.me/unique2faucet_opal_bot)
 
-![](media/image11.png){width="10.118055555555555in"
-height="1.6111111111111112in"}
+![](/image11.png)
 
 To create a collection, click the "Create new" button.
 
-![](media/image12.png){width="6.0256944444444445in"
-height="2.908333333333333in"}
+![](image12.png)
 
 STEP 2.6.
 
@@ -155,8 +142,7 @@ the collection, and a short name for the collection tokens.
 
 Press the "Confirm" button.
 
-![](media/image13.png){width="4.437863079615048in"
-height="4.8638987314085735in"}
+![](image13.png)
 
 STEP 2.7.
 
@@ -164,34 +150,28 @@ Next, you need to load the collection icon.
 
 Click on the "Confirm" button.
 
-![](media/image14.png){width="4.6052799650043745in"
-height="3.774083552055993in"}
+![](image14.png)
 
-![](media/image15.png){width="4.45338145231846in"
-height="3.707665135608049in"}
+![](image15.png)
 
 STEP 2.8.
 
 Next, you need to set the names of the fields in future tokens and click
 the "Confirm" button.
 
-![](media/image16.png){width="7.347509842519685in"
-height="3.9111351706036745in"}
-
+![](image16.png)
 STEP 2.9.
 
 Next, signing the transaction, you must enter your password and click
 the "Sign and submit" button.
 
-![](media/image17.png){width="4.927771216097987in"
-height="2.5836942257217848in"}
+![](image17.png)
 
 You need to wait about 1 minute. Then your collection will appear.
 
 You are now the owner of an empty NFT collection!
 
-![](media/image18.png){width="8.599992344706912in"
-height="2.3811056430446196in"}
+![](image18.png)
 
 STEP 3.
 
@@ -201,33 +181,28 @@ STEP 3.1.
 
 To create an NFT token, you need to click on the “Create NFT” button.
 
-![](media/image19.png){width="9.093313648293963in"
-height="3.1829713473315837in"}
+![](image19.png)
 
 STEP 3.2.
 
 Next, you need to upload your NFT image, enter the name of the image and
 click the "Confirm" button.
 
-![](media/image20.png){width="6.800589457567804in"
-height="4.075353237095363in"}
+![](image20.png)
 
 Then sign our transaction for the creation of the NFT, similar to step
 2.8.
 
 You now have your first NFT token, which can be seen here:
 
-![](media/image21.png){width="9.95972331583552in"
-height="2.87540135608049in"}
+![](image21.png)
 
 After that, our collection and the NFT token appear in our substrate
 address:
 
-![](media/image22.png){width="7.944083552055993in"
-height="3.842820428696413in"}
+![](image22.png)
 
-![](media/image23.png){width="8.56712489063867in"
-height="4.1918350831146105in"}
+![](image23.png)
 
 It is now possible to connect NFT token trading to your marketplace.
 
@@ -252,6 +227,7 @@ To create an extrinsic, use PATCH /token for transfer NFT\
 \
 Request Body
 
+```
 {
 
 "collectionId": 1,
@@ -263,9 +239,11 @@ Request Body
 "to": "string"
 
 }
+```
 
 CURL Example
 
+```
 curl -X 'PATCH' \\
 
 'https://web-quartz.unique.network/token/transfer' \\
@@ -285,11 +263,13 @@ curl -X 'PATCH' \\
 "to": "string"
 
 }'
+```
 
 Response
 
 Http Status 200
 
+```
 {
 
 "signerPayloadJSON": {
@@ -337,6 +317,7 @@ Http Status 200
 "signerPayloadHex": "string"
 
 }
+```
 
 So we created the extrinsic.
 
@@ -347,15 +328,17 @@ Signing extrinsic.
 To sign an extrinsic, use the POST /extrinsic/sign method
 
 Request body
-
+```
 {
 
 "signerPayloadHex": "string"
 
 }
+```
 
 CURL Example
 
+```
 curl -X 'POST' \\
 
 'https://web-quartz.unique.network/extrinsic/sign' \\
@@ -369,11 +352,13 @@ curl -X 'POST' \\
 "signerPayloadHex": "string"
 
 }'
+```
 
 Response
 
 Http Status 200
 
+```
 {
 
 "signature": "string",
@@ -431,9 +416,11 @@ Request body
 "signatureType": "sr25519"
 
 }
+```
 
 CURL Example
 
+```
 curl -X 'POST' \\
 
 'https://web-quartz.unique.network/extrinsic/submit' \\
@@ -491,6 +478,7 @@ Http Status 200
 "hash": "string"
 
 }
+```
 
 STEP 5.
 
@@ -521,6 +509,7 @@ POST /token
 
 Request body
 
+```
 {
 
 "collectionId": 1,
@@ -565,11 +554,12 @@ curl -X 'POST' \\
 "constData": {}
 
 }'
+```
 
 Response
 
 Http Status 200
-
+```
 {
 
 "signerPayloadJSON": {
@@ -664,11 +654,13 @@ curl -X 'PATCH' \\
 "to": "string"
 
 }'
+```
 
 Response
 
 Http Status 200
 
+```
 {
 
 "signerPayloadJSON": {
@@ -716,6 +708,7 @@ Http Status 200
 "signerPayloadHex": "string"
 
 }
+```
 
 *After executing this method, you must follow method POST
 /extrinsic/sign and method POST /extrinsic/submit*
