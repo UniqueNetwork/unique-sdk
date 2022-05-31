@@ -3,9 +3,9 @@ import { Codec } from '@polkadot/types-codec/types';
 function serializeCodec(data: Codec): object {
   return {
     rawType: data.toRawType(),
-    human: data.toHuman(),
-    json: data.toJSON(),
-    hex: data.toHex(),
+    human: data.toHuman ? data.toHuman() : undefined,
+    json: data.toJSON ? data.toJSON() : undefined,
+    hex: data.toHex ? data.toHex() : undefined,
   };
 }
 
