@@ -9,7 +9,11 @@
     "paths": {
       "@unique-nft/sdk/*": ["packages/sdk/*"],
       "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
-    }
+    },
+    "module": "ESNext"
+  },
+  "angularCompilerOptions": {
+    "enableIvy": false
   },
   "include": ["**/*.ts"],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]

@@ -10,13 +10,13 @@ import {
   TokenInfo,
 } from './unique-types';
 import {
-  SdkSigner,
   SignTxArguments,
   SignTxResult,
   SubmitResult,
   SubmitTxArguments,
   TxBuildArguments,
 } from './arguments';
+import { SignResult } from './polkadot-types';
 
 export interface ChainProperties {
   SS58Prefix: number;
@@ -121,4 +121,8 @@ export interface ISdkExtrinsics {
     signer: SdkSigner | undefined,
   ): Promise<SignTxResult>;
   submit(args: SubmitTxArguments): Promise<SubmitResult>;
+}
+
+export interface SdkSigner {
+  sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult>;
 }

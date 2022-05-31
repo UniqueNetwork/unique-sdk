@@ -8,6 +8,9 @@ import {
   KeyfileSigner,
   SignerOptions,
 } from '@unique-nft/sdk/sign';
+import '@unique-nft/sdk/extrinsics';
+import '@unique-nft/sdk/tokens';
+import '@unique-nft/sdk/balance';
 import { Sdk } from '../src/lib/sdk';
 import { getDefaultSdkOptions } from './testing-utils';
 
@@ -74,21 +77,18 @@ describe('Sdk signers', () => {
       'sign ok - %s',
       async (addressName: string, signerOptions: SignerOptions) => {
         const sdk = await createSdk(signerOptions);
-        const { signerPayloadHex, signerPayloadJSON } =
-          await sdk.balance.transfer({
-            address: getAddressByName(addressName),
-            destination: bob.address,
-            amount: 0.000001,
-          });
-
-        const { signature, signatureType } = await sdk.extrinsics.sign({
-          signerPayloadHex,
+        const unsignedTxPayload = await sdk.balance.transfer({
+          address: getAddressByName(addressName),
+          destination: bob.address,
+          amount: 0.000001,
         });
+        const { signerPayloadJSON } = unsignedTxPayload;
+
+        const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
 
         expect(typeof signature).toBe('string');
         await sdk.extrinsics.verifySignOrThrow({
           signature,
-          signatureType,
           signerPayloadJSON,
         });
       },
@@ -105,21 +105,18 @@ describe('Sdk signers', () => {
         signerOptions: SignerOptions,
       ) => {
         const sdk = await createSdk(signerOptions);
-        const { signerPayloadHex, signerPayloadJSON } =
-          await sdk.balance.transfer({
-            address: getAddressByName(addressName),
-            destination: getAddressByName(destinationName),
-            amount: 0.000001,
-          });
-
-        const { signature, signatureType } = await sdk.extrinsics.sign({
-          signerPayloadHex,
+        const unsignedTxPayload = await sdk.balance.transfer({
+          address: getAddressByName(addressName),
+          destination: getAddressByName(destinationName),
+          amount: 0.000001,
         });
+        const { signerPayloadJSON } = unsignedTxPayload;
+
+        const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
 
         await expect(async () => {
           await sdk.extrinsics.verifySignOrThrow({
             signature,
-            signatureType,
             signerPayloadJSON,
           });
         }).rejects.toThrowError(new BadSignatureError());
@@ -177,22 +174,19 @@ describe('Sdk signers', () => {
         },
       });
 
-      const { signerPayloadHex, signerPayloadJSON } =
-        await sdk.balance.transfer({
-          address: testUser.keyfile.address,
-          destination: bob.address,
-          amount: 0.000001,
-        });
-
-      const { signature, signatureType } = await sdk.extrinsics.sign({
-        signerPayloadHex,
+      const unsignedTxPayload = await sdk.balance.transfer({
+        address: testUser.keyfile.address,
+        destination: bob.address,
+        amount: 0.000001,
       });
+      const { signerPayloadJSON } = unsignedTxPayload;
+
+      const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
 
       expect(typeof signature).toBe('string');
 
       await sdk.extrinsics.verifySignOrThrow({
         signature,
-        signatureType,
         signerPayloadJSON,
       });
     });

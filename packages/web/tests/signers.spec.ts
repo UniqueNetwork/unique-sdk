@@ -67,14 +67,12 @@ describe('Web signers', () => {
         amount: 0.000001,
       });
     expect(true).toEqual(buildResponse.ok);
-    const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
+    const { signerPayloadJSON } = buildResponse.body;
 
     const signResponse = await request(app.getHttpServer())
       .post(`/api/extrinsic/sign`)
       .set(headers)
-      .send({
-        signerPayloadHex,
-      });
+      .send(buildResponse.body);
     expect(true).toEqual(signResponse.ok);
     const { signature } = signResponse.body;
 

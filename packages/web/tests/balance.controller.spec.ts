@@ -2,8 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import request from 'supertest';
-import { u8aToHex } from '@polkadot/util';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
+import '@unique-nft/sdk/extrinsics';
+import '@unique-nft/sdk/tokens';
+import '@unique-nft/sdk/balance';
 
 import { BalanceController } from '../src/app/controllers';
 import { createApp } from './utils.test';
@@ -19,7 +21,7 @@ describe(BalanceController.name, () => {
 
     alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
     bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
-    emptyUser = new Keyring({ type: 'sr25519' }).addFromUri('EmptyUser');
+    emptyUser = new Keyring({ type: 'sr25519' }).addFromUri('//EmptyUser');
   });
 
   function getBalance(address: string): request.Test {
@@ -40,6 +42,7 @@ describe(BalanceController.name, () => {
     amount: number,
     from: KeyringPair,
     to: KeyringPair,
+    seed: string,
   ): Promise<request.Test> {
     const buildResponse = await transferBuild(amount, from, to);
     expect(buildResponse.ok).toEqual(true);
@@ -47,13 +50,18 @@ describe(BalanceController.name, () => {
       signerPayloadJSON: expect.any(Object),
       signerPayloadHex: expect.any(String),
     });
+    const { signerPayloadJSON } = buildResponse.body;
 
-    const { signerPayloadJSON, signerPayloadHex } = buildResponse.body;
-    const signature = u8aToHex(from.sign(signerPayloadHex));
+    const signResponse = await request(app.getHttpServer())
+      .post(`/api/extrinsic/sign`)
+      .set({
+        Authorization: `Seed ${seed}`,
+      })
+      .send(buildResponse.body);
+    const { signature } = signResponse.body;
 
     return request(app.getHttpServer()).post(`/api/extrinsic/submit`).send({
       signature,
-      signatureType: from.type,
       signerPayloadJSON,
     });
   }
@@ -81,10 +89,8 @@ describe(BalanceController.name, () => {
 
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
-      const submitResponse = await transfer(0.001, alice, bob);
-
+      const submitResponse = await transfer(0.001, alice, bob, '//Alice');
       expect(submitResponse.ok).toEqual(true);
-
       expect(submitResponse.body).toMatchObject({
         hash: expect.any(String),
       });
@@ -97,6 +103,7 @@ describe(BalanceController.name, () => {
         currentAmount + 1,
         emptyUser,
         alice,
+        '//EmptyUser',
       );
 
       expect(submitResponse.ok).toEqual(false);

@@ -190,3 +190,5 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
 }
+
+export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}
