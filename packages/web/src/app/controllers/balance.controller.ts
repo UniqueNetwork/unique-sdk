@@ -1,10 +1,18 @@
-import { Body, Controller, Get, Post, Query, UseFilters } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseFilters,
+  UsePipes,
+} from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { validate } from '../validation';
+import { CustomValidationPipe } from '../validation';
 import {
   AddressQuery,
   BalanceResponse,
@@ -19,16 +27,16 @@ export class BalanceController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
+  @UsePipes(new CustomValidationPipe({}))
   async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
-    await validate(args, AddressQuery);
     return this.sdk.balance.get(args);
   }
 
   @Post('transfer')
+  @UsePipes(new CustomValidationPipe({}))
   async transferBuild(
     @Body() args: TransferBuildBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    await validate(args, TransferBuildBody);
     return this.sdk.balance.transfer(args);
   }
 }

@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
@@ -21,7 +22,7 @@ import {
   TransferTokenBody,
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
-import { validate } from '../validation';
+import { CustomValidationPipe } from '../validation';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
@@ -30,8 +31,8 @@ export class TokenController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
+  @UsePipes(new CustomValidationPipe({}))
   async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
-    await validate(args, TokenIdQuery);
     const token = await this.sdk.token.get(args);
 
     if (token) return token;
@@ -42,6 +43,7 @@ export class TokenController {
   }
 
   @Post()
+  @UsePipes(new CustomValidationPipe({}))
   async createToken(
     @Body() args: CreateTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -49,6 +51,7 @@ export class TokenController {
   }
 
   @Delete()
+  @UsePipes(new CustomValidationPipe({}))
   async burnToken(
     @Body() args: BurnTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -56,6 +59,7 @@ export class TokenController {
   }
 
   @Patch('transfer')
+  @UsePipes(new CustomValidationPipe({}))
   async transferToken(
     @Body() args: TransferTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {

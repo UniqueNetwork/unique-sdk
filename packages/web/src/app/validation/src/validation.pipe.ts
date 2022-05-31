@@ -16,9 +16,7 @@ export class CustomValidationPipe
       ...options,
       transform: true,
       transformOptions: { enableImplicitConversion: true },
-      exceptionFactory: (errors) => {
-        return Promise.resolve(new ValidationError(errors));
-      },
+      exceptionFactory: (errors) => Promise.resolve(new ValidationError(errors)),
     });
   }
 }
