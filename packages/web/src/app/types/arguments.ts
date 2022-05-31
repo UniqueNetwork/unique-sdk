@@ -3,6 +3,7 @@ import { HexString } from '@polkadot/util/types';
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { IsHexadecimal, IsNotEmptyObject } from 'class-validator';
 import {
+  QueryArguments,
   SignatureType,
   SignTxResult,
   SubmitResult,
@@ -81,4 +82,30 @@ export class TxBuildBody implements TxBuildArguments {
    */
   @ApiHideProperty()
   isImmortal?: boolean;
+}
+
+export class QueryBody implements QueryArguments {
+  @ApiProperty({
+    type: String,
+    example: 'derive',
+  })
+  controller: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'balances',
+  })
+  section: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'all',
+  })
+  method: string;
+
+  @ApiProperty({
+    type: Array,
+    example: '["yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"]',
+  })
+  args: Array<string | number | BigInt | Record<string, any>>;
 }
