@@ -21,7 +21,7 @@ import {
   TransferCollectionBody,
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
-import { CustomValidationPipe } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import { CollectionInfoResponse } from '../types/unique-types';
 
 @UseFilters(SdkExceptionsFilter)
@@ -31,7 +31,7 @@ export class CollectionController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
@@ -43,7 +43,7 @@ export class CollectionController {
   }
 
   @Post()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async createCollection(
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -51,7 +51,7 @@ export class CollectionController {
   }
 
   @Delete()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async burnCollection(
     @Body() args: BurnCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -59,7 +59,7 @@ export class CollectionController {
   }
 
   @Patch('transfer')
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async transferCollection(
     @Body() args: TransferCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {

@@ -12,7 +12,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { generateAccount, getAccountFromMnemonic } from '@unique-nft/sdk/sign';
 
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { CustomValidationPipe } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import {
   AccountResponse,
   GenerateAccountBody,
@@ -24,13 +24,13 @@ import {
 @Controller('account')
 export class AccountController {
   @Get()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async getAccount(@Query() args: GetAccountQuery): Promise<AccountResponse> {
     return getAccountFromMnemonic(args);
   }
 
   @Post('generate')
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async generate(@Body() args: GenerateAccountBody): Promise<AccountResponse> {
     return generateAccount(args);
   }

@@ -7,7 +7,7 @@ import {
 import { ValidationError } from '@unique-nft/sdk/errors';
 
 @Injectable()
-export class CustomValidationPipe
+export class SdkValidationPipe
   extends ValidationPipe
   implements PipeTransform<any>
 {
@@ -16,7 +16,8 @@ export class CustomValidationPipe
       ...options,
       transform: true,
       transformOptions: { enableImplicitConversion: true },
-      exceptionFactory: (errors) => Promise.resolve(new ValidationError(errors)),
+      exceptionFactory: (errors) =>
+        Promise.resolve(new ValidationError(errors)),
     });
   }
 }

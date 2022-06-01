@@ -13,7 +13,7 @@ import { SdkSigner, UnsignedTxPayload } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
-import { CustomValidationPipe } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import {
   UnsignedTxPayloadBody,
   UnsignedTxPayloadResponse,
@@ -63,7 +63,7 @@ export class ExtrinsicsController {
   }
 
   @Post('submit')
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
     return this.sdk.extrinsics.submit(args);
   }

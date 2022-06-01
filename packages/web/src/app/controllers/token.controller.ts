@@ -22,7 +22,7 @@ import {
   TransferTokenBody,
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
-import { CustomValidationPipe } from '../validation';
+import { SdkValidationPipe } from '../validation';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
@@ -31,7 +31,7 @@ export class TokenController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
     const token = await this.sdk.token.get(args);
 
@@ -43,7 +43,7 @@ export class TokenController {
   }
 
   @Post()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async createToken(
     @Body() args: CreateTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -51,7 +51,7 @@ export class TokenController {
   }
 
   @Delete()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async burnToken(
     @Body() args: BurnTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -59,7 +59,7 @@ export class TokenController {
   }
 
   @Patch('transfer')
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async transferToken(
     @Body() args: TransferTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {

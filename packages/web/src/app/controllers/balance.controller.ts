@@ -12,7 +12,7 @@ import { Sdk } from '@unique-nft/sdk';
 
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { CustomValidationPipe } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import {
   AddressQuery,
   BalanceResponse,
@@ -27,13 +27,13 @@ export class BalanceController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
     return this.sdk.balance.get(args);
   }
 
   @Post('transfer')
-  @UsePipes(new CustomValidationPipe({}))
+  @UsePipes(new SdkValidationPipe({}))
   async transferBuild(
     @Body() args: TransferBuildBody,
   ): Promise<UnsignedTxPayloadResponse> {
