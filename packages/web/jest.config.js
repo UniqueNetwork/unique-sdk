@@ -3,6 +3,7 @@ const esModules = ['@polkadot/', '@unique-nft/types'].join('|');
 module.exports = {
   displayName: 'web',
   preset: '../../jest.preset.js',
+  maxWorkers: 1,
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
