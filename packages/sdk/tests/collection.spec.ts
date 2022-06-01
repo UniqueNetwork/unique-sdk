@@ -51,22 +51,28 @@ const collectionInitial: Omit<CreateCollectionArguments, 'address'> = {
 describe(Sdk.name, () => {
   let sdk: Sdk;
   let testAccounts: TestAccounts;
-  let account: KeyringPair;
+  let accountFerdie: KeyringPair;
+  let accountAlice: KeyringPair;
 
   beforeAll(async () => {
     sdk = await Sdk.create(getDefaultSdkOptions());
     testAccounts = await getKeyringPairs();
-    account = testAccounts.ferdie;
+    accountFerdie = testAccounts.ferdie;
+    accountAlice = testAccounts.alice;
   });
 
   const createCollection = async (): Promise<{ collectionId: number }> => {
     const txPayload = await sdk.collection.create({
       ...collectionInitial,
-      address: account.address,
+      address: accountFerdie.address,
       constOnChainSchema,
     });
 
-    const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
+    const signature = signWithAccount(
+      sdk,
+      accountFerdie,
+      txPayload.signerPayloadHex,
+    );
 
     await sdk.extrinsics.submit({
       signerPayloadJSON: txPayload.signerPayloadJSON,
@@ -84,18 +90,23 @@ describe(Sdk.name, () => {
     return { collectionId };
   };
 
-  const createToken = async ({
-    collectionId,
-  }: {
-    collectionId: number;
-  }): Promise<void> => {
+  const createToken = async (
+    collectionId: number,
+    tokenId: number,
+    ownerAddress?: string,
+  ): Promise<void> => {
     const txPayload = await sdk.token.create({
-      address: account.address,
+      address: accountFerdie.address,
+      owner: ownerAddress,
       collectionId,
       constData,
     });
 
-    const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
+    const signature = signWithAccount(
+      sdk,
+      accountFerdie,
+      txPayload.signerPayloadHex,
+    );
 
     await sdk.extrinsics.submit({
       signerPayloadJSON: txPayload.signerPayloadJSON,
@@ -104,17 +115,25 @@ describe(Sdk.name, () => {
 
     await delay(30_000);
 
-    const newToken = await sdk.token.get({ collectionId, tokenId: 1 });
+    const newToken = await sdk.token.get({ collectionId, tokenId });
 
     expect(newToken).toMatchObject({
-      owner: normalizeAddress(account.address, sdk.api.registry.chainSS58),
+      owner: normalizeAddress(
+        ownerAddress || accountFerdie.address,
+        sdk.api.registry.chainSS58,
+      ),
       constData,
     });
   };
 
+  async function testCreateTokens({ collectionId }: { collectionId: number }) {
+    await createToken(collectionId, 1);
+    await createToken(collectionId, 2, accountAlice.address);
+  }
+
   it('create collection and token', async () => {
-    await createCollection().then(createToken);
-  }, 90_000);
+    await createCollection().then(testCreateTokens);
+  }, 120_000);
 
   afterAll(async () => {
     await sdk.api.disconnect();

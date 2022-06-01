@@ -1,6 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsPositive, NotEquals } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsPositive,
+  NotEquals,
+  IsOptional,
+} from 'class-validator';
 import {
   AddressArguments,
   AnyObject,
@@ -145,13 +151,17 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   to: string;
 }
 
-export class CreateTokenBody implements CreateTokenArguments {
+export class CreateTokenBody
+  extends AddressQuery
+  implements CreateTokenArguments
+{
   @ApiProperty({ example: 1 })
   collectionId: number;
 
+  @IsOptional()
   @ValidAddress()
   @AddressApiProperty
-  address: string;
+  owner?: string;
 
   @ApiProperty({
     example: {

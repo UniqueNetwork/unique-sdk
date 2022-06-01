@@ -48,8 +48,8 @@ export class SdkToken implements ISdkToken {
     return decodeToken(collection, tokenId, tokenData, this.sdk.options);
   }
 
-  async create(token: CreateTokenArguments): Promise<UnsignedTxPayload> {
-    const { address, collectionId, constData } = token;
+  async create(args: CreateTokenArguments): Promise<UnsignedTxPayload> {
+    const { address, owner, collectionId, constData } = args;
 
     const collection = await this.sdk.collection.get({ collectionId });
 
@@ -63,7 +63,7 @@ export class SdkToken implements ISdkToken {
       address,
       section: 'unique',
       method: 'createItem',
-      args: [collectionId, { substrate: address }, tokenPayload],
+      args: [collectionId, { substrate: owner || address }, tokenPayload],
     });
   }
 
