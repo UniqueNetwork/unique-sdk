@@ -46,6 +46,7 @@ const collectionInitial: Omit<CreateCollectionArguments, 'address'> = {
   description: 'bar',
   tokenPrefix: 'BAZ',
   schemaVersion: 'Unique',
+  variableOnChainSchema: '{}',
 };
 
 describe(Sdk.name, () => {

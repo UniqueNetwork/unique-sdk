@@ -639,7 +639,7 @@ curl -X 'GET' \
       }
     }
   },
-  "variableOnChainSchema": {},
+  "variableOnChainSchema": "{}",
   "metaUpdatePermission": "ItemOwner",
   "id": 1,
   "owner": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
@@ -747,7 +747,7 @@ Generates an unsigned extrinsic to create a collection with certain parameters
       }
     }
   },
-  "variableOnChainSchema": {},
+  "variableOnChainSchema": "{}",
   "metaUpdatePermission": "ItemOwner",
   "address": "yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"
 }'

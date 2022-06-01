@@ -1,5 +1,4 @@
 // eslint-disable-next-line max-classes-per-file
-import { AnyJson } from '@polkadot/types/types';
 import { INamespace } from 'protobufjs';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -107,8 +106,11 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
   })
   constOnChainSchema?: INamespace | null;
 
-  @ApiProperty({ type: Object, required: false })
-  variableOnChainSchema?: AnyJson | null;
+  @ApiProperty({
+    example: '{}',
+    required: false,
+  })
+  variableOnChainSchema?: string | null;
 
   @ApiProperty({ enum: MetaUpdatePermission, required: false })
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
