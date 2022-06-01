@@ -4,7 +4,8 @@ import {
   IsString,
   IsNumber,
   IsPositive,
-  NotEquals,
+  IsInt,
+  IsNumberString,
   IsOptional,
 } from 'class-validator';
 import {
@@ -63,11 +64,13 @@ export class ChainPropertiesResponse implements ChainProperties {
 }
 
 export class BalanceResponse implements Balance {
+  @IsNumberString()
   @ApiProperty({
     example: '411348197000000000000',
   })
   amount: string;
 
+  @IsString()
   @ApiProperty({
     example: '411.3481 QTZ',
   })
@@ -91,7 +94,6 @@ export class TransferBuildBody implements TransferBuildArguments {
 
   @IsNumber()
   @IsPositive()
-  @NotEquals(0)
   @ApiProperty({
     example: 0.01,
   })
@@ -99,6 +101,8 @@ export class TransferBuildBody implements TransferBuildArguments {
 }
 
 export class CollectionIdQuery implements CollectionIdArguments {
+  @IsInt()
+  @IsPositive()
   @ApiProperty({
     example: 1,
   })
@@ -109,6 +113,8 @@ export class TokenIdQuery
   extends CollectionIdQuery
   implements TokenIdArguments
 {
+  @IsPositive()
+  @IsInt()
   @ApiProperty({
     example: 1,
   })
@@ -130,6 +136,8 @@ export class CreateCollectionBody
 }
 
 export class BurnCollectionBody implements BurnCollectionArguments {
+  @IsPositive()
+  @IsInt()
   @ApiProperty({
     example: 1,
   })
@@ -141,13 +149,19 @@ export class BurnCollectionBody implements BurnCollectionArguments {
 }
 
 export class TransferCollectionBody implements TransferCollectionArguments {
-  @ApiProperty()
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({
+    example: 1,
+  })
   collectionId: number;
 
-  @ApiProperty()
+  @ValidAddress()
+  @AddressApiProperty
   from: string;
 
-  @ApiProperty()
+  @ValidAddress()
+  @AddressApiProperty
   to: string;
 }
 
@@ -155,6 +169,8 @@ export class CreateTokenBody
   extends AddressQuery
   implements CreateTokenArguments
 {
+  @IsPositive()
+  @IsInt()
   @ApiProperty({ example: 1 })
   collectionId: number;
 
@@ -179,13 +195,16 @@ export class BurnTokenBody extends TokenIdQuery implements BurnTokenArguments {
   @AddressApiProperty
   address: string;
 }
+
 export class TransferTokenBody
   extends TokenIdQuery
   implements TransferTokenArguments
 {
+  @ValidAddress()
   @AddressApiProperty
   from: string;
 
+  @ValidAddress()
   @AddressApiProperty
   to: string;
 }

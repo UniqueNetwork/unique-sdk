@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
@@ -21,7 +22,9 @@ import {
   TransferTokenBody,
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
+import { SdkValidationPipe } from '../validation';
 
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
 @Controller('token')
