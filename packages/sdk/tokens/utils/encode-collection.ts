@@ -28,6 +28,14 @@ export const encodeCollection = (
     });
   }
 
+  if (collectionInfo.variableOnChainSchema) {
+    params.push({
+      variableOnChainSchema: JSON.stringify(
+        collectionInfo.variableOnChainSchema,
+      ),
+    });
+  }
+
   return registry.createType<UpDataStructsCreateCollectionData>(
     'UpDataStructsCreateCollectionData',
     objectSpread({}, ...params),
