@@ -2,7 +2,6 @@ import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
 import { BuildQueryError } from '@unique-nft/sdk/errors';
-import { QueryControllers } from '@unique-nft/sdk/types';
 import '@unique-nft/sdk/state-queries';
 
 import { getDefaultSdkOptions } from './testing-utils';
@@ -21,8 +20,8 @@ describe('Sdk Queries', () => {
 
   it('derive.balances.all', async () => {
     const result = await sdk.stateQueries.execute({
-      controller: QueryControllers.derive,
-      section: 'balances',
+      endpoint: 'derive',
+      module: 'balances',
       method: 'all',
       args: [alice.address],
     });
@@ -33,8 +32,8 @@ describe('Sdk Queries', () => {
 
   it('derive.accounts.accountId', async () => {
     const result = await sdk.stateQueries.execute({
-      controller: QueryControllers.derive,
-      section: 'accounts',
+      endpoint: 'derive',
+      module: 'accounts',
       method: 'accountId',
       args: [alice.address],
     });
@@ -47,25 +46,21 @@ describe('Sdk Queries', () => {
   });
 
   it.each([
-    [
-      QueryControllers.derive,
-      'balances1',
-      'all',
-      'Invalid section: "balances1"',
-    ],
-    [QueryControllers.derive, 'balances', 'all1', 'Invalid method: "all1"'],
+    ['derive1', 'balances1', 'all', 'Invalid endpoint: "derive1"'],
+    ['derive', 'balances1', 'all', 'Invalid module: "balances1"'],
+    ['derive', 'balances', 'all1', 'Invalid method: "all1"'],
   ])(
     'fail - %s.%s.%s',
     async (
-      controller: QueryControllers,
-      section: string,
+      endpoint: string,
+      module: string,
       method: string,
       errorMessage: string,
     ) => {
       await expect(async () => {
         await sdk.stateQueries.execute({
-          controller,
-          section,
+          endpoint,
+          module,
           method,
           args: [alice.address],
         });

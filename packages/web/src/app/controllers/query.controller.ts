@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { Sdk } from '@unique-nft/sdk';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { QueryBody } from '../types/arguments';
+import { ApiQueryBody } from '../types/arguments';
 import { validate } from '../validation';
 
 @UseFilters(SdkExceptionsFilter)
@@ -13,8 +13,8 @@ export class QueryController {
   constructor(private readonly sdk: Sdk) {}
 
   @Post()
-  async query(@Body() args: QueryBody): Promise<any> {
-    await validate(args, QueryBody);
+  async query(@Body() args: ApiQueryBody): Promise<any> {
+    await validate(args, ApiQueryBody);
     return this.sdk.stateQueries.execute(args);
   }
 }

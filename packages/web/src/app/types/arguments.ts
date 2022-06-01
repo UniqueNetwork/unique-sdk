@@ -9,8 +9,7 @@ import {
   IsArray,
 } from 'class-validator';
 import {
-  QueryArguments,
-  QueryControllers,
+  ApiQueryArguments,
   SignatureType,
   SignTxResult,
   SubmitResult,
@@ -91,20 +90,20 @@ export class TxBuildBody implements TxBuildArguments {
   isImmortal?: boolean;
 }
 
-export class QueryBody implements QueryArguments {
+export class ApiQueryBody implements ApiQueryArguments {
   @ApiProperty({
-    enum: QueryControllers,
-    example: QueryControllers.derive,
+    type: String,
+    example: 'derive',
   })
-  @IsEnum(QueryControllers)
-  controller: QueryControllers;
+  @IsString()
+  endpoint: string;
 
   @ApiProperty({
     type: String,
     example: 'accounts',
   })
   @IsString()
-  section: string;
+  module: string;
 
   @ApiProperty({
     type: String,

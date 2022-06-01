@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/ban-ts-comment */
 import { ApiPromise } from '@polkadot/api';
-import { QueryArguments } from '@unique-nft/sdk/types';
+import { ApiQueryArguments } from '@unique-nft/sdk/types';
 import { BuildQueryError } from '@unique-nft/sdk/errors';
 
 import { serialize } from '@unique-nft/sdk/utils';
@@ -12,28 +12,25 @@ interface Sdk {
 export class SdkStateQueries {
   constructor(private readonly sdk: Sdk) {}
 
-  async execute(query: QueryArguments): Promise<any> {
-    const { controller, section, method, args } = query;
+  async execute(query: ApiQueryArguments): Promise<any> {
+    const { endpoint, module, method, args } = query;
 
-    if (!(controller in this.sdk.api)) {
-      throw new BuildQueryError(
-        { query },
-        `Invalid controller: "${controller}"`,
-      );
+    if (!(endpoint in this.sdk.api)) {
+      throw new BuildQueryError({ query }, `Invalid endpoint: "${endpoint}"`);
     }
     // @ts-ignore
-    if (!(section in this.sdk.api[controller])) {
-      throw new BuildQueryError({ query }, `Invalid section: "${section}"`);
+    if (!(module in this.sdk.api[endpoint])) {
+      throw new BuildQueryError({ query }, `Invalid module: "${module}"`);
     }
     // @ts-ignore
-    if (!(method in this.sdk.api[controller][section])) {
+    if (!(method in this.sdk.api[endpoint][module])) {
       throw new BuildQueryError({ query }, `Invalid method: "${method}"`);
     }
 
     let result;
     try {
       // @ts-ignore
-      result = await this.sdk.api[controller][section][method](...args);
+      result = await this.sdk.api[endpoint][module][method](...args);
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
