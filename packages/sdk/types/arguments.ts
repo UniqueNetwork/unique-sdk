@@ -28,3 +28,10 @@ export interface TxBuildArguments {
   era?: number;
   isImmortal?: boolean;
 }
+
+export interface ApiQueryArguments {
+  endpoint: string;
+  module: string;
+  method: string;
+  args: Array<string | number | BigInt | Record<string, any>>;
+}
