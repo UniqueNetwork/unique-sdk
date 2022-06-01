@@ -10,5 +10,5 @@
       "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
     }
   },
-  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "**/*.ts"]
 }
