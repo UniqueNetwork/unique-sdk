@@ -67,9 +67,10 @@ export interface TransferCollectionArguments {
   to: string;
 }
 
-export interface CreateTokenArguments {
+export interface CreateTokenArguments extends AddressArguments {
+  // todo - rename "address" field to "author" or "creator" ?
   collectionId: number;
-  address: string;
+  owner?: string;
   constData: AnyObject;
 }
 
