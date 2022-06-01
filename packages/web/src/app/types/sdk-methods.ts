@@ -5,7 +5,6 @@ import {
   IsNumber,
   IsPositive,
   IsInt,
-  NotEquals,
   IsNumberString,
   IsOptional,
 } from 'class-validator';

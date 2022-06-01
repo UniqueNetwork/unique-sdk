@@ -15,7 +15,7 @@ describe(CollectionController.name, () => {
 
   describe('GET /api/collection', () => {
     it('valid collectionId', async () => {
-      const { ok, body } = await request(app.getHttpServer())
+      const { ok } = await request(app.getHttpServer())
         .get(`/api/collection`)
         .query({ collectionId: 1 });
       expect(ok).toEqual(true);
@@ -66,7 +66,7 @@ describe(CollectionController.name, () => {
     it.skip('submit collection', async () => {
       const { signature } = signResponse;
       const { signerPayloadJSON } = generatedCollection;
-      const { ok, body } = await request(app.getHttpServer())
+      const { ok } = await request(app.getHttpServer())
         .post(`/api/extrinsic/submit`)
         .send({
           signerPayloadJSON,

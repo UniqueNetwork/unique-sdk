@@ -15,13 +15,13 @@ describe(TokenController.name, () => {
 
   describe('GET /api/token', () => {
     it('valid tokenId', async () => {
-      const { ok, body } = await request(app.getHttpServer())
+      const { ok } = await request(app.getHttpServer())
         .get(`/api/token`)
         .query({ collectionId: 1, tokenId: 1 });
       expect(ok).toEqual(true);
     });
 
-    it.skip.each([
+    it.each([
       {
         collectionId: 'foo',
         tokenId: 1,
@@ -30,18 +30,15 @@ describe(TokenController.name, () => {
         collectionId: 1,
         tokenId: 'foo',
       },
-    ])(
-      'invalid collectionId - $collectionId or tokenId - $tokenId',
-      async (collectionId, tokenId) => {
-        const { ok, body } = await request(app.getHttpServer())
-          .get(`/api/token`)
-          .query({ collectionId, tokenId });
-        expect(ok).toEqual(false);
-        expect(body.error.code).toEqual(ErrorCodes.Validation);
-      },
-    );
+    ])('invalid collectionId or tokenId - %j', async (obj) => {
+      const { ok, body } = await request(app.getHttpServer())
+        .get(`/api/token`)
+        .query(obj);
+      expect(ok).toEqual(false);
+      expect(body.error.code).toEqual(ErrorCodes.Validation);
+    });
 
-    describe.skip('POST /api/token', () => {
+    describe('POST /api/token', () => {
       let generatedCollection;
       it('generate token', async () => {
         const { ok, body } = await request(app.getHttpServer())
@@ -51,7 +48,7 @@ describe(TokenController.name, () => {
             address: 'yGDkQ8CbZSsX6y4PaGC5Q7nVtQxycKunSb3W7dHNAJpNYCzUh',
             constData: {
               ipfsJson:
-                '{"ipfs":"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb","type":"image"}',
+                '{"ipfs":"QmbdrbA7uAstaxeZWmmiECMNqNpJkMWZ8jw8GfKHid3NLX","type":"image"}',
               gender: 'Male',
               traits: ['TEETH_SMILE', 'UP_HAIR'],
             },
