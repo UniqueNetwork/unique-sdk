@@ -24,6 +24,7 @@ import {
 import { SdkValidationPipe } from '../validation';
 import { CollectionInfoResponse } from '../types/unique-types';
 
+@UsePipes(new SdkValidationPipe({}))
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('collection')
 @Controller('collection')
@@ -43,7 +44,6 @@ export class CollectionController {
   }
 
   @Post()
-  @UsePipes(new SdkValidationPipe({}))
   async createCollection(
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -51,7 +51,6 @@ export class CollectionController {
   }
 
   @Delete()
-  @UsePipes(new SdkValidationPipe({}))
   async burnCollection(
     @Body() args: BurnCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
@@ -59,7 +58,6 @@ export class CollectionController {
   }
 
   @Patch('transfer')
-  @UsePipes(new SdkValidationPipe({}))
   async transferCollection(
     @Body() args: TransferCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {

@@ -6,6 +6,7 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { ApiQueryBody } from '../types/arguments';
 import { SdkValidationPipe } from '../validation';
 
+@UsePipes(new SdkValidationPipe({}))
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('query')
 @Controller('query')
@@ -13,7 +14,6 @@ export class QueryController {
   constructor(private readonly sdk: Sdk) {}
 
   @Post()
-  @UsePipes(new SdkValidationPipe({}))
   async query(@Body() args: ApiQueryBody): Promise<any> {
     return this.sdk.stateQueries.execute(args);
   }

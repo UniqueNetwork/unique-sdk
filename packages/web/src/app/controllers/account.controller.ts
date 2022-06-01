@@ -19,18 +19,17 @@ import {
   GetAccountQuery,
 } from '../types/signer-payload';
 
+@UsePipes(new SdkValidationPipe({}))
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('account')
 @Controller('account')
 export class AccountController {
   @Get()
-  @UsePipes(new SdkValidationPipe({}))
   async getAccount(@Query() args: GetAccountQuery): Promise<AccountResponse> {
     return getAccountFromMnemonic(args);
   }
 
   @Post('generate')
-  @UsePipes(new SdkValidationPipe({}))
   async generate(@Body() args: GenerateAccountBody): Promise<AccountResponse> {
     return generateAccount(args);
   }

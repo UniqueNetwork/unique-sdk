@@ -20,6 +20,7 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 
+@UsePipes(new SdkValidationPipe({}))
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('balance')
 @Controller('balance')
@@ -27,13 +28,11 @@ export class BalanceController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  @UsePipes(new SdkValidationPipe({}))
   async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
     return this.sdk.balance.get(args);
   }
 
   @Post('transfer')
-  @UsePipes(new SdkValidationPipe({}))
   async transferBuild(
     @Body() args: TransferBuildBody,
   ): Promise<UnsignedTxPayloadResponse> {
