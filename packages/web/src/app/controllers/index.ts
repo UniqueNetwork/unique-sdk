@@ -4,3 +4,4 @@ export { ExtrinsicsController } from './extrinsics.controller';
 export { CollectionController } from './collection.controller';
 export { TokenController } from './token.controller';
 export { AccountController } from './account.controller';
+export { QueryController } from './query.controller';

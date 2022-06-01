@@ -7,6 +7,7 @@ import {
   IsInt,
   NotEquals,
   IsNumberString,
+  IsOptional,
 } from 'class-validator';
 import {
   AddressArguments,
@@ -165,17 +166,19 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   to: string;
 }
 
-export class CreateTokenBody implements CreateTokenArguments {
+export class CreateTokenBody
+  extends AddressQuery
+  implements CreateTokenArguments
+{
   @IsPositive()
   @IsInt()
-  @ApiProperty({
-    example: 1,
-  })
+  @ApiProperty({ example: 1 })
   collectionId: number;
 
+  @IsOptional()
   @ValidAddress()
   @AddressApiProperty
-  address: string;
+  owner?: string;
 
   @ApiProperty({
     example: {

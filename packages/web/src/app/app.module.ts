@@ -14,6 +14,7 @@ import {
   ExtrinsicsController,
   TokenController,
   AccountController,
+  QueryController,
 } from './controllers';
 import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
@@ -29,6 +30,7 @@ import { sdkProvider } from './sdk-provider';
     CollectionController,
     TokenController,
     AccountController,
+    QueryController,
   ],
   providers: [
     sdkProvider,

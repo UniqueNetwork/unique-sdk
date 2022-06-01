@@ -1,8 +1,15 @@
 /* eslint-disable max-classes-per-file */
 import { HexString } from '@polkadot/util/types';
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
-import { IsHexadecimal, IsNotEmptyObject } from 'class-validator';
 import {
+  IsHexadecimal,
+  IsNotEmptyObject,
+  IsEnum,
+  IsString,
+  IsArray,
+} from 'class-validator';
+import {
+  ApiQueryArguments,
   SignatureType,
   SignTxResult,
   SubmitResult,
@@ -81,4 +88,34 @@ export class TxBuildBody implements TxBuildArguments {
    */
   @ApiHideProperty()
   isImmortal?: boolean;
+}
+
+export class ApiQueryBody implements ApiQueryArguments {
+  @ApiProperty({
+    type: String,
+    example: 'derive',
+  })
+  @IsString()
+  endpoint: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'accounts',
+  })
+  @IsString()
+  module: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'accountId',
+  })
+  @IsString()
+  method: string;
+
+  @ApiProperty({
+    type: Array,
+    example: '["yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"]',
+  })
+  @IsArray()
+  args: Array<string | number | BigInt | Record<string, any>>;
 }
