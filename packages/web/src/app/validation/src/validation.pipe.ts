@@ -1,20 +1,8 @@
-import {
-  Injectable,
-  PipeTransform,
-  ValidationPipe,
-  ValidationPipeOptions,
-} from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from '@unique-nft/sdk/errors';
 
-@Injectable()
-export class SdkValidationPipe extends ValidationPipe implements PipeTransform {
-  constructor(options: ValidationPipeOptions) {
-    super({
-      ...options,
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-      exceptionFactory: (errors) =>
-        Promise.resolve(new ValidationError(errors)),
-    });
-  }
-}
+export const SdkValidationPipe = new ValidationPipe({
+  transform: true,
+  transformOptions: { enableImplicitConversion: true },
+  exceptionFactory: (errors) => new ValidationError(errors),
+});

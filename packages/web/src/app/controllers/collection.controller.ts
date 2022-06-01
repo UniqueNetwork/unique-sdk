@@ -24,7 +24,7 @@ import {
 import { SdkValidationPipe } from '../validation';
 import { CollectionInfoResponse } from '../types/unique-types';
 
-@UsePipes(new SdkValidationPipe({}))
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('collection')
 @Controller('collection')
@@ -32,7 +32,6 @@ export class CollectionController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  @UsePipes(new SdkValidationPipe({}))
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {

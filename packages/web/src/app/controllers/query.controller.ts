@@ -6,7 +6,7 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { ApiQueryBody } from '../types/arguments';
 import { SdkValidationPipe } from '../validation';
 
-@UsePipes(new SdkValidationPipe({}))
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('query')
 @Controller('query')

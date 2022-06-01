@@ -19,7 +19,7 @@ import {
   GetAccountQuery,
 } from '../types/signer-payload';
 
-@UsePipes(new SdkValidationPipe({}))
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('account')
 @Controller('account')

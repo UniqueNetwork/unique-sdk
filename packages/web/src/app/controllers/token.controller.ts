@@ -24,7 +24,7 @@ import {
 } from '../types/sdk-methods';
 import { SdkValidationPipe } from '../validation';
 
-@UsePipes(new SdkValidationPipe({}))
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('token')
 @Controller('token')

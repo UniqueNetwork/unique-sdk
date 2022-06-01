@@ -20,7 +20,7 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 
-@UsePipes(new SdkValidationPipe({}))
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('balance')
 @Controller('balance')

@@ -25,6 +25,7 @@ import {
   TxBuildBody,
 } from '../types/arguments';
 
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('extrinsic')
 @Controller('extrinsic')
@@ -63,7 +64,6 @@ export class ExtrinsicsController {
   }
 
   @Post('submit')
-  @UsePipes(new SdkValidationPipe({}))
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
     return this.sdk.extrinsics.submit(args);
   }
