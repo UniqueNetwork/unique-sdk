@@ -56,7 +56,7 @@ export const decodeCollection = (
   mintMode: collection.mintMode.toHuman(),
   offchainSchema: bytesToString(collection.offchainSchema),
   constOnChainSchema: bytesToJson(collection.constOnChainSchema),
-  variableOnChainSchema: bytesToJson(collection.variableOnChainSchema),
+  variableOnChainSchema: bytesToString(collection.variableOnChainSchema),
   schemaVersion: collection.schemaVersion.type,
   sponsorship: decodeCollectionSponsorship(collection.sponsorship),
   metaUpdatePermission: collection.metaUpdatePermission.type,

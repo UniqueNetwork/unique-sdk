@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseFilters, Headers } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseFilters,
+  Headers,
+  UsePipes,
+} from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
@@ -6,7 +13,7 @@ import { SdkSigner, UnsignedTxPayload } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
-import { validate } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import {
   UnsignedTxPayloadBody,
   UnsignedTxPayloadResponse,
@@ -18,6 +25,7 @@ import {
   TxBuildBody,
 } from '../types/arguments';
 
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('extrinsic')
 @Controller('extrinsic')
@@ -57,7 +65,6 @@ export class ExtrinsicsController {
 
   @Post('submit')
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
-    await validate(args, SubmitTxBody);
     return this.sdk.extrinsics.submit(args);
   }
 }

@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
@@ -20,9 +21,10 @@ import {
   TransferCollectionBody,
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
-import { validate } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import { CollectionInfoResponse } from '../types/unique-types';
 
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('collection')
 @Controller('collection')
@@ -44,7 +46,6 @@ export class CollectionController {
   async createCollection(
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    await validate(args, CreateCollectionBody);
     return this.sdk.collection.create(args);
   }
 

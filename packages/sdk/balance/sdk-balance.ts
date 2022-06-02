@@ -26,12 +26,9 @@ export class SdkBalance {
   async get(args: AddressArguments): Promise<Balance> {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
-    const { availableBalance } = await this.sdk.stateQueries.execute({
-      endpoint: 'derive',
-      module: 'balances',
-      method: 'all',
-      args: [args.address],
-    });
+    const { availableBalance } = await this.sdk.api.derive.balances.all(
+      args.address,
+    );
 
     return {
       amount: availableBalance.toBigInt().toString(),

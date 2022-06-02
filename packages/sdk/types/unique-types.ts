@@ -1,4 +1,3 @@
-import { AnyJson } from '@polkadot/types/types';
 import { INamespace } from 'protobufjs';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -55,7 +54,7 @@ export interface CollectionInfoBase {
   sponsorship?: CollectionSponsorship | null;
   limits?: CollectionLimits;
   constOnChainSchema?: INamespace | null;
-  variableOnChainSchema?: AnyJson | null;
+  variableOnChainSchema?: string | null;
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
 }
 

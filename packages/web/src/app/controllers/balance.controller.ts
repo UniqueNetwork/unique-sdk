@@ -1,10 +1,18 @@
-import { Body, Controller, Get, Post, Query, UseFilters } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseFilters,
+  UsePipes,
+} from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 
 import { ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { validate } from '../validation';
+import { SdkValidationPipe } from '../validation';
 import {
   AddressQuery,
   BalanceResponse,
@@ -12,6 +20,7 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 
+@UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('balance')
 @Controller('balance')
@@ -20,7 +29,6 @@ export class BalanceController {
 
   @Get()
   async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
-    await validate(args, AddressQuery);
     return this.sdk.balance.get(args);
   }
 
@@ -28,7 +36,6 @@ export class BalanceController {
   async transferBuild(
     @Body() args: TransferBuildBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    await validate(args, TransferBuildBody);
     return this.sdk.balance.transfer(args);
   }
 }

@@ -39,6 +39,7 @@ const collectionInitial: Omit<CreateCollectionArguments, 'address'> = {
   description: 'bar',
   tokenPrefix: 'BAZ',
   schemaVersion: 'Unique',
+  variableOnChainSchema: '{}',
 };
 
 export async function createCollection(
