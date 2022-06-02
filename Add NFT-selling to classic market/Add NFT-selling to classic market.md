@@ -27,11 +27,7 @@ How the market and blockchain work.
 
 
 TABLE OF CONTENTS:
-- [STEP 1](#STEP-1)
-  - [STEP 1.1](#STEP-1.1)
-  - [STEP 1.2](#STEP-1.2)
-  - [STEP 1.3](#STEP-1.3)
-  - [STEP 1.4](#STEP-1.4)
+- [STEP 1](#Create a market's substrate account)
 - [STEP 2](#STEP-2)
   - [STEP 2.1](#STEP-2.1)
   - [STEP 2.2](#STEP-2.2)
@@ -53,19 +49,18 @@ TABLE OF CONTENTS:
   - [STEP 5.1](#STEP-5.1)
   - [STEP 5.2](#STEP-5.2)
 
-### STEP 1
-To carry out transactions with NFT, it is necessary to have a
-Polkadot\\Unique substrate address.
+### STEP 1 Create a market's substrate account
+Your marketplace will have to store and transfer NFTs. To do so it is necessary to have a spessial account. 
+Unique network operates in 'Substrate' ecosystem. Substrate account addresses (Polkadot, Kusama, Unique, Quartz etc.) may look different on different networks but they have all the same private key underneath. You can see all transformations of any address on https://polkadot.subscan.io/tools/ss58_transform\\Unique substrate address.
 
-To do this, you need to use the resources:
-[*https://polkadot.js.org*](https://polkadot.js.org) ,
-[*https://wallet.unique.network/*](https://wallet.unique.network/) or
-use the API:
-[*https://polkadot.js.org/docs/ui-keyring/*](https://polkadot.js.org/docs/ui-keyring/)
-.
+There are several ways to create a Substrate account address:
+- [*https://polkadot.js.org/extension/*](https://polkadot.js.org) - you will get an account and an extension for your Chrome or Firefox browser in order to quickly connect to any Unique network webs (recommended) 
+- [*https://wallet.unique.network/*](https://wallet.unique.network/) - you will get an account, but will have to manualy connect it to other Unique network webs
+- using API [*https://polkadot.js.org/docs/ui-keyring/*](https://polkadot.js.org/docs/ui-keyring/) - you will get only an account
 
-First, consider creating a substrate address using
-https://wallet.unique.network/ as an example:
+It is vety important to keep your account seed phrase safe! Write it down on paper or export the JSON key with a password you would never forget.
+
+The account creating steps are the same for eather way, the example of UI in https://wallet.unique.network/:
 
 #### STEP 1.1
 
@@ -79,66 +74,42 @@ and click on the "Create substrate account" button
 When creating an account, the type "Mnemonic" is selected and a secret
 phrase of 12 words is automatically generated.
 
-You need to write down these words for yourself in a safe place and keep
-them.
+You need to write down these words in a safe place.
 
-After that, mark the checkbox "I have saved my mnemonic seed safely" and
-press the "NEXT" butto
+After that, mark the checkbox "I have saved my mnemonic seed safely". Press "NEXT"
 ![](image3.png)
 
 #### STEP 1.3
 
-Think up and enter your name and password. After that, the "NEXT" button
-is pressed.
+Think up and enter your name and password. Press "NEXT"
 
 ![](image4.png)
 
 #### STEP 1.4
 
 Log in to your account using your credentials (credentials already
-entered). Press the "SAVE"
+entered). Press "SAVE"
 button.![](image5.png)
 
-You now have your substrate address!
+You now have your substrate account address!
 
 ![](image6.png)
 
-### STEP 2
+### STEP 2 Create an NFT collection
 
-The next stage of work will be the creation of a collection to
-accommodate the NFT.
+All NFTs in Unique network are organized in collections. You can create as many collections as you want and orginize them by any principle: one collection per market/artist/albom/event/theme etc.
+
+There are several ways to create a collection: 
+- using Unique Minter UI [*https://minter-quartz.unique.network/*](https://minter-quartz.unique.network/)
+- using SDK
+- using custom scripts 
+
+We recommend to start with using the Unique Minter UI.
 
 #### STEP 2.1
 
-To do this, using our authorization data, go to the minter at:
-[*https://minter-quartz.unique.network/*](https://minter-quartz.unique.network/)
-and click on the "Add account via" button
-
-![](image7.png)
-
-#### STEP 2.2
-
-On the page that opens, enter your secret phrase, select the checkbox
-and press the "NEXT" button.
-
-![](image8.png)
-
-#### STEP 2.3
-
-Next, enter your account name and password. Press the "NEXT" button.
-
-![](image9.png)
-
-#### STEP 2.4
-
-A page with your details opens. Press the "SAVE" button.
-
-![](image10.png)
-
-#### STEP 2.5
-
-Now you are authorized in the minter and can create NFT collections and
-NFT tokens.
+Go to the minter at [*https://minter-quartz.unique.network/*](https://minter-quartz.unique.network/)
+and connect an account you've created via polkadot.js extension or following "Add account via" instructions.
 
 Attention! To create collections, you must have QTZ coins in your
 account!
