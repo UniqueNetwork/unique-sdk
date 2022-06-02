@@ -77,7 +77,7 @@ export class SdkToken implements ISdkToken {
       address: from,
       section: 'unique',
       method: 'transfer',
-      args: [to, collectionId, tokenId, 1],
+      args: [{ substrate: to }, collectionId, tokenId, 1],
     });
   }
 

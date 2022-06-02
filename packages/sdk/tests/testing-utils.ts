@@ -2,8 +2,27 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { HexString } from '@polkadot/util/types';
-import { SdkOptions } from '@unique-nft/sdk/types';
+import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
+import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '../src/lib/sdk';
+
+export const getDefaultSdkOptions = (): SdkOptions => ({
+  chainWsUrl: 'wss://ws-quartz-dev.unique.network',
+  ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
+});
+
+export async function createSdk(signerOptions?: SignerOptions): Promise<Sdk> {
+  const defOptions = getDefaultSdkOptions();
+  const signer: SdkSigner | undefined = signerOptions
+    ? await createSigner(signerOptions)
+    : undefined;
+  const options: SdkOptions = {
+    chainWsUrl: defOptions.chainWsUrl,
+    ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
+    signer,
+  };
+  return Sdk.create(options);
+}
 
 export type TestAccounts = {
   alice: KeyringPair;
@@ -45,11 +64,6 @@ export const delay = (ms = 1000) =>
   new Promise<void>((resolve) => {
     setTimeout(resolve, ms);
   });
-
-export const getDefaultSdkOptions = (): SdkOptions => ({
-  chainWsUrl: 'wss://ws-quartz-dev.unique.network',
-  ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
-});
 
 export function signWithAccount(
   sdk: Sdk,

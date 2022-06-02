@@ -3,6 +3,7 @@ const esModules = ['@polkadot/', '@unique-nft/types'].join('|');
 module.exports = {
   displayName: 'sdk',
   preset: '../../jest.preset.js',
+  maxWorkers: 1,
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -14,4 +15,5 @@ module.exports = {
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/sdk',
+  testPathIgnorePatterns: ['./utils/*'],
 };
