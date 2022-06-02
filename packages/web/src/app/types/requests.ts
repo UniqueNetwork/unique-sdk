@@ -31,5 +31,5 @@ export class ImageUploadResponse {
   @ApiProperty({
     description: 'Image address',
   })
-  address: string;
+  cid: string;
 }

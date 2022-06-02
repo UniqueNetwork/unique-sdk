@@ -51,11 +51,7 @@ describe(TokenController.name, () => {
 
       expect(ok).toBe(true);
       expect(body).toMatchObject({
-        ok: false,
-        error: {
-          code: WebErrorCodes.InvalidFiletype,
-          message: 'Invalid filetype',
-        },
+        ok: true,
       });
     });
   });

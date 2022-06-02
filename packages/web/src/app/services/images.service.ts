@@ -31,32 +31,11 @@ export class ImageService {
     } catch (e) {
       return false;
     }
-
     if (!typeResult && extraMime) {
       typeResult = extraMime;
     }
-
     if (!typeResult) return false;
-
     return this.allowedImageTypes.indexOf(typeResult.mime) >= 0;
-  }
-
-  private async saveBufferToIPFS(buffer): Promise<{
-    success: boolean;
-    result?: string;
-  }> {
-    try {
-      const client = create({
-        url: this.ipfsUploadUrl,
-        agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
-      });
-      const uploaded = await client.add({
-        content: buffer,
-      });
-      return { success: true, result: uploaded.cid.toString() };
-    } catch (e) {
-      return { success: false };
-    }
   }
 
   public async uploadFile(file): Promise<ImageUploadResponse> {
@@ -78,14 +57,22 @@ export class ImageService {
       );
     }
 
-    const ipfsResult = await this.saveBufferToIPFS(file.buffer);
-    if (!ipfsResult.success) {
+    try {
+      const client = create({
+        url: this.ipfsUploadUrl,
+        agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
+      });
+      const uploaded = await client.add({
+        content: file.buffer,
+      });
+      return {
+        cid: uploaded.cid.toString(),
+      };
+    } catch (e) {
       throw new ImageUploadError(
         WebErrorCodes.UploadImageError,
         'Failed to upload image',
       );
     }
-
-    return { address: ipfsResult.result };
   }
 }
