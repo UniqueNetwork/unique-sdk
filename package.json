@@ -54,6 +54,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "8.1.0",
+    "husky": "^8.0.1",
     "injection-js": "^2.4.0",
     "jest": "27.2.3",
     "ng-packagr": "^13.3.1",
