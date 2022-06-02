@@ -1,10 +1,19 @@
-import { Sdk } from '@unique-nft/sdk';
 import {
   AddressArguments,
   Balance,
   TransferBuildArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
+import { formatBalance } from '@unique-nft/sdk/utils';
+import { SdkStateQueries } from '@unique-nft/sdk/state-queries';
+import { ApiPromise } from '@polkadot/api';
+import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+
+interface Sdk {
+  api: ApiPromise;
+  extrinsics: SdkExtrinsics;
+  stateQueries: SdkStateQueries;
+}
 
 export class SdkBalance {
   private readonly multiplierToRaw: number;
@@ -21,7 +30,7 @@ export class SdkBalance {
       args.address,
     );
 
-    return this.sdk.formatBalance(availableBalance);
+    return formatBalance(this.sdk.api, availableBalance);
   }
 
   async transfer(args: TransferBuildArguments): Promise<UnsignedTxPayload> {

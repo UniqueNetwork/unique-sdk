@@ -20,6 +20,7 @@ import {
   SignatureType,
   Fee,
 } from '@unique-nft/sdk/types';
+import { formatBalance } from '@unique-nft/sdk/utils';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
@@ -90,7 +91,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     const { partialFee } = await submittable.paymentInfo(buildArgs.address);
 
-    return this.sdk.formatBalance(partialFee);
+    return formatBalance(this.sdk.api, partialFee);
   }
 
   private buildSubmittable(buildArgs: TxBuildArguments): SubmittableExtrinsic {
