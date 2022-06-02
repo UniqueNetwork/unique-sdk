@@ -83,7 +83,6 @@ export const verifyTxSignatureOrThrow = (
 export const signerPayloadToUnsignedTxPayload = (
   api: ApiPromise,
   signerPayload: SignerPayload,
-  { partialFee }: RuntimeDispatchInfo,
 ): UnsignedTxPayload => {
   const signerPayloadJSON = signerPayload.toPayload();
   const signerPayloadRaw = signerPayload.toRaw();
@@ -93,12 +92,5 @@ export const signerPayloadToUnsignedTxPayload = (
     signerPayloadJSON,
     signerPayloadRaw,
     signerPayloadHex,
-    fee: {
-      amount: partialFee.toBigInt().toString(),
-      formatted: formatBalance(partialFee, {
-        decimals: api.registry.chainDecimals[0],
-        withUnit: api.registry.chainTokens[0],
-      }),
-    },
   };
 };

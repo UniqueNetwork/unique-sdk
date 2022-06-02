@@ -1,9 +1,9 @@
-import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 import { HexString } from '@polkadot/util/types';
 import { objectSpread } from '@polkadot/util';
+import { Sdk } from '@unique-nft/sdk';
 import {
   BuildExtrinsicError,
   InvalidSignerError,
@@ -18,16 +18,12 @@ import {
   SignTxResult,
   SdkSigner,
   SignatureType,
+  Balance,
 } from '@unique-nft/sdk/types';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
 } from './tx';
-
-interface Sdk {
-  api: ApiPromise;
-  signer?: SdkSigner;
-}
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly sdk: Sdk) {}
@@ -86,13 +82,15 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       ],
     );
 
-    const runtimeDispatchInfo = await tx.paymentInfo(address);
+    return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
+  }
 
-    return signerPayloadToUnsignedTxPayload(
-      this.sdk.api,
-      signerPayload,
-      runtimeDispatchInfo,
-    );
+  async getFee(buildArgs: TxBuildArguments): Promise<Balance> {
+    const submittable = this.buildSubmittable(buildArgs);
+
+    const { partialFee } = await submittable.paymentInfo(buildArgs.address);
+
+    return this.sdk.formatBalance(partialFee);
   }
 
   private buildSubmittable(buildArgs: TxBuildArguments): SubmittableExtrinsic {

@@ -3,7 +3,14 @@ import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 
-import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
+import {
+  SdkOptions,
+  SdkSigner,
+  ChainProperties,
+  Balance,
+} from '@unique-nft/sdk/types';
+import { INumber } from '@polkadot/types-codec/types';
+import { formatBalance } from '@polkadot/util';
 
 export class Sdk {
   readonly isReady: Promise<boolean>;
@@ -41,6 +48,17 @@ export class Sdk {
       decimals: this.api.registry.chainDecimals[0],
       wsUrl: this.options.chainWsUrl,
       genesisHash: this.api.genesisHash.toHex(), // todo hex?
+    };
+  }
+
+  formatBalance(amount: INumber): Balance {
+    return {
+      amount: amount.toBigInt().toString(),
+      formatted: formatBalance(amount, {
+        decimals: this.api.registry.chainDecimals[0],
+        withUnit: this.api.registry.chainTokens[0],
+      }),
+      // todo formatted -> formatted, withUnit, as number?
     };
   }
 }
