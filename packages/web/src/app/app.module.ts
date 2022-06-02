@@ -20,6 +20,7 @@ import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
+import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
 
 @Module({
   imports: [GlobalConfigModule, SignerMiddleware],
@@ -42,6 +43,24 @@ import { sdkProvider } from './sdk-provider';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContentTypeHeaderValidationMiddleware).forRoutes(
+      {
+        path: '/*',
+        method: RequestMethod.POST,
+      },
+      {
+        path: '/*',
+        method: RequestMethod.PUT,
+      },
+      {
+        path: '/*',
+        method: RequestMethod.DELETE,
+      },
+      {
+        path: '/*',
+        method: RequestMethod.PATCH,
+      },
+    );
     consumer
       .apply(SignerMiddleware)
       .forRoutes({ path: '/extrinsic/*', method: RequestMethod.POST });
