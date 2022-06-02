@@ -218,6 +218,9 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
 
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
+
+  @ApiProperty({ type: BalanceResponse })
+  fee: BalanceResponse;
 }
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}

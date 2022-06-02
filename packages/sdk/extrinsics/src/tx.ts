@@ -4,9 +4,9 @@ import {
   SignerPayloadJSON,
 } from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
-import { hexToU8a, u8aToHex } from '@polkadot/util';
+import { formatBalance, hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
-import { SignerPayload } from '@polkadot/types/interfaces';
+import { RuntimeDispatchInfo, SignerPayload } from '@polkadot/types/interfaces';
 import { BadSignatureError, BadPayloadError } from '@unique-nft/sdk/errors';
 import { UnsignedTxPayload } from '@unique-nft/sdk/types';
 
@@ -83,6 +83,7 @@ export const verifyTxSignatureOrThrow = (
 export const signerPayloadToUnsignedTxPayload = (
   api: ApiPromise,
   signerPayload: SignerPayload,
+  { partialFee }: RuntimeDispatchInfo,
 ): UnsignedTxPayload => {
   const signerPayloadJSON = signerPayload.toPayload();
   const signerPayloadRaw = signerPayload.toRaw();
@@ -92,5 +93,12 @@ export const signerPayloadToUnsignedTxPayload = (
     signerPayloadJSON,
     signerPayloadRaw,
     signerPayloadHex,
+    fee: {
+      amount: partialFee.toBigInt().toString(),
+      formatted: formatBalance(partialFee, {
+        decimals: api.registry.chainDecimals[0],
+        withUnit: api.registry.chainTokens[0],
+      }),
+    },
   };
 };
