@@ -18,6 +18,7 @@ import {
   CollectionIdArguments,
   CreateCollectionArguments,
   CreateTokenArguments,
+  Fee,
   TokenIdArguments,
   TransferBuildArguments,
   TransferCollectionArguments,
@@ -66,20 +67,34 @@ export class ChainPropertiesResponse implements ChainProperties {
 export class BalanceResponse implements Balance {
   @IsNumberString()
   @ApiProperty({
-    example: '411348197000000000000',
+    example: '89980000000000001',
   })
-  amount: string;
+  raw: string;
+
+  @IsNumber()
+  @ApiProperty({ example: 0.0899 })
+  amount: number;
 
   @IsString()
   @ApiProperty({
-    example: '411.3481 QTZ',
+    example: '89.9800 mQTZ',
   })
   formatted: string;
 
-  // todo see sdk.ts line 50
-  // todo formatted: string
-  // todo withUnit: string
+  @IsString()
+  @ApiProperty({
+    example: '0.0899 QTZ',
+  })
+  amountWithUnit: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'QTZ',
+  })
+  unit: string;
 }
+
+export class FeeResponse extends BalanceResponse implements Fee {}
 
 export class TransferBuildBody implements TransferBuildArguments {
   @IsString()
