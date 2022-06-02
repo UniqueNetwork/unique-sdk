@@ -9,7 +9,7 @@ import {
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { SdkSigner, UnsignedTxPayload } from '@unique-nft/sdk/types';
+import { SdkSigner } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';

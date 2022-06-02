@@ -9,6 +9,9 @@ export type Config = {
   prefix: string;
   swagger: string;
   signer?: SignerConfig;
+
+  ipfsUploadUrl: string;
+  allowedImageTypes: Array<string>;
 };
 
 export type SignerConfig = {
@@ -26,6 +29,21 @@ const loadConfig = (): Config => ({
   signer: {
     seed: process.env.SIGNER_SEED || undefined,
   },
+
+  ipfsUploadUrl:
+    process.env.IPFS_UPLOAD_URL ||
+    'http://image-uploader-ipfs-node:5001/api/v0',
+  allowedImageTypes: process.env.ALLOWED_IMAGE_TYPES
+    ? process.env.ALLOWED_IMAGE_TYPES.split(',')
+    : [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'image/svg+xml',
+        'text/json',
+        'application/json',
+      ],
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

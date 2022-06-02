@@ -4,7 +4,6 @@ import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import {
   IsHexadecimal,
   IsNotEmptyObject,
-  IsEnum,
   IsString,
   IsArray,
 } from 'class-validator';

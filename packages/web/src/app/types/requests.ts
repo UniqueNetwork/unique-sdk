@@ -26,3 +26,10 @@ export class VerificationResultResponse {
   @ApiProperty()
   errorMessage: string | null;
 }
+
+export class ImageUploadResponse {
+  @ApiProperty({
+    description: 'Image address',
+  })
+  address: string;
+}

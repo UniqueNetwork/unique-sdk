@@ -5,10 +5,7 @@ import { ErrorCodes } from '@unique-nft/sdk/errors';
 import { createCollection } from '@unique-nft/sdk/tests/utils/collection-create.test';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
-import {
-  getDefaultSdkOptions,
-  getKeyringPairs,
-} from '@unique-nft/sdk/tests/testing-utils';
+import { getKeyringPairs } from '@unique-nft/sdk/tests/testing-utils';
 import { createApp } from './utils.test';
 import { TokenController } from '../src/app/controllers';
 
