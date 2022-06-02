@@ -27,13 +27,14 @@ export interface ChainProperties {
 }
 
 export interface Balance {
-  amount: string;
+  raw: string;
+  amount: number;
+  amountWithUnit: string;
   formatted: string;
-
-  // todo see sdk.ts line 50
-  // todo formatted: string
-  // todo withUnit: string
+  unit: string;
 }
+
+export type Fee = Balance
 
 export interface TransferBuildArguments {
   address: string;

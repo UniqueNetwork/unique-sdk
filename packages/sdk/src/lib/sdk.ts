@@ -51,14 +51,26 @@ export class Sdk {
     };
   }
 
-  formatBalance(amount: INumber): Balance {
+  formatBalance(raw: INumber): Balance {
+    const withUnit = this.api.registry.chainTokens[0];
+    const decimals = this.api.registry.chainDecimals[0];
+
+    const formatted = formatBalance(raw, { decimals, withUnit });
+
+    const amountWithUnit = formatBalance(raw, {
+      decimals,
+      withUnit,
+      forceUnit: '-',
+    });
+
+    const amount = parseFloat(amountWithUnit.split(' ')[0]);
+
     return {
-      amount: amount.toBigInt().toString(),
-      formatted: formatBalance(amount, {
-        decimals: this.api.registry.chainDecimals[0],
-        withUnit: this.api.registry.chainTokens[0],
-      }),
-      // todo formatted -> formatted, withUnit, as number?
+      raw: raw.toString(),
+      amount,
+      amountWithUnit,
+      formatted,
+      unit: withUnit,
     };
   }
 }

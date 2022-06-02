@@ -18,7 +18,7 @@ import {
   SignTxResult,
   SdkSigner,
   SignatureType,
-  Balance,
+  Fee,
 } from '@unique-nft/sdk/types';
 import {
   signerPayloadToUnsignedTxPayload,
@@ -85,7 +85,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
   }
 
-  async getFee(buildArgs: TxBuildArguments): Promise<Balance> {
+  async getFee(buildArgs: TxBuildArguments): Promise<Fee> {
     const submittable = this.buildSubmittable(buildArgs);
 
     const { partialFee } = await submittable.paymentInfo(buildArgs.address);
