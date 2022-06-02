@@ -2,8 +2,14 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 
+import { createCollection } from '@unique-nft/sdk/tests/utils/collection-create.test';
+import { KeyringPair } from '@polkadot/keyring/types';
+import { Sdk } from '@unique-nft/sdk';
+import {
+  getDefaultSdkOptions,
+  getKeyringPairs,
+} from '@unique-nft/sdk/tests/testing-utils';
 import { createApp } from './utils.test';
-
 import { TokenController } from '../src/app/controllers';
 
 describe(TokenController.name, () => {
@@ -39,23 +45,21 @@ describe(TokenController.name, () => {
     });
 
     describe('POST /api/token', () => {
-      let generatedCollection;
       it('generate token', async () => {
-        const { ok, body } = await request(app.getHttpServer())
+        const testAccounts = await getKeyringPairs();
+        const accountFerdie: KeyringPair = testAccounts.ferdie;
+        const sdk = await app.get(Sdk);
+        const { collectionId }: { collectionId: number } =
+          await createCollection(sdk, accountFerdie);
+        const { ok } = await request(app.getHttpServer())
           .post(`/api/token`)
           .send({
-            collectionId: 10,
-            address: 'yGDkQ8CbZSsX6y4PaGC5Q7nVtQxycKunSb3W7dHNAJpNYCzUh',
-            constData: {
-              ipfsJson:
-                '{"ipfs":"QmbdrbA7uAstaxeZWmmiECMNqNpJkMWZ8jw8GfKHid3NLX","type":"image"}',
-              gender: 'Male',
-              traits: ['TEETH_SMILE', 'UP_HAIR'],
-            },
+            collectionId,
+            address: accountFerdie.address,
+            constData: { ipfsJson: 'aaa', name: 'bbb' },
           });
         expect(ok).toEqual(true);
-        generatedCollection = body;
-      });
+      }, 120_000);
     });
   });
 });

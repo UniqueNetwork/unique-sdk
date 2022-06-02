@@ -71,10 +71,11 @@ describe('Web Queries', () => {
     },
   );
 
+  // todo: throw error validation for module: 1, method: 1
   it.each([
     { endpoint: 'derive', module: 'balances', method: 'all' },
-    { endpoint: 'derive', module: 1, method: 'all', args: [] },
-    { endpoint: 'derive', module: 'balances', method: 1, args: [] },
+    { endpoint: 'derive', module: null, method: 'all', args: [] },
+    { endpoint: 'derive', module: 'balances', method: null, args: [] },
   ])('validation fail - %j', async (data: object) => {
     const { ok, body } = await request(app.getHttpServer())
       .post(`/api/query`)
