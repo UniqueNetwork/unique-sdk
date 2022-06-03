@@ -28,7 +28,7 @@ httpResponseErrorMap.set(ValidationError.name, BadRequestException);
 httpResponseErrorMap.set(InvalidSignerError.name, BadRequestException);
 httpResponseErrorMap.set(BuildQueryError.name, BadRequestException);
 
-@Catch(SdkError)
+@Catch()
 export class SdkExceptionsFilter extends BaseExceptionFilter {
   catch(exception: SdkError, host: ArgumentsHost) {
     if (httpResponseErrorMap.has(exception.constructor.name)) {
@@ -45,7 +45,16 @@ export class SdkExceptionsFilter extends BaseExceptionFilter {
       super.catch(httpError, host);
     } else {
       super.catch(
-        new HttpException(exception, HttpStatus.INTERNAL_SERVER_ERROR),
+        new HttpException(
+          {
+            ok: false,
+            error: {
+              code: HttpStatus.INTERNAL_SERVER_ERROR,
+              message: 'Internal server error',
+            },
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
         host,
       );
     }
