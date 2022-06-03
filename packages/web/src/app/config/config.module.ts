@@ -30,9 +30,7 @@ const loadConfig = (): Config => ({
     seed: process.env.SIGNER_SEED || undefined,
   },
 
-  ipfsUploadUrl:
-    process.env.IPFS_UPLOAD_URL ||
-    'http://image-uploader-ipfs-node:5001/api/v0',
+  ipfsUploadUrl: process.env.IPFS_UPLOAD_URL,
   allowedImageTypes: process.env.ALLOWED_IMAGE_TYPES
     ? process.env.ALLOWED_IMAGE_TYPES.split(',')
     : [

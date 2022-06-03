@@ -21,7 +21,7 @@ export class ImageService {
   constructor(private configService: ConfigService) {
     this.ipfsUploadUrl = configService.get('ipfsUploadUrl');
     this.allowedImageTypes = configService.get('allowedImageTypes');
-    this.isHttpsUrl = this.ipfsUploadUrl.startsWith('https');
+    this.isHttpsUrl = this.ipfsUploadUrl?.startsWith('https');
   }
 
   private async checkImageMimeType(imageBuffer, extraMime): Promise<boolean> {
