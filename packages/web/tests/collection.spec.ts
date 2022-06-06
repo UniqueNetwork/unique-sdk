@@ -76,4 +76,17 @@ describe(CollectionController.name, () => {
       expect(ok).toEqual(true);
     });
   });
+
+  describe('check Content-type header', () => {
+    it.each(['text/html', 'multipart/form-data', ''])(
+      'create collection, invalid Content-type - %s',
+      async (contentType) => {
+        const { ok, body } = await request(app.getHttpServer())
+          .post(`/api/collection`)
+          .set('Content-type', contentType);
+        expect(ok).toEqual(false);
+        expect(body.error.code).toEqual(ErrorCodes.Validation);
+      },
+    );
+  });
 });

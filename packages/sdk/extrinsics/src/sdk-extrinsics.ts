@@ -1,8 +1,9 @@
-import { ApiPromise } from '@polkadot/api';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import { SignatureOptions } from '@polkadot/types/types/extrinsic';
+import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 import { HexString } from '@polkadot/util/types';
 import { objectSpread } from '@polkadot/util';
+import { Sdk } from '@unique-nft/sdk';
 import {
   BuildExtrinsicError,
   InvalidSignerError,
@@ -17,22 +18,19 @@ import {
   SignTxResult,
   SdkSigner,
   SignatureType,
+  Fee,
 } from '@unique-nft/sdk/types';
+import { formatBalance } from '@unique-nft/sdk/utils';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
 } from './tx';
 
-interface Sdk {
-  api: ApiPromise;
-  signer?: SdkSigner;
-}
-
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly sdk: Sdk) {}
 
   async build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload> {
-    const { address, section, method, args } = buildArgs;
+    const { address } = buildArgs;
 
     const signingInfo = await this.sdk.api.derive.tx.signingInfo(
       address,
@@ -71,14 +69,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       signedExtensions,
     };
 
-    let tx;
-    try {
-      tx = this.sdk.api.tx[section][method](...args);
-    } catch (error) {
-      const errorMessage =
-        error && error instanceof Error ? error.message : undefined;
-      throw new BuildExtrinsicError(errorMessage);
-    }
+    const tx = this.buildSubmittable(buildArgs);
 
     const signerPayload = this.sdk.api.registry.createTypeUnsafe<SignerPayload>(
       'SignerPayload',
@@ -93,6 +84,26 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     );
 
     return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
+  }
+
+  async getFee(buildArgs: TxBuildArguments): Promise<Fee> {
+    const submittable = this.buildSubmittable(buildArgs);
+
+    const { partialFee } = await submittable.paymentInfo(buildArgs.address);
+
+    return formatBalance(this.sdk.api, partialFee);
+  }
+
+  private buildSubmittable(buildArgs: TxBuildArguments): SubmittableExtrinsic {
+    const { section, method, args } = buildArgs;
+
+    try {
+      return this.sdk.api.tx[section][method](...args);
+    } catch (error) {
+      const errorMessage =
+        error && error instanceof Error ? error.message : undefined;
+      throw new BuildExtrinsicError(errorMessage);
+    }
   }
 
   async sign(
@@ -133,10 +144,12 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       version,
     });
 
-    extrinsic.addSignature(address, signature, signerPayloadJSON);
+    const submittable = this.sdk.api.tx(extrinsic);
+
+    submittable.addSignature(address, signature, signerPayloadJSON);
 
     try {
-      const hash = await this.sdk.api.rpc.author.submitExtrinsic(extrinsic);
+      const hash = await submittable.send();
       return { hash: hash.toHex() };
     } catch (error) {
       const errorMessage =

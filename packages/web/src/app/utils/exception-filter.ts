@@ -49,7 +49,7 @@ function createWebException(exception: SdkError | WebError) {
   return new InternalServerErrorException(response);
 }
 
-@Catch(SdkError)
+@Catch()
 export class SdkExceptionsFilter extends BaseExceptionFilter {
   catch(exception: SdkError, host: ArgumentsHost) {
     super.catch(createWebException(exception), host);

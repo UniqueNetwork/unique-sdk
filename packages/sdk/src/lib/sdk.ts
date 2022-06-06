@@ -3,7 +3,11 @@ import { unique } from '@unique-nft/types/definitions';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 
-import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
+import {
+  SdkOptions,
+  SdkSigner,
+  ChainProperties,
+} from '@unique-nft/sdk/types';
 
 export class Sdk {
   readonly isReady: Promise<boolean>;
