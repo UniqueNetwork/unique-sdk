@@ -39,7 +39,7 @@ export class IpfsController {
   })
   @ApiResponse({ status: HttpStatus.CREATED, type: IpfsUploadResponse })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(
+  async uploadFiles(
     @UploadedFile() file,
     @Body() body,
     @Res({ passthrough: true }) response,
