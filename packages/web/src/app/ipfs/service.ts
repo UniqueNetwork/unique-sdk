@@ -1,35 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { ImageUploadError } from '../errors/image-upload-error';
+import { IpfsError } from '../errors/ipfs-error';
 import { WebErrorCodes } from '../errors/codes';
 import { ImageUploadResponse } from '../types/requests';
-import { ImageUploader } from './uploader/ImageUploader';
+import { FileUploader } from './uploader/FileUploader';
 import { ZipUploader } from './uploader/ZipUploader';
 
 @Injectable()
 export class IpfsService {
-  private imageUploader: ImageUploader;
+  private fileUploader: FileUploader;
 
   private zipUploader: ZipUploader;
 
   constructor(configService: ConfigService) {
-    this.imageUploader = new ImageUploader(configService);
+    this.fileUploader = new FileUploader(configService);
     this.zipUploader = new ZipUploader(configService);
   }
 
   public async uploadFile(file): Promise<ImageUploadResponse> {
     if (!file) {
-      throw new ImageUploadError(
-        WebErrorCodes.InvalidPayload,
-        'Invalid payload',
-      );
+      throw new IpfsError(WebErrorCodes.InvalidPayload, 'Invalid payload');
     }
 
     if (file.mimetype === 'application/zip') {
       return this.zipUploader.uploadZip(file);
     }
 
-    return this.imageUploader.uploadFile(file);
+    return this.fileUploader.uploadFile(file);
   }
 }

@@ -16,7 +16,7 @@ import {
   InvalidSignerError,
   BuildQueryError,
 } from '@unique-nft/sdk/errors';
-import { ImageUploadError } from '../errors/image-upload-error';
+import { IpfsError } from '../errors/ipfs-error';
 import { WebError } from '../errors/web-error';
 
 const httpResponseErrorMap = new Map<
@@ -29,7 +29,7 @@ httpResponseErrorMap.set(SubmitExtrinsicError.name, BadRequestException);
 httpResponseErrorMap.set(ValidationError.name, BadRequestException);
 httpResponseErrorMap.set(InvalidSignerError.name, BadRequestException);
 httpResponseErrorMap.set(BuildQueryError.name, BadRequestException);
-httpResponseErrorMap.set(ImageUploadError.name, BadRequestException);
+httpResponseErrorMap.set(IpfsError.name, BadRequestException);
 
 function createWebException(exception: SdkError | WebError) {
   const response = {

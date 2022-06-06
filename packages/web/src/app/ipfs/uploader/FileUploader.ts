@@ -3,28 +3,25 @@ import { Agent as HttpsAgent } from 'https';
 import { create } from 'ipfs-http-client';
 import { extname } from 'path';
 
-import { ImageUploadError } from '../../errors/image-upload-error';
+import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
 import { ImageUploadResponse } from '../../types/requests';
 import { UploaderBase } from './UploaderBase';
 
-export class ImageUploader extends UploaderBase {
+export class FileUploader extends UploaderBase {
   public async uploadFile(file): Promise<ImageUploadResponse> {
     const mimeSuccess = await this.checkImageMimeType(file.buffer, {
       mime: file.mimetype,
       ext: extname(file.originalname).slice(1),
     });
     if (!mimeSuccess) {
-      throw new ImageUploadError(
-        WebErrorCodes.InvalidFiletype,
-        'Invalid filetype',
-      );
+      throw new IpfsError(WebErrorCodes.InvalidFiletype, 'Invalid filetype');
     }
 
-    return this.uploadImage(file);
+    return this.upload(file);
   }
 
-  private async uploadImage(file): Promise<ImageUploadResponse> {
+  private async upload(file): Promise<ImageUploadResponse> {
     try {
       const client = create({
         url: this.ipfsUploadUrl,
@@ -37,7 +34,7 @@ export class ImageUploader extends UploaderBase {
         cid: uploaded.cid.toString(),
       };
     } catch (err) {
-      throw new ImageUploadError(WebErrorCodes.UploadImageError, err.message);
+      throw new IpfsError(WebErrorCodes.UploadFileError, err.message);
     }
   }
 }

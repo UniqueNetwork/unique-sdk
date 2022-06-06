@@ -19,7 +19,7 @@ describe('Images upload', () => {
     config = app.get(ConfigService);
     if (!config.get('ipfsUploadUrl')) {
       skipTests = true;
-      console.log('skipped image upload test');
+      console.log('skipped file upload test');
     }
   });
 
@@ -97,7 +97,7 @@ describe('Images upload', () => {
       await fs.promises.unlink(outputLocationPath);
     }
 
-    it('image', async () => {
+    it('file', async () => {
       if (skipTests) return;
 
       const { ok, body } = await request(app.getHttpServer())

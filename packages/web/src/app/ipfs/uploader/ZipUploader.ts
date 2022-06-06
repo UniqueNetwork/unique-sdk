@@ -6,14 +6,14 @@ import * as path from 'path';
 import ExtractZip from 'extract-zip';
 import { ConfigService } from '@nestjs/config';
 
-import { ImageUploadError } from '../../errors/image-upload-error';
+import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
 import { ImageUploadResponse } from '../../types/requests';
 import { TempDirInfo } from './types';
 import { UploaderBase } from './UploaderBase';
 
 export class ZipUploader extends UploaderBase {
-  protected static rootPath = 'images';
+  protected static rootPath = 'files';
 
   protected readonly ipfsUploadZipDir: string;
 
@@ -37,12 +37,12 @@ export class ZipUploader extends UploaderBase {
     const rnd = Math.floor(Math.random() * 1_000_000);
     const rootDir = path.join(this.ipfsUploadZipDir, `${Date.now()}_${rnd}`);
     const zipFile = path.join(rootDir, 'data.zip');
-    const imagesDir = path.join(rootDir, 'images');
-    await fs.mkdir(imagesDir, { recursive: true });
+    const filesDir = path.join(rootDir, 'files');
+    await fs.mkdir(filesDir, { recursive: true });
     return {
       rootDir,
       zipFile,
-      imagesDir,
+      filesDir,
     };
   }
 
@@ -52,11 +52,11 @@ export class ZipUploader extends UploaderBase {
   ): Promise<string[]> {
     await fs.writeFile(tempInfo.zipFile, zipFile.buffer);
     try {
-      await ExtractZip(tempInfo.zipFile, { dir: tempInfo.imagesDir });
+      await ExtractZip(tempInfo.zipFile, { dir: tempInfo.filesDir });
     } catch (err) {
-      throw new ImageUploadError(WebErrorCodes.UploadImageError, err.message);
+      throw new IpfsError(WebErrorCodes.UploadFileError, err.message);
     }
-    return fs.readdir(tempInfo.imagesDir);
+    return fs.readdir(tempInfo.filesDir);
   }
 
   private async loadFiles(
@@ -65,7 +65,7 @@ export class ZipUploader extends UploaderBase {
   ): Promise<any[]> {
     const contents = await Promise.all(
       files.map(async (fileName) => {
-        const content = await fs.readFile(`${tempInfo.imagesDir}/${fileName}`);
+        const content = await fs.readFile(`${tempInfo.filesDir}/${fileName}`);
         return {
           path: `${ZipUploader.rootPath}/${fileName}`,
           content,
@@ -76,9 +76,9 @@ export class ZipUploader extends UploaderBase {
       this.checkImageMimeType(item.content),
     );
     if (!filteredContent.length) {
-      throw new ImageUploadError(
-        WebErrorCodes.UploadImageError,
-        'No images in zip archive',
+      throw new IpfsError(
+        WebErrorCodes.UploadFileError,
+        'No files in zip archive',
       );
     }
     return filteredContent;
@@ -104,17 +104,14 @@ export class ZipUploader extends UploaderBase {
         });
       }
     } catch (err) {
-      throw new ImageUploadError(WebErrorCodes.UploadImageError, err.message);
+      throw new IpfsError(WebErrorCodes.UploadFileError, err.message);
     }
 
     const rootItem = addedFiles.find(
       (item) => item.path === ZipUploader.rootPath,
     );
     if (!rootItem) {
-      throw new ImageUploadError(
-        WebErrorCodes.UploadImageError,
-        'Root cid not found',
-      );
+      throw new IpfsError(WebErrorCodes.UploadFileError, 'Root cid not found');
     }
     return rootItem.cid;
   }

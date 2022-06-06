@@ -4,23 +4,23 @@ import { ConfigService } from '@nestjs/config';
 export class UploaderBase {
   protected readonly ipfsUploadUrl: string;
 
-  protected readonly allowedImageTypes: string;
+  protected readonly allowedTypes: string;
 
   protected readonly isHttpsUrl: boolean;
 
   constructor(configService: ConfigService) {
     this.ipfsUploadUrl = configService.get('ipfsUploadUrl');
-    this.allowedImageTypes = configService.get('allowedImageTypes');
+    this.allowedTypes = configService.get('allowedTypes');
     this.isHttpsUrl = this.ipfsUploadUrl?.startsWith('https');
   }
 
   protected async checkImageMimeType(
-    imageBuffer,
+    fileBuffer,
     extraMime = undefined,
   ): Promise<boolean> {
     let typeResult;
     try {
-      typeResult = await fileTypeFromBuffer(imageBuffer);
+      typeResult = await fileTypeFromBuffer(fileBuffer);
     } catch (e) {
       return false;
     }
@@ -28,6 +28,6 @@ export class UploaderBase {
       typeResult = extraMime;
     }
     if (!typeResult) return false;
-    return this.allowedImageTypes.indexOf(typeResult.mime) >= 0;
+    return this.allowedTypes.indexOf(typeResult.mime) >= 0;
   }
 }

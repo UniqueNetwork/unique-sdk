@@ -11,7 +11,7 @@ export type Config = {
   signer?: SignerConfig;
 
   ipfsUploadUrl: string;
-  allowedImageTypes: Array<string>;
+  allowedTypes: Array<string>;
   ipfsUploadZipDir: string;
 };
 
@@ -32,8 +32,8 @@ const loadConfig = (): Config => ({
   },
 
   ipfsUploadUrl: process.env.IPFS_UPLOAD_URL,
-  allowedImageTypes: process.env.ALLOWED_IMAGE_TYPES
-    ? process.env.ALLOWED_IMAGE_TYPES.split(',')
+  allowedTypes: process.env.ALLOWED_TYPES
+    ? process.env.ALLOWED_TYPES.split(',')
     : [
         'image/jpeg',
         'image/png',
