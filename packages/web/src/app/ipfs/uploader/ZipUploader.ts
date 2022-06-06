@@ -73,7 +73,7 @@ export class ZipUploader extends UploaderBase {
       }),
     );
     const filteredContent = contents.filter((item) =>
-      this.checkImageMimeType(item.content),
+      this.checkFileMimeType(item.content),
     );
     if (!filteredContent.length) {
       throw new IpfsError(

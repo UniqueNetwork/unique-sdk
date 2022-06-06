@@ -10,7 +10,7 @@ import { UploaderBase } from './UploaderBase';
 
 export class FileUploader extends UploaderBase {
   public async uploadFile(file): Promise<IpfsUploadResponse> {
-    const mimeSuccess = await this.checkImageMimeType(file.buffer, {
+    const mimeSuccess = await this.checkFileMimeType(file.buffer, {
       mime: file.mimetype,
       ext: extname(file.originalname).slice(1),
     });

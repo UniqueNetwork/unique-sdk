@@ -14,7 +14,7 @@ export class UploaderBase {
     this.isHttpsUrl = this.ipfsUploadUrl?.startsWith('https');
   }
 
-  protected async checkImageMimeType(
+  protected async checkFileMimeType(
     fileBuffer,
     extraMime = undefined,
   ): Promise<boolean> {
