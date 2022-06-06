@@ -10,6 +10,7 @@ import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
 import { IpfsUploadResponse } from '../../types/requests';
 import { UploaderBase } from './UploaderBase';
+import { UploadContent } from './types';
 
 const openZip = promisify<Buffer, object, ZipFile>(yauzlFromBuffer);
 
@@ -31,7 +32,7 @@ export class ZipUploader extends UploaderBase {
     };
   }
 
-  private async readContentsFromZip(buffer): Promise<any> {
+  private async readContentsFromZip(buffer): Promise<UploadContent[]> {
     const zipfile = await openZip(buffer, { lazyEntries: true });
     const openReadStream = promisify(zipfile.openReadStream.bind(zipfile));
     let canceled: boolean;
@@ -45,7 +46,7 @@ export class ZipUploader extends UploaderBase {
 
       zipfile.on('end', () => {
         if (!canceled) {
-          resolve(contents);
+          resolve(true);
         }
       });
 
@@ -90,7 +91,7 @@ export class ZipUploader extends UploaderBase {
     });
   }
 
-  private async uploadIpfs(contents: any[]): Promise<string> {
+  private async uploadIpfs(contents: UploadContent[]): Promise<string> {
     const addedFiles = [];
     try {
       const client = create({
