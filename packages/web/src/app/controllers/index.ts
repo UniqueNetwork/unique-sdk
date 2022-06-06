@@ -5,4 +5,4 @@ export { CollectionController } from './collection.controller';
 export { TokenController } from './token.controller';
 export { AccountController } from './account.controller';
 export { QueryController } from './query.controller';
-export { ImagesController } from './images.controller';
+export { IpfsController } from '../ipfs/controller';

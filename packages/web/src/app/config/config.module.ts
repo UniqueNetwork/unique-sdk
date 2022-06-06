@@ -12,6 +12,7 @@ export type Config = {
 
   ipfsUploadUrl: string;
   allowedImageTypes: Array<string>;
+  ipfsUploadZipDir: string;
 };
 
 export type SignerConfig = {
@@ -21,7 +22,7 @@ export type SignerConfig = {
 const loadConfig = (): Config => ({
   isProduction: process.env.NODE_ENV !== 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
-  chainWsUrl: process.env.CHAIN_WS_URL || 'wss://ws-quartz-dev.comecord.com',
+  chainWsUrl: process.env.CHAIN_WS_URL || 'wss://ws-quartz-dev.unique.network',
   prefix: process.env.PREFIX || '',
   swagger: process.env.SWAGGER || 'swagger',
   ipfsGatewayUrl:
@@ -42,6 +43,7 @@ const loadConfig = (): Config => ({
         'text/json',
         'application/json',
       ],
+  ipfsUploadZipDir: process.env.IPFS_UPLOAD_ZIP_DIR,
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

@@ -51,10 +51,10 @@ describe('Images upload', () => {
         .post(`/api/images/upload`)
         .attach('file', path.join(__dirname, 'data', 'punk.png'));
 
-      expect(ok).toBe(true);
       expect(body).toMatchObject({
         cid: expect.any(String),
       });
+      expect(ok).toBe(true);
     } else {
       console.log('skipped image upload test');
     }

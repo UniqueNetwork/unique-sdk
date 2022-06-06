@@ -15,16 +15,15 @@ import {
   TokenController,
   AccountController,
   QueryController,
-  ImagesController,
 } from './controllers';
 import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
-import { ImageService } from './services/images.service';
+import { IpfsModule } from './ipfs/module';
 
 @Module({
-  imports: [GlobalConfigModule, SignerMiddleware],
+  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
   controllers: [
     ChainController,
     ExtrinsicsController,
@@ -33,7 +32,6 @@ import { ImageService } from './services/images.service';
     TokenController,
     AccountController,
     QueryController,
-    ImagesController,
   ],
   providers: [
     sdkProvider,
@@ -41,7 +39,6 @@ import { ImageService } from './services/images.service';
       provide: APP_FILTER,
       useClass: SdkExceptionsFilter,
     },
-    ImageService,
   ],
 })
 export class AppModule implements NestModule {

@@ -12,7 +12,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { ImageService } from '../services/images.service';
+import { IpfsService } from './service';
 import { SdkValidationPipe } from '../validation';
 import { WebExceptionsFilter } from '../utils/exception-filter';
 import { ImageUploadResponse } from '../types/requests';
@@ -21,8 +21,8 @@ import { ImageUploadResponse } from '../types/requests';
 @UseFilters(WebExceptionsFilter)
 @ApiTags('images')
 @Controller('images')
-export class ImagesController {
-  constructor(private readonly imageService: ImageService) {}
+export class IpfsController {
+  constructor(private readonly ipfsService: IpfsService) {}
 
   @Post('upload')
   @ApiConsumes('multipart/form-data')
@@ -44,6 +44,6 @@ export class ImagesController {
     @Body() body,
     @Res({ passthrough: true }) response,
   ): Promise<ImageUploadResponse> {
-    return this.imageService.uploadFile(file);
+    return this.ipfsService.uploadFile(file);
   }
 }

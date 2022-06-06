@@ -12,6 +12,7 @@ module.exports = (request, options) => {
     const { sdkPath } = exec.groups;
     return `${appDir}/packages/sdk/${sdkPath || 'src'}/index.ts`;
   }
+
   let modulePath;
   try {
     modulePath = options.defaultResolver(request, options);
