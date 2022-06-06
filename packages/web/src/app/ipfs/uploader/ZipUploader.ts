@@ -4,6 +4,7 @@ import { Agent as HttpsAgent } from 'https';
 import { create } from 'ipfs-http-client';
 import * as path from 'path';
 import ExtractZip from 'extract-zip';
+import { ConfigService } from '@nestjs/config';
 
 import { ImageUploadError } from '../../errors/image-upload-error';
 import { WebErrorCodes } from '../../errors/codes';
@@ -12,12 +13,21 @@ import { TempDirInfo } from './types';
 import { UploaderBase } from './UploaderBase';
 
 export class ZipUploader extends UploaderBase {
+  protected static rootPath = 'images';
+
+  protected readonly ipfsUploadZipDir: string;
+
+  constructor(configService: ConfigService) {
+    super(configService);
+    this.ipfsUploadZipDir = configService.get('ipfsUploadZipDir');
+  }
+
   public async uploadZip(zipFile): Promise<ImageUploadResponse> {
     const tempInfo = await this.createTempDir();
     const files = await ZipUploader.extractZip(tempInfo, zipFile);
     const contents = await this.loadFiles(tempInfo, files);
     const cid = await this.uploadIpfs(contents);
-    await fs.rmdir(tempInfo.rootDir, { recursive: true });
+    await fs.rm(tempInfo.rootDir, { recursive: true });
     return {
       cid,
     };
