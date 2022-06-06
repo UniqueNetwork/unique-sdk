@@ -19,8 +19,8 @@ import { ImageUploadResponse } from '../types/requests';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(WebExceptionsFilter)
-@ApiTags('images')
-@Controller('images')
+@ApiTags('ipfs')
+@Controller('ipfs')
 export class IpfsController {
   constructor(private readonly ipfsService: IpfsService) {}
 

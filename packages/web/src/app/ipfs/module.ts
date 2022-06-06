@@ -6,6 +6,14 @@ import { IpfsController } from './controller';
 @Module({})
 export class IpfsModule {
   static register(): DynamicModule {
+    if (!process.env.IPFS_UPLOAD_URL) {
+      return {
+        module: IpfsModule,
+        imports: [],
+        controllers: [],
+        providers: [],
+      };
+    }
     return {
       module: IpfsModule,
       imports: [GlobalConfigModule],

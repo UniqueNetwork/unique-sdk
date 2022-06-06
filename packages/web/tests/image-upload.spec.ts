@@ -11,15 +11,24 @@ import { Config } from '../src/app/config/config.module';
 
 describe('Images upload', () => {
   let app: INestApplication;
+  let config: ConfigService<Config>;
+  let skipTests;
 
   beforeAll(async () => {
     app = await createApp();
+    config = app.get(ConfigService);
+    if (!config.get('ipfsUploadUrl')) {
+      skipTests = true;
+      console.log('skipped image upload test');
+    }
   });
 
   describe('fail', () => {
     it('invalid payload', async () => {
+      if (skipTests) return;
+
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/images/upload`)
+        .post(`/api/ipfs/upload`)
         .set({
           'content-type': 'application/json',
         })
@@ -36,8 +45,10 @@ describe('Images upload', () => {
     });
 
     it('invalid filetype', async () => {
+      if (skipTests) return;
+
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/images/upload`)
+        .post(`/api/ipfs/upload`)
         .attach('file', path.join(__dirname, '..', 'README.md'));
 
       expect(ok).toBe(false);
@@ -52,21 +63,12 @@ describe('Images upload', () => {
   });
 
   describe('ok upload', () => {
-    let config: ConfigService<Config>;
-    let skipTests;
     const downloadDir = '../../tmp/download-test';
     const dataDir = path.join(__dirname, 'data');
     const punk1FilePath = path.join(dataDir, 'punk-1.png');
     const zipFilePath = path.join(dataDir, 'punks.zip');
     beforeAll(async () => {
       jest.setTimeout(60000);
-      config = app.get(ConfigService);
-      if (!config.get('ipfsUploadUrl')) {
-        skipTests = true;
-        console.log('skipped image upload test');
-        return;
-      }
-
       await fs.promises.mkdir(downloadDir, { recursive: true });
     });
 
@@ -99,7 +101,7 @@ describe('Images upload', () => {
       if (skipTests) return;
 
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/images/upload`)
+        .post(`/api/ipfs/upload`)
         .attach('file', punk1FilePath);
 
       expect(body).toMatchObject({
@@ -114,7 +116,7 @@ describe('Images upload', () => {
     it('zip', async () => {
       if (skipTests) return;
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/images/upload`)
+        .post(`/api/ipfs/upload`)
         .attach('file', zipFilePath);
 
       expect(body).toMatchObject({
