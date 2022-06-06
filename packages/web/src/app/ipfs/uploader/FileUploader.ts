@@ -5,11 +5,11 @@ import { extname } from 'path';
 
 import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
-import { ImageUploadResponse } from '../../types/requests';
+import { IpfsUploadResponse } from '../../types/requests';
 import { UploaderBase } from './UploaderBase';
 
 export class FileUploader extends UploaderBase {
-  public async uploadFile(file): Promise<ImageUploadResponse> {
+  public async uploadFile(file): Promise<IpfsUploadResponse> {
     const mimeSuccess = await this.checkImageMimeType(file.buffer, {
       mime: file.mimetype,
       ext: extname(file.originalname).slice(1),
@@ -21,7 +21,7 @@ export class FileUploader extends UploaderBase {
     return this.upload(file);
   }
 
-  private async upload(file): Promise<ImageUploadResponse> {
+  private async upload(file): Promise<IpfsUploadResponse> {
     try {
       const client = create({
         url: this.ipfsUploadUrl,

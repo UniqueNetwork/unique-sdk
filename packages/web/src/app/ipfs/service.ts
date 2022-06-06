@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { IpfsError } from '../errors/ipfs-error';
 import { WebErrorCodes } from '../errors/codes';
-import { ImageUploadResponse } from '../types/requests';
+import { IpfsUploadResponse } from '../types/requests';
 import { FileUploader } from './uploader/FileUploader';
 import { ZipUploader } from './uploader/ZipUploader';
 
@@ -18,7 +18,7 @@ export class IpfsService {
     this.zipUploader = new ZipUploader(configService);
   }
 
-  public async uploadFile(file): Promise<ImageUploadResponse> {
+  public async uploadFile(file): Promise<IpfsUploadResponse> {
     if (!file) {
       throw new IpfsError(WebErrorCodes.InvalidPayload, 'Invalid payload');
     }

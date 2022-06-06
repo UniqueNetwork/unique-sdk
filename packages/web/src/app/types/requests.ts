@@ -27,9 +27,9 @@ export class VerificationResultResponse {
   errorMessage: string | null;
 }
 
-export class ImageUploadResponse {
+export class IpfsUploadResponse {
   @ApiProperty({
-    description: 'Image address',
+    description: 'File address',
   })
   cid: string;
 }

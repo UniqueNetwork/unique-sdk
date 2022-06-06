@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
-import { ImageUploadResponse } from '../../types/requests';
+import { IpfsUploadResponse } from '../../types/requests';
 import { TempDirInfo } from './types';
 import { UploaderBase } from './UploaderBase';
 
@@ -22,7 +22,7 @@ export class ZipUploader extends UploaderBase {
     this.ipfsUploadZipDir = configService.get('ipfsUploadZipDir');
   }
 
-  public async uploadZip(zipFile): Promise<ImageUploadResponse> {
+  public async uploadZip(zipFile): Promise<IpfsUploadResponse> {
     const tempInfo = await this.createTempDir();
     const files = await ZipUploader.extractZip(tempInfo, zipFile);
     const contents = await this.loadFiles(tempInfo, files);

@@ -15,7 +15,7 @@ import { ApiConsumes, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IpfsService } from './service';
 import { SdkValidationPipe } from '../validation';
 import { WebExceptionsFilter } from '../utils/exception-filter';
-import { ImageUploadResponse } from '../types/requests';
+import { IpfsUploadResponse } from '../types/requests';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(WebExceptionsFilter)
@@ -37,13 +37,13 @@ export class IpfsController {
       },
     },
   })
-  @ApiResponse({ status: HttpStatus.CREATED, type: ImageUploadResponse })
+  @ApiResponse({ status: HttpStatus.CREATED, type: IpfsUploadResponse })
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
     @UploadedFile() file,
     @Body() body,
     @Res({ passthrough: true }) response,
-  ): Promise<ImageUploadResponse> {
+  ): Promise<IpfsUploadResponse> {
     return this.ipfsService.uploadFile(file);
   }
 }
