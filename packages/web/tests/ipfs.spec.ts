@@ -68,7 +68,6 @@ describe('Ipfs upload', () => {
     const punk1FilePath = path.join(dataDir, 'punk-1.png');
     const zipFilePath = path.join(dataDir, 'punks.zip');
     beforeAll(async () => {
-      jest.setTimeout(60000);
       await fs.promises.mkdir(downloadDir, { recursive: true });
     });
 
@@ -110,11 +109,13 @@ describe('Ipfs upload', () => {
       expect(ok).toBe(true);
 
       const downloadUrl = `https://ipfs.io/ipfs/${body.cid}`;
+      console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
     });
 
     it('zip', async () => {
       if (skipTests) return;
+
       const { ok, body } = await request(app.getHttpServer())
         .post(`/api/ipfs/upload`)
         .attach('file', zipFilePath);
@@ -125,6 +126,7 @@ describe('Ipfs upload', () => {
       expect(ok).toBe(true);
 
       const downloadUrl = `https://ipfs.io/ipfs/${body.cid}/punk-1.png`;
+      console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
     });
   });

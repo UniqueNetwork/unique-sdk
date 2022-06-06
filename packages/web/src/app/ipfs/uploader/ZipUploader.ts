@@ -1,16 +1,17 @@
-import { promises as fs } from 'fs';
 import { Agent as HttpAgent } from 'http';
 import { Agent as HttpsAgent } from 'https';
 import { create } from 'ipfs-http-client';
-import * as path from 'path';
-import ExtractZip from 'extract-zip';
 import { ConfigService } from '@nestjs/config';
+import { promisify } from 'util';
+import { fromBuffer as yauzlFromBuffer, ZipFile, Entry } from 'yauzl';
+import { Readable as ReadableStream } from 'stream';
 
 import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
 import { IpfsUploadResponse } from '../../types/requests';
-import { TempDirInfo } from './types';
 import { UploaderBase } from './UploaderBase';
+
+const openZip = promisify<Buffer, object, ZipFile>(yauzlFromBuffer);
 
 export class ZipUploader extends UploaderBase {
   protected static rootPath = 'files';
@@ -23,65 +24,70 @@ export class ZipUploader extends UploaderBase {
   }
 
   public async uploadZip(zipFile): Promise<IpfsUploadResponse> {
-    const tempInfo = await this.createTempDir();
-    const files = await ZipUploader.extractZip(tempInfo, zipFile);
-    const contents = await this.loadFiles(tempInfo, files);
+    const contents = await this.readContentsFromZip(zipFile.buffer);
     const cid = await this.uploadIpfs(contents);
-    await fs.rm(tempInfo.rootDir, { recursive: true });
     return {
       cid,
     };
   }
 
-  private async createTempDir(): Promise<TempDirInfo> {
-    const rnd = Math.floor(Math.random() * 1_000_000);
-    const rootDir = path.join(this.ipfsUploadZipDir, `${Date.now()}_${rnd}`);
-    const zipFile = path.join(rootDir, 'data.zip');
-    const filesDir = path.join(rootDir, 'files');
-    await fs.mkdir(filesDir, { recursive: true });
-    return {
-      rootDir,
-      zipFile,
-      filesDir,
-    };
+  private async readContentsFromZip(buffer): Promise<any> {
+    const zipfile = await openZip(buffer, { lazyEntries: true });
+    const openReadStream = promisify(zipfile.openReadStream.bind(zipfile));
+    let canceled: boolean;
+    zipfile.readEntry();
+    const contents = [];
+    await new Promise((resolve, reject) => {
+      zipfile.on('error', (err) => {
+        canceled = true;
+        reject(err);
+      });
+
+      zipfile.on('end', () => {
+        if (!canceled) {
+          resolve(contents);
+        }
+      });
+
+      zipfile.on('entry', async (entry: Entry) => {
+        if (canceled) {
+          return;
+        }
+        if (entry.fileName.startsWith('__MACOSX/')) {
+          zipfile.readEntry();
+          return;
+        }
+        const stream: ReadableStream = await openReadStream(entry);
+        const content = await ZipUploader.readStream(entry, stream);
+        const mimeTypeSuccess = await this.checkFileMimeType(content);
+        if (mimeTypeSuccess) {
+          contents.push({
+            path: `${ZipUploader.rootPath}/${entry.fileName}`,
+            content,
+          });
+        }
+        zipfile.readEntry();
+      });
+    });
+    return contents;
   }
 
-  private static async extractZip(
-    tempInfo: TempDirInfo,
-    zipFile,
-  ): Promise<string[]> {
-    await fs.writeFile(tempInfo.zipFile, zipFile.buffer);
-    try {
-      await ExtractZip(tempInfo.zipFile, { dir: tempInfo.filesDir });
-    } catch (err) {
-      throw new IpfsError(WebErrorCodes.UploadFileError, err.message);
-    }
-    return fs.readdir(tempInfo.filesDir);
-  }
-
-  private async loadFiles(
-    tempInfo: TempDirInfo,
-    files: string[],
-  ): Promise<any[]> {
-    const contents = await Promise.all(
-      files.map(async (fileName) => {
-        const content = await fs.readFile(`${tempInfo.filesDir}/${fileName}`);
-        return {
-          path: `${ZipUploader.rootPath}/${fileName}`,
-          content,
-        };
-      }),
-    );
-    const filteredContent = contents.filter((item) =>
-      this.checkFileMimeType(item.content),
-    );
-    if (!filteredContent.length) {
-      throw new IpfsError(
-        WebErrorCodes.UploadFileError,
-        'No files in zip archive',
-      );
-    }
-    return filteredContent;
+  private static async readStream(
+    entry: Entry,
+    stream: ReadableStream,
+  ): Promise<Buffer> {
+    return new Promise((resolve) => {
+      const chunks = [];
+      stream.on('readable', async () => {
+        stream.read(entry.uncompressedSize);
+      });
+      stream.on('data', async (chunk) => {
+        chunks.push(chunk);
+      });
+      stream.on('end', async () => {
+        resolve(Buffer.concat(chunks));
+      });
+    });
   }
 
   private async uploadIpfs(contents: any[]): Promise<string> {
