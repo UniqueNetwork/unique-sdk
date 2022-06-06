@@ -14,14 +14,14 @@ export class ImageUploader extends UploaderBase {
       mime: file.mimetype,
       ext: extname(file.originalname).slice(1),
     });
-    if (mimeSuccess) {
-      return this.uploadImage(file);
+    if (!mimeSuccess) {
+      throw new ImageUploadError(
+        WebErrorCodes.InvalidFiletype,
+        'Invalid filetype',
+      );
     }
 
-    throw new ImageUploadError(
-      WebErrorCodes.InvalidFiletype,
-      'Invalid filetype',
-    );
+    return this.uploadImage(file);
   }
 
   private async uploadImage(file): Promise<ImageUploadResponse> {

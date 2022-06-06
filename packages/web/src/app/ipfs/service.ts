@@ -22,7 +22,7 @@ export class IpfsService {
     if (!file) {
       throw new ImageUploadError(
         WebErrorCodes.InvalidPayload,
-        'Invalid image payload',
+        'Invalid payload',
       );
     }
 
