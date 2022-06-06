@@ -15,7 +15,8 @@
     "start": "node ./dist/packages/web/main.js",
     "postinstall": "npm run fix:unique:nft:types && npm run husky:install",
     "fix:unique:nft:types": "find ./node_modules/@unique-nft/types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
-    "husky:install": "husky install"
+    "husky:install": "husky install",
+    "rollup:build": "rollup -c packages/sdk/rollup.config.js"
   },
   "private": true,
   "dependencies": {
