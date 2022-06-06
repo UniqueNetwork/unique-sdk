@@ -9,7 +9,7 @@ import { createApp } from './utils.test';
 import { WebErrorCodes } from '../src/app/errors/codes';
 import { Config } from '../src/app/config/config.module';
 
-describe('Images upload', () => {
+describe('Ipfs upload', () => {
   let app: INestApplication;
   let config: ConfigService<Config>;
   let skipTests;
