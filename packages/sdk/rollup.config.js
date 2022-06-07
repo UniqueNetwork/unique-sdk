@@ -1,5 +1,7 @@
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
+import nodeResolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 
 import fs from 'fs';
 import path from 'path';
@@ -11,6 +13,13 @@ const currentPackageJson = require('./package.json');
 const SRC_FOLDER = './packages/sdk';
 const TS_CONFIG = 'tsconfig.lib.json';
 const DIST_FOLDER = './dist/packages/sdk';
+
+const EMBEDDED_DEPS = ['@unique-nft/types'];
+
+const checkIsEmbedded = (id) => {
+  return EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
+};
+
 const ENTRY_POINTS = [
   './index.ts',
   './extrinsics/index.ts',
@@ -26,8 +35,13 @@ let bundlesCount = 0;
 
 const allBundles = [];
 
-const checkExternal = (id) => {
-  return !/^[./]/.test(id);
+const INTERNAL_IDS = ENTRY_POINTS.map((e) => path.join(SRC_FOLDER, e));
+
+const checkIsExternal = (id) => {
+  const isInternal =
+    /^[./]/.test(id) || INTERNAL_IDS.includes(id) || checkIsEmbedded(id);
+
+  return !isInternal;
 };
 
 const parsedTsConfig = ts.readConfigFile(
@@ -85,7 +99,9 @@ const onGenerateBundle = (options, bundle) => {
 
     const dependencies = Object.entries(mainPackageJson.dependencies).reduce(
       (acc, [key, value]) => {
-        return allImportsSet.has(key) ? { ...acc, [key]: value } : acc;
+        return allImportsSet.has(key) && !checkIsEmbedded(key)
+          ? { ...acc, [key]: value }
+          : acc;
       },
       {},
     );
@@ -128,9 +144,9 @@ const getEntryConfig = (relativeInput) => {
 
   const getBundleConfig = (config) => ({
     ...config,
-    plugins: [...config.plugins, afterAll],
+    plugins: [...config.plugins, commonjs(), nodeResolve(), afterAll],
     input,
-    external: checkExternal,
+    external: checkIsExternal,
   });
 
   return [
