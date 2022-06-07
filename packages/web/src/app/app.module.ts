@@ -4,6 +4,7 @@ import {
   NestModule,
   RequestMethod,
   MiddlewareConsumer,
+  CacheModule,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 
@@ -22,9 +23,15 @@ import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
 import { IpfsModule } from './ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
+import { ExtrinsicsCache } from './utils/extrinsics-cache';
 
 @Module({
-  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
+  imports: [
+    GlobalConfigModule,
+    SignerMiddleware,
+    IpfsModule.register(),
+    CacheModule.register(),
+  ],
   controllers: [
     ChainController,
     ExtrinsicsController,
@@ -40,6 +47,7 @@ import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-typ
       provide: APP_FILTER,
       useClass: SdkExceptionsFilter,
     },
+    ExtrinsicsCache,
   ],
 })
 export class AppModule implements NestModule {

@@ -5,6 +5,8 @@ import {
   UseFilters,
   Headers,
   UsePipes,
+  Get,
+  Query,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
@@ -20,18 +22,23 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 import {
+  ExtrinsicResultRequest,
   SignTxResultResponse,
   SubmitResultResponse,
   SubmitTxBody,
   TxBuildBody,
 } from '../types/arguments';
+import { ExtrinsicsCache } from '../utils/extrinsics-cache';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('extrinsic')
 @Controller('extrinsic')
 export class ExtrinsicsController {
-  constructor(private readonly sdk: Sdk) {}
+  constructor(
+    private readonly sdk: Sdk,
+    private readonly extrinsicsCache: ExtrinsicsCache,
+  ) {}
 
   @Post('build')
   async buildTx(@Body() args: TxBuildBody): Promise<UnsignedTxPayloadResponse> {
@@ -72,5 +79,37 @@ export class ExtrinsicsController {
   @Post('calculate-fee')
   async calculateFee(@Body() args: TxBuildBody): Promise<FeeResponse> {
     return this.sdk.extrinsics.getFee(args);
+  }
+
+  @Get('status')
+  async getStatus(@Query() { hash }: ExtrinsicResultRequest): Promise<any> {
+    return this.extrinsicsCache.getResult(hash);
+  }
+
+  // todo - just for test - remove before PR
+  @Get('test')
+  async test(): Promise<string> {
+    const unsigned = await this.sdk.extrinsics.build({
+      address: 'yGHwY7vxr6PSwodHNEx3Gqxj9HNinWKqFz7A2y7GHqhR6dRrE',
+      section: 'balances',
+      method: 'transfer',
+      args: [
+        'yGFxbGGNhpzjSAKB7iU4FRoxjKetFPqxqwEucsa8nqudSJANV',
+        '100000000000000000000000000',
+      ],
+    });
+
+    const { signature } = await this.sdk.extrinsics.sign(
+      unsigned,
+    );
+
+    const { signerPayloadJSON } = unsigned;
+
+    const submitResult = await this.sdk.extrinsics.submit(
+      { signature, signerPayloadJSON },
+      this.extrinsicsCache.getUpdateHandler(),
+    );
+
+    return submitResult.hash.toString();
   }
 }
