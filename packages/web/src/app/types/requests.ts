@@ -26,3 +26,10 @@ export class VerificationResultResponse {
   @ApiProperty()
   errorMessage: string | null;
 }
+
+export class IpfsUploadResponse {
+  @ApiProperty({
+    description: 'File address',
+  })
+  cid: string;
+}

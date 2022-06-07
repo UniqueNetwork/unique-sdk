@@ -29,11 +29,14 @@
     "@unique-nft/types": "^0.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "file-type": "16.5.3",
+    "ipfs-http-client": "53.0.1",
     "protobufjs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
     "swagger-ui-express": "^4.3.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "yauzl": "^2.10.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",
@@ -52,6 +55,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "~5.18.0",
     "@typescript-eslint/parser": "~5.18.0",
+    "axios": "^0.27.2",
     "eslint": "~8.12.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
