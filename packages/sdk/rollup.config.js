@@ -127,6 +127,7 @@ const onGenerateBundle = (options, bundle) => {
           scripts: undefined,
           devDependencies: undefined,
           'lint-staged': undefined,
+          private: undefined,
         },
         null,
         2,
