@@ -14,9 +14,7 @@ import { addSwagger } from './app/utils/swagger';
 import { Config } from './app/config/config.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    cors: true, // todo task for devops
-  });
+  const app = await NestFactory.create(AppModule);
   const config: ConfigService<Config> = app.get(ConfigService);
 
   const prefix = config.get('prefix');
