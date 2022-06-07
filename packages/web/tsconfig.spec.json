@@ -7,7 +7,7 @@
     "allowJs": true,
     "paths": {
       "@unique-nft/sdk/*": ["packages/sdk/*"],
-      "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
+      "@unique-nft/sdk": ["packages/sdk/index.ts"]
     }
   },
   "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "**/*.ts"]
