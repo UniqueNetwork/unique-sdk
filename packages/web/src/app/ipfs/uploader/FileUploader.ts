@@ -1,16 +1,25 @@
-import { Agent as HttpAgent } from 'http';
-import { Agent as HttpsAgent } from 'https';
-import { create } from 'ipfs-http-client';
 import { extname } from 'path';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
 import { IpfsUploadResponse } from '../../types/requests';
-import { UploaderBase } from './UploaderBase';
+import { IpfsUploader } from './IpfsUploader';
 
-export class FileUploader extends UploaderBase {
-  public async uploadFile(file): Promise<IpfsUploadResponse> {
-    const mimeSuccess = await this.checkFileMimeType(file.buffer, {
+@Injectable()
+export class FileUploader extends IpfsUploader {
+  constructor(configService: ConfigService) {
+    super();
+    this.init(configService);
+  }
+
+  public async upload(file): Promise<IpfsUploadResponse> {
+    if (!file) {
+      throw new IpfsError(WebErrorCodes.InvalidPayload, 'Invalid payload');
+    }
+
+    const mimeSuccess = await this.isAllowMimeType(file.buffer, {
       mime: file.mimetype,
       ext: extname(file.originalname).slice(1),
     });
@@ -18,15 +27,12 @@ export class FileUploader extends UploaderBase {
       throw new IpfsError(WebErrorCodes.InvalidFiletype, 'Invalid filetype');
     }
 
-    return this.upload(file);
+    return this.uploadFile(file);
   }
 
-  private async upload(file): Promise<IpfsUploadResponse> {
+  private async uploadFile(file): Promise<IpfsUploadResponse> {
     try {
-      const client = create({
-        url: this.ipfsUploadUrl,
-        agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
-      });
+      const client = this.createClient();
       const uploaded = await client.add({
         content: file.buffer,
       });

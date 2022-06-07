@@ -1,7 +1,8 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { GlobalConfigModule } from '../config/config.module';
-import { IpfsService } from './service';
 import { IpfsController } from './controller';
+import { FileUploader } from './uploader/FileUploader';
+import { ZipUploader } from './uploader/ZipUploader';
 
 @Module({})
 export class IpfsModule {
@@ -18,7 +19,7 @@ export class IpfsModule {
       module: IpfsModule,
       imports: [GlobalConfigModule],
       controllers: [IpfsController],
-      providers: [IpfsService],
+      providers: [FileUploader, ZipUploader],
     };
   }
 }

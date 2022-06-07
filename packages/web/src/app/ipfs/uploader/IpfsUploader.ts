@@ -1,20 +1,30 @@
 import { fromBuffer as fileTypeFromBuffer } from 'file-type';
 import { ConfigService } from '@nestjs/config';
+import { create, IPFSHTTPClient } from 'ipfs-http-client';
+import { Agent as HttpsAgent } from 'https';
+import { Agent as HttpAgent } from 'http';
 
-export class UploaderBase {
-  protected readonly ipfsUploadUrl: string;
+export class IpfsUploader {
+  private ipfsUploadUrl: string;
 
-  protected readonly allowedTypes: string;
+  private allowedTypes: string;
 
-  protected readonly isHttpsUrl: boolean;
+  private isHttpsUrl: boolean;
 
-  constructor(configService: ConfigService) {
+  protected init(configService: ConfigService) {
     this.ipfsUploadUrl = configService.get('ipfsUploadUrl');
     this.allowedTypes = configService.get('allowedTypes');
     this.isHttpsUrl = this.ipfsUploadUrl?.startsWith('https');
   }
 
-  protected async checkFileMimeType(
+  protected createClient(): IPFSHTTPClient {
+    return create({
+      url: this.ipfsUploadUrl,
+      agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
+    });
+  }
+
+  protected async isAllowMimeType(
     fileBuffer,
     extraMime = undefined,
   ): Promise<boolean> {

@@ -28,7 +28,7 @@ describe('Ipfs upload', () => {
       if (skipTests) return;
 
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/ipfs/upload`)
+        .post(`/api/ipfs/upload-file`)
         .set({
           'content-type': 'application/json',
         })
@@ -48,7 +48,7 @@ describe('Ipfs upload', () => {
       if (skipTests) return;
 
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/ipfs/upload`)
+        .post(`/api/ipfs/upload-file`)
         .attach('file', path.join(__dirname, '..', 'README.md'));
 
       expect(ok).toBe(false);
@@ -100,7 +100,7 @@ describe('Ipfs upload', () => {
       if (skipTests) return;
 
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/ipfs/upload`)
+        .post(`/api/ipfs/upload-file`)
         .attach('file', punk1FilePath);
 
       expect(body).toMatchObject({
@@ -117,7 +117,7 @@ describe('Ipfs upload', () => {
       if (skipTests) return;
 
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/ipfs/upload`)
+        .post(`/api/ipfs/upload-zip`)
         .attach('file', zipFilePath);
 
       expect(body).toMatchObject({

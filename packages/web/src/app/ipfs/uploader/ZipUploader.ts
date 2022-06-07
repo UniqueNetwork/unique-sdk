@@ -1,6 +1,4 @@
-import { Agent as HttpAgent } from 'http';
-import { Agent as HttpsAgent } from 'https';
-import { create } from 'ipfs-http-client';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { promisify } from 'util';
 import { fromBuffer as yauzlFromBuffer, ZipFile, Entry } from 'yauzl';
@@ -9,23 +7,25 @@ import { Readable as ReadableStream } from 'stream';
 import { IpfsError } from '../../errors/ipfs-error';
 import { WebErrorCodes } from '../../errors/codes';
 import { IpfsUploadResponse } from '../../types/requests';
-import { UploaderBase } from './UploaderBase';
-import { UploadContent } from './types';
+import { IpfsUploader } from './IpfsUploader';
 
 const openZip = promisify<Buffer, object, ZipFile>(yauzlFromBuffer);
 
-export class ZipUploader extends UploaderBase {
+@Injectable()
+export class ZipUploader extends IpfsUploader {
   protected static rootPath = 'files';
 
-  protected readonly ipfsUploadZipDir: string;
-
   constructor(configService: ConfigService) {
-    super(configService);
-    this.ipfsUploadZipDir = configService.get('ipfsUploadZipDir');
+    super();
+    this.init(configService);
   }
 
-  public async uploadZip(zipFile): Promise<IpfsUploadResponse> {
-    const contents = await this.readContentsFromZip(zipFile.buffer);
+  public async upload(file): Promise<IpfsUploadResponse> {
+    if (!file) {
+      throw new IpfsError(WebErrorCodes.InvalidPayload, 'Invalid payload');
+    }
+
+    const contents = await this.readContentsFromZip(file.buffer);
     const cid = await this.uploadIpfs(contents);
     return {
       cid,
@@ -60,7 +60,7 @@ export class ZipUploader extends UploaderBase {
         }
         const stream: ReadableStream = await openReadStream(entry);
         const content = await ZipUploader.readStream(entry, stream);
-        const mimeTypeSuccess = await this.checkFileMimeType(content);
+        const mimeTypeSuccess = await this.isAllowMimeType(content);
         if (mimeTypeSuccess) {
           contents.push({
             path: `${ZipUploader.rootPath}/${entry.fileName}`,
@@ -94,11 +94,7 @@ export class ZipUploader extends UploaderBase {
   private async uploadIpfs(contents: UploadContent[]): Promise<string> {
     const addedFiles = [];
     try {
-      const client = create({
-        url: this.ipfsUploadUrl,
-        agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
-      });
-
+      const client = this.createClient();
       const files = client.addAll(contents, {
         fileImportConcurrency: 50,
       });
@@ -122,4 +118,9 @@ export class ZipUploader extends UploaderBase {
     }
     return rootItem.cid;
   }
+}
+
+interface UploadContent {
+  path: string;
+  content: Buffer;
 }
