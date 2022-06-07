@@ -10,15 +10,14 @@ import ts from 'typescript';
 
 const mainPackageJson = require('../../package.json');
 const currentPackageJson = require('./package.json');
+
 const SRC_FOLDER = './packages/sdk';
 const TS_CONFIG = 'tsconfig.lib.json';
 const DIST_FOLDER = './dist/packages/sdk';
 
 const EMBEDDED_DEPS = ['@unique-nft/types'];
 
-const checkIsEmbedded = (id) => {
-  return EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
-};
+const checkIsEmbedded = (id) => EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
 
 const ENTRY_POINTS = [
   './index.ts',
@@ -60,18 +59,18 @@ const onGenerateBundle = (options, bundle) => {
   allBundles.push({ options, bundle });
 
   if (allBundles.length === bundlesCount) {
-    let allImportsSet = new Set();
+    const allImportsSet = new Set();
     const allExports = {};
 
     allBundles.forEach(({ options, bundle }) => {
-      const file = './' + options.file;
+      const file = `./${  options.file}`;
       const { dir, ext } = path.parse(file);
 
       Object.values(bundle)[0].imports.forEach((id) => allImportsSet.add(id));
 
       let pathRequest = path.relative(DIST_FOLDER, dir);
-      pathRequest = pathRequest ? './' + pathRequest : '.';
-      const pathResult = './' + path.relative(DIST_FOLDER, file);
+      pathRequest = pathRequest ? `./${  pathRequest}` : '.';
+      const pathResult = `./${  path.relative(DIST_FOLDER, file)}`;
 
       const current = allExports[pathRequest] || {};
 
@@ -98,11 +97,9 @@ const onGenerateBundle = (options, bundle) => {
     });
 
     const dependencies = Object.entries(mainPackageJson.dependencies).reduce(
-      (acc, [key, value]) => {
-        return allImportsSet.has(key) && !checkIsEmbedded(key)
+      (acc, [key, value]) => allImportsSet.has(key) && !checkIsEmbedded(key)
           ? { ...acc, [key]: value }
-          : acc;
-      },
+          : acc,
       {},
     );
 
