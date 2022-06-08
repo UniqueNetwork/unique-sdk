@@ -7,11 +7,15 @@ import {
   UsePipes,
   Get,
   Query,
+  Inject,
+  CACHE_MANAGER,
+  NotFoundException,
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
+import { Cache } from 'cache-manager';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
@@ -28,7 +32,8 @@ import {
   SubmitTxBody,
   TxBuildBody,
 } from '../types/arguments';
-import { ExtrinsicsCache } from '../utils/extrinsics-cache';
+import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
+import { serializeResult } from '../utils/submittable-result-transformer';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -37,7 +42,7 @@ import { ExtrinsicsCache } from '../utils/extrinsics-cache';
 export class ExtrinsicsController {
   constructor(
     private readonly sdk: Sdk,
-    private readonly extrinsicsCache: ExtrinsicsCache,
+    @Inject(CACHE_MANAGER) private cache: Cache,
   ) {}
 
   @Post('build')
@@ -73,7 +78,12 @@ export class ExtrinsicsController {
 
   @Post('submit')
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
-    return this.sdk.extrinsics.submit(args);
+    return this.sdk.extrinsics.submit(args, async (result) => {
+      await this.cache.set<ExtrinsicResultResponse>(
+        result.txHash.toHex(),
+        serializeResult(this.sdk.api, result),
+      );
+    });
   }
 
   @Post('calculate-fee')
@@ -82,34 +92,15 @@ export class ExtrinsicsController {
   }
 
   @Get('status')
-  async getStatus(@Query() { hash }: ExtrinsicResultRequest): Promise<any> {
-    return this.extrinsicsCache.getResult(hash);
-  }
+  async getStatus(
+    @Query() { hash }: ExtrinsicResultRequest,
+  ): Promise<ExtrinsicResultResponse> {
+    const result = await this.cache.get<ExtrinsicResultResponse>(hash);
 
-  // todo - just for test - remove before PR
-  @Get('test')
-  async test(): Promise<string> {
-    const unsigned = await this.sdk.extrinsics.build({
-      address: 'yGHwY7vxr6PSwodHNEx3Gqxj9HNinWKqFz7A2y7GHqhR6dRrE',
-      section: 'balances',
-      method: 'transfer',
-      args: [
-        'yGFxbGGNhpzjSAKB7iU4FRoxjKetFPqxqwEucsa8nqudSJANV',
-        '100000000000000000000000000',
-      ],
-    });
+    if (result) return result;
 
-    const { signature } = await this.sdk.extrinsics.sign(
-      unsigned,
+    throw new NotFoundException(
+      `No extrinsic with hash ${hash} fount in cache`,
     );
-
-    const { signerPayloadJSON } = unsigned;
-
-    const submitResult = await this.sdk.extrinsics.submit(
-      { signature, signerPayloadJSON },
-      this.extrinsicsCache.getUpdateHandler(),
-    );
-
-    return submitResult.hash.toString();
   }
 }

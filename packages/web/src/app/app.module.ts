@@ -23,7 +23,6 @@ import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
 import { IpfsModule } from './ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
-import { ExtrinsicsCache } from './utils/extrinsics-cache';
 
 @Module({
   imports: [
@@ -47,7 +46,6 @@ import { ExtrinsicsCache } from './utils/extrinsics-cache';
       provide: APP_FILTER,
       useClass: SdkExceptionsFilter,
     },
-    ExtrinsicsCache,
   ],
 })
 export class AppModule implements NestModule {

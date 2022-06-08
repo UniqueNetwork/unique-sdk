@@ -1,5 +1,8 @@
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
-import { SignatureOptions } from '@polkadot/types/types/extrinsic';
+import {
+  ISubmittableResult,
+  SignatureOptions,
+} from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
 import { objectSpread } from '@polkadot/util';
 import { Sdk } from '@unique-nft/sdk';
@@ -23,7 +26,7 @@ import { formatBalance } from '@unique-nft/sdk/utils';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
-} from './tx';
+} from './tx-utils';
 
 import {
   buildUnsignedSubmittable,
@@ -152,5 +155,17 @@ export class SdkExtrinsics implements ISdkExtrinsics {
         error && error instanceof Error ? error.message : undefined;
       throw new SubmitExtrinsicError(errorMessage);
     }
+  }
+
+  async submitWaitCompleted(
+    args: SubmitTxArguments,
+  ): Promise<ISubmittableResult> {
+    return new Promise(async (resolve) => {
+      const callback = (result: ISubmittableResult) => {
+        if (result.isCompleted) resolve(result);
+      };
+
+      await this.submit(args, callback);
+    });
   }
 }

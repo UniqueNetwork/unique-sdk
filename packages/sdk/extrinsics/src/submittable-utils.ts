@@ -2,7 +2,7 @@ import { SubmitTxArguments, TxBuildArguments } from '@unique-nft/sdk/types';
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 import { BuildExtrinsicError } from '@unique-nft/sdk/errors';
 import { ApiPromise } from '@polkadot/api';
-import { verifyTxSignatureOrThrow } from '@unique-nft/sdk/extrinsics';
+import { verifyTxSignatureOrThrow } from './tx-utils';
 
 export const buildUnsignedSubmittable = (
   api: ApiPromise,
