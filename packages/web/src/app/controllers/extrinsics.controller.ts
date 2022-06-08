@@ -17,6 +17,7 @@ import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { Cache } from 'cache-manager';
+import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
@@ -35,7 +36,6 @@ import {
 } from '../types/arguments';
 import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
 import { serializeResult } from '../utils/submittable-result-transformer';
-import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

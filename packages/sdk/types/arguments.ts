@@ -3,8 +3,8 @@ import {
   SignerPayloadJSON,
 } from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
-import { SignatureType, SignResult } from './polkadot-types';
 import { Observable } from 'rxjs';
+import { SignatureType, SignResult } from './polkadot-types';
 
 export interface SubmitResult {
   hash: HexString;
