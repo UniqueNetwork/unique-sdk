@@ -32,6 +32,7 @@ import {
   buildUnsignedSubmittable,
   buildSignedSubmittable,
 } from './submittable-utils';
+import { Observable, Subscriber } from 'rxjs';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly sdk: Sdk) {}
@@ -167,5 +168,34 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
       await this.submit(args, callback);
     });
+  }
+
+  async submitAndObserve(
+    args: SubmitTxArguments,
+  ): Promise<Observable<ISubmittableResult>> {
+    const submittable = buildSignedSubmittable(this.sdk.api, args);
+
+    let resultObserver: Subscriber<ISubmittableResult>;
+
+    const result$ = new Observable<ISubmittableResult>((observer) => {
+      resultObserver = observer;
+    });
+
+    const stopWatching = await submittable.send(
+      (nextTxResult: ISubmittableResult) => {
+        if (nextTxResult.isError || nextTxResult.dispatchError) {
+          resultObserver.error(nextTxResult);
+        } else {
+          resultObserver.next(nextTxResult);
+        }
+
+        if (nextTxResult.isCompleted) {
+          stopWatching();
+          resultObserver.complete();
+        }
+      },
+    );
+
+    return result$;
   }
 }

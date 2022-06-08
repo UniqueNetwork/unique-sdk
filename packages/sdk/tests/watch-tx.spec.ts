@@ -3,6 +3,7 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
+import { lastValueFrom } from 'rxjs';
 import { SubmitTxArguments } from '@unique-nft/sdk/types';
 import {
   getDefaultSdkOptions,
@@ -40,10 +41,12 @@ describe('watch TX', () => {
   it('watch extrinsic succeed', async () => {
     const signedTransfer = await getSignedTransfer(10);
 
-    const result = await sdk.extrinsics.submitWaitCompleted(signedTransfer);
+    const result$ = await sdk.extrinsics.submitAndObserve(signedTransfer);
 
-    expect(result.status.type).toBe('InBlock');
-    expect(result.dispatchError).toBeFalsy();
+    const succeed = await lastValueFrom(result$);
+
+    expect(succeed.status.type).toBe('InBlock');
+    expect(succeed.dispatchError).toBeFalsy();
   }, 60_000);
 
   it('watch extrinsic failed', async () => {
@@ -51,10 +54,10 @@ describe('watch TX', () => {
 
     const signedTransfer = await getSignedTransfer(balance.raw);
 
-    const result = await sdk.extrinsics.submitWaitCompleted(signedTransfer);
+    const failed = await sdk.extrinsics.submitWaitCompleted(signedTransfer);
 
-    expect(result.status.type).toBe('InBlock');
-    expect(result.dispatchError).toBeTruthy();
+    expect(failed.status.type).toBe('InBlock');
+    expect(failed.dispatchError).toBeTruthy();
   }, 60_000);
 
   afterAll(async () => {
