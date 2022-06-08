@@ -1,3 +1,4 @@
+import { Observable, Subscriber } from 'rxjs';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import {
   ISubmittableResult,
@@ -32,7 +33,6 @@ import {
   buildUnsignedSubmittable,
   buildSignedSubmittable,
 } from './submittable-utils';
-import { Observable, Subscriber } from 'rxjs';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly sdk: Sdk) {}
@@ -158,9 +158,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     }
   }
 
-  async submitWaitCompleted(
-    args: SubmitTxArguments,
-  ): Promise<ISubmittableResult> {
+  submitWaitCompleted(args: SubmitTxArguments): Promise<ISubmittableResult> {
     return new Promise(async (resolve) => {
       const callback = (result: ISubmittableResult) => {
         if (result.isCompleted) resolve(result);
