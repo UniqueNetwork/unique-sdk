@@ -1,9 +1,18 @@
-import { SignerPayloadJSON } from '@polkadot/types/types/extrinsic';
+import {
+  ISubmittableResult,
+  SignerPayloadJSON,
+} from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
 import { SignatureType, SignResult } from './polkadot-types';
+import { Observable } from 'rxjs';
 
 export interface SubmitResult {
   hash: HexString;
+}
+
+export interface ObservableSubmitResult {
+  hash: HexString;
+  result$: Observable<ISubmittableResult>;
 }
 
 export interface SignTxArguments {

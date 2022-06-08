@@ -22,6 +22,7 @@ import {
   SignatureType,
   Fee,
   ExtrinsicResultCallback,
+  ObservableSubmitResult,
 } from '@unique-nft/sdk/types';
 import { formatBalance } from '@unique-nft/sdk/utils';
 import {
@@ -170,7 +171,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
   async submitAndObserve(
     args: SubmitTxArguments,
-  ): Promise<Observable<ISubmittableResult>> {
+  ): Promise<ObservableSubmitResult> {
     const submittable = buildSignedSubmittable(this.sdk.api, args);
 
     let resultObserver: Subscriber<ISubmittableResult>;
@@ -178,6 +179,8 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     const result$ = new Observable<ISubmittableResult>((observer) => {
       resultObserver = observer;
     });
+
+    const hash = submittable.hash.toHex();
 
     const stopWatching = await submittable.send(
       (nextTxResult: ISubmittableResult) => {
@@ -194,6 +197,6 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       },
     );
 
-    return result$;
+    return { hash, result$ };
   }
 }

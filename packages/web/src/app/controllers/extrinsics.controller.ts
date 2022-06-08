@@ -11,6 +11,7 @@ import {
   CACHE_MANAGER,
   NotFoundException,
 } from '@nestjs/common';
+import { map, catchError } from 'rxjs';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
@@ -34,6 +35,7 @@ import {
 } from '../types/arguments';
 import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
 import { serializeResult } from '../utils/submittable-result-transformer';
+import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -78,12 +80,15 @@ export class ExtrinsicsController {
 
   @Post('submit')
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
-    return this.sdk.extrinsics.submit(args, async (result) => {
-      await this.cache.set<ExtrinsicResultResponse>(
-        result.txHash.toHex(),
-        serializeResult(this.sdk.api, result),
-      );
-    });
+    const { hash, result$ } = await this.sdk.extrinsics.submitAndObserve(args);
+
+    const updateCache = async (next: ISubmittableResult): Promise<void> => {
+      await this.cache.set(hash, serializeResult(this.sdk.api, next));
+    };
+
+    result$.pipe(map(updateCache), catchError(updateCache));
+
+    return { hash };
   }
 
   @Post('calculate-fee')

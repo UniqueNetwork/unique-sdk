@@ -41,7 +41,7 @@ describe('watch TX', () => {
   it('watch extrinsic succeed', async () => {
     const signedTransfer = await getSignedTransfer(10);
 
-    const result$ = await sdk.extrinsics.submitAndObserve(signedTransfer);
+    const { result$ } = await sdk.extrinsics.submitAndObserve(signedTransfer);
 
     const succeed = await lastValueFrom(result$);
 
