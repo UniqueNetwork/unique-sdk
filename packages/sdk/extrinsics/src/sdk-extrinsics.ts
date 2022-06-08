@@ -159,12 +159,12 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   submitWaitCompleted(args: SubmitTxArguments): Promise<ISubmittableResult> {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       const callback = (result: ISubmittableResult) => {
         if (result.isCompleted) resolve(result);
       };
 
-      await this.submit(args, callback);
+      this.submit(args, callback).then(() => {});
     });
   }
 
