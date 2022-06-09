@@ -15,8 +15,7 @@ import type {
   TransferTokenArguments,
   SdkOptions,
 } from '@unique-nft/sdk/types';
-import { Option } from '@polkadot/types-codec';
-import { PalletNonfungibleItemData } from '@unique-nft/types';
+import { UpDataStructsTokenData } from '@unique-nft/types';
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
 
@@ -38,10 +37,8 @@ export class SdkToken implements ISdkToken {
 
     if (!collection) return null;
 
-    const tokenDataOption: Option<PalletNonfungibleItemData> =
-      await this.sdk.api.query.nonfungible.tokenData(collectionId, tokenId);
-
-    const tokenData = tokenDataOption.unwrapOr(undefined);
+    const tokenData: UpDataStructsTokenData =
+      await this.sdk.api.rpc.unique.tokenData(collectionId, tokenId);
 
     if (!tokenData) return null;
 
@@ -55,7 +52,7 @@ export class SdkToken implements ISdkToken {
 
     if (!collection) throw new Error(`no collection ${collectionId}`);
 
-    const { constOnChainSchema } = collection;
+    const { constOnChainSchema } = collection.properties;
 
     const tokenPayload = encodeToken(constData, constOnChainSchema);
 

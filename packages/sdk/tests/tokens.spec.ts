@@ -24,12 +24,12 @@ describe('Sdk Tokens', () => {
   });
 
   it('transfer', async () => {
-    const { collectionId } = await createCollection(sdk, alice);
-    const token = await createToken(sdk, collectionId, 1, alice, bob);
+    const collection = await createCollection(sdk, alice);
+    const token = await createToken(sdk, collection.id, alice, bob);
     const unsignedPayload = await sdk.token.transfer({
       from: alice.address,
       to: bob.address,
-      collectionId,
+      collectionId: collection.id,
       tokenId: token.id,
     });
     const signResult = await sdk.extrinsics.sign(unsignedPayload);
