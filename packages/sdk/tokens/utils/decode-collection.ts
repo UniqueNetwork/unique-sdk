@@ -1,22 +1,34 @@
 import {
+  bytesToJson,
+  bytesToString,
   sponsoredDataRateLimitToNumber,
   toBoolean,
   toNumber,
-  bytesToString,
   utf16ToString,
-  bytesToJson,
 } from '@unique-nft/sdk/utils';
 
 import type {
-  UpDataStructsCollection,
-  UpDataStructsSponsorshipState,
   UpDataStructsCollectionLimits,
-} from '@unique-nft/types/unique';
+  UpDataStructsCollectionPermissions,
+  UpDataStructsProperty,
+  UpDataStructsRpcCollection,
+  UpDataStructsSponsorshipState,
+  UpDataStructsPropertyKeyPermission,
+} from '@unique-nft/types/default';
 
 import type {
   CollectionInfoBase,
   CollectionLimits,
+  CollectionPermissions,
+  CollectionProperties,
   CollectionSponsorship,
+} from '@unique-nft/sdk/types';
+import {
+  CollectionPropertiesKeys,
+  CollectionSchemaVersion,
+  TokenPropertiesKeys,
+  TokenPropertiesPermissions,
+  TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 
 export const decodeCollectionSponsorship = (
@@ -45,20 +57,83 @@ export const decodeCollectionLimits = (
   transfersEnabled: toBoolean(limits.transfersEnabled),
 });
 
+export const decodeCollectionPermissions = (
+  permissions: UpDataStructsCollectionPermissions,
+): CollectionPermissions => ({
+  access: permissions.access.unwrapOrDefault()?.type,
+  mintMode: toBoolean(permissions.mintMode) || false,
+  nesting: permissions.nesting.unwrapOrDefault()?.type,
+});
+
+export const decodeCollectionProperties = (
+  properties: UpDataStructsProperty[],
+): CollectionProperties => {
+  const collectionProperties: CollectionProperties = {};
+  properties.map((property) => {
+    switch (property.key.toHuman()) {
+      case CollectionPropertiesKeys.offchainSchema:
+        collectionProperties.offchainSchema = bytesToString(property.value);
+        break;
+      case CollectionPropertiesKeys.schemaVersion:
+        collectionProperties.schemaVersion = bytesToString(
+          property.value,
+        ) as CollectionSchemaVersion;
+        break;
+      case CollectionPropertiesKeys.variableOnChainSchema:
+        collectionProperties.variableOnChainSchema = bytesToString(
+          property.value,
+        );
+        break;
+      case CollectionPropertiesKeys.constOnChainSchema:
+        collectionProperties.constOnChainSchema = bytesToJson(property.value);
+        break;
+      default:
+        break;
+    }
+    return 0;
+  });
+  return collectionProperties;
+};
+
+const decodeTokenPropertyPermissions = (
+  property: UpDataStructsPropertyKeyPermission,
+): TokenPropertyPermissions => ({
+  mutable: property.permission.mutable.toHuman(),
+  collectionAdmin: property.permission.collectionAdmin.toHuman(),
+  tokenOwner: property.permission.tokenOwner.toHuman(),
+});
+
+const decodeTokenPropertiesPermissions = (
+  tokenPropertiesPermissions: UpDataStructsPropertyKeyPermission[],
+): TokenPropertiesPermissions => {
+  const decodedPermissions: TokenPropertiesPermissions = {};
+  tokenPropertiesPermissions.map((property) => {
+    const key = bytesToString(property.key);
+    switch (key) {
+      case TokenPropertiesKeys.constData:
+        decodedPermissions.constData = decodeTokenPropertyPermissions(property);
+        break;
+      default:
+        break;
+    }
+    return true;
+  });
+  return decodedPermissions;
+};
+
 export const decodeCollection = (
-  collection: UpDataStructsCollection,
+  collection: UpDataStructsRpcCollection,
 ): CollectionInfoBase => ({
   mode: collection.mode.type,
-  access: collection.access.type,
   name: utf16ToString(collection.name),
   description: utf16ToString(collection.description),
   tokenPrefix: bytesToString(collection.tokenPrefix),
-  mintMode: collection.mintMode.toHuman(),
-  offchainSchema: bytesToString(collection.offchainSchema),
-  constOnChainSchema: bytesToJson(collection.constOnChainSchema),
-  variableOnChainSchema: bytesToString(collection.variableOnChainSchema),
-  schemaVersion: collection.schemaVersion.type,
   sponsorship: decodeCollectionSponsorship(collection.sponsorship),
-  metaUpdatePermission: collection.metaUpdatePermission.type,
   limits: decodeCollectionLimits(collection.limits),
+
+  permissions: decodeCollectionPermissions(collection.permissions),
+  properties: decodeCollectionProperties(collection.properties),
+  tokenPropertyPermissions: decodeTokenPropertiesPermissions(
+    collection.tokenPropertyPermissions,
+  ),
 });

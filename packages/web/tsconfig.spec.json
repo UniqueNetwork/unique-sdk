@@ -8,7 +8,8 @@
     "paths": {
       "@unique-nft/sdk/*": ["packages/sdk/*"],
       "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
-    }
+    },
+    "target": "ES2020"
   },
   "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "**/*.ts"]
 }
