@@ -28,6 +28,7 @@ const ENTRY_POINTS = [
   './tokens/index.ts',
   './utils/index.ts',
   './types/index.ts',
+  './errors/index.ts',
 ];
 
 let bundlesCount = 0;

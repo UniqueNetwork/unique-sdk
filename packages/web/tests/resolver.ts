@@ -11,20 +11,23 @@ module.exports = (request, options) => {
   const exec = uniqReg.exec(request);
   if (exec) {
     const { sdkPath } = exec.groups;
-    return `${appDir}/packages/sdk/${sdkPath || 'src'}/index.ts`;
+    if (!sdkPath) {
+      return `${appDir}/packages/sdk/index.ts`;
+    }
+    return `${appDir}/packages/sdk/${sdkPath}/index.ts`;
   }
 
   let modulePath;
   try {
     modulePath = options.defaultResolver(request, options);
   } catch (e) {
-    return;
+    return null;
   }
-  if (!modulePath) return;
+  if (!modulePath) return null;
 
   if (request.indexOf('ipfs-core-utils') > -1) {
     if (modulePath.indexOf(ipfsUtils) > -1 && !modulePath.endsWith('.js')) {
-      return `${modulePath.split(ipfsUtils).join(ipfsUtilsCjs)  }.js`;
+      return `${modulePath.split(ipfsUtils).join(ipfsUtilsCjs)}.js`;
     }
   }
   return modulePath;
