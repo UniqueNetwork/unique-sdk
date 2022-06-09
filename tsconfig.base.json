@@ -17,7 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@unique-nft/sdk/*": ["packages/sdk/*"],
-      "@unique-nft/sdk": ["packages/sdk/src/index.ts"]
+      "@unique-nft/sdk": ["packages/sdk/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

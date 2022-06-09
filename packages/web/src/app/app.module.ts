@@ -20,10 +20,11 @@ import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
+import { IpfsModule } from './ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
 
 @Module({
-  imports: [GlobalConfigModule, SignerMiddleware],
+  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
   controllers: [
     ChainController,
     ExtrinsicsController,

@@ -15,7 +15,8 @@
     "start": "node ./dist/packages/web/main.js",
     "postinstall": "npm run fix:unique:nft:types && npm run husky:install",
     "fix:unique:nft:types": "find ./node_modules/@unique-nft/types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
-    "husky:install": "husky install"
+    "husky:install": "husky install",
+    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js"
   },
   "private": true,
   "dependencies": {
@@ -28,11 +29,14 @@
     "@unique-nft/types": "^0.6.0-4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "file-type": "16.5.3",
+    "ipfs-http-client": "53.0.1",
     "protobufjs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
     "swagger-ui-express": "^4.3.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "yauzl": "^2.10.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",
@@ -51,6 +55,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "~5.18.0",
     "@typescript-eslint/parser": "~5.18.0",
+    "axios": "^0.27.2",
     "eslint": "~8.12.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -63,6 +68,11 @@
     "nx": "13.10.2",
     "postcss-import": "^14.1.0",
     "prettier": "^2.5.1",
+    "rollup": "^2.75.5",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "supertest": "^6.2.2",
     "ts-jest": "27.0.5",
     "typescript": "~4.6.2"

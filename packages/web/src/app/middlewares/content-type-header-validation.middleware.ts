@@ -5,11 +5,13 @@ import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from '@unique-nft/sdk/errors';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 
+const contentTypesReg = /(application\/json)|(multipart\/form-data)/;
+
 @UseFilters(SdkExceptionsFilter)
 export class ContentTypeHeaderValidationMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const { 'content-type': contentType } = req.headers;
-    if (!/application\/json/.test(contentType)) {
+    if (!contentTypesReg.test(contentType)) {
       throw new ValidationError({}, 'Invalid Content-type header');
     }
 

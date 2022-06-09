@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
+#  workflow_dispatch:
 #    inputs:
 #      publish:
 #        description: 'True to print to publish RC'
@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           npm ci
-          npm run build:sdk
+          npm run rollup:build:sdk
       - name: NPM Publish
         working-directory: ./dist/packages/sdk
         shell: bash
