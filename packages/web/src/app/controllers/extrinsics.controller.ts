@@ -112,7 +112,7 @@ export class ExtrinsicsController {
     if (result) return result;
 
     throw new NotFoundException(
-      `No extrinsic with hash ${hash} fount in cache`,
+      `No extrinsic with hash ${hash} found in cache`,
     );
   }
 }
