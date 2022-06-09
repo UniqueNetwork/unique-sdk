@@ -195,6 +195,7 @@ describe('Web signers', () => {
       async (headValue) => {
         const { ok, body } = await request(app.getHttpServer())
           .post(`/api/extrinsic/sign`)
+          .set('Content-type', 'application/json')
           .set({
             Authorization: headValue,
           })

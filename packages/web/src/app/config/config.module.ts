@@ -5,6 +5,7 @@ export type Config = {
   isProduction: boolean;
   port: number;
   chainWsUrl: string;
+  secondaryChainWsUr: string;
   ipfsGatewayUrl: string;
   prefix: string;
   swagger: string;
@@ -22,6 +23,7 @@ const loadConfig = (): Config => ({
   isProduction: process.env.NODE_ENV !== 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
   chainWsUrl: process.env.CHAIN_WS_URL,
+  secondaryChainWsUr: process.env.SECONDARY_CHAIN_WS_URL,
   prefix: process.env.PREFIX || '',
   swagger: process.env.SWAGGER || 'swagger',
   ipfsGatewayUrl: process.env.IPFS_GATEWAY_URL,

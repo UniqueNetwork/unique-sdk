@@ -5,7 +5,7 @@ import { u8aToHex } from '@polkadot/util';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 import request from 'supertest';
 
-import { ExtrinsicsController } from '../src/app/controllers';
+import { ExtrinsicsController } from '../src/app/modules/common/controllers/extrinsics.controller';
 import { createApp } from './utils.test';
 
 describe(ExtrinsicsController.name, () => {

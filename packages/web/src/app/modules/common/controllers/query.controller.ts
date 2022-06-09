@@ -2,9 +2,9 @@ import { Body, Controller, Post, UseFilters, UsePipes } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { Sdk } from '@unique-nft/sdk';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { ApiQueryBody } from '../types/arguments';
-import { SdkValidationPipe } from '../validation';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { ApiQueryBody } from '../../../types/arguments';
+import { SdkValidationPipe } from '../../../validation';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

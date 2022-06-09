@@ -13,16 +13,16 @@ import {
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags } from '@nestjs/swagger';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import {
   BurnCollectionBody,
   CollectionIdQuery,
   CreateCollectionBody,
   TransferCollectionBody,
   UnsignedTxPayloadResponse,
-} from '../types/sdk-methods';
-import { SdkValidationPipe } from '../validation';
-import { CollectionInfoResponse } from '../types/unique-types';
+} from '../../../types/sdk-methods';
+import { SdkValidationPipe } from '../../../validation';
+import { CollectionInfoResponse } from '../../../types/unique-types';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

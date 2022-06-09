@@ -7,7 +7,7 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
-import { BalanceController } from '../src/app/controllers';
+import { BalanceController } from '../src/app/modules/common/controllers/balance.controller';
 import { createApp } from './utils.test';
 
 describe(BalanceController.name, () => {
@@ -73,7 +73,7 @@ describe(BalanceController.name, () => {
       expect(response.ok).toEqual(true);
 
       expect(response.body).toMatchObject({
-        amount: expect.any(String),
+        amount: expect.any(Number),
         formatted: expect.any(String),
       });
     });

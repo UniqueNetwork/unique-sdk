@@ -10,21 +10,21 @@ import {
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { SignHeaders, VerificationResultResponse } from '../types/requests';
-import { Signer } from '../decorators/signer.decorator';
-import { SdkValidationPipe } from '../validation';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { SignHeaders, VerificationResultResponse } from '../../../types/requests';
+import { Signer } from '../../../decorators/signer.decorator';
+import { SdkValidationPipe } from '../../../validation';
 import {
   FeeResponse,
   UnsignedTxPayloadBody,
   UnsignedTxPayloadResponse,
-} from '../types/sdk-methods';
+} from '../../../types/sdk-methods';
 import {
   SignTxResultResponse,
   SubmitResultResponse,
   SubmitTxBody,
   TxBuildBody,
-} from '../types/arguments';
+} from '../../../types/arguments';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
