@@ -69,7 +69,7 @@ export const decodeCollectionProperties = (
   properties: UpDataStructsProperty[],
 ): CollectionProperties => {
   const collectionProperties: CollectionProperties = {};
-  properties.map((property) => {
+  properties.forEach((property) => {
     switch (property.key.toHuman()) {
       case CollectionPropertiesKeys.offchainSchema:
         collectionProperties.offchainSchema = bytesToString(property.value);
@@ -90,7 +90,6 @@ export const decodeCollectionProperties = (
       default:
         break;
     }
-    return 0;
   });
   return collectionProperties;
 };
