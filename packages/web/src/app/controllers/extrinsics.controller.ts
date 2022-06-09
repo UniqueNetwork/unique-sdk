@@ -88,6 +88,13 @@ export class ExtrinsicsController {
 
     result$.pipe(map(updateCache), catchError(updateCache));
 
+    await this.cache.set<ExtrinsicResultResponse>(hash, {
+      events: [],
+      isCompleted: false,
+      isError: false,
+      status: 'pending',
+    });
+
     return { hash };
   }
 

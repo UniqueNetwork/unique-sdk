@@ -1,4 +1,4 @@
-import { Observable, Subscriber } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
 import {
   ISubmittableResult,
@@ -174,28 +174,25 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   ): Promise<ObservableSubmitResult> {
     const submittable = buildSignedSubmittable(this.sdk.api, args);
 
-    let resultObserver: Subscriber<ISubmittableResult>;
-
-    const result$ = new Observable<ISubmittableResult>((observer) => {
-      resultObserver = observer;
-    });
-
-    const hash = submittable.hash.toHex();
+    const resultSubject = new Subject<ISubmittableResult>();
 
     const stopWatching = await submittable.send(
       (nextTxResult: ISubmittableResult) => {
         if (nextTxResult.isError || nextTxResult.dispatchError) {
-          resultObserver.error(nextTxResult);
+          resultSubject.error(nextTxResult);
         } else {
-          resultObserver.next(nextTxResult);
+          resultSubject.next(nextTxResult);
         }
 
         if (nextTxResult.isCompleted) {
           stopWatching();
-          resultObserver.complete();
+          resultSubject.complete();
         }
       },
     );
+
+    const result$ = resultSubject.asObservable();
+    const hash = submittable.hash.toHex();
 
     return { hash, result$ };
   }

@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+
 const ipfsUtils = `ipfs-core-utils${path.sep}`;
 const ipfsUtilsCjs = `ipfs-core-utils${path.sep}cjs${path.sep}src${path.sep}`;
 
@@ -23,7 +24,7 @@ module.exports = (request, options) => {
 
   if (request.indexOf('ipfs-core-utils') > -1) {
     if (modulePath.indexOf(ipfsUtils) > -1 && !modulePath.endsWith('.js')) {
-      return modulePath.split(ipfsUtils).join(ipfsUtilsCjs) + '.js';
+      return `${modulePath.split(ipfsUtils).join(ipfsUtilsCjs)  }.js`;
     }
   }
   return modulePath;
