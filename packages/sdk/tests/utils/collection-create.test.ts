@@ -1,6 +1,9 @@
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { CreateCollectionArguments } from '@unique-nft/sdk/types';
+import {
+  CollectionInfo,
+  CreateCollectionArguments,
+} from '@unique-nft/sdk/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
@@ -11,7 +14,7 @@ import {
 } from '@unique-nft/sdk/tests/testing-utils';
 import { Sdk } from '@unique-nft/sdk';
 
-const constOnChainSchema: INamespace = {
+export const constOnChainSchema: INamespace = {
   nested: {
     onChainMetaData: {
       nested: {
@@ -34,22 +37,43 @@ const constOnChainSchema: INamespace = {
   },
 };
 
-const collectionInitial: Omit<CreateCollectionArguments, 'address'> = {
+export type TestCollectionInitial = Omit<CreateCollectionArguments, 'address'>;
+const defaultCollectionInitial: TestCollectionInitial = {
   name: `foo_${Math.floor(Math.random() * 1000)}`,
   description: 'bar',
   tokenPrefix: 'BAZ',
-  schemaVersion: 'Unique',
-  variableOnChainSchema: '{}',
+  properties: {
+    schemaVersion: 'Unique',
+    constOnChainSchema,
+  },
 };
+
+async function findCollection(
+  sdk: Sdk,
+  name: string,
+  tryCount = 0,
+): Promise<CollectionInfo | null> {
+  const collectionId = await getLastCollectionId(sdk);
+  const collection = collectionId
+    ? await sdk.collection.get({ collectionId })
+    : null;
+  if (collection && collection.name === name) return collection;
+  if (tryCount < 10) {
+    await delay(3_000);
+    return findCollection(sdk, name, tryCount + 1);
+  }
+  return null;
+}
 
 export async function createCollection(
   sdk: Sdk,
   account: KeyringPair,
-): Promise<{ collectionId: number }> {
+  collectionInitial?: TestCollectionInitial,
+): Promise<CollectionInfo> {
+  const collectionData = collectionInitial || defaultCollectionInitial;
   const txPayload = await sdk.collection.create({
-    ...collectionInitial,
+    ...collectionData,
     address: account.address,
-    constOnChainSchema,
   });
 
   const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
@@ -59,13 +83,11 @@ export async function createCollection(
     signature,
   });
 
-  await delay(30_000);
+  const newCollection = await findCollection(sdk, collectionData.name);
+  expect(newCollection).toMatchObject(collectionData);
 
-  const collectionId = await getLastCollectionId(sdk);
-
-  const newCollection = await sdk.collection.get({ collectionId });
-
-  expect(newCollection).toMatchObject(collectionInitial);
-
-  return { collectionId };
+  if (!newCollection) {
+    throw new Error('Create collection fail');
+  }
+  return newCollection;
 }

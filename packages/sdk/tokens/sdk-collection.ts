@@ -31,16 +31,13 @@ export class SdkCollection implements ISdkCollection {
     );
 
     const collection = collectionOption.unwrapOr(null);
-
     if (!collection) return null;
 
-    const tokensCount = await this.sdk.api.rpc.unique.lastTokenId(collectionId);
     const decoded = decodeCollection(collection);
 
     return {
       ...decoded,
       id: collectionId,
-      tokensCount: tokensCount.toNumber(),
       owner: collection.owner.toString(),
     };
   }

@@ -46,12 +46,11 @@ describe(TokenController.name, () => {
         const testAccounts = await getKeyringPairs();
         const accountFerdie: KeyringPair = testAccounts.ferdie;
         const sdk = await app.get(Sdk);
-        const { collectionId }: { collectionId: number } =
-          await createCollection(sdk, accountFerdie);
+        const collection = await createCollection(sdk, accountFerdie);
         const { ok } = await request(app.getHttpServer())
           .post(`/api/token`)
           .send({
-            collectionId,
+            collectionId: collection.id,
             address: accountFerdie.address,
             constData: { ipfsJson: 'aaa', name: 'bbb' },
           });
