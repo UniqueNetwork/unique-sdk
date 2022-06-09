@@ -8,10 +8,10 @@ import {
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { SignHeaders, VerificationResultResponse } from '../types/requests';
+import { VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
 import { SdkValidationPipe } from '../validation';
 import {
@@ -38,11 +38,16 @@ export class ExtrinsicsController {
     return this.sdk.extrinsics.build(args);
   }
 
+  @ApiOperation({
+    description: `Use the Authorization request header to provide authentication information
+<ul>
+<li><code>Authorization: Seed &lt;your mnemonic phrase | uri name&gt;</code></li>
+</ul>`,
+  })
   @Post('sign')
   @ApiBearerAuth('SeedAuth')
   async sign(
     @Body() args: UnsignedTxPayloadBody,
-    @Headers() headers: SignHeaders,
     @Signer() signer?: SdkSigner,
   ): Promise<SignTxResultResponse> {
     return this.sdk.extrinsics.sign(args, signer);
