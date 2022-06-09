@@ -14,6 +14,7 @@ import {
   TokenInfo,
   TokenProperties,
   TokenPropertiesPermissions,
+  TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
@@ -70,6 +71,7 @@ export class CollectionPermissionsDto implements CollectionPermissions {
   @ApiProperty({ required: false })
   mintMode?: boolean;
 
+  @ApiProperty({ enum: CollectionNesting, required: false })
   nesting?: CollectionNesting | `${CollectionNesting}`;
 }
 
@@ -98,8 +100,34 @@ export class CollectionPropertiesDto implements CollectionProperties {
   constOnChainSchema?: INamespace | null;
 }
 
+export class TokenPropertyPermissionsDto implements TokenPropertyPermissions {
+  @ApiProperty({
+    type: Boolean,
+    required: false,
+  })
+  mutable?: boolean;
+
+  @ApiProperty({
+    type: Boolean,
+    required: false,
+  })
+  collectionAdmin?: boolean;
+
+  @ApiProperty({
+    type: Boolean,
+    required: false,
+  })
+  tokenOwner?: boolean;
+}
+
 export class TokenPropertiesPermissionsDto
-  implements TokenPropertiesPermissions {}
+  implements TokenPropertiesPermissions
+{
+  @ApiProperty({
+    required: false,
+  })
+  constData?: TokenPropertyPermissionsDto;
+}
 
 export class CollectionInfoBaseDto implements CollectionInfoBase {
   @ApiProperty({ enum: CollectionMode, required: false })
@@ -130,12 +158,16 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
 
   @ApiProperty()
-  permissions?: CollectionPermissionsDto;
-
-  @ApiProperty()
   properties: CollectionPropertiesDto;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+  })
+  permissions?: CollectionPermissionsDto;
+
+  @ApiProperty({
+    required: false,
+  })
   tokenPropertyPermissions?: TokenPropertiesPermissionsDto;
 }
 
