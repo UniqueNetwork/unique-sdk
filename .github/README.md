@@ -40,7 +40,7 @@ HTTP API Service is created to connect to blockcahin using simple HTTP requests.
 In general HTTP API Service provides folowing fuctions:
 
  1. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#build-unsigned-extrinsic">Building an unsigned extrinsic</a>
- 2. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#sign-an-extrinsic">Extrinsic signing and verification using service</a> (These functions could also be implemented on client)
+ 2. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#sign-an-extrinsic">Extrinsic signing and verification using service</a> (These functions should be implemented on client for safety)
  3. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#Submit-extrinsic">Submitting an extrinsic</a>
 
 HTTP API Service also allows to upload images using IPFS.
