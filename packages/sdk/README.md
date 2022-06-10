@@ -22,7 +22,7 @@ At the moment the library is an pre-alpha version. We will be grateful for the f
 
 # Installation
 Install the package:
-```
+```shell
 npm i --save @unique-nft/sdk
 ```
 
