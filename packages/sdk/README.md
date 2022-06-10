@@ -164,7 +164,7 @@ export async function createToken(sdk: Sdk, address: string, collectionId: numbe
         let tokenId = 0;
         function resultCallback(result: ISubmittableResult) {
             const createdEvent = result.events.find(event => event.event.method === 'ItemCreated');
-            if (createdEvent) collectionId = +createdEvent.event.data[1];
+            if (createdEvent) tokenId = +createdEvent.event.data[1];
             if (result.isCompleted) resolve(tokenId);
         }
         sdk.extrinsics.submit(submitTxArgs, resultCallback);
