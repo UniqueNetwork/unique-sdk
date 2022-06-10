@@ -1,9 +1,9 @@
 1. [Install](#Install)
-2. [Create sdk](#create-sdk)
-3. [Create account](#create-account)
-4. [Create collection](#create-collection)
-5. [Create token](#create-token)
-6. [Transfer token](#transfer-token)
+2. [Example create sdk](#example-create-sdk)
+3. [Example create account](#example-create-account)
+4. [Example create collection](#example-create-collection)
+5. [Example create token](#example-create-token)
+6. [Example transfer token](#example-transfer-token)
 
 ## Install
 Install the package:
@@ -11,7 +11,7 @@ Install the package:
 npm i --save @unique-nft/sdk
 ```
 
-## Create sdk
+## Example create sdk
 ```ts
 import { SdkSigner } from "@unique-nft/sdk/types";
 import { createSigner } from "@unique-nft/sdk/sign";
@@ -34,7 +34,7 @@ export async function createSdk(seed: string): Promise<Sdk> {
 
 ```
 
-## Create account
+## Example create account
 ```ts
 import { KeyringPair } from "@polkadot/keyring/types";
 import { Keyring } from "@polkadot/keyring";
@@ -45,7 +45,7 @@ export function createAccount(uri: string): KeyringPair {
 }
 ```
 
-## Create collection
+## Example create collection
 <details>
 
 ```ts
@@ -120,7 +120,7 @@ export async function createCollection(sdk: Sdk, account: KeyringPair): Promise<
 
 </details>
 
-## Create token
+## Example create token
 ```ts
 import { Sdk } from "@unique-nft/sdk";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -168,7 +168,7 @@ export async function createToken(sdk: Sdk, account: KeyringPair, collectionId: 
 }
 ```
 
-## Transfer token
+## Example transfer token
 ```ts
 import { Sdk } from "@unique-nft/sdk";
 import { KeyringPair } from "@polkadot/keyring/types";
