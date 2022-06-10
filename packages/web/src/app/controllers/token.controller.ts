@@ -33,7 +33,7 @@ export class TokenController {
 
   @Get()
   async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
-    const token = await this.sdk.token.get(args);
+    const token = await this.sdk.tokens.get(args);
 
     if (token) return token;
 
@@ -46,20 +46,20 @@ export class TokenController {
   async createToken(
     @Body() args: CreateTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.token.create(args);
+    return this.sdk.tokens.create(args);
   }
 
   @Delete()
   async burnToken(
     @Body() args: BurnTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.token.burn(args);
+    return this.sdk.tokens.burn(args);
   }
 
   @Patch('transfer')
   async transferToken(
     @Body() args: TransferTokenBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.token.transfer(args);
+    return this.sdk.tokens.transfer(args);
   }
 }
