@@ -13,9 +13,7 @@ export const buildUnsignedSubmittable = (
   try {
     return api.tx[section][method](...args);
   } catch (error) {
-    const errorMessage =
-      error && error instanceof Error ? error.message : undefined;
-    throw new BuildExtrinsicError(errorMessage);
+    throw BuildExtrinsicError.wrapError(error, { section, method, args });
   }
 };
 
