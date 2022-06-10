@@ -7,7 +7,7 @@ const getImageUrlForImageUrlSchema = ({
   tokenId: number;
   collection: CollectionInfo;
 }): string | null => {
-  const urlTemplate = collection.properties.offchainSchema;
+  const urlTemplate = collection.offchainSchema;
 
   if (urlTemplate && urlTemplate.includes('{id}')) {
     return urlTemplate.replace('{id}', tokenId.toString());
@@ -55,13 +55,11 @@ export const getTokenUrl = ({
   decodedConstData?: Record<string, any>;
   ipfsGatewayUrl: string;
 }): string | null => {
-  if (
-    collection.properties.schemaVersion === CollectionSchemaVersion.ImageURL
-  ) {
+  if (collection.schemaVersion === CollectionSchemaVersion.ImageURL) {
     return getImageUrlForImageUrlSchema({ collection, tokenId });
   }
   if (
-    collection.properties.schemaVersion === CollectionSchemaVersion.Unique &&
+    collection.schemaVersion === CollectionSchemaVersion.Unique &&
     decodedConstData
   ) {
     return getImageUrlForUniqueSchema({ decodedConstData, ipfsGatewayUrl });

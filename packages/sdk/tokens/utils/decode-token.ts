@@ -1,40 +1,27 @@
+import { u8aToString } from '@polkadot/util';
 import { decodeConstData, getTokenUrl } from '@unique-nft/sdk/utils';
 
-import type { UpDataStructsTokenData } from '@unique-nft/types';
+import type { PalletNonfungibleItemData } from '@unique-nft/types';
 import type {
   CollectionInfo,
   SdkOptions,
   TokenInfo,
-  TokenProperties,
 } from '@unique-nft/sdk/types';
-import { TokenPropertiesKeys } from '@unique-nft/sdk/types';
 
 type IpfsOptions = Pick<SdkOptions, 'ipfsGatewayUrl'>;
 
 export const decodeToken = (
   collection: CollectionInfo,
   tokenId: number,
-  tokenData: UpDataStructsTokenData,
+  tokenData: PalletNonfungibleItemData,
   options: IpfsOptions,
 ): TokenInfo => {
-  let constData: Uint8Array | null = null;
-  tokenData.properties.forEach((prop) => {
-    switch (prop.key.toHuman()) {
-      case TokenPropertiesKeys.constData:
-        constData = prop.value.toU8a(true);
-        break;
-      default:
-        break;
-    }
-  });
-
-  const decodedConstData =
-    collection.properties.constOnChainSchema && constData
-      ? decodeConstData(constData, collection.properties.constOnChainSchema)
-      : undefined;
-  const tokenProperties: TokenProperties = {
-    constData: decodedConstData,
-  };
+  const decodedConstData = collection.constOnChainSchema
+    ? decodeConstData(
+        tokenData.constData.toU8a(true),
+        collection.constOnChainSchema,
+      )
+    : undefined;
 
   const tokenUrl = getTokenUrl({
     collection,
@@ -43,12 +30,12 @@ export const decodeToken = (
     ipfsGatewayUrl: options.ipfsGatewayUrl,
   });
 
-  const ownerJson = tokenData.owner.value.toHuman() as any;
   return {
     id: tokenId,
     collectionId: collection.id,
     url: tokenUrl,
-    owner: ownerJson ? ownerJson.Substrate : null,
-    properties: tokenProperties,
+    constData: decodedConstData || null,
+    variableData: u8aToString(tokenData.variableData.toU8a(true)) || null,
+    owner: tokenData.owner.value.toString(),
   };
 };

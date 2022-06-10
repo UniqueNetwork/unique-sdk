@@ -6,15 +6,9 @@ import {
   CollectionInfoBase,
   CollectionLimits,
   CollectionMode,
-  CollectionNesting,
-  CollectionPermissions,
-  CollectionProperties,
   CollectionSchemaVersion,
   MetaUpdatePermission,
   TokenInfo,
-  TokenProperties,
-  TokenPropertiesPermissions,
-  TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
@@ -64,74 +58,15 @@ export class CollectionLimitsDto implements CollectionLimits {
   transfersEnabled?: boolean | null;
 }
 
-export class CollectionPermissionsDto implements CollectionPermissions {
-  @ApiProperty({ enum: CollectionAccess, required: false })
-  access?: CollectionAccess | `${CollectionAccess}`;
-
-  @ApiProperty({ required: false })
-  mintMode?: boolean;
-
-  @ApiProperty({ enum: CollectionNesting, required: false })
-  nesting?: CollectionNesting | `${CollectionNesting}`;
-}
-
-export class CollectionPropertiesDto implements CollectionProperties {
-  @ApiProperty({
-    required: false,
-    example:
-      'https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png',
-  })
-  offchainSchema?: string;
-
-  @ApiProperty({ enum: CollectionSchemaVersion, required: false })
-  schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
-
-  @ApiProperty({
-    example: '{}',
-    required: false,
-  })
-  variableOnChainSchema?: string | null;
-
-  @ApiProperty({
-    type: Object,
-    example: JSON.stringify(DEFAULT_CONST_SCHEMA),
-    required: false,
-  })
-  constOnChainSchema?: INamespace | null;
-}
-
-export class TokenPropertyPermissionsDto implements TokenPropertyPermissions {
-  @ApiProperty({
-    type: Boolean,
-    required: false,
-  })
-  mutable?: boolean;
-
-  @ApiProperty({
-    type: Boolean,
-    required: false,
-  })
-  collectionAdmin?: boolean;
-
-  @ApiProperty({
-    type: Boolean,
-    required: false,
-  })
-  tokenOwner?: boolean;
-}
-
-export class TokenPropertiesPermissionsDto
-  implements TokenPropertiesPermissions
-{
-  @ApiProperty({
-    required: false,
-  })
-  constData?: TokenPropertyPermissionsDto;
-}
-
 export class CollectionInfoBaseDto implements CollectionInfoBase {
   @ApiProperty({ enum: CollectionMode, required: false })
   mode?: CollectionMode | `${CollectionMode}`;
+
+  @ApiProperty({ enum: CollectionAccess, required: false })
+  access?: CollectionAccess | `${CollectionAccess}`;
+
+  @ApiProperty({ enum: CollectionSchemaVersion, required: false })
+  schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
 
   @ApiProperty({
     example: 'Sample collection name',
@@ -149,26 +84,36 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
   tokenPrefix: string;
 
   @ApiProperty({ required: false })
+  mintMode?: boolean;
+
+  @ApiProperty({
+    required: false,
+    example:
+      'https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png',
+  })
+  offchainSchema?: string;
+
+  @ApiProperty({ required: false })
   sponsorship?: CollectionSponsorship | null;
 
   @ApiProperty({ required: false })
-  limits?: CollectionLimitsDto;
+  limits?: CollectionLimits;
+
+  @ApiProperty({
+    type: Object,
+    example: JSON.stringify(DEFAULT_CONST_SCHEMA),
+    required: false,
+  })
+  constOnChainSchema?: INamespace | null;
+
+  @ApiProperty({
+    example: '{}',
+    required: false,
+  })
+  variableOnChainSchema?: string | null;
 
   @ApiProperty({ enum: MetaUpdatePermission, required: false })
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
-
-  @ApiProperty()
-  properties: CollectionPropertiesDto;
-
-  @ApiProperty({
-    required: false,
-  })
-  permissions?: CollectionPermissionsDto;
-
-  @ApiProperty({
-    required: false,
-  })
-  tokenPropertyPermissions?: TokenPropertiesPermissionsDto;
 }
 
 export class CollectionInfoResponse extends CollectionInfoBaseDto {
@@ -182,18 +127,11 @@ export class CollectionInfoResponse extends CollectionInfoBaseDto {
     example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
   })
   owner: string;
-}
 
-export class TokenPropertiesResponse implements TokenProperties {
   @ApiProperty({
-    example: {
-      ipfsJson:
-        '{"ipfs":"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb","type":"image"}',
-      gender: 'Male',
-      traits: ['TEETH_SMILE', 'UP_HAIR'],
-    },
+    example: 100,
   })
-  constData?: AnyObject;
+  tokensCount: number;
 }
 
 export class TokenInfoResponse implements TokenInfo {
@@ -214,13 +152,23 @@ export class TokenInfoResponse implements TokenInfo {
   collectionId: number;
 
   @ApiProperty({
+    example: {
+      ipfsJson:
+        '{"ipfs":"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb","type":"image"}',
+      gender: 'Male',
+      traits: ['TEETH_SMILE', 'UP_HAIR'],
+    },
+  })
+  constData: AnyObject | null;
+
+  @ApiProperty({
     description: 'URL of the token content on IPFS node (if available)',
     example:
       'https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image1.png',
   })
   url: string | null;
 
-  properties: TokenPropertiesResponse;
+  variableData: string | null;
 }
 
 export type TokenPayload =

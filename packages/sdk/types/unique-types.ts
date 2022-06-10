@@ -14,12 +14,6 @@ export enum CollectionAccess {
   AllowList = 'AllowList',
 }
 
-export enum CollectionNesting {
-  Disabled = 'Disabled',
-  Owner = 'Owner',
-  OwnerRestricted = 'OwnerRestricted',
-}
-
 export enum CollectionSchemaVersion {
   ImageURL = 'ImageURL',
   Unique = 'Unique',
@@ -48,70 +42,35 @@ export interface CollectionLimits {
   transfersEnabled?: boolean | null;
 }
 
-export interface CollectionPermissions {
-  access?: CollectionAccess | `${CollectionAccess}`;
-  mintMode?: boolean;
-  nesting?: CollectionNesting | `${CollectionNesting}`;
-}
-
-export interface CollectionProperties {
-  offchainSchema?: string;
-  schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
-  variableOnChainSchema?: string | null;
-  constOnChainSchema?: INamespace | null;
-}
-
 export interface CollectionInfoBase {
   mode?: CollectionMode | `${CollectionMode}`;
+  access?: CollectionAccess | `${CollectionAccess}`;
+  schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
   name: string;
   description: string;
   tokenPrefix: string;
+  mintMode?: boolean;
+  offchainSchema?: string;
   sponsorship?: CollectionSponsorship | null;
   limits?: CollectionLimits;
+  constOnChainSchema?: INamespace | null;
+  variableOnChainSchema?: string | null;
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
-
-  properties: CollectionProperties;
-  permissions?: CollectionPermissions;
-  tokenPropertyPermissions?: TokenPropertiesPermissions;
-}
-
-export enum CollectionPropertiesKeys {
-  offchainSchema = '_old_offchainSchema',
-  schemaVersion = '_old_schemaVersion',
-  variableOnChainSchema = '_old_variableOnChainSchema',
-  constOnChainSchema = '_old_constOnChainSchema',
-}
-
-export enum TokenPropertiesKeys {
-  constData = '_old_constData',
-}
-
-export interface TokenPropertiesPermissions {
-  constData?: TokenPropertyPermissions;
-}
-
-export interface TokenPropertyPermissions {
-  mutable?: boolean;
-  collectionAdmin?: boolean;
-  tokenOwner?: boolean;
 }
 
 export interface CollectionInfo extends CollectionInfoBase {
   id: number;
   owner: string;
-  // todo tokensCount: number
-}
-
-export interface TokenProperties {
-  constData?: AnyObject;
+  tokensCount: number;
 }
 
 export interface TokenInfo {
   id: number;
   collectionId: number;
   url: string | null;
-  owner: string | null;
-  properties: TokenProperties;
+  constData: AnyObject | null;
+  variableData: string | null;
+  owner: string;
 }
 
 export type TokenPayload =

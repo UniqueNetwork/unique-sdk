@@ -12,7 +12,7 @@ import {
 import { createCollection } from './utils/collection-create.test';
 import { createToken } from './utils/token-create.test';
 
-describe('Collections and tokens', () => {
+describe(Sdk.name, () => {
   let sdk: Sdk;
   let testAccounts: TestAccounts;
   let accountFerdie: KeyringPair;
@@ -25,14 +25,14 @@ describe('Collections and tokens', () => {
     accountAlice = testAccounts.alice;
   });
 
+  async function testCreateTokens({ collectionId }: { collectionId: number }) {
+    await createToken(sdk, collectionId, 1, accountFerdie);
+    await createToken(sdk, collectionId, 2, accountFerdie, accountAlice);
+  }
+
   it('create collection and token', async () => {
-    const collection = await createCollection(sdk, accountFerdie);
-    await createToken(sdk, collection.id, accountFerdie);
-  }, 60_000);
-  it('create collection and token to other account', async () => {
-    const collection = await createCollection(sdk, accountFerdie);
-    await createToken(sdk, collection.id, accountFerdie, accountAlice);
-  }, 60_000);
+    await createCollection(sdk, accountFerdie).then(testCreateTokens);
+  }, 120_000);
 
   afterAll(async () => {
     await sdk.api.disconnect();

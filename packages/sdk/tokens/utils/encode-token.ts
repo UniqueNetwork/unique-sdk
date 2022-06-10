@@ -1,6 +1,6 @@
 import { INamespace } from 'protobufjs';
 import { u8aToHex } from '@polkadot/util';
-import { TokenPayload, TokenPropertiesKeys } from '@unique-nft/sdk/types';
+import { TokenPayload } from '@unique-nft/sdk/types';
 import { serializeConstData } from '@unique-nft/sdk/utils';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -13,12 +13,7 @@ export const encodeToken = (
 
   return {
     NFT: {
-      properties: [
-        {
-          key: TokenPropertiesKeys.constData,
-          value: u8aToHex(serializeConstData(constData, constOnChainSchema)),
-        },
-      ],
+      constData: u8aToHex(serializeConstData(constData, constOnChainSchema)),
     },
   };
 };
