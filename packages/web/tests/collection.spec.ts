@@ -55,6 +55,7 @@ describe(CollectionController.name, () => {
         .post(`/api/extrinsic/sign`)
         .set({
           Authorization: 'Seed //Alice',
+          "Content-Type": "application/json",
         })
         .send({
           signerPayloadHex,
@@ -78,7 +79,7 @@ describe(CollectionController.name, () => {
   });
 
   describe('check Content-type header', () => {
-    it.each(['text/html', 'multipart/form-data', ''])(
+    it.each(['text/html', ''])(
       'create collection, invalid Content-type - %s',
       async (contentType) => {
         const { ok, body } = await request(app.getHttpServer())

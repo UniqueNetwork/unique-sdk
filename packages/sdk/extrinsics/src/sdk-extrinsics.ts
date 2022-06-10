@@ -174,26 +174,33 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   ): Promise<ObservableSubmitResult> {
     const submittable = buildSignedSubmittable(this.sdk.api, args);
 
-    const resultSubject = new Subject<ISubmittableResult>();
+    try {
 
-    const stopWatching = await submittable.send(
-      (nextTxResult: ISubmittableResult) => {
-        if (nextTxResult.isError || nextTxResult.dispatchError) {
-          resultSubject.error(nextTxResult);
-        } else {
-          resultSubject.next(nextTxResult);
-        }
+      const resultSubject = new Subject<ISubmittableResult>();
 
-        if (nextTxResult.isCompleted) {
-          stopWatching();
-          resultSubject.complete();
-        }
-      },
-    );
+      const stopWatching = await submittable.send(
+        (nextTxResult: ISubmittableResult) => {
+          if (nextTxResult.isError || nextTxResult.dispatchError) {
+            resultSubject.error(nextTxResult);
+          } else {
+            resultSubject.next(nextTxResult);
+          }
 
-    const result$ = resultSubject.asObservable();
-    const hash = submittable.hash.toHex();
+          if (nextTxResult.isCompleted) {
+            stopWatching();
+            resultSubject.complete();
+          }
+        },
+      );
 
-    return { hash, result$ };
+      const result$ = resultSubject.asObservable();
+      const hash = submittable.hash.toHex();
+
+      return { hash, result$ };
+    } catch (error) {
+      const errorMessage =
+        error && error instanceof Error ? error.message : undefined;
+      throw new SubmitExtrinsicError(errorMessage);
+    }
   }
 }

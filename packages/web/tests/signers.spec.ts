@@ -197,6 +197,7 @@ describe('Web signers', () => {
           .post(`/api/extrinsic/sign`)
           .set({
             Authorization: headValue,
+            "Content-Type": "application/json",
           })
           .send();
         expect(false).toEqual(ok);
@@ -215,6 +216,7 @@ describe('Web signers', () => {
         bob.address,
         {
           Authorization,
+          "Content-Type": "application/json",
         },
       );
       expect(true).toEqual(ok);
@@ -231,6 +233,7 @@ describe('Web signers', () => {
         bob.address,
         {
           Authorization,
+          "Content-Type": "application/json",
         },
       );
       expect(true).toEqual(ok);

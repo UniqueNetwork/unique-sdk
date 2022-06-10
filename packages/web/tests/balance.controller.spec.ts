@@ -56,6 +56,7 @@ describe(BalanceController.name, () => {
       .post(`/api/extrinsic/sign`)
       .set({
         Authorization: `Seed ${seed}`,
+        "Content-Type": "application/json",
       })
       .send(buildResponse.body);
     const { signature } = signResponse.body;
@@ -73,7 +74,7 @@ describe(BalanceController.name, () => {
       expect(response.ok).toEqual(true);
 
       expect(response.body).toMatchObject({
-        amount: expect.any(String),
+        amount: expect.any(Number),
         formatted: expect.any(String),
       });
     });
