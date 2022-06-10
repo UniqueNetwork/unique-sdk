@@ -12,34 +12,33 @@ This document contains examples of main SDK operations.
 
 ##  Table of Contents
 
-- [Deployment](#Deployment)
+- [Installation](#Installation)
 - [Examples](#Examples)
-  - [SDK creation](#SDK-creation)
-  - [Account creation](#Account-creation)
+  - [Initialize SDK](#Initialize-SDK)
   - [Collection creation](#Collection-creation)
   - [Token creation](#Token-creation)
   - [Token transfer](#Token-transfern)
 
-## Deployment
+## Installation
 Install the package:
 ```
 npm i --save @unique-nft/sdk
 ```
 # Examples
 
-## SDK creation
+## Initialize SDK
 ```ts
 import { SdkSigner } from "@unique-nft/sdk/types";
 import { createSigner } from "@unique-nft/sdk/sign";
 import { Sdk } from "@unique-nft/sdk";
 
-export async function createSdk(seed: string): Promise<Sdk> {
+export async function createSdk(): Promise<Sdk> {
   const options = {
     chainWsUrl: 'wss://ws-rc.unique.network',
     ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
   }
   const signerOptions = {
-    seed,
+    seed: '//Alice', // Signer seed phrase
   };
   const signer: SdkSigner = await createSigner(signerOptions);
   return await Sdk.create({
@@ -50,17 +49,6 @@ export async function createSdk(seed: string): Promise<Sdk> {
 
 ```
 
-## Account creation
-```ts
-import { KeyringPair } from "@polkadot/keyring/types";
-import { Keyring } from "@polkadot/keyring";
-
-export function createAccount(uri: string): KeyringPair {
-    const keyring = new Keyring({ type: 'sr25519' });
-    return keyring.addFromUri(uri);
-}
-```
-
 ## Collection creation
 <details>
 <summary>Collapse</summary>
@@ -68,7 +56,6 @@ export function createAccount(uri: string): KeyringPair {
 
 ```ts
 import { Sdk } from "@unique-nft/sdk";
-import { KeyringPair } from "@polkadot/keyring/types";
 import { INamespace } from "protobufjs";
 import {
   CreateCollectionArguments,
@@ -80,8 +67,7 @@ import { ISubmittableResult } from "@polkadot/types/types/extrinsic";
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/extrinsics';
 
-export async function createCollection(sdk: Sdk, account: KeyringPair): Promise<number> {
-    console.log('collection creation ...');
+export async function createCollection(sdk: Sdk, address: string): Promise<number> {
     const constOnChainSchema: INamespace = {
         nested: {
             onChainMetaData: {
@@ -113,7 +99,7 @@ export async function createCollection(sdk: Sdk, account: KeyringPair): Promise<
             schemaVersion: 'Unique',
             constOnChainSchema,
         },
-        address: account.address,
+        address,
     };
     const txPayload: UnsignedTxPayload = await sdk.collection.create(createArgs);
 
@@ -141,7 +127,6 @@ export async function createCollection(sdk: Sdk, account: KeyringPair): Promise<
 ## Token creation
 ```ts
 import { Sdk } from "@unique-nft/sdk";
-import { KeyringPair } from "@polkadot/keyring/types";
 import {
   CreateTokenArguments,
   SignTxResult,
@@ -152,16 +137,15 @@ import { ISubmittableResult } from "@polkadot/types/types/extrinsic";
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/extrinsics';
 
-export async function createToken(sdk: Sdk, account: KeyringPair, collectionId: number): Promise<number> {
-    console.log('token creation ...');
+export async function createToken(sdk: Sdk, address: string, collectionId: number): Promise<number> {
     const constData = {
         FieldA: 'My field a',
         FieldB: 'My field b',
     };
 
     const createArgs: CreateTokenArguments = {
-        address: account.address,
-        owner: account?.address,
+        address,
+        owner: address,
         collectionId,
         constData,
     };
@@ -189,7 +173,6 @@ export async function createToken(sdk: Sdk, account: KeyringPair, collectionId: 
 ## Token transfer
 ```ts
 import { Sdk } from "@unique-nft/sdk";
-import { KeyringPair } from "@polkadot/keyring/types";
 import {
   SignTxResult,
   SubmitTxArguments,
@@ -201,15 +184,14 @@ import '@unique-nft/sdk/extrinsics';
 
 export async function transferToken(
     sdk: Sdk,
-    accountFrom: KeyringPair,
-    accountTo: KeyringPair,
+    addressFrom: string,
+    addressTo: string,
     collectionId: number,
     tokenId: number
 ) {
-    console.log('token transfer ...');
     const transferArgs: TransferTokenArguments = {
-        from: accountFrom.address,
-        to: accountTo.address,
+        from: addressFrom,
+        to: addressTo,
         tokenId: tokenId,
         collectionId: collectionId,
     }
