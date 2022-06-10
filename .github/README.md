@@ -1,4 +1,3 @@
-
 <div align="center">
 <img src="https://github.com/UniqueNetwork/marketplace-docker/raw/master/doc/logo-white.svg" alt="Unique White Label Market">
 </div>
@@ -9,8 +8,8 @@
 
 # Intro
 
-This SDK is intended for web project owners and developers whose goal is to implement main UniqueNetwork functions to their projects without difficult blockchain connection logic.
-This SDK is an npm package that contains all the necessary logic for implementation.
+The SDK is intended for developers whose goal is to implement Unique Network functions avoiding working with a low-level blockchain API.
+This SDK may be used as an npm package or REST API.
 
 ## Table of Contents
 
@@ -36,10 +35,17 @@ To learn more read <a href="https://github.com/UniqueNetwork/unique-sdk/blob/mas
 <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/sdk">SDK package</a> contains npm package of SDK itself.
 
 ## Web
-As an alternative to the whole SDK you can use proxy http serviсe for SDK to implement server logic - <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web">web service</a>.
-Web service is created to make a request (extrinsic) with certain parameter to make changes to the blockchain. It also allows to upload images using IPFS.
-Use <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#readme">web service documentation</a> to learn its methods.
-Web  package can be used with existing public nodes or with your own private nodes.
+As an alternative to the whole SDK you can use proxy http serviсe for SDK to implement server logic - <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web">HTTP API Service</a>.
+HTTP API Service is created to connect to blockcahin using simple HTTP requests.
+In general HTTP API Service provides folowing fuctions:
+
+ 1. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#build-unsigned-extrinsic">Building an unsigned extrinsic</a>
+ 2. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#sign-an-extrinsic">Extrinsic signing and verification using service</a> (These functions could also be implemented on client)
+ 3. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#Submit-extrinsic">Submitting an extrinsic</a>
+
+HTTP API Service also allows to upload images using IPFS.
+Use <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#readme">HTTP API Service documentation</a> to learn its methods.
+HTTP API Service can be used with existing public nodes or with your own private nodes.
 
 ## Recipes
 <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/recipes">Here</a> you can find some useful hints or life hacks that will ease using of SDK.
