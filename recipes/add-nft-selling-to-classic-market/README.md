@@ -97,7 +97,7 @@
 </details>
 
 <details>
-  <summary>▶ via HTTP REST API</summary>
+  <summary>via HTTP REST API</summary>
 
 #### Get collection data
 
