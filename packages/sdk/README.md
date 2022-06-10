@@ -8,25 +8,25 @@
 
 
 # Intro
-This document contains examples of main SDK operations.
+SDK is an JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance etc.
+At the moment the library is an pre-alpha version. We will be grateful for the feedback and ideas for improvement.
 
-##  Table of Contents
+#  Table of Contents
 
 - [Installation](#Installation)
-- [Examples](#Examples)
-  - [Initialize SDK](#Initialize-SDK)
+- [Initialize SDK](#Initialize-SDK)
+- [Usage examples](#Usage-examples)
   - [Collection creation](#Collection-creation)
   - [Token creation](#Token-creation)
   - [Token transfer](#Token-transfern)
 
-## Installation
+# Installation
 Install the package:
 ```
 npm i --save @unique-nft/sdk
 ```
-# Examples
 
-## Initialize SDK
+# Initialize SDK
 ```ts
 import { SdkSigner } from "@unique-nft/sdk/types";
 import { createSigner } from "@unique-nft/sdk/sign";
@@ -48,6 +48,8 @@ export async function createSdk(): Promise<Sdk> {
 }
 
 ```
+
+# Usage examples
 
 ## Collection creation
 <details>
@@ -101,7 +103,7 @@ export async function createCollection(sdk: Sdk, address: string): Promise<numbe
         },
         address,
     };
-    const txPayload: UnsignedTxPayload = await sdk.collection.create(createArgs);
+    const txPayload: UnsignedTxPayload = await sdk.collections.create(createArgs);
 
     const signTxResult: SignTxResult = await sdk.extrinsics.sign(txPayload);
 
@@ -149,7 +151,7 @@ export async function createToken(sdk: Sdk, address: string, collectionId: numbe
         collectionId,
         constData,
     };
-    const txPayload: UnsignedTxPayload = await sdk.token.create(createArgs);
+    const txPayload: UnsignedTxPayload = await sdk.tokens.create(createArgs);
 
     const signTxResult: SignTxResult = await sdk.extrinsics.sign(txPayload);
 
@@ -195,7 +197,7 @@ export async function transferToken(
         tokenId: tokenId,
         collectionId: collectionId,
     }
-    const txPayload = await sdk.token.transfer(transferArgs);
+    const txPayload = await sdk.tokens.transfer(transferArgs);
 
     const signTxResult: SignTxResult = await sdk.extrinsics.sign(txPayload);
 
