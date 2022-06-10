@@ -41,7 +41,7 @@
 ### 2.2 Getting information about a collection, an NFT and it’s owner
 
 <details>
-  <summary>▶ via @unique-nft/sdk </summary>
+  <summary>via @unique-nft/sdk </summary>
 
   ```javascript
     import '@unique-nft/sdk/tokens';
@@ -59,7 +59,7 @@
 </details>
 
 <details>
-  <summary>▶ via HTTP REST API</summary>
+  <summary>via HTTP REST API</summary>
   
 #### Get collection data
 
@@ -85,7 +85,7 @@
 ### 2.4 Getting the wallet address QTZ balance
 
 <details>
-  <summary>▶ via @unique-nft/sdk </summary>
+  <summary>via @unique-nft/sdk </summary>
 
   ```javascript
     import '@unique-nft/sdk/balance';
@@ -113,7 +113,7 @@
 ## 3. Sending an NFT to the buyer
 
 <details>
-  <summary>▶ via @unique-nft/sdk </summary>
+  <summary>via @unique-nft/sdk </summary>
 
   ```javascript
     import '@unique-nft/sdk/token';
@@ -147,7 +147,7 @@
 </details>
 
 <details>
-  <summary>▶ via HTTP REST API</summary>
+  <summary>via HTTP REST API</summary>
 
 #### Build transaction
 
