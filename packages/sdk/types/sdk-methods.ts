@@ -2,6 +2,7 @@ import { HexString } from '@polkadot/util/types';
 import {
   SignerPayloadJSON,
   SignerPayloadRaw,
+  ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
 import {
   AnyObject,
@@ -34,7 +35,7 @@ export interface Balance {
   unit: string;
 }
 
-export type Fee = Balance
+export type Fee = Balance;
 
 export interface TransferBuildArguments {
   address: string;
@@ -116,13 +117,20 @@ export interface UnsignedTxPayload {
   signerPayloadHex: HexString;
 }
 
+export type ExtrinsicResultCallback = (
+  result: ISubmittableResult,
+) => void | Promise<void>;
+
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload>;
   sign(
     args: SignTxArguments,
     signer: SdkSigner | undefined,
   ): Promise<SignTxResult>;
-  submit(args: SubmitTxArguments): Promise<SubmitResult>;
+  submit(
+    args: SubmitTxArguments,
+    callback?: ExtrinsicResultCallback,
+  ): Promise<SubmitResult>;
 }
 
 export interface SdkSigner {

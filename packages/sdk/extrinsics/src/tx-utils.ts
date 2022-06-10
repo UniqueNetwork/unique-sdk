@@ -4,9 +4,9 @@ import {
   SignerPayloadJSON,
 } from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
-import { formatBalance, hexToU8a, u8aToHex } from '@polkadot/util';
+import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { signatureVerify } from '@polkadot/util-crypto';
-import { RuntimeDispatchInfo, SignerPayload } from '@polkadot/types/interfaces';
+import { SignerPayload } from '@polkadot/types/interfaces';
 import { BadSignatureError, BadPayloadError } from '@unique-nft/sdk/errors';
 import { UnsignedTxPayload } from '@unique-nft/sdk/types';
 

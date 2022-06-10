@@ -5,11 +5,19 @@ import {
   UseFilters,
   Headers,
   UsePipes,
+  Get,
+  Query,
+  Inject,
+  CACHE_MANAGER,
+  NotFoundException,
 } from '@nestjs/common';
+import { map, catchError } from 'rxjs';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
+import { Cache } from 'cache-manager';
+import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SignHeaders, VerificationResultResponse } from '../types/requests';
 import { Signer } from '../decorators/signer.decorator';
@@ -20,18 +28,24 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/sdk-methods';
 import {
+  ExtrinsicResultRequest,
   SignTxResultResponse,
   SubmitResultResponse,
   SubmitTxBody,
   TxBuildBody,
 } from '../types/arguments';
+import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
+import { serializeResult } from '../utils/submittable-result-transformer';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('extrinsic')
 @Controller('extrinsic')
 export class ExtrinsicsController {
-  constructor(private readonly sdk: Sdk) {}
+  constructor(
+    private readonly sdk: Sdk,
+    @Inject(CACHE_MANAGER) private cache: Cache,
+  ) {}
 
   @Post('build')
   async buildTx(@Body() args: TxBuildBody): Promise<UnsignedTxPayloadResponse> {
@@ -66,11 +80,39 @@ export class ExtrinsicsController {
 
   @Post('submit')
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
-    return this.sdk.extrinsics.submit(args);
+    const { hash, result$ } = await this.sdk.extrinsics.submitAndObserve(args);
+
+    const updateCache = async (next: ISubmittableResult): Promise<void> => {
+      await this.cache.set(hash, serializeResult(this.sdk.api, next));
+    };
+
+    result$.pipe(map(updateCache), catchError(updateCache));
+
+    await this.cache.set<ExtrinsicResultResponse>(hash, {
+      events: [],
+      isCompleted: false,
+      isError: false,
+      status: 'pending',
+    });
+
+    return { hash };
   }
 
   @Post('calculate-fee')
   async calculateFee(@Body() args: TxBuildBody): Promise<FeeResponse> {
     return this.sdk.extrinsics.getFee(args);
+  }
+
+  @Get('status')
+  async getStatus(
+    @Query() { hash }: ExtrinsicResultRequest,
+  ): Promise<ExtrinsicResultResponse> {
+    const result = await this.cache.get<ExtrinsicResultResponse>(hash);
+
+    if (result) return result;
+
+    throw new NotFoundException(
+      `No extrinsic with hash ${hash} found in cache`,
+    );
   }
 }
