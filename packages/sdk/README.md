@@ -1,17 +1,33 @@
-1. [Install](#Install)
-2. [Example create sdk](#example-create-sdk)
-3. [Example create account](#example-create-account)
-4. [Example create collection](#example-create-collection)
-5. [Example create token](#example-create-token)
-6. [Example transfer token](#example-transfer-token)
+<div align="center">
+    <img src="/doc/logo-white.svg" alt="Unique White Label">
+</div>
 
-## Install
+[![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org) [![uniquenetwork](https://img.shields.io/badge/unique-network-blue?style=flat-square)](https://unique.network/) ![Docker Automated build](https://img.shields.io/docker/cloud/automated/uniquenetwork/marketplace-frontend?style=flat-square) ![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-marketplace-frontend?style=flat-square) ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
+<!-- ![GitHub Release Date](https://img.shields.io/github/release-date/uniquenetwork/unique-marketplace-frontend?style=flat-square)
+![GitHub](https://img.shields.io/github/v/tag/uniquenetwork/unique-marketplace-frontend?style=flat-square) -->
+
+
+# Intro
+This document contains examples of main SDK operations.
+
+##  Table of Contents
+
+- [Deployment](#Deployment)
+- [Examples](#Examples)
+  - [SDK creation](#SDK-creation)
+  - [Account creation](#Account-creation)
+  - [Collection creation](#Collection-creation)
+  - [Token creation](#Token-creation)
+  - [Token transfer](#Token-transfern)
+
+## Deployment
 Install the package:
 ```
 npm i --save @unique-nft/sdk
 ```
+# Examples
 
-## Example create sdk
+## SDK creation
 ```ts
 import { SdkSigner } from "@unique-nft/sdk/types";
 import { createSigner } from "@unique-nft/sdk/sign";
@@ -34,7 +50,7 @@ export async function createSdk(seed: string): Promise<Sdk> {
 
 ```
 
-## Example create account
+## Account creation
 ```ts
 import { KeyringPair } from "@polkadot/keyring/types";
 import { Keyring } from "@polkadot/keyring";
@@ -45,8 +61,10 @@ export function createAccount(uri: string): KeyringPair {
 }
 ```
 
-## Example create collection
+## Collection creation
 <details>
+<summary>Collapse</summary>
+
 
 ```ts
 import { Sdk } from "@unique-nft/sdk";
@@ -120,7 +138,7 @@ export async function createCollection(sdk: Sdk, account: KeyringPair): Promise<
 
 </details>
 
-## Example create token
+## Token creation
 ```ts
 import { Sdk } from "@unique-nft/sdk";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -168,7 +186,7 @@ export async function createToken(sdk: Sdk, account: KeyringPair, collectionId: 
 }
 ```
 
-## Example transfer token
+## Token transfer
 ```ts
 import { Sdk } from "@unique-nft/sdk";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -212,5 +230,3 @@ export async function transferToken(
     })
 }
 ```
-
-
