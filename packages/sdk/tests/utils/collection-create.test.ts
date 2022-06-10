@@ -55,7 +55,7 @@ async function findCollection(
 ): Promise<CollectionInfo | null> {
   const collectionId = await getLastCollectionId(sdk);
   const collection = collectionId
-    ? await sdk.collection.get({ collectionId })
+    ? await sdk.collections.get({ collectionId })
     : null;
   if (collection && collection.name === name) return collection;
   if (tryCount < 10) {
@@ -71,7 +71,7 @@ export async function createCollection(
   collectionInitial?: TestCollectionInitial,
 ): Promise<CollectionInfo> {
   const collectionData = collectionInitial || defaultCollectionInitial;
-  const txPayload = await sdk.collection.create({
+  const txPayload = await sdk.collections.create({
     ...collectionData,
     address: account.address,
   });

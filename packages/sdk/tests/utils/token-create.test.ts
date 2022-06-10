@@ -15,7 +15,9 @@ async function findToken(
   tryCount = 0,
 ): Promise<TokenInfo | null> {
   const tokenId = await getLastTokenId(sdk, collectionId);
-  const token = tokenId ? await sdk.token.get({ collectionId, tokenId }) : null;
+  const token = tokenId
+    ? await sdk.tokens.get({ collectionId, tokenId })
+    : null;
   const constData = token?.properties?.constData as any;
   if (constData && constData.name === name) return token;
   if (tryCount < 10) {
@@ -36,7 +38,7 @@ export async function createToken(
     ipfsJson: 'aaa',
   };
 
-  const txPayload = await sdk.token.create({
+  const txPayload = await sdk.tokens.create({
     address: authorAccount.address,
     owner: ownerAccount?.address,
     collectionId,
