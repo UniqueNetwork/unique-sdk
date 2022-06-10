@@ -46,6 +46,8 @@ export function createAccount(uri: string): KeyringPair {
 ```
 
 ## Create collection
+<details>
+
 ```ts
 import { Sdk } from "@unique-nft/sdk";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -115,6 +117,8 @@ export async function createCollection(sdk: Sdk, account: KeyringPair): Promise<
     })
 }
 ```
+
+</details>
 
 ## Create token
 ```ts
