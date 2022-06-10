@@ -1,5 +1,7 @@
 <div align="center">
-    <img width="300px" src="../../doc/logo-white.svg" alt="Unique White Label">
+    <img width="400px" src="../../doc/logo-white.svg" alt="Unique White Label">
+<br/>
+<br/>
 
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
 [![uniquenetwork](https://img.shields.io/badge/unique-network-blue?style=flat-square)](https://unique.network/)
