@@ -1,30 +1,17 @@
 import { DynamicModule, Module, Global } from '@nestjs/common';
 import { Sdk } from '@unique-nft/sdk';
-import { ConfigService } from '@nestjs/config';
-import { sdkSecondaryProvider } from '../../sdk-secondary-provider';
+import { sdkProviderFactoryInstance } from "../../factory-sdk";
 
 @Global()
 @Module({})
 export class ModuleWithSecondarySdkProvider {
-  static secondary(options: { wsUrl: string }): DynamicModule {
+  static secondary(): DynamicModule {
     return {
       module: ModuleWithSecondarySdkProvider,
       providers: [
-        {
-          inject: [ConfigService],
-          provide: Sdk,
-          useFactory: async (configService: ConfigService) => {
-            const sdk = new Sdk({
-              chainWsUrl: options.wsUrl,
-              ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
-            });
-
-            await sdk.isReady;
-
-            return sdk;
-          },
-        },
-        sdkSecondaryProvider,
+        process.env.SECONDARY_CHAIN_WS_URL
+          ? sdkProviderFactoryInstance.create('secondaryChainWsUr')
+          : sdkProviderFactoryInstance.create('chainWsUrl'),
       ],
       exports: [Sdk],
     };

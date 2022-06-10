@@ -27,10 +27,12 @@ import { CommonModule } from './modules/common/common.module';
         module: UniqueModule,
         children: [CommonModule],
       },
-      {
+      ...process.env.SECONDARY_CHAIN_WS_URL
+      ? [{
         path: 'ksm',
         module: CommonModule,
-      },
+      }]
+      : [],
     ]),
   ],
   providers: [

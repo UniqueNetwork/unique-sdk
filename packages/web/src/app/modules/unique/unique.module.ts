@@ -7,7 +7,7 @@ import { ExtrinsicsController } from '../common/controllers/extrinsics.controlle
 import { BalanceController } from '../common/controllers/balance.controller';
 import { AccountController } from '../common/controllers/account.controller';
 import { QueryController } from '../common/controllers/query.controller';
-import { sdkProvider } from '../../sdk-provider';
+import { sdkProviderFactoryInstance } from '../../factory-sdk';
 
 @Module({
   imports: [CommonModule],
@@ -20,6 +20,6 @@ import { sdkProvider } from '../../sdk-provider';
     TokenController,
     CollectionController,
   ],
-  providers: [sdkProvider],
+  providers: [sdkProviderFactoryInstance.create('chainWsUrl')],
 })
 export class UniqueModule {}
