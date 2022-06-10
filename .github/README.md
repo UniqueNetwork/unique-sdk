@@ -35,9 +35,9 @@ To learn more read <a href="https://github.com/UniqueNetwork/unique-sdk/blob/mas
 <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/sdk">SDK package</a> contains npm package of SDK itself.
 
 ## Web
-As an alternative to the whole SDK you can use proxy http serviсe for SDK to implement server logic - <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web">HTTP API Service</a>.
-It is created to connect to blockchain using simple HTTP requests.
-In general this service provides following functions:
+As an alternative to the whole SDK, you can use proxy http serviсe for SDK to implement server logic - <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web">HTTP API Service</a>.
+It is created to interact with the blockchain using simple HTTP requests.
+In general, this service provides the following functions:
 
  1. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#build-unsigned-extrinsic">Building an unsigned extrinsic</a>
  2. <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web#sign-an-extrinsic">Extrinsic signing and verification using service</a> (These functions should be implemented on client for safety)
