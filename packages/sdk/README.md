@@ -34,7 +34,7 @@ import { Sdk } from "@unique-nft/sdk";
 
 export async function createSdk(): Promise<Sdk> {
   const options = {
-    chainWsUrl: 'wss://ws-rc.unique.network',
+    chainWsUrl: 'wss://quartz.unique.network',
     ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
   }
   const signerOptions = {
