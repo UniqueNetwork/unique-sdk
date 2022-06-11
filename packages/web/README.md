@@ -6,18 +6,18 @@
 
 # Intro
 
-Extrinsic is a request to change data in the blockchain.
+An _extrinsic_ is a request to change data in the blockchain.
 
 https://docs.substrate.io/v3/concepts/extrinsics/
 
 https://polkadot.js.org/docs/substrate/extrinsics/
 
-To make changes to the blockchain, it is necessary to form a request (extrinsic) with certain parameters, which consists of 3 parts:
-1) Blockchain section
-2) Method section
-3) Array of arguments
+To form such a request, the extrinsic needs to contain these three sections:
+1) A blockchain section
+2) A method section
+3) An array of arguments
 
-Once an extrinsic has been generated, it must be signed in order for the chain to complete the requested changes.
+Once generated, it must be signed prior to being submitted in order for the chain to complete the requested changes.
 
 
 ## Table of Contents
@@ -47,7 +47,7 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 - [How to configure – environment variables](#environment-variables)
 - [Where to try - Swagger](#swagger)
 ## Install
-Choose install approach: [Docker](#docker), [Source code](#git) or [Public endpoints](#public-endpoints)
+There are three install approaches provided: [Docker](#docker), [Source code](#git) or [Public endpoints](#public-endpoints)
 
 ### Docker
 
@@ -69,7 +69,7 @@ npm start
 
 ### Public endpoints
 
-You can use public endpoints for access Unique Web:
+Use the following public endpoints for Unique Web acces:
 
 #### Opal
 ```
