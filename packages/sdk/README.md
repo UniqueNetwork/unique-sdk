@@ -17,7 +17,7 @@
 # Intro
 SDK is a JavaScript/Typescript library that includes a set of convenient methods for interacting with the Unique Network blockchain without the need to reference the low-level blockchain API. These methods provide means to mint collections and tokens, manage collection and token properties, manage accounts etc. 
 
-It is in a pre-alpha state so expect the unexpected. We thus welcome any comments, suggestions regarding improvement and reports on issues experienced in its implementation.
+It is in it's pre-alpha stage of development so expect the unexpected. We thus welcome any comments, suggestions regarding improvement and reports on issues experienced in its implementation.
 
 #  Table of Contents
 
