@@ -16,10 +16,10 @@ This SDK may be used as an npm package or REST API.
 ## Table of Contents
 
 - [Getting started](#how-to-start)
-- [Packages](#Packages)
- 	- [SDK](#SDK)
-	- [Web](#Web)
-	- [Recipes](#Resipes)
+- [Packages](#packages)
+ 	- [SDK](#sdk)
+	- [Web](#web)
+	- [Recipes](#recipes)
 
 # How to start
 Add SDK to your JavaScript/TypeScript project with
@@ -29,7 +29,7 @@ or deploy your own SDK as HTTP REST Service with
 
     docker run uniquenetwork/web:latest
 You can also use <a href="../packages/web#public-endpoints">Public endpoints</a>.
-To learn more read <a href="../packages/web#sdk-deployment---getting-started-guide">SDK Deployment guide</a>:  <a href="https://github.com/UniqueNetwork/unique-sdk/blob/master/packages/web/README.md#docker">Docker</a>, <a href="../packages/web/README.md#git">Git</a>.
+To learn more read <a href="../packages/web#sdk-deployment---getting-started-guide">SDK Deployment guide</a>:  <a href="../packages/web/README.md#docker">Docker</a>, <a href="../packages/web/README.md#git">Git</a>.
 
 # Packages
 
