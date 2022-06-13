@@ -2,13 +2,9 @@ import { HexString } from '@polkadot/util/types';
 import {
   SignerPayloadJSON,
   SignerPayloadRaw,
+  ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
-import {
-  AnyObject,
-  CollectionInfo,
-  CollectionInfoBase,
-  TokenInfo,
-} from './unique-types';
+import { AnyObject, CollectionInfoBase } from './unique-types';
 import {
   SignTxArguments,
   SignTxResult,
@@ -34,7 +30,7 @@ export interface Balance {
   unit: string;
 }
 
-export type Fee = Balance
+export type Fee = Balance;
 
 export interface TransferBuildArguments {
   address: string;
@@ -83,38 +79,15 @@ export interface TransferTokenArguments extends TokenIdArguments {
   to: string;
 }
 
-export interface ISdkCollection {
-  get(args: CollectionIdArguments): Promise<CollectionInfo | null>;
-  create(collection: CreateCollectionArguments): Promise<UnsignedTxPayload>;
-  burn(args: BurnCollectionArguments): Promise<UnsignedTxPayload>;
-  transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload>;
-}
-
-export interface ISdkToken {
-  get(args: TokenIdArguments): Promise<TokenInfo | null>;
-  create(token: CreateTokenArguments): Promise<UnsignedTxPayload>;
-  burn(args: BurnTokenArguments): Promise<UnsignedTxPayload>;
-  transfer(args: TransferTokenArguments): Promise<UnsignedTxPayload>;
-}
-
-export interface ISdkBalance {
-  get(args: AddressArguments): Promise<Balance>;
-  transfer(buildArgs: TransferBuildArguments): Promise<UnsignedTxPayload>;
-}
-
-export interface ISdk {
-  extrinsics: ISdkExtrinsics;
-  balance: ISdkBalance;
-  collection: ISdkCollection;
-  token: ISdkToken;
-  chainProperties(): ChainProperties;
-}
-
 export interface UnsignedTxPayload {
   signerPayloadJSON: SignerPayloadJSON;
   signerPayloadRaw: SignerPayloadRaw;
   signerPayloadHex: HexString;
 }
+
+export type ExtrinsicResultCallback = (
+  result: ISubmittableResult,
+) => void | Promise<void>;
 
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload>;
@@ -122,7 +95,10 @@ export interface ISdkExtrinsics {
     args: SignTxArguments,
     signer: SdkSigner | undefined,
   ): Promise<SignTxResult>;
-  submit(args: SubmitTxArguments): Promise<SubmitResult>;
+  submit(
+    args: SubmitTxArguments,
+    callback?: ExtrinsicResultCallback,
+  ): Promise<SubmitResult>;
 }
 
 export interface SdkSigner {

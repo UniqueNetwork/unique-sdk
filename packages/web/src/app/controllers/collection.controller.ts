@@ -35,7 +35,7 @@ export class CollectionController {
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
-    const collection = await this.sdk.collection.get(args);
+    const collection = await this.sdk.collections.get(args);
 
     if (collection) return collection;
 
@@ -46,20 +46,20 @@ export class CollectionController {
   async createCollection(
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collection.create(args);
+    return this.sdk.collections.create(args);
   }
 
   @Delete()
   async burnCollection(
     @Body() args: BurnCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collection.burn(args);
+    return this.sdk.collections.burn(args);
   }
 
   @Patch('transfer')
   async transferCollection(
     @Body() args: TransferCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collection.transfer(args);
+    return this.sdk.collections.transfer(args);
   }
 }

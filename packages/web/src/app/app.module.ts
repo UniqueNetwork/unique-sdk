@@ -4,6 +4,7 @@ import {
   NestModule,
   RequestMethod,
   MiddlewareConsumer,
+  CacheModule,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 
@@ -24,7 +25,12 @@ import { IpfsModule } from './ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
 
 @Module({
-  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
+  imports: [
+    GlobalConfigModule,
+    SignerMiddleware,
+    IpfsModule.register(),
+    CacheModule.register(),
+  ],
   controllers: [
     ChainController,
     ExtrinsicsController,

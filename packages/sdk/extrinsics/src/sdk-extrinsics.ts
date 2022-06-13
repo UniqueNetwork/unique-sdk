@@ -1,11 +1,13 @@
+import { Subject } from 'rxjs';
 import { ExtrinsicEra, SignerPayload } from '@polkadot/types/interfaces';
-import { SignatureOptions } from '@polkadot/types/types/extrinsic';
-import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
+import {
+  ISubmittableResult,
+  SignatureOptions,
+} from '@polkadot/types/types/extrinsic';
 import { HexString } from '@polkadot/util/types';
 import { objectSpread } from '@polkadot/util';
 import { Sdk } from '@unique-nft/sdk';
 import {
-  BuildExtrinsicError,
   InvalidSignerError,
   SubmitExtrinsicError,
 } from '@unique-nft/sdk/errors';
@@ -19,12 +21,19 @@ import {
   SdkSigner,
   SignatureType,
   Fee,
+  ExtrinsicResultCallback,
+  ObservableSubmitResult,
 } from '@unique-nft/sdk/types';
 import { formatBalance } from '@unique-nft/sdk/utils';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
-} from './tx';
+} from './tx-utils';
+
+import {
+  buildUnsignedSubmittable,
+  buildSignedSubmittable,
+} from './submittable-utils';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   constructor(readonly sdk: Sdk) {}
@@ -69,7 +78,10 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       signedExtensions,
     };
 
-    const tx = this.buildSubmittable(buildArgs);
+    const { method, version } = buildUnsignedSubmittable(
+      this.sdk.api,
+      buildArgs,
+    );
 
     const signerPayload = this.sdk.api.registry.createTypeUnsafe<SignerPayload>(
       'SignerPayload',
@@ -77,8 +89,8 @@ export class SdkExtrinsics implements ISdkExtrinsics {
         objectSpread({}, signatureOptions, {
           address,
           blockNumber: header?.number || 0,
-          method: tx.method,
-          version: tx.version,
+          method,
+          version,
         }),
       ],
     );
@@ -87,23 +99,11 @@ export class SdkExtrinsics implements ISdkExtrinsics {
   }
 
   async getFee(buildArgs: TxBuildArguments): Promise<Fee> {
-    const submittable = this.buildSubmittable(buildArgs);
+    const submittable = buildUnsignedSubmittable(this.sdk.api, buildArgs);
 
     const { partialFee } = await submittable.paymentInfo(buildArgs.address);
 
     return formatBalance(this.sdk.api, partialFee);
-  }
-
-  private buildSubmittable(buildArgs: TxBuildArguments): SubmittableExtrinsic {
-    const { section, method, args } = buildArgs;
-
-    try {
-      return this.sdk.api.tx[section][method](...args);
-    } catch (error) {
-      const errorMessage =
-        error && error instanceof Error ? error.message : undefined;
-      throw new BuildExtrinsicError(errorMessage);
-    }
   }
 
   async sign(
@@ -132,29 +132,68 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       .toHex();
   }
 
-  async submit(args: SubmitTxArguments): Promise<SubmitResult> {
-    const { signerPayloadJSON, signature } = args;
-    const { method, version, address } = signerPayloadJSON;
-
-    verifyTxSignatureOrThrow(this.sdk.api, signerPayloadJSON, signature);
-
-    // todo 'Extrinsic' -> enum ExtrinsicTypes {} ?
-    const extrinsic = this.sdk.api.registry.createType('Extrinsic', {
-      method,
-      version,
-    });
-
-    const submittable = this.sdk.api.tx(extrinsic);
-
-    submittable.addSignature(address, signature, signerPayloadJSON);
-
+  async submit(
+    args: SubmitTxArguments,
+    callback?: ExtrinsicResultCallback,
+  ): Promise<SubmitResult> {
     try {
-      const hash = await submittable.send();
-      return { hash: hash.toHex() };
+      const submittable = buildSignedSubmittable(this.sdk.api, args);
+
+      if (!callback) {
+        const hash = await submittable.send();
+
+        return { hash: hash.toHex() };
+      }
+
+      const unsubscribe = await submittable.send((result) => {
+        if (result.isCompleted) unsubscribe();
+
+        callback(result);
+      });
+
+      return { hash: submittable.hash.toHex() };
     } catch (error) {
       const errorMessage =
         error && error instanceof Error ? error.message : undefined;
       throw new SubmitExtrinsicError(errorMessage);
     }
+  }
+
+  submitWaitCompleted(args: SubmitTxArguments): Promise<ISubmittableResult> {
+    return new Promise((resolve) => {
+      const callback = (result: ISubmittableResult) => {
+        if (result.isCompleted) resolve(result);
+      };
+
+      this.submit(args, callback).then(() => {});
+    });
+  }
+
+  async submitAndObserve(
+    args: SubmitTxArguments,
+  ): Promise<ObservableSubmitResult> {
+    const submittable = buildSignedSubmittable(this.sdk.api, args);
+
+    const resultSubject = new Subject<ISubmittableResult>();
+
+    const stopWatching = await submittable.send(
+      (nextTxResult: ISubmittableResult) => {
+        if (nextTxResult.isError || nextTxResult.dispatchError) {
+          resultSubject.error(nextTxResult);
+        } else {
+          resultSubject.next(nextTxResult);
+        }
+
+        if (nextTxResult.isCompleted) {
+          stopWatching();
+          resultSubject.complete();
+        }
+      },
+    );
+
+    const result$ = resultSubject.asObservable();
+    const hash = submittable.hash.toHex();
+
+    return { hash, result$ };
   }
 }

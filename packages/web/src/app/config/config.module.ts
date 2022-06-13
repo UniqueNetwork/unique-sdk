@@ -26,7 +26,7 @@ const loadConfig = (): Config => ({
   swagger: process.env.SWAGGER || 'swagger',
   ipfsGatewayUrl: process.env.IPFS_GATEWAY_URL,
   signer: {
-    seed: process.env.SIGNER_SEED || undefined,
+    seed: process.env.SIGNER_SEED,
   },
 
   ipfsUploadUrl: process.env.IPFS_UPLOAD_URL,

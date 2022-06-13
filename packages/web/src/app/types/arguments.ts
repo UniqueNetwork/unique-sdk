@@ -22,6 +22,8 @@ export class SubmitResultResponse implements SubmitResult {
   hash: HexString;
 }
 
+export class ExtrinsicResultRequest extends SubmitResultResponse {}
+
 export class SignTxResultResponse implements SignTxResult {
   @ApiProperty({ type: String })
   signature: HexString;
