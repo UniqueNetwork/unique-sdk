@@ -1,4 +1,4 @@
-# Heading
+# NFT trading for classic e-commerce
 
 ## Table of contents
 
@@ -7,12 +7,12 @@
   - [1.1 Creating a market’s substrate wallet](#11-creating-a-markets-substrate-wallet)
   - [1.2 Getting QTZ tokens](#12-getting-qtz-tokens)
   - [1.3 Creating a collection and NFTs](#13-creating-a-collection-and-nfts)
-[2. Selling preparation](#2-selling-preparation)
+- [2. Selling preparation](#2-selling-preparation)
   - [2.1 Connecting to the Unique SDK](#21-connecting-to-the-unique-sdk)
   - [2.2 Getting information about a collection, an NFT and it’s owner](#22-getting-information-about-a-collection-an-nft-and-its-owner)
   - [2.3 Getting the customer's substrate wallet address](#23-getting-the-buyers-substrate-wallet-address)
   - [2.4 Getting the wallet address QTZ balance](#24-getting-the-wallet-address-qtz-balance)
-[3. Sending an NFT to the customer](#3-sending-an-nft-to-the-buyer)
+- [3. Sending an NFT to the customer](#3-sending-an-nft-to-the-buyer)
 
 
 
