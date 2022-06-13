@@ -49,4 +49,4 @@ HTTP API Service also allows to upload images using IPFS, can be used with exist
 Use <a href="./packages/web#readme">service documentation</a> to learn its methods.
 
 ## Recipes
-<a href="./recipes">Here</a> you can find some useful hints or life hacks that will ease using of SDK.
+<a href="../recipes">Here</a> you can find some useful hints or life hacks that will ease using of SDK.
