@@ -41,7 +41,7 @@ As an alternative to the whole SDK, you can use proxy http serviсe for SDK to i
 It is created to interact with the blockchain using simple HTTP requests.
 In general, this service provides the following functions:
 
- 1. <a href="./packages/web#build-unsigned-extrinsic">Building an unsigned extrinsic</a>
+ 1. [Building an unsigned extrinsic](./packages/web#build-unsigned-extrinsic)
  2. <a href="./packages/web#sign-an-extrinsic">Extrinsic signing and verification using service</a> (These functions should be implemented on client for safety)
  3. <a href="./packages/web#Submit-extrinsic">Submitting an extrinsic</a>
 
