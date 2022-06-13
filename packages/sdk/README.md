@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="400px" src="../../doc/logo-white.svg" alt="Unique White Label">
+    <img width="400px" src="../../doc/logo-white.svg" alt="Unique Network">
 <br/>
 <br/>
 
