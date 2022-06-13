@@ -34,7 +34,7 @@ To learn more read <a href="../packages/web#sdk-deployment---getting-started-gui
 # Packages
 
 ## SDK
-<a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/sdk">SDK package</a> contains npm package of SDK itself.
+<a href="../packages/sdk">SDK package</a> contains npm package of SDK itself.
 
 ## Web
 As an alternative to the whole SDK, you can use proxy http serviсe for SDK to implement server logic - <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web">HTTP API Service</a>.
