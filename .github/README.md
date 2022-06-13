@@ -37,7 +37,7 @@ To learn more read <a href="../packages/web#sdk-deployment---getting-started-gui
 <a href="../packages/sdk">SDK package</a> contains npm package of SDK itself.
 
 ## Web
-As an alternative to the whole SDK, you can use proxy http serviсe for SDK to implement server logic - <a href="https://github.com/UniqueNetwork/unique-sdk/tree/master/packages/web">HTTP API Service</a>.
+As an alternative to the whole SDK, you can use proxy http serviсe for SDK to implement server logic - <a href="../packages/web">HTTP API Service</a>.
 It is created to interact with the blockchain using simple HTTP requests.
 In general, this service provides the following functions:
 
@@ -46,7 +46,7 @@ In general, this service provides the following functions:
  3. <a href="../packages/web#Submit-extrinsic">Submitting an extrinsic</a>
 
 HTTP API Service also allows to upload images using IPFS, can be used with existing public nodes or with your own private nodes.
-Use <a href="./packages/web#readme">service documentation</a> to learn its methods.
+Use <a href="../packages/web#readme">service documentation</a> to learn its methods.
 
 ## Recipes
 <a href="../recipes">Here</a> you can find some useful hints or life hacks that will ease using of SDK.
