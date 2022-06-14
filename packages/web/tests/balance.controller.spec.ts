@@ -73,7 +73,7 @@ describe(BalanceController.name, () => {
       expect(response.ok).toEqual(true);
 
       expect(response.body).toMatchObject({
-        amount: expect.any(String),
+        amount: expect.any(Number),
         formatted: expect.any(String),
       });
     });
@@ -89,7 +89,7 @@ describe(BalanceController.name, () => {
 
   describe('GET /api/balance/transfer', () => {
     it('ok', async () => {
-      const submitResponse = await transfer(0.001, alice, bob, '//Alice');
+      const submitResponse = await transfer(0.00001, bob, alice, '//Bob');
       expect(submitResponse.ok).toEqual(true);
       expect(submitResponse.body).toMatchObject({
         hash: expect.any(String),

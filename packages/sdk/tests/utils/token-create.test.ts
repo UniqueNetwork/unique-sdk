@@ -1,31 +1,8 @@
 import { KeyringPair } from '@polkadot/keyring/types';
-import {
-  delay,
-  getLastTokenId,
-  signWithAccount,
-} from '@unique-nft/sdk/tests/testing-utils';
+import { signWithAccount } from '@unique-nft/sdk/tests/testing-utils';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '@unique-nft/sdk';
 import { TokenInfo } from '@unique-nft/sdk/types';
-
-async function findToken(
-  sdk: Sdk,
-  collectionId: number,
-  name: string,
-  tryCount = 0,
-): Promise<TokenInfo | null> {
-  const tokenId = await getLastTokenId(sdk, collectionId);
-  const token = tokenId
-    ? await sdk.tokens.get({ collectionId, tokenId })
-    : null;
-  const constData = token?.properties?.constData as any;
-  if (constData && constData.name === name) return token;
-  if (tryCount < 10) {
-    await delay(3_000);
-    return findToken(sdk, collectionId, name, tryCount + 1);
-  }
-  return null;
-}
 
 export async function createToken(
   sdk: Sdk,
@@ -51,16 +28,22 @@ export async function createToken(
     txPayload.signerPayloadHex,
   );
 
-  await sdk.extrinsics.submit({
+  const submitResult = await sdk.extrinsics.submitWaitCompleted({
     signerPayloadJSON: txPayload.signerPayloadJSON,
     signature,
   });
-
-  const newToken: TokenInfo | null = await findToken(
-    sdk,
-    collectionId,
-    constData.name,
+  const tokenCreatedEvent = submitResult.events.find(
+    (event) => event.event.method === 'ItemCreated',
   );
+  if (!tokenCreatedEvent) {
+    throw new Error('Create token fail');
+  }
+  const tokenId = +tokenCreatedEvent.event.data[1];
+
+  const newToken: TokenInfo | null = await sdk.tokens.get({
+    collectionId,
+    tokenId,
+  });
 
   expect(newToken).toMatchObject({
     owner: normalizeAddress(

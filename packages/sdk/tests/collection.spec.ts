@@ -15,23 +15,23 @@ import { createToken } from './utils/token-create.test';
 describe('Collections and tokens', () => {
   let sdk: Sdk;
   let testAccounts: TestAccounts;
-  let accountFerdie: KeyringPair;
+  let accountBob: KeyringPair;
   let accountAlice: KeyringPair;
 
   beforeAll(async () => {
     sdk = await Sdk.create(getDefaultSdkOptions());
     testAccounts = await getKeyringPairs();
-    accountFerdie = testAccounts.ferdie;
+    accountBob = testAccounts.bob;
     accountAlice = testAccounts.alice;
   });
 
   it('create collection and token', async () => {
-    const collection = await createCollection(sdk, accountFerdie);
-    await createToken(sdk, collection.id, accountFerdie);
+    const collection = await createCollection(sdk, accountBob);
+    await createToken(sdk, collection.id, accountBob);
   }, 60_000);
   it('create collection and token to other account', async () => {
-    const collection = await createCollection(sdk, accountFerdie);
-    await createToken(sdk, collection.id, accountFerdie, accountAlice);
+    const collection = await createCollection(sdk, accountBob);
+    await createToken(sdk, collection.id, accountBob, accountAlice);
   }, 60_000);
 
   afterAll(async () => {
