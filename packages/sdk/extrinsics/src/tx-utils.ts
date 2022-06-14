@@ -57,10 +57,7 @@ export const verifyTxSignatureOrThrow = (
     const signerPayloadRaw = getSignerPayloadRaw(api, signerPayloadJSON);
     signerPayloadHex = getSignerPayloadHex(api, signerPayloadRaw);
   } catch (error) {
-    const errorMessage =
-      error && error instanceof Error ? error.message : undefined;
-
-    throw new BadPayloadError(errorMessage);
+    throw BadPayloadError.wrapError(error);
   }
 
   try {
@@ -72,9 +69,7 @@ export const verifyTxSignatureOrThrow = (
 
     if (verifyResult.isValid) return;
   } catch (error) {
-    const errorMessage =
-      error && error instanceof Error ? error.message : undefined;
-    throw new BadSignatureError(errorMessage);
+    throw BadSignatureError.wrapError(error);
   }
 
   throw new BadSignatureError();

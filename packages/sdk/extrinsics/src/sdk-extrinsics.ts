@@ -153,9 +153,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
       return { hash: submittable.hash.toHex() };
     } catch (error) {
-      const errorMessage =
-        error && error instanceof Error ? error.message : undefined;
-      throw new SubmitExtrinsicError(errorMessage);
+      throw SubmitExtrinsicError.wrapError(error);
     }
   }
 

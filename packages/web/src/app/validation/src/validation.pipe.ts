@@ -4,5 +4,5 @@ import { ValidationError } from '@unique-nft/sdk/errors';
 export const SdkValidationPipe = new ValidationPipe({
   transform: true,
   transformOptions: { enableImplicitConversion: true },
-  exceptionFactory: (errors) => new ValidationError(errors),
+  exceptionFactory: (errors) => ValidationError.wrapError(null, errors),
 });
