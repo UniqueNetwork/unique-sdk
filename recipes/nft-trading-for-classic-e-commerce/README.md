@@ -8,11 +8,11 @@ The purpose of this instruction is to show that selling NFTs can be made simple,
 
 In comparison to a standard on-line retail product or services purchase, the experience only differs in the one-time wallet creation step for a first-time buyer.
 
-<img src="./images/owner-flow.jpg" width="100%" />
+<img src="./images/client-flow.jpg" width="100%" />
 
 The market only needs to change the last step of the usual sales process: instead of sending a request for shipment from the warehouse, make only one transaction in the blockchain.
 
-<img src="./images/client-flow.jpg" width="100%" />
+<img src="./images/owner-flow.jpg" width="100%" />
 
 You will need to follow a few simple steps to join the NFT-world:
 
