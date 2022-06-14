@@ -1,4 +1,4 @@
-export * from './encode-token';
-export * from './decode-token';
-export * from './encode-collection';
-export * from './decode-collection';
+export { encodeToken } from './encode-token';
+export { decodeToken } from './decode-token';
+export { encodeCollection } from './encode-collection';
+export { decodeCollection } from './decode-collection';

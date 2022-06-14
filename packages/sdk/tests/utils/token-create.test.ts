@@ -13,7 +13,7 @@ export async function createToken(
   authorAccount: KeyringPair,
   ownerAccount?: KeyringPair,
 ): Promise<TokenInfo> {
-  const txPayload = await sdk.token.create({
+  const txPayload = await sdk.tokens.create({
     address: authorAccount.address,
     owner: ownerAccount?.address,
     collectionId,
@@ -33,7 +33,7 @@ export async function createToken(
 
   await delay(30_000);
 
-  const newToken: TokenInfo | null = await sdk.token.get({
+  const newToken: TokenInfo | null = await sdk.tokens.get({
     collectionId,
     tokenId,
   });

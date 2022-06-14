@@ -8,7 +8,6 @@ import {
   CollectionIdArguments,
   CollectionInfo,
   CreateCollectionArguments,
-  ISdkCollection,
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
 
@@ -20,7 +19,7 @@ interface Sdk {
   extrinsics: SdkExtrinsics;
 }
 
-export class SdkCollection implements ISdkCollection {
+export class SdkCollections {
   constructor(readonly sdk: Sdk) {}
 
   async get({

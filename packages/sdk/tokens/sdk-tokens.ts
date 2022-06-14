@@ -2,16 +2,12 @@ import '@unique-nft/types/augment-api';
 
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-import {
+import type {
   UnsignedTxPayload,
-  ISdkCollection,
   TokenIdArguments,
   TokenInfo,
-} from '@unique-nft/sdk/types';
-import type {
   BurnTokenArguments,
   CreateTokenArguments,
-  ISdkToken,
   TransferTokenArguments,
   SdkOptions,
 } from '@unique-nft/sdk/types';
@@ -19,22 +15,23 @@ import { Option } from '@polkadot/types-codec';
 import { PalletNonfungibleItemData } from '@unique-nft/types';
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
+import { SdkCollections } from './sdk-collections';
 
 interface Sdk {
   api: ApiPromise;
   extrinsics: SdkExtrinsics;
   options: SdkOptions;
-  collection: ISdkCollection;
+  collections: SdkCollections;
 }
 
-export class SdkToken implements ISdkToken {
+export class SdkTokens {
   constructor(readonly sdk: Sdk) {}
 
   async get({
     collectionId,
     tokenId,
   }: TokenIdArguments): Promise<TokenInfo | null> {
-    const collection = await this.sdk.collection.get({ collectionId });
+    const collection = await this.sdk.collections.get({ collectionId });
 
     if (!collection) return null;
 
@@ -51,7 +48,7 @@ export class SdkToken implements ISdkToken {
   async create(args: CreateTokenArguments): Promise<UnsignedTxPayload> {
     const { address, owner, collectionId, constData } = args;
 
-    const collection = await this.sdk.collection.get({ collectionId });
+    const collection = await this.sdk.collections.get({ collectionId });
 
     if (!collection) throw new Error(`no collection ${collectionId}`);
 

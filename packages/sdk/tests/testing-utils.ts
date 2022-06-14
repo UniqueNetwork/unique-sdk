@@ -7,7 +7,8 @@ import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
 import { Sdk } from '../src/lib/sdk';
 
 export const getDefaultSdkOptions = (): SdkOptions => ({
-  chainWsUrl: 'wss://ws-quartz-dev.unique.network',
+  // chainWsUrl: 'wss://ws-quartz-dev.unique.network',
+  chainWsUrl: 'wss://ws-quartz-dev.comecord.com',
   ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
 });
 

@@ -46,7 +46,7 @@ export async function createCollection(
   sdk: Sdk,
   account: KeyringPair,
 ): Promise<{ collectionId: number }> {
-  const txPayload = await sdk.collection.create({
+  const txPayload = await sdk.collections.create({
     ...collectionInitial,
     address: account.address,
     constOnChainSchema,
@@ -63,7 +63,7 @@ export async function createCollection(
 
   const collectionId = await getLastCollectionId(sdk);
 
-  const newCollection = await sdk.collection.get({ collectionId });
+  const newCollection = await sdk.collections.get({ collectionId });
 
   expect(newCollection).toMatchObject(collectionInitial);
 
