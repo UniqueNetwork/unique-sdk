@@ -64,7 +64,7 @@ describe('Sdk Queries', () => {
           method,
           args: [alice.address],
         });
-      }).rejects.toThrowError(new BuildQueryError({}, errorMessage));
+      }).rejects.toThrowError(new BuildQueryError(errorMessage));
     },
   );
 
