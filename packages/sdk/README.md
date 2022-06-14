@@ -15,8 +15,9 @@
 
 
 # Intro
-SDK is an JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance etc.
-At the moment the library is an pre-alpha version. We will be grateful for the feedback and ideas for improvement.
+SDK is a JavaScript/Typescript library that includes a set of convenient methods for interacting with the Unique Network blockchain without the need to reference the low-level blockchain API. These methods provide means to mint collections and tokens, manage collection and token properties, manage accounts etc. 
+
+It is in it's pre-alpha stage of development so expect the unexpected. We thus welcome any comments, suggestions regarding improvement and reports on issues experienced in its implementation.
 
 #  Table of Contents
 
