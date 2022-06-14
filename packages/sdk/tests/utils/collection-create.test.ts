@@ -7,12 +7,8 @@ import {
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
-import {
-  delay,
-  getLastCollectionId,
-  signWithAccount,
-} from '@unique-nft/sdk/tests/testing-utils';
 import { Sdk } from '@unique-nft/sdk';
+import { signWithAccount } from '../testing-utils';
 
 export const constOnChainSchema: INamespace = {
   nested: {
@@ -48,23 +44,6 @@ const defaultCollectionInitial: TestCollectionInitial = {
   },
 };
 
-async function findCollection(
-  sdk: Sdk,
-  name: string,
-  tryCount = 0,
-): Promise<CollectionInfo | null> {
-  const collectionId = await getLastCollectionId(sdk);
-  const collection = collectionId
-    ? await sdk.collections.get({ collectionId })
-    : null;
-  if (collection && collection.name === name) return collection;
-  if (tryCount < 10) {
-    await delay(3_000);
-    return findCollection(sdk, name, tryCount + 1);
-  }
-  return null;
-}
-
 export async function createCollection(
   sdk: Sdk,
   account: KeyringPair,
@@ -78,12 +57,19 @@ export async function createCollection(
 
   const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
 
-  await sdk.extrinsics.submit({
+  const submitResult = await sdk.extrinsics.submitWaitCompleted({
     signerPayloadJSON: txPayload.signerPayloadJSON,
     signature,
   });
+  const collectionCreatedEvent = submitResult.events.find(
+    (event) => event.event.method === 'CollectionCreated',
+  );
+  if (!collectionCreatedEvent) {
+    throw new Error('Create collection fail');
+  }
+  const collectionId = +collectionCreatedEvent.event.data[0];
 
-  const newCollection = await findCollection(sdk, collectionData.name);
+  const newCollection = await sdk.collections.get({ collectionId });
   expect(newCollection).toMatchObject(collectionData);
 
   if (!newCollection) {

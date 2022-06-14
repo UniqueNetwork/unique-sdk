@@ -16,6 +16,7 @@ import {
   TokenController,
   AccountController,
   QueryController,
+  InfoController,
 } from './controllers';
 import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
@@ -39,6 +40,7 @@ import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-typ
     TokenController,
     AccountController,
     QueryController,
+    InfoController,
   ],
   providers: [
     sdkProvider,

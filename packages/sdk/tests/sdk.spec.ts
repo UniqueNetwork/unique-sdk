@@ -1,11 +1,14 @@
-import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
 import { Sdk } from '../src/lib/sdk';
-import { getDefaultSdkOptions, signWithAccount } from './testing-utils';
+import {
+  getDefaultSdkOptions,
+  signWithAccount,
+  getKeyringPairs,
+} from './testing-utils';
 
 describe(Sdk.name, () => {
   let sdk: Sdk;
@@ -15,18 +18,19 @@ describe(Sdk.name, () => {
   beforeAll(async () => {
     sdk = await Sdk.create(getDefaultSdkOptions());
 
-    alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
-    bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
+    const testAccounts = await getKeyringPairs();
+    alice = testAccounts.alice;
+    bob = testAccounts.bob;
   });
 
   it('balances transfer build & submit test', async () => {
     expect(Sdk).toBeDefined();
 
     const txPayload = await sdk.extrinsics.build({
-      address: alice.address,
+      address: bob.address,
       section: 'balances',
       method: 'transfer',
-      args: [bob.address, 1000_000],
+      args: [alice.address, 1000_000],
     });
 
     expect(txPayload).toMatchObject({
@@ -37,7 +41,7 @@ describe(Sdk.name, () => {
 
     const { signerPayloadJSON, signerPayloadHex } = txPayload;
 
-    const signature = signWithAccount(sdk, alice, signerPayloadHex);
+    const signature = signWithAccount(sdk, bob, signerPayloadHex);
 
     const submitPromise = sdk.extrinsics.submit({
       signature,
