@@ -136,15 +136,15 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     args: SubmitTxArguments,
     callback?: ExtrinsicResultCallback,
   ): Promise<SubmitResult> {
+    const submittable = buildSignedSubmittable(this.sdk.api, args);
+
+    if (!callback) {
+      const hash = await submittable.send();
+
+      return { hash: hash.toHex() };
+    }
+
     try {
-      const submittable = buildSignedSubmittable(this.sdk.api, args);
-
-      if (!callback) {
-        const hash = await submittable.send();
-
-        return { hash: hash.toHex() };
-      }
-
       const unsubscribe = await submittable.send((result) => {
         if (result.isCompleted) unsubscribe();
 
@@ -176,24 +176,30 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     const resultSubject = new Subject<ISubmittableResult>();
 
-    const stopWatching = await submittable.send(
-      (nextTxResult: ISubmittableResult) => {
-        if (nextTxResult.isError || nextTxResult.dispatchError) {
-          resultSubject.error(nextTxResult);
-        } else {
-          resultSubject.next(nextTxResult);
-        }
+    try {
+      const stopWatching = await submittable.send(
+        (nextTxResult: ISubmittableResult) => {
+          if (nextTxResult.isError || nextTxResult.dispatchError) {
+            resultSubject.error(nextTxResult);
+          } else {
+            resultSubject.next(nextTxResult);
+          }
 
-        if (nextTxResult.isCompleted) {
-          stopWatching();
-          resultSubject.complete();
-        }
-      },
-    );
+          if (nextTxResult.isCompleted) {
+            stopWatching();
+            resultSubject.complete();
+          }
+        },
+      );
 
-    const result$ = resultSubject.asObservable();
-    const hash = submittable.hash.toHex();
+      const result$ = resultSubject.asObservable();
+      const hash = submittable.hash.toHex();
 
-    return { hash, result$ };
+      return { hash, result$ };
+    } catch (error) {
+      const errorMessage =
+        error && error instanceof Error ? error.message : undefined;
+      throw new SubmitExtrinsicError(errorMessage);
+    }
   }
 }

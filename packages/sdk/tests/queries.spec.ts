@@ -1,10 +1,9 @@
-import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
 import { BuildQueryError } from '@unique-nft/sdk/errors';
 import '@unique-nft/sdk/state-queries';
 
-import { getDefaultSdkOptions } from './testing-utils';
+import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
 
 describe('Sdk Queries', () => {
   let sdk: Sdk;
@@ -14,8 +13,9 @@ describe('Sdk Queries', () => {
   beforeAll(async () => {
     sdk = await Sdk.create(getDefaultSdkOptions());
 
-    alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
-    bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
+    const testAccounts = await getKeyringPairs();
+    alice = testAccounts.alice;
+    bob = testAccounts.bob;
   });
 
   it('derive.balances.all', async () => {
