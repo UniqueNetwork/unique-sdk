@@ -1,15 +1,15 @@
 <div align="center">
-    <img width="400px" src="../../doc/logo-white.svg" alt="Unique White Label">
+    <img width="400px" src="../../doc/logo-white.svg" alt="Unique Network">
 <br/>
 <br/>
 
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
 [![uniquenetwork](https://img.shields.io/badge/unique-network-blue?style=flat-square)](https://unique.network/)
-![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-marketplace-frontend?style=flat-square)
+![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-sdk?style=flat-square)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 ![GitHub Release Date](https://img.shields.io/github/release-date/uniquenetwork/unique-sdk?style=flat-square)
 ![GitHub](https://img.shields.io/github/v/tag/uniquenetwork/unique-sdk?style=flat-square)
-
+[![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 </div>
 
 
