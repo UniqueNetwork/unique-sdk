@@ -4,15 +4,33 @@ import {
   SignerPayloadRaw,
   ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
-import { AnyObject, CollectionInfoBase } from './unique-types';
+import { AnyObject } from './unique-types';
 import {
+  CollectionIdArguments,
   SignTxArguments,
   SignTxResult,
   SubmitResult,
   SubmitTxArguments,
   TxBuildArguments,
+  TxBuildOptions,
 } from './arguments';
 import { SignResult } from './polkadot-types';
+import { Sdk } from '@unique-nft/sdk';
+
+export interface SdkReadableMethod<A, R> {
+  (
+    this: Sdk,
+    args: A,
+  ): Promise<R>;
+}
+
+export interface SdkWritableMethod<A> {
+  (
+    this: Sdk,
+    args: A,
+    buildExtrinsicOptions?: TxBuildOptions,
+  ): Promise<UnsignedTxPayload>;
+}
 
 export interface ChainProperties {
   SS58Prefix: number;
@@ -38,19 +56,11 @@ export interface TransferBuildArguments {
   amount: number;
 }
 
-export interface CollectionIdArguments {
-  collectionId: number;
-}
-
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
 }
 
 export interface AddressArguments {
-  address: string;
-}
-
-export interface CreateCollectionArguments extends CollectionInfoBase {
   address: string;
 }
 

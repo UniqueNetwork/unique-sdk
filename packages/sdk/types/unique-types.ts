@@ -96,12 +96,6 @@ export interface TokenPropertyPermissions {
   tokenOwner?: boolean;
 }
 
-export interface CollectionInfo extends CollectionInfoBase {
-  id: number;
-  owner: string;
-  // todo tokensCount: number
-}
-
 export interface TokenProperties {
   constData?: AnyObject;
 }
