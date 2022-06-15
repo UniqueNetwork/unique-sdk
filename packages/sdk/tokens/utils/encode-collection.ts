@@ -14,6 +14,7 @@ import type {
   UpDataStructsCollectionPermissions,
 } from '@unique-nft/types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
+import { encodeCollectionFields } from './encode-collection-fields';
 
 type CollectionProperty = {
   key: CollectionPropertiesKeys;
@@ -29,7 +30,13 @@ const encodeCollectionProperties = (
       value: properties.schemaVersion,
     });
   }
-  if (properties.constOnChainSchema) {
+  if (properties.fields) {
+    const constOnChainSchema = encodeCollectionFields(properties.fields);
+    encodedProperties.push({
+      key: CollectionPropertiesKeys.constOnChainSchema,
+      value: JSON.stringify(constOnChainSchema),
+    });
+  } else if (properties.constOnChainSchema) {
     encodedProperties.push({
       key: CollectionPropertiesKeys.constOnChainSchema,
       value: JSON.stringify(properties.constOnChainSchema),

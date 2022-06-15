@@ -9,17 +9,16 @@ export interface CollectionFieldBase {
   required?: boolean;
 }
 
-export interface CollectionStringField extends CollectionFieldBase {
+export interface CollectionTextField extends CollectionFieldBase {
   type: CollectionFieldTypes.TEXT;
 }
 
 export interface CollectionSelectField extends CollectionFieldBase {
   type: CollectionFieldTypes.SELECT;
   items: string[];
-  multiSelect?: boolean;
+  multi?: boolean;
 }
 
-export type CollectionFields = (
-  | CollectionStringField
-  | CollectionSelectField
-)[];
+export type CollectionField = CollectionTextField | CollectionSelectField;
+
+export type CollectionFields = Array<CollectionField>;

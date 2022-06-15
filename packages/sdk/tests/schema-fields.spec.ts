@@ -1,6 +1,7 @@
 import { encodeCollectionFields } from '@unique-nft/sdk/tokens/utils/encode-collection-fields';
 import { CollectionFields, CollectionFieldTypes } from '@unique-nft/sdk/types';
-import { INamespace } from 'protobufjs';
+import { Root, INamespace } from 'protobufjs';
+import { decodeCollectionFields } from '@unique-nft/sdk/tokens/utils/decode-collection-fields';
 
 const fields: CollectionFields = [
   {
@@ -17,19 +18,19 @@ const fields: CollectionFields = [
     name: 'select_required',
     type: CollectionFieldTypes.SELECT,
     required: true,
-    items: ['select required 1', 'select required 2'],
+    items: ['{"en":"select required 1"}', '{"en":"select required 2"}'],
   },
   {
     name: 'select_optional',
     type: CollectionFieldTypes.SELECT,
     required: false,
-    items: ['select optional 1', 'select optional 2'],
+    items: ['{"en":"select optional 1"}', '{"en":"select optional 2"}'],
   },
   {
     name: 'mselect',
     type: CollectionFieldTypes.SELECT,
-    multiSelect: true,
-    items: ['multi-select 1', 'multi-select 2'],
+    multi: true,
+    items: ['{"en":"multi-select 1"}', '{"en":"multi-select 2"}'],
   },
 ];
 
@@ -102,8 +103,13 @@ export const constOnChainSchema: INamespace = {
 };
 
 describe('Collections fields', () => {
-  it('encode', () => {
+  it('encode fields', () => {
     const encoded = encodeCollectionFields(fields);
     expect(encoded).toMatchObject(constOnChainSchema);
+  });
+
+  it('decode schema', () => {
+    const decoded = decodeCollectionFields(constOnChainSchema);
+    expect(decoded).toMatchObject(fields);
   });
 });

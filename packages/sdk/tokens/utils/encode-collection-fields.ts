@@ -3,9 +3,9 @@ import {
   CollectionFieldTypes,
   CollectionSelectField,
 } from '@unique-nft/sdk/types';
-import { INamespace } from 'protobufjs';
+import { INamespace, IField, IEnum } from 'protobufjs';
 
-const encodeSelectField = (selectField: CollectionSelectField): object => {
+const encodeSelectField = (selectField: CollectionSelectField): IEnum => {
   const options: Record<string, string> = {};
 
   const values: Record<string, number> = {};
@@ -13,9 +13,7 @@ const encodeSelectField = (selectField: CollectionSelectField): object => {
   selectField.items.forEach((item, index) => {
     const name = `field${index + 1}`;
 
-    options[name] = JSON.stringify({
-      en: item,
-    });
+    options[name] = item;
 
     values[name] = index;
   });
@@ -31,7 +29,7 @@ export const encodeCollectionFields = (
 ): INamespace => {
   const protobufTypes: Record<string, object> = {};
 
-  const protobufFields: any = {};
+  const protobufFields: Record<string, IField> = {};
 
   collectionFields.forEach((field, index) => {
     const { type, name, required } = field;
@@ -51,7 +49,7 @@ export const encodeCollectionFields = (
       case CollectionFieldTypes.SELECT:
         selectField = field as CollectionSelectField;
 
-        if (selectField.multiSelect) {
+        if (selectField.multi) {
           protobufFields[name] = {
             id,
             rule: 'repeated',
