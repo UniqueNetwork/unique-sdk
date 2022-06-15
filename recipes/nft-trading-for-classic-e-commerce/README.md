@@ -180,7 +180,6 @@ Once the user’s wallet address becomes available (after initial creation), it 
 <details>
   <summary>via HTTP REST API</summary>
 
-#### Get collection data
 
   ```shell
     curl -X 'GET' \
@@ -197,11 +196,11 @@ Once the user’s wallet address becomes available (after initial creation), it 
   <summary>via @unique-nft/sdk </summary>
 
   ```javascript
-    import '@unique-nft/sdk/token';
+    import '@unique-nft/sdk/tokens';
     import { Sdk } from '@unique-nft/sdk';
     import { createSignerSync } from '@unique-nft/sdk/sign';
     
-    const sdk = Sdk.create({
+    const sdk = await Sdk.create({
       chainWsUrl: 'wss://quartz.unique.network',
       ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
       signer: createSignerSync({
@@ -213,7 +212,7 @@ Once the user’s wallet address becomes available (after initial creation), it 
     const to = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'; // Provide customer's address
     const collectionId = 1; // Provide the Collection ID
     const tokenId = 3456; // Provide the Token ID
-    const extrinsic = await sdk.tokens.get({
+    const extrinsic = await sdk.tokens.transfer({
       from,
       to,
       collectionId,
