@@ -42,7 +42,6 @@ const decodeField = (
   };
 };
 
-/* eslint-disable  @typescript-eslint/dot-notation */
 export const decodeCollectionFields = (
   constOnChainSchema: INamespace,
 ): CollectionFields => {
