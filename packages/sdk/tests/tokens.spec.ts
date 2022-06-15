@@ -16,7 +16,7 @@ describe('Sdk Tokens', () => {
 
   beforeAll(async () => {
     sdk = await createSdk({
-      seed: '//Alice',
+      seed: '//Bob',
     });
     testAccounts = await getKeyringPairs();
     alice = testAccounts.alice;
@@ -24,11 +24,11 @@ describe('Sdk Tokens', () => {
   });
 
   it('transfer', async () => {
-    const collection = await createCollection(sdk, alice);
-    const token = await createToken(sdk, collection.id, alice, bob);
+    const collection = await createCollection(sdk, bob);
+    const token = await createToken(sdk, collection.id, bob, alice);
     const unsignedPayload = await sdk.tokens.transfer({
-      from: alice.address,
-      to: bob.address,
+      from: bob.address,
+      to: alice.address,
       collectionId: collection.id,
       tokenId: token.id,
     });

@@ -10,12 +10,12 @@ import { createApp } from './utils.test';
 
 describe(ExtrinsicsController.name, () => {
   let app: INestApplication;
-  let alice: KeyringPair;
+  let bob: KeyringPair;
 
   beforeAll(async () => {
     app = await createApp();
 
-    alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
+    bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
   });
 
   describe('/extrinsic/build & /extrinsic/submit', () => {
@@ -25,23 +25,23 @@ describe(ExtrinsicsController.name, () => {
       const payloadResponse = await request(app.getHttpServer())
         .post(`/api/extrinsic/build`)
         .send({
-          address: alice.address,
+          address: bob.address,
           section: 'balances',
           method: 'transfer',
-          args: [alice.address, 100000000],
+          args: [bob.address, 100000000],
         });
 
       expect(payloadResponse.ok).toBe(true);
 
       const { signerPayloadJSON, signerPayloadHex } = payloadResponse.body;
 
-      const badSignature = u8aToHex(alice.sign('not_a_payload_hex'));
+      const badSignature = u8aToHex(bob.sign('not_a_payload_hex'));
 
       const badSubmit = await request(app.getHttpServer())
         .post(`/api/extrinsic/submit`)
         .send({
           signerPayloadJSON,
-          signatureType: alice.type,
+          signatureType: bob.type,
           signature: badSignature,
         });
 
@@ -50,7 +50,7 @@ describe(ExtrinsicsController.name, () => {
       expect(badSubmit.body.error.code).toEqual(ErrorCodes.BadSignature);
 
       const correctSignature = u8aToHex(
-        alice.sign(hexToU8a(signerPayloadHex), { withType: true }),
+        bob.sign(hexToU8a(signerPayloadHex), { withType: true }),
       );
 
       const correctSubmit = await request(app.getHttpServer())

@@ -71,7 +71,10 @@ describe('Web signers', () => {
 
     const signResponse = await request(app.getHttpServer())
       .post(`/api/extrinsic/sign`)
-      .set(headers)
+      .set({
+        'content-type': 'application/json',
+        ...headers,
+      })
       .send(buildResponse.body);
     expect(true).toEqual(signResponse.ok);
     const { signature } = signResponse.body;
@@ -129,10 +132,10 @@ describe('Web signers', () => {
     it('submit ok', async () => {
       const { ok, body } = await signAndSubmit(
         app,
-        alice.address,
         bob.address,
+        alice.address,
         {
-          Authorization: 'Seed //Alice',
+          Authorization: 'Seed //Bob',
         },
       );
       expect(true).toEqual(ok);
@@ -196,12 +199,13 @@ describe('Web signers', () => {
         const { ok, body } = await request(app.getHttpServer())
           .post(`/api/extrinsic/sign`)
           .set({
+            'content-type': 'application/json',
             Authorization: headValue,
           })
           .send();
         expect(false).toEqual(ok);
         expect(body.error.code).toEqual(ErrorCodes.Validation);
-        expect(body.error.message).toEqual('Invalid authorization header');
+        expect(body.error.message).toMatch('Invalid authorization header');
       },
     );
 

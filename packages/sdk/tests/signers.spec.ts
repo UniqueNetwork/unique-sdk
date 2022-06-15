@@ -1,4 +1,3 @@
-import { Keyring } from '@polkadot/keyring';
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
 import { BadSignatureError, InvalidSignerError } from '@unique-nft/sdk/errors';
@@ -12,7 +11,7 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 import { Sdk } from '../src/lib/sdk';
-import { getDefaultSdkOptions } from './testing-utils';
+import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
 
 describe('Sdk signers', () => {
   let alice: KeyringPair;
@@ -42,8 +41,10 @@ describe('Sdk signers', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady();
-    alice = new Keyring({ type: 'sr25519' }).addFromUri('//Alice');
-    bob = new Keyring({ type: 'sr25519' }).addFromUri('//Bob');
+
+    const testAccounts = await getKeyringPairs();
+    alice = testAccounts.alice;
+    bob = testAccounts.bob;
   });
 
   async function createSdk(signerOptions: SignerOptions): Promise<Sdk> {

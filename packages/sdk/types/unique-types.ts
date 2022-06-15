@@ -1,4 +1,5 @@
 import { INamespace } from 'protobufjs';
+import { CollectionFields } from './unique-fields';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
@@ -59,6 +60,7 @@ export interface CollectionProperties {
   schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
   variableOnChainSchema?: string | null;
   constOnChainSchema?: INamespace | null;
+  fields?: CollectionFields;
 }
 
 export interface CollectionInfoBase {
