@@ -2,12 +2,12 @@
 
 import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
-import { IsEnum, IsOptional } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from '@polkadot/types/types/extrinsic';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { SignatureType } from '@unique-nft/sdk/types';
 import {
   Account,
@@ -17,25 +17,41 @@ import {
 import { ValidMnemonic } from '../validation';
 
 export class GenerateAccountBody implements GenerateAccountArguments {
-  @IsOptional()
+  @ApiPropertyOptional({
+    example: 'qwerty',
+  })
   password?: string;
 
+  @ApiPropertyOptional({
+    enum: SignatureType,
+  })
   @IsEnum(SignatureType)
-  @IsOptional()
   pairType?: SignatureType;
 
-  @IsOptional()
+  @ApiPropertyOptional({
+    example: '',
+  })
   meta?: KeyringPair$Meta;
 }
 export class GetAccountQuery
   extends GenerateAccountBody
   implements GetAccountArguments
 {
+  @ApiProperty({
+    description: 'The mnemonic seed gives full access to your account',
+    example:
+      'little crouch armed put judge bamboo avoid fine actor soccer rebuild cluster',
+  })
   @ValidMnemonic()
   mnemonic: string;
 }
 
 export class AccountResponse implements Account {
+  @ApiProperty({
+    description: 'The mnemonic seed gives full access to your account',
+    example:
+      'little crouch armed put judge bamboo avoid fine actor soccer rebuild cluster',
+  })
   mnemonic: string;
 
   seed: HexString;
