@@ -61,15 +61,19 @@ export async function createCollection(
     signerPayloadJSON: txPayload.signerPayloadJSON,
     signature,
   });
-  const collectionCreatedEvent = submitResult.events.find(
-    (event) => event.event.method === 'CollectionCreated',
+
+  const collectionCreatedEvent = submitResult.findRecord(
+    'common',
+    'CollectionCreated',
   );
+
   if (!collectionCreatedEvent) {
     throw new Error('Create collection fail');
   }
   const collectionId = +collectionCreatedEvent.event.data[0];
 
   const newCollection = await sdk.collections.get({ collectionId });
+
   expect(newCollection).toMatchObject(collectionData);
 
   if (!newCollection) {

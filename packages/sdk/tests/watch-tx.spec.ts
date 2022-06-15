@@ -3,7 +3,7 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
-import { lastValueFrom } from 'rxjs';
+import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SubmitTxArguments } from '@unique-nft/sdk/types';
 import {
   getDefaultSdkOptions,
@@ -41,9 +41,7 @@ describe('watch TX', () => {
   it('watch extrinsic succeed', async () => {
     const signedTransfer = await getSignedTransfer(10);
 
-    const { result$ } = await sdk.extrinsics.submitAndObserve(signedTransfer);
-
-    const succeed = await lastValueFrom(result$);
+    const succeed = await sdk.extrinsics.submitWaitCompleted(signedTransfer);
 
     expect(succeed.status.type).toBe('InBlock');
     expect(succeed.dispatchError).toBeFalsy();
@@ -54,7 +52,9 @@ describe('watch TX', () => {
 
     const signedTransfer = await getSignedTransfer(balance.raw);
 
-    const failed = await sdk.extrinsics.submitWaitCompleted(signedTransfer);
+    const failed = await sdk.extrinsics
+      .submitWaitCompleted(signedTransfer)
+      .catch((e: ISubmittableResult) => e);
 
     expect(failed.status.type).toBe('InBlock');
     expect(failed.dispatchError).toBeTruthy();
