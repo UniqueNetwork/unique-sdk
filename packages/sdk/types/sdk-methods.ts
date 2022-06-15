@@ -4,6 +4,7 @@ import {
   SignerPayloadRaw,
   ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
+import { Sdk } from '@unique-nft/sdk';
 import { AnyObject } from './unique-types';
 import {
   CollectionIdArguments,
@@ -15,13 +16,9 @@ import {
   TxBuildOptions,
 } from './arguments';
 import { SignResult } from './polkadot-types';
-import { Sdk } from '@unique-nft/sdk';
 
 export interface SdkReadableMethod<A, R> {
-  (
-    this: Sdk,
-    args: A,
-  ): Promise<R>;
+  (this: Sdk, args: A): Promise<R>;
 }
 
 export interface SdkWritableMethod<A> {
