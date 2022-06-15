@@ -205,7 +205,7 @@ describe('Web signers', () => {
           .send();
         expect(false).toEqual(ok);
         expect(body.error.code).toEqual(ErrorCodes.Validation);
-        expect(body.error.message).toEqual('Invalid authorization header');
+        expect(body.error.message).toMatch('Invalid authorization header');
       },
     );
 

@@ -11,12 +11,12 @@ export function createSignerByHeader(authorization: string): SdkSigner {
   switch (type) {
     case 'Seed':
       if (!validateSeed(value)) {
-        throw new ValidationError({}, 'Invalid authorization header');
+        throw new ValidationError(`Invalid authorization header "${value}"`);
       }
       signerOptions = { seed: value };
       break;
     default:
-      throw new ValidationError({}, 'Invalid authorization header');
+      throw new ValidationError('Invalid authorization header');
   }
   return createSignerSync(signerOptions);
 }

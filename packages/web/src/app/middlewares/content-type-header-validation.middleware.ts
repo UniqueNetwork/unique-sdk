@@ -12,7 +12,7 @@ export class ContentTypeHeaderValidationMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const { 'content-type': contentType } = req.headers;
     if (!contentTypesReg.test(contentType)) {
-      throw new ValidationError({}, 'Invalid Content-type header');
+      throw new ValidationError(`Invalid Content-type header "${contentType}"`);
     }
 
     next();

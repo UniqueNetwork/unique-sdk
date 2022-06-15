@@ -16,15 +16,15 @@ export class SdkStateQueries {
     const { endpoint, module, method, args } = query;
 
     if (!(endpoint in this.sdk.api)) {
-      throw new BuildQueryError({ query }, `Invalid endpoint: "${endpoint}"`);
+      throw new BuildQueryError(`Invalid endpoint: "${endpoint}"`, { query });
     }
     // @ts-ignore
     if (!(module in this.sdk.api[endpoint])) {
-      throw new BuildQueryError({ query }, `Invalid module: "${module}"`);
+      throw new BuildQueryError(`Invalid module: "${module}"`, { query });
     }
     // @ts-ignore
     if (!(method in this.sdk.api[endpoint][module])) {
-      throw new BuildQueryError({ query }, `Invalid method: "${method}"`);
+      throw new BuildQueryError(`Invalid method: "${method}"`, { query });
     }
 
     let result;
@@ -32,9 +32,7 @@ export class SdkStateQueries {
       // @ts-ignore
       result = await this.sdk.api[endpoint][module][method](...args);
     } catch (error) {
-      const errorMessage =
-        error && error instanceof Error ? error.message : undefined;
-      throw new BuildQueryError({ query }, errorMessage);
+      throw BuildQueryError.wrapError(error, { query });
     }
     return serialize(result);
   }
