@@ -3,12 +3,12 @@ import {
   CollectionFields,
   CollectionFieldTypes,
 } from '@unique-nft/sdk/types';
-import { IField, IType, INamespace, AnyNestedObject } from 'protobufjs';
+import { Root, IField, Enum, INamespace } from 'protobufjs';
 
 const decodeField = (
   name: string,
   field: IField,
-  nested: { [k: string]: AnyNestedObject },
+  root: Root,
 ): CollectionField => {
   if (field.type === 'string') {
     return {
@@ -18,14 +18,20 @@ const decodeField = (
     };
   }
 
+  const item: Enum = root.lookupEnum(name);
+
   const items: string[] = [];
+  if (item && item.options) {
+    items.push(...Object.values(item.options));
+  }
 
-  if (name in nested) {
-    const options = nested[name].options || {};
-
-    Object.keys(options).forEach((key) => {
-      items.push(options[key]);
-    });
+  if (field.rule === 'repeated') {
+    return {
+      type: CollectionFieldTypes.SELECT,
+      name,
+      items,
+      multi: true,
+    };
   }
 
   return {
@@ -33,7 +39,6 @@ const decodeField = (
     name,
     items,
     required: field.rule === 'required',
-    multi: field.rule === 'repeated',
   };
 };
 
@@ -41,20 +46,13 @@ const decodeField = (
 export const decodeCollectionFields = (
   constOnChainSchema: INamespace,
 ): CollectionFields => {
-  const onChainMetaData: INamespace | undefined = constOnChainSchema.nested
-    ? constOnChainSchema.nested['onChainMetaData']
-    : undefined;
+  const root = Root.fromJSON(constOnChainSchema);
 
-  if (!onChainMetaData) return [];
-  if (!onChainMetaData.nested) return [];
+  const nftMetaType = root.lookupType('NFTMeta');
+  if (!nftMetaType) return [];
 
-  const NFTMeta = onChainMetaData.nested['NFTMeta'] as IType;
-  if (!NFTMeta) return [];
-
-  const { fields } = NFTMeta;
+  const { fields } = nftMetaType;
   if (!fields) return [];
 
-  return Object.keys(fields).map((key) =>
-    decodeField(key, fields[key], onChainMetaData.nested || {}),
-  );
+  return Object.keys(fields).map((key) => decodeField(key, fields[key], root));
 };
