@@ -1,6 +1,8 @@
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
 import {
+  CollectionFields,
+  CollectionFieldTypes,
   CollectionInfo,
   CreateCollectionArguments,
 } from '@unique-nft/sdk/types';
@@ -33,6 +35,19 @@ export const constOnChainSchema: INamespace = {
   },
 };
 
+const fields: CollectionFields = [
+  {
+    type: CollectionFieldTypes.TEXT,
+    name: 'ipfsJson',
+    required: true,
+  },
+  {
+    type: CollectionFieldTypes.TEXT,
+    name: 'name',
+    required: true,
+  },
+];
+
 export type TestCollectionInitial = Omit<CreateCollectionArguments, 'address'>;
 const defaultCollectionInitial: TestCollectionInitial = {
   name: `foo_${Math.floor(Math.random() * 1000)}`,
@@ -40,7 +55,7 @@ const defaultCollectionInitial: TestCollectionInitial = {
   tokenPrefix: 'BAZ',
   properties: {
     schemaVersion: 'Unique',
-    constOnChainSchema,
+    fields,
   },
 };
 
@@ -50,10 +65,11 @@ export async function createCollection(
   collectionInitial?: TestCollectionInitial,
 ): Promise<CollectionInfo> {
   const collectionData = collectionInitial || defaultCollectionInitial;
-  const txPayload = await sdk.collections.create({
+  const createData = {
     ...collectionData,
     address: account.address,
-  });
+  };
+  const txPayload = await sdk.collections.create(createData);
 
   const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
 
@@ -70,10 +86,11 @@ export async function createCollection(
   const collectionId = +collectionCreatedEvent.event.data[0];
 
   const newCollection = await sdk.collections.get({ collectionId });
-  expect(newCollection).toMatchObject(collectionData);
-
   if (!newCollection) {
     throw new Error('Create collection fail');
   }
+
+  expect(newCollection).toMatchObject(collectionData);
+
   return newCollection;
 }
