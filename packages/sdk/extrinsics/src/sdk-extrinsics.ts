@@ -20,7 +20,7 @@ import {
   Fee,
 } from '@unique-nft/sdk/types';
 import { formatBalance } from '@unique-nft/sdk/utils';
-import { Submitter } from '@unique-nft/sdk/extrinsics/src/submitter';
+import { Submitter } from './submitter';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,

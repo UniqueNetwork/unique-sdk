@@ -1,10 +1,10 @@
 import { ApiPromise } from '@polkadot/api';
 import { SubmitResult, SubmitTxArguments } from '@unique-nft/sdk/types';
-import { buildSignedSubmittable } from '@unique-nft/sdk/extrinsics/src/submittable-utils';
 import { Observable, EMPTY } from 'rxjs';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
+import { buildSignedSubmittable } from './submittable-utils';
 
 export class Submitter {
   constructor(readonly api: ApiPromise) {}
