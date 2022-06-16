@@ -69,7 +69,6 @@ There are several ways to create a collection with NFTs:
 
 - using <a href="https://minter-quartz.unique.network/" target="_blank">Unique Minter</a>
 - using <a href="https://github.com/UniqueNetwork/unique-sdk" target="_blank">Unique SDK</a>
-- using <a href="https://github.com/UniqueNetwork/nft-workshop" target="_blank">custom scripts</a>
 
 We recommend using a <a href="https://minter-quartz.unique.network/" target="_blank">Unique Minter</a>, since it has an intuitive interface that will allow you to create your first collections in a straightforward manner. You will have to set the:
 
