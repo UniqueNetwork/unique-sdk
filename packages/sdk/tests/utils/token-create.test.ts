@@ -32,9 +32,8 @@ export async function createToken(
     signerPayloadJSON: txPayload.signerPayloadJSON,
     signature,
   });
-  const tokenCreatedEvent = submitResult.events.find(
-    (event) => event.event.method === 'ItemCreated',
-  );
+  const tokenCreatedEvent = submitResult.findRecord('common', 'ItemCreated');
+
   if (!tokenCreatedEvent) {
     throw new Error('Create token fail');
   }

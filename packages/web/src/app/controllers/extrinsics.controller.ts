@@ -83,7 +83,7 @@ export class ExtrinsicsController {
 
   @Post('submit')
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
-    const { hash, result$ } = await this.sdk.extrinsics.submitAndObserve(args);
+    const { hash, result$ } = await this.sdk.extrinsics.submit(args, true);
 
     const updateCache = async (next: ISubmittableResult): Promise<void> => {
       await this.cache.set(hash, serializeResult(this.sdk.api, next));
