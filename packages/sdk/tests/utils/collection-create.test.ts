@@ -77,9 +77,12 @@ export async function createCollection(
     signerPayloadJSON: txPayload.signerPayloadJSON,
     signature,
   });
-  const collectionCreatedEvent = submitResult.events.find(
-    (event) => event.event.method === 'CollectionCreated',
+
+  const collectionCreatedEvent = submitResult.findRecord(
+    'common',
+    'CollectionCreated',
   );
+
   if (!collectionCreatedEvent) {
     throw new Error('Create collection fail');
   }

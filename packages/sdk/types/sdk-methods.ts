@@ -92,20 +92,20 @@ export interface UnsignedTxPayload {
   signerPayloadHex: HexString;
 }
 
-export type ExtrinsicResultCallback = (
-  result: ISubmittableResult,
-) => void | Promise<void>;
-
 export interface ISdkExtrinsics {
   build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload>;
+
   sign(
     args: SignTxArguments,
     signer: SdkSigner | undefined,
   ): Promise<SignTxResult>;
+
   submit(
     args: SubmitTxArguments,
-    callback?: ExtrinsicResultCallback,
+    isObservable?: boolean,
   ): Promise<SubmitResult>;
+
+  submitWaitCompleted(args: SubmitTxArguments): Promise<ISubmittableResult>;
 }
 
 export interface SdkSigner {

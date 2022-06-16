@@ -17,7 +17,7 @@ import {
 } from '@unique-nft/sdk/types';
 import { SignerPayloadJSONDto } from './signer-payload';
 
-export class SubmitResultResponse implements SubmitResult {
+export class SubmitResultResponse implements Omit<SubmitResult, 'result$'> {
   @ApiProperty({ type: String })
   hash: HexString;
 }
