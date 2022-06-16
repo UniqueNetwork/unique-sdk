@@ -1,8 +1,9 @@
 // eslint-disable-next-line max-classes-per-file
 import { INamespace } from 'protobufjs';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import {
   CollectionAccess,
+  CollectionFieldTypes,
   CollectionInfoBase,
   CollectionLimits,
   CollectionMode,
@@ -18,6 +19,11 @@ import {
 } from '@unique-nft/sdk/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
+import {
+  CollectionFieldDto,
+  CollectionSelectFieldDto,
+  CollectionTextFieldDto,
+} from './unique-fileds';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
@@ -75,6 +81,7 @@ export class CollectionPermissionsDto implements CollectionPermissions {
   nesting?: CollectionNesting | `${CollectionNesting}`;
 }
 
+@ApiExtraModels(CollectionTextFieldDto, CollectionSelectFieldDto)
 export class CollectionPropertiesDto implements CollectionProperties {
   @ApiProperty({
     required: false,
@@ -98,6 +105,31 @@ export class CollectionPropertiesDto implements CollectionProperties {
     required: false,
   })
   constOnChainSchema?: INamespace | null;
+
+  @ApiProperty({
+    type: 'array',
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(CollectionTextFieldDto) },
+        { $ref: getSchemaPath(CollectionSelectFieldDto) },
+      ],
+    },
+    required: false,
+    example: [
+      {
+        type: CollectionFieldTypes.TEXT,
+        name: 'name',
+        required: true,
+      },
+      {
+        type: CollectionFieldTypes.SELECT,
+        name: 'mode',
+        required: false,
+        items: ['mode A', 'mode B'],
+      },
+    ],
+  })
+  fields?: CollectionFieldDto[];
 }
 
 export class TokenPropertyPermissionsDto implements TokenPropertyPermissions {
