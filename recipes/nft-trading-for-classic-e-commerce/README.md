@@ -197,14 +197,16 @@ Once the user’s wallet address becomes available (after initial creation), it 
   ```javascript
     import '@unique-nft/sdk/tokens';
     import { Sdk } from '@unique-nft/sdk';
-    import { createSignerSync } from '@unique-nft/sdk/sign';
+    import { createSigner } from '@unique-nft/sdk/sign';
+
+    const signer = await createSigner({
+      seed: '//Alice', // Provide collection owner's seed phrase
+    });
     
     const sdk = await Sdk.create({
+      signer,
       chainWsUrl: 'wss://quartz.unique.network',
       ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
-      signer: createSignerSync({
-        seed: '//Alice', // Provide collection owner's seed phrase
-      }),
     });
 
     const from = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'; // Provide collection owner's address
