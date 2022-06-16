@@ -6,6 +6,15 @@ Creates collection, and as other [writable methods](#) can sign, submit this ext
 
 ## Arguments
 
-- ***name*** - _name of collection, string 124 length_
-- ***description*** - _description of collection, string 256 length_
+- **address** - The address of collection owner
+- **name** - Collection name (UTF-16 array, up to 64 characters)
+- **description** - Collection description (UTF-16, up to 256 characters)
+- **mode** - The collection type (Nft, Fungible, or ReFungible)
+- **tokenPrefix** - Token prefix (UTF-8, up to 16 bytes)
+- **sponsorship** - This field tells if sponsorship is enabled and what address is the current collection sponsor.
+- **limits** - Collection limits
+- **metaUpdatePermission** - Permission for update meta (ItemOwner, Admin, None)
+- **properties** - Collection properties
+- **permissions** - Collection permissions
+- **tokenPropertyPermissions** - Collection tokens permissions
 
