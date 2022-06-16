@@ -20,10 +20,10 @@ describe('Web Queries', () => {
     alice = new Keyring({ type: SignatureType.Sr25519 }).addFromUri('//Alice');
   });
 
-  async function executeQuery(data: object) {
+  async function executeQuery(data: { endpoint; module; method; args }) {
     const { ok } = await request(app.getHttpServer())
-      .post(`/api/query`)
-      .send(data);
+      .post(`/api/query/${data.endpoint}/${data.module}/${data.method}`)
+      .send({ args: data.args });
     expect(true).toEqual(ok);
   }
 
@@ -58,11 +58,8 @@ describe('Web Queries', () => {
       errorMessage: string,
     ) => {
       const { ok, body } = await request(app.getHttpServer())
-        .post(`/api/query`)
+        .post(`/api/query/${endpoint}/${module}/${method}`)
         .send({
-          endpoint,
-          module,
-          method,
           args: [],
         });
       expect(false).toEqual(ok);
@@ -76,11 +73,14 @@ describe('Web Queries', () => {
     { endpoint: 'derive', module: 'balances', method: 'all' },
     { endpoint: 'derive', module: null, method: 'all', args: [] },
     { endpoint: 'derive', module: 'balances', method: null, args: [] },
-  ])('validation fail - %j', async (data: object) => {
-    const { ok, body } = await request(app.getHttpServer())
-      .post(`/api/query`)
-      .send(data);
-    expect(false).toEqual(ok);
-    expect(body.error.code).toEqual(ErrorCodes.Validation);
-  });
+  ])(
+    'validation fail - %j',
+    async (data: { endpoint; module; method; args }) => {
+      const { ok, body } = await request(app.getHttpServer())
+        .post(`/api/query/${data.endpoint}/${data.module}/${data.method}`)
+        .send({ data: { args: data.args } });
+      expect(false).toEqual(ok);
+      expect(body.error.code).toEqual(ErrorCodes.Validation);
+    },
+  );
 });

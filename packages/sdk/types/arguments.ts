@@ -38,9 +38,14 @@ export interface TxBuildArguments {
   isImmortal?: boolean;
 }
 
-export interface ApiQueryArguments {
+export interface ApiQueryParams {
   endpoint: string;
   module: string;
   method: string;
+}
+
+export interface ApiQueryBody {
   args: Array<string | number | BigInt | Record<string, any>>;
 }
+
+export interface ApiQueryArguments extends ApiQueryParams, ApiQueryBody {}

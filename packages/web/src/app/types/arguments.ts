@@ -8,7 +8,8 @@ import {
   IsArray,
 } from 'class-validator';
 import {
-  ApiQueryArguments,
+  ApiQueryParams,
+  ApiQueryBody,
   SignatureType,
   SignTxResult,
   SubmitResult,
@@ -91,7 +92,7 @@ export class TxBuildBody implements TxBuildArguments {
   isImmortal?: boolean;
 }
 
-export class ApiQueryBody implements ApiQueryArguments {
+export class ApiRequestParams implements ApiQueryParams {
   @ApiProperty({
     type: String,
     example: 'derive',
@@ -101,18 +102,20 @@ export class ApiQueryBody implements ApiQueryArguments {
 
   @ApiProperty({
     type: String,
-    example: 'accounts',
+    example: 'balances',
   })
   @IsString()
   module: string;
 
   @ApiProperty({
     type: String,
-    example: 'accountId',
+    example: 'all',
   })
   @IsString()
   method: string;
+}
 
+export class ApiRequestBody implements ApiQueryBody {
   @ApiProperty({
     type: Array,
     example: '["yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm"]',

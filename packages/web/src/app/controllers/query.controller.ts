@@ -1,9 +1,16 @@
-import { Body, Controller, Post, UseFilters, UsePipes } from '@nestjs/common';
+import {
+  Param,
+  Body,
+  Controller,
+  Post,
+  UseFilters,
+  UsePipes,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { Sdk } from '@unique-nft/sdk';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { ApiQueryBody } from '../types/arguments';
+import { ApiRequestParams, ApiRequestBody } from '../types/arguments';
 import { SdkValidationPipe } from '../validation';
 
 @UsePipes(SdkValidationPipe)
@@ -13,8 +20,11 @@ import { SdkValidationPipe } from '../validation';
 export class QueryController {
   constructor(private readonly sdk: Sdk) {}
 
-  @Post()
-  async query(@Body() args: ApiQueryBody): Promise<any> {
-    return this.sdk.stateQueries.execute(args);
+  @Post('/:endpoint/:module/:method')
+  async query(
+    @Param() params: ApiRequestParams,
+    @Body() args: ApiRequestBody,
+  ): Promise<any> {
+    return this.sdk.stateQueries.execute({ ...params, ...args });
   }
 }
