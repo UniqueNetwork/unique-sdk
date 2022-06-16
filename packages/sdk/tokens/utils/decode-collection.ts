@@ -1,3 +1,4 @@
+import { INamespace } from 'protobufjs';
 import {
   bytesToJson,
   bytesToString,
@@ -30,6 +31,7 @@ import {
   TokenPropertiesPermissions,
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
+import { decodeCollectionFields } from './decode-collection-fields';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
@@ -69,6 +71,7 @@ export const decodeCollectionProperties = (
   properties: UpDataStructsProperty[],
 ): CollectionProperties => {
   const collectionProperties: CollectionProperties = {};
+  let constOnChainSchema: INamespace;
   properties.forEach((property) => {
     switch (property.key.toHuman()) {
       case CollectionPropertiesKeys.offchainSchema:
@@ -85,7 +88,10 @@ export const decodeCollectionProperties = (
         );
         break;
       case CollectionPropertiesKeys.constOnChainSchema:
-        collectionProperties.constOnChainSchema = bytesToJson(property.value);
+        constOnChainSchema = bytesToJson(property.value);
+        collectionProperties.constOnChainSchema = constOnChainSchema;
+        collectionProperties.fields =
+          decodeCollectionFields(constOnChainSchema);
         break;
       default:
         break;
