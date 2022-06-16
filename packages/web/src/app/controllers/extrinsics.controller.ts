@@ -3,7 +3,6 @@ import {
   Controller,
   Post,
   UseFilters,
-  Headers,
   UsePipes,
   Get,
   Query,
@@ -11,7 +10,6 @@ import {
   CACHE_MANAGER,
   NotFoundException,
 } from '@nestjs/common';
-import { map, catchError } from 'rxjs';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
@@ -91,7 +89,10 @@ export class ExtrinsicsController {
       await this.cache.set(hash, serializeResult(this.sdk.api, next));
     };
 
-    result$.pipe(map(updateCache), catchError(updateCache));
+    result$.subscribe({
+      next: updateCache,
+      error: updateCache,
+    });
 
     await this.cache.set<ExtrinsicResultResponse>(hash, {
       events: [],
