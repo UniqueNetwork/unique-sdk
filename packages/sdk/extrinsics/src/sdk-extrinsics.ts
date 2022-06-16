@@ -20,13 +20,13 @@ import {
   Fee,
 } from '@unique-nft/sdk/types';
 import { formatBalance } from '@unique-nft/sdk/utils';
+import { Submitter } from '@unique-nft/sdk/extrinsics/src/submitter';
 import {
   signerPayloadToUnsignedTxPayload,
   verifyTxSignatureOrThrow,
 } from './tx-utils';
 
 import { buildUnsignedSubmittable } from './submittable-utils';
-import { Submitter } from '@unique-nft/sdk/extrinsics/src/submitter';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   private submitter: Submitter;

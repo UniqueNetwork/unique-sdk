@@ -1,7 +1,7 @@
 import { ApiPromise } from '@polkadot/api';
 import { SubmitResult, SubmitTxArguments } from '@unique-nft/sdk/types';
 import { buildSignedSubmittable } from '@unique-nft/sdk/extrinsics/src/submittable-utils';
-import { Observable, Subject, EMPTY } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
@@ -24,7 +24,7 @@ export class Submitter {
         return { hash, result$: EMPTY };
       }
 
-      const result$ = await this.buildObservable(submittable);
+      const result$ = Submitter.buildObservable(submittable);
 
       return { hash, result$ };
     } catch (error) {
@@ -32,28 +32,26 @@ export class Submitter {
     }
   }
 
-  private async buildObservable(
+  private static buildObservable(
     submittable: SubmittableExtrinsic,
-  ): Promise<Observable<ISubmittableResult>> {
-    const resultSubject = new Subject<ISubmittableResult>();
+  ): Observable<ISubmittableResult> {
+    return new Observable<ISubmittableResult>((subscriber) => {
+      const stopWatching = submittable.send(
+        (nextTxResult: ISubmittableResult) => {
+          if (nextTxResult.isError || nextTxResult.dispatchError) {
+            subscriber.error(nextTxResult);
+          } else {
+            subscriber.next(nextTxResult);
+          }
 
-    const stopWatching = await submittable.send(
-      (nextTxResult: ISubmittableResult) => {
-        if (nextTxResult.isError || nextTxResult.dispatchError) {
-          resultSubject.error(nextTxResult);
-        } else {
-          resultSubject.next(nextTxResult);
-        }
+          subscriber.next(nextTxResult);
 
-        resultSubject.next(nextTxResult);
-
-        if (nextTxResult.isCompleted) {
-          stopWatching();
-          resultSubject.complete();
-        }
-      },
-    );
-
-    return resultSubject.asObservable();
+          if (nextTxResult.isCompleted) {
+            stopWatching.then((fn) => fn());
+            subscriber.complete();
+          }
+        },
+      );
+    });
   }
 }
