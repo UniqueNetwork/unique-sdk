@@ -6,7 +6,7 @@ import {
   UseFilters,
   UsePipes,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { Sdk } from '@unique-nft/sdk';
 import { SdkExceptionsFilter } from '../utils/exception-filter';
@@ -21,6 +21,14 @@ export class QueryController {
   constructor(private readonly sdk: Sdk) {}
 
   @Post('/:endpoint/:module/:method')
+  @ApiOperation({
+    summary: 'Direct call to any Polkadot method',
+    description: `For call Polkadot method <a href="https://polkadot.js.org/docs/substrate/storage/#number-u32">The current block number being processed</a>
+\t<ul><li><code>number(): u32<FrameSystemPhase></code></li>
+\t<li><code>interface: api.query.system.number</code></li></ul>
+select the appropriate value from the interface <code>api.&lt;endpoint&gt;.&lt;module&gt;.&lt;method&gt;</code>
+and pass the parameters to the method in the args list.`,
+  })
   async query(
     @Param() params: ApiRequestParams,
     @Body() args: ApiRequestBody,
