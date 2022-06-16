@@ -1,6 +1,6 @@
 import { ApiPromise } from '@polkadot/api';
 import { SubmitResult, SubmitTxArguments } from '@unique-nft/sdk/types';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, EMPTY, TeardownLogic } from 'rxjs';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
@@ -35,7 +35,7 @@ export class Submitter {
   private static buildObservable(
     submittable: SubmittableExtrinsic,
   ): Observable<ISubmittableResult> {
-    return new Observable<ISubmittableResult>((subscriber) => {
+    return new Observable<ISubmittableResult>((subscriber): TeardownLogic => {
       const stopWatching = submittable.send(
         (nextTxResult: ISubmittableResult) => {
           if (nextTxResult.isError || nextTxResult.dispatchError) {
@@ -47,11 +47,12 @@ export class Submitter {
           subscriber.next(nextTxResult);
 
           if (nextTxResult.isCompleted) {
-            stopWatching.then((fn) => fn());
             subscriber.complete();
           }
         },
       );
+
+      return () => stopWatching.then();
     });
   }
 }
