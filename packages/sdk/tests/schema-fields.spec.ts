@@ -1,32 +1,38 @@
 import { encodeCollectionFields } from '@unique-nft/sdk/tokens/utils/encode-collection-fields';
 import { CollectionFields, CollectionFieldTypes } from '@unique-nft/sdk/types';
-import { Root, INamespace } from 'protobufjs';
+import { INamespace } from 'protobufjs';
 import { decodeCollectionFields } from '@unique-nft/sdk/tokens/utils/decode-collection-fields';
+import { ValidationError } from '@unique-nft/sdk/errors';
 
 const fields: CollectionFields = [
   {
+    id: 1,
     name: 'text_required',
     type: CollectionFieldTypes.TEXT,
     required: true,
   },
   {
+    id: 2,
     name: 'text_optional',
     type: CollectionFieldTypes.TEXT,
     required: false,
   },
   {
+    id: 3,
     name: 'select_required',
     type: CollectionFieldTypes.SELECT,
     required: true,
     items: ['{"en":"select required 1"}', '{"en":"select required 2"}'],
   },
   {
+    id: 4,
     name: 'select_optional',
     type: CollectionFieldTypes.SELECT,
     required: false,
     items: ['{"en":"select optional 1"}', '{"en":"select optional 2"}'],
   },
   {
+    id: 5,
     name: 'mselect',
     type: CollectionFieldTypes.SELECT,
     multi: true,
@@ -111,5 +117,43 @@ describe('Collections fields', () => {
   it('decode schema', () => {
     const decoded = decodeCollectionFields(constOnChainSchema);
     expect(decoded).toMatchObject(fields);
+  });
+
+  it('validation, unique id', () => {
+    expect(() => {
+      encodeCollectionFields([
+        {
+          id: 1,
+          name: 'a',
+          type: CollectionFieldTypes.TEXT,
+        },
+        {
+          id: 1,
+          name: 'b',
+          type: CollectionFieldTypes.TEXT,
+        },
+      ]);
+    }).toThrow(
+      new ValidationError('The "id" property in fields list must be unique'),
+    );
+  });
+
+  it('validation, unique name', () => {
+    expect(() => {
+      encodeCollectionFields([
+        {
+          id: 1,
+          name: 'a',
+          type: CollectionFieldTypes.TEXT,
+        },
+        {
+          id: 2,
+          name: 'a',
+          type: CollectionFieldTypes.TEXT,
+        },
+      ]);
+    }).toThrow(
+      new ValidationError('The "name" property in fields list must be unique'),
+    );
   });
 });

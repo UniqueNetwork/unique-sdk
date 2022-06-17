@@ -9,6 +9,9 @@ import {
 
 export class CollectionFieldBaseDto implements CollectionFieldBase {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   name: string;
 
   @ApiProperty({ enum: CollectionFieldTypes })
