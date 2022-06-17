@@ -16,7 +16,6 @@ const fields: CollectionFields = [
     id: 2,
     name: 'text_optional',
     type: CollectionFieldTypes.TEXT,
-    required: false,
   },
   {
     id: 3,
@@ -29,7 +28,6 @@ const fields: CollectionFields = [
     id: 4,
     name: 'select_optional',
     type: CollectionFieldTypes.SELECT,
-    required: false,
     items: ['{"en":"select optional 1"}', '{"en":"select optional 2"}'],
   },
   {

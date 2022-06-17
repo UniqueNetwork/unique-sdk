@@ -1,5 +1,6 @@
 import { Root, Type, IField, INamespace } from 'protobufjs';
 import { ValidationError } from '@unique-nft/sdk/errors';
+import * as console from 'console';
 
 export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
   let root: Root;
@@ -32,7 +33,11 @@ export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
     idsContainer[id] = true;
 
     if (field.type === 'string') {
-      if (field.rule !== 'required' && field.rule !== 'optional') {
+      if (
+        field.rule &&
+        field.rule !== 'required' &&
+        field.rule !== 'optional'
+      ) {
         throw new ValidationError(`Invalid rule in string field`, { field });
       }
     } else {
