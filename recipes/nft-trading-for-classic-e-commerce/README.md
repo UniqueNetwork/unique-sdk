@@ -69,7 +69,6 @@ There are several ways to create a collection with NFTs:
 
 - using <a href="https://minter-quartz.unique.network/" target="_blank">Unique Minter</a>
 - using <a href="https://github.com/UniqueNetwork/unique-sdk" target="_blank">Unique SDK</a>
-- using <a href="https://github.com/UniqueNetwork/nft-workshop" target="_blank">custom scripts</a>
 
 We recommend using a <a href="https://minter-quartz.unique.network/" target="_blank">Unique Minter</a>, since it has an intuitive interface that will allow you to create your first collections in a straightforward manner. You will have to set the:
 
@@ -180,7 +179,6 @@ Once the user’s wallet address becomes available (after initial creation), it 
 <details>
   <summary>via HTTP REST API</summary>
 
-#### Get collection data
 
   ```shell
     curl -X 'GET' \
@@ -197,23 +195,25 @@ Once the user’s wallet address becomes available (after initial creation), it 
   <summary>via @unique-nft/sdk </summary>
 
   ```javascript
-    import '@unique-nft/sdk/token';
+    import '@unique-nft/sdk/tokens';
     import { Sdk } from '@unique-nft/sdk';
-    import { createSignerSync } from '@unique-nft/sdk/sign';
+    import { createSigner } from '@unique-nft/sdk/sign';
+
+    const signer = await createSigner({
+      seed: '//Alice', // Provide collection owner's seed phrase
+    });
     
-    const sdk = Sdk.create({
+    const sdk = await Sdk.create({
+      signer,
       chainWsUrl: 'wss://quartz.unique.network',
       ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
-      signer: createSignerSync({
-        seed: '//Alice', // Provide collection owner's seed phrase
-      }),
     });
 
     const from = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'; // Provide collection owner's address
     const to = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'; // Provide customer's address
     const collectionId = 1; // Provide the Collection ID
     const tokenId = 3456; // Provide the Token ID
-    const extrinsic = await sdk.tokens.get({
+    const extrinsic = await sdk.tokens.transfer({
       from,
       to,
       collectionId,

@@ -8,6 +8,7 @@ import { SignatureType, SignResult } from './polkadot-types';
 
 export interface SubmitResult {
   hash: HexString;
+  result$: Observable<ISubmittableResult>;
 }
 
 export interface ObservableSubmitResult {

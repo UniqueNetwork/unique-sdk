@@ -30,7 +30,9 @@ import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-typ
     GlobalConfigModule,
     SignerMiddleware,
     IpfsModule.register(),
-    CacheModule.register(),
+    CacheModule.register({
+      ttl: 600,
+    }),
   ],
   controllers: [
     ChainController,
