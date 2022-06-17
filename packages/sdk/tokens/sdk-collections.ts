@@ -8,7 +8,10 @@ import {
 
 import { Sdk } from '@unique-nft/sdk';
 import { collectionById } from './methods/collection-by-id/method';
-import { createCollectionEx } from './methods/create-collection-ex/method';
+import {
+  createCollectionEx,
+  createCollectionEx2,
+} from './methods/create-collection-ex/method';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {}
@@ -16,6 +19,8 @@ export class SdkCollections {
   get = collectionById.bind(this.sdk);
 
   create = createCollectionEx.bind(this.sdk);
+
+  create2 = createCollectionEx2.bind(this.sdk);
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({

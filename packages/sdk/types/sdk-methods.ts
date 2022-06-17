@@ -5,6 +5,7 @@ import {
   ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
 import { Sdk } from '@unique-nft/sdk';
+import { Observable } from 'rxjs';
 import { AnyObject } from './unique-types';
 import {
   CollectionIdArguments,
@@ -27,6 +28,51 @@ export interface SdkWritableMethod<A> {
     args: A,
     buildExtrinsicOptions?: TxBuildOptions,
   ): Promise<UnsignedTxPayload>;
+}
+
+export enum MutationCallMode {
+  Build = 'Build',
+  Sign = 'Sign',
+  Submit = 'Submit',
+  Watch = 'Watch',
+  WaitCompleted = 'WaitCompleted',
+}
+
+export type SubmittableResultWithParsed<T> = ISubmittableResult & {
+  parsed?: T;
+};
+
+export interface SdkMutationMethod<A, R> {
+  (
+    this: Sdk,
+    args: A,
+    callMode: MutationCallMode.Build,
+  ): Promise<UnsignedTxPayload>;
+
+  (
+    this: Sdk,
+    args: A,
+    callMode: MutationCallMode.Sign,
+  ): Promise<SubmitTxArguments>;
+
+  (this: Sdk, args: A, callMode: MutationCallMode.Submit): Promise<
+    Omit<SubmitResult, 'result$'>
+  >;
+
+  (this: Sdk, args: A, callMode: MutationCallMode.Watch): Promise<
+    Observable<SubmittableResultWithParsed<R>>
+  >;
+
+  (this: Sdk, args: A, callMode: MutationCallMode.WaitCompleted): Promise<
+    SubmittableResultWithParsed<R>
+  >;
+}
+
+export interface SdkMutationMethodBuilder<A, R> {
+  (
+    transformArgs: (args: A) => UnsignedTxPayload,
+    transformResult: (result: ISubmittableResult) => R,
+  ): SdkMutationMethod<A, R>;
 }
 
 export interface ChainProperties {
