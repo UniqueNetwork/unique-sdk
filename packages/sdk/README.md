@@ -26,6 +26,9 @@ At the moment the library is an pre-alpha version. We will be grateful for the f
   - [Collection creation](#Collection-creation)
   - [Token creation](#Token-creation)
   - [Token transfer](#Token-transfern)
+- [Design](#design)
+  - [Modules](#modules)
+  - [Mutation and Query method](#mutation-and-query-methods)
 
 # Installation
 Install the package:
@@ -220,4 +223,84 @@ export async function transferToken(
         sdk.extrinsics.submit(submitTxArgs, resultCallback);
     })
 }
+```
+
+# Design
+
+СДК спроектирован вокруг полькадот апи-промис,
+расширяет его удобными методами для работы с сетью Юник (опал, кварц).
+Тем не менее СДК может быть подключен к любой сети на фреймворке субстрат и
+основные модули (эксринсик, баланс, квери) так же могут быть использованы.
+
+
+## Modules
+СДК реализовывает только подключение к блокчейн-сети,
+а модули расширяют его возможности. Модули реализованы как секондари-ендпоинты
+НПМ-пакета, это позвляет гибко управлять зависимостями, не включать ненужные модули
+в сборку бандла приложения, расширять СДК собственными модулями.
+
+```typescript
+import { Sdk } from "@unique-nft/sdk";
+
+// ... 
+
+import '@unique-nft/sdk/extrinsics'; // Augment SDK with the `extrinsic` property
+
+```
+
+Сейчас у нас есть 4 освновных модуля
+
+- [Extrinsics](./extrinsics) - собирает, подписывает эксринсики
+- [State Queries](./state-queries) - формирует запросы к чейну
+- [Sign](./sign) - работа с аккаунтами
+- [Balance](./balance) - работа с балансами нативных токенов
+- [Tokens](./tokens) - работает с NFT, RFT Unique-сетей (опал, кварц, юник)
+
+Модули могут быть зависимы друг от друга. Так, например, модуль баланса зависит
+от модулуля экстринсик, потому что формирует эксринсики трансфера и сабмитит их в чейн.
+
+
+## Mutation and Query methods
+
+Мы разделили все методы СДК на два типа
+1) [Query](#query-method) методы для чтения стораджей сети
+(например баланс, или свойства токена)
+
+```typescript
+const collectionId = 1;
+const tokenId = 3456;
+const collection = await sdk.collections.get({ collectionId, tokenId });
+```
+2) [Mutation](#mutation-method) методы для обновления состояния блокчейна
+```typescript
+const args = {
+  tokenId,
+  collectionId,
+  from: addressFrom,
+  to: addressTo,
+}
+const unsignedExtrinsic = await sdk.tokens.transfer(args);
+```
+
+### Query method
+
+
+### Mutation method
+По умолчанию они возвращают неподписанный экстринсик.
+Чтобы применить это изменение необходимо подписать его
+
+```typescript
+import { createSigner } from "@unique-nft/sdk/sign";
+const signer: SdkSigner = await createSigner(signerOptions);
+const unsignedExtrinsic = await sdk.tokens.transfer(args);
+const {signature, signatureType} = await signer.sign(unsignedExtrinsic);
+```
+
+И уже отправить в чейн экстринсик и подпись к нему
+```typescript
+const hash = await sdk.extrinsics.submit(
+  signature,
+  signatureType,
+  ... unsignedExtrinsic,
+);
 ```
