@@ -18,23 +18,21 @@
 SDK is an JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance etc.
 At the moment the library is an pre-alpha version. We will be grateful for the feedback and ideas for improvement.
 
+___
 #  Table of Contents
 
 - [Installation](#Installation)
-- [Initialize SDK](#Initialize-SDK)
-- [Usage examples](#Usage-examples)
-  - [Collection creation](#Collection-creation)
-  - [Token creation](#Token-creation)
-  - [Token transfer](#Token-transfern)
+- [Initialize](#Initialize-SDK)
 - [Design](#design)
   - [Modules](#modules)
   - [Mutation and Query method](#mutation-and-query-methods)
 
+___
 # Installation
 
 ### npm
 ```shell
-npm i --save @unique-nft/sdk
+npm install @unique-nft/sdk
 ```
 
 ### yarn
@@ -49,8 +47,9 @@ cd unique-sdk
 npm install
 npm run build:sdk
 ```
-
+___
 # Initialize SDK
+
 ```typescript
 import { createSigner } from "@unique-nft/sdk/sign";
 import { Sdk } from "@unique-nft/sdk";
@@ -65,27 +64,32 @@ import { Sdk } from "@unique-nft/sdk";
 })();
 ```
 
+___
 # Design
 
-СДК спроектирован вокруг полькадот апи-промис,
-расширяет его удобными методами для работы с сетью Юник (опал, кварц).
-Тем не менее СДК может быть подключен к любой сети на фреймворке субстрат и
-основные модули (эксринсик, баланс, квери) так же могут быть использованы.
+Unique SDK was developed as an add-on of
+<a href="https://polkadot.js.org/docs/api/start" target="_blank">Polkadot{.js} ApiPromise</a>,
+extends it with simple methods to work with the Unique Network blockchains
+(Opal, Quartz, Unique).
+However, Unique SDK can be connected to any network based on the
+<a href="https://substrate.io" target="_blank">Substrate framework</a>
+and the main modules (extrinsics, balance, query, sign etc.) can also be used.
 
-
+___
 ## Modules
-СДК реализовывает только подключение к блокчейн-сети,
-а модули расширяют его возможности. Модули реализованы как секондари-ендпоинты
-НПМ-пакета, это позвляет гибко управлять зависимостями, не включать ненужные модули
-в сборку бандла приложения, расширять СДК собственными модулями.
+
+By default, the SDK implements only a connection to the blockchain network,
+and modules expand its capabilities. Modules are implemented as secondary endpoints
+of NPM package, this allows you to flexibly manage dependencies, do not include unnecessary modules
+into the application bundle assembly, expand the SDK with your own modules.
 
 ```typescript
 import { Sdk, addFeature } from "@unique-nft/sdk";
 
 // ... 
 
-import '@unique-nft/sdk/extrinsics';
-import { addFeature } from './add-feature'; // Augment SDK with the `extrinsic` property
+import '@unique-nft/sdk/extrinsics'; // Augment SDK with the `extrinsic` property
+import { addFeature } from './add-feature';
 
 // ... 
 class MyOwnSdkModule {
@@ -97,36 +101,37 @@ class MyOwnSdkModule {
   }
 }
 
-addFeature('my-own-feature', MyOwnSdkModule);
+addFeature('myOwnFeature', MyOwnSdkModule);
 
-console.log(sdk.hello);
+console.log(sdk.myOwnFeature.hello());
 
 ```
 
-Сейчас у нас есть 4 освновных модуля
+Now the SDK includes 4 modules
 
-- [Extrinsics](./extrinsics) - собирает, подписывает эксринсики
-- [State Queries](./state-queries) - формирует запросы к чейну
-- [Sign](./sign) - работа с аккаунтами
-- [Balance](./balance) - работа с балансами нативных токенов
-- [Tokens](./tokens) - работает с NFT, RFT Unique-сетей (опал, кварц, юник)
+- [Extrinsics](./extrinsics) - for build, sign and submit extrinsics
+- [State Queries](./state-queries) - queries blockchain storage
+- [Sign](./sign) - account management: sign, addresses
+- [Balance](./balance) - get and transfers native substrate token
+- [Tokens](./tokens) - operations with NFT of Unique Network blockchains (Opal, Unique, Quartz)
 
-Модули могут быть зависимы друг от друга. Так, например, модуль баланса зависит
-от модулуля экстринсик, потому что формирует эксринсики трансфера и сабмитит их в чейн.
+Modules can be dependent on each other. So, for example, the Balance Module depends
+from the Extrinsic Module,
+because it generates extrinsics of the transfer and submits them to the blockchain.
 
-
+___
 ## Mutation and Query methods
 
-Мы разделили все методы СДК на два типа
-1) [Query](#query-method) методы для чтения стораджей сети
-(например баланс, или свойства токена)
+We have divided all SDK methods into two types
+1) [Query](#query-method) methods for reading blockchain storage
+   (e.g. balance, or token properties)
 
 ```typescript
 const collectionId = 1;
 const tokenId = 3456;
-const collection = await sdk.collections.get({ collectionId, tokenId });
+const token = await sdk.tokens.get({ collectionId, tokenId });
 ```
-2) [Mutation](#mutation-method) методы для обновления состояния блокчейна
+2) [Mutation](#mutation-method) methods for updating the state of the blockchain
 ```typescript
 const transferArgs = {
   tokenId,
@@ -136,13 +141,30 @@ const transferArgs = {
 }
 const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
 ```
-
+___
 ### Query method
+Queries to blockchain storage that return data in human format
 
+```typescript
 
+const address = 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx';
+/**
+ * returns
+ * {
+ *  "raw": "0",
+ *  "amount": 0,
+ *  "amountWithUnit": "0",
+ *  "formatted": "0",
+ *  "unit": "UNQ"
+ * }
+ */
+const { raw, amount, amountWithUnit, formatted, unit } = await sdk.balance.get({ address });
+```
+
+___
 ### Mutation method
-По умолчанию они возвращают неподписанный экстринсик.
-Чтобы применить это изменение необходимо подписать его
+By default, they return an unsigned extension.
+To apply this change in blockchain state, you must sign it
 
 ```typescript
 import { createSigner } from "@unique-nft/sdk/sign";
@@ -151,18 +173,19 @@ const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
 const { signature, signatureType } = await signer.sign(unsignedExtrinsic);
 ```
 
-И уже отправить в чейн экстринсик и подпись к нему
+And send an extrinsic and a signature to it in the blockchain
+
 ```typescript
-const hash = await sdk.extrinsics.submit(
+const hash = await sdk.extrinsics.submit({
   signature,
   signatureType,
-  ... unsignedExtrinsic,
-);
+  ...unsignedExtrinsic,
+});
 ```
 
-Для удобства мы реализовали [комплексный метод](./extrinsics#complex-method):
-если инициализировать СДК с подписантом то можно подписывать и отправлять эксринсики
-бесшовно, без отдельных действий
+For convenience, we have implemented a [complex method](./extrinsics#complex):
+if you initialize the SDK with a signer, you can sign and send extrinsics
+seamlessly, without separate actions
 
 ```typescript
 import { SdkSigner } from "@unique-nft/sdk/types";
@@ -178,14 +201,29 @@ const sdk = await Sdk.create({
   }),
 });
 
+/**
+ * returns unsigned extrinsic
+ */
 const unsignedExtrinsic = await sdk.balance.transfer(transferArgs);
+
+/**
+ * return signed extrinsic (unsigned extrinsic + signature + signature type)
+ */
 const signedExtrinsic = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Sign);
+
+/**
+ * submitting extrinsic and returns hash
+ */
 const hash = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Submit);
+
+/**
+ * submitting extrinsic and returns final result (status, events, other human info)
+ */
 const result = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Watch);
 ```
 
-Когда мы передаем опцию `ExtrinsicOptions.Watch` метод распарсит данные евентов
-и вернет связанные с этим эксринсиком данные
+When we pass the `ExtrinsicOptions.Watch` option, the method will parse the event data
+and return the data associated with this extrinsic
 
 ```typescript
 const { collectionId } = await sdk.collections.create({ ... }, ExtrinsicOptions.Watch);
