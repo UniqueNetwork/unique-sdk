@@ -43,6 +43,7 @@ export abstract class MutationMethodBase<A, R>
     args: A,
     callMode: MutationCallMode.WaitCompleted | 'WaitCompleted',
   ): Promise<SubmittableResultWithParsed<R>>;
+
   async use(args: A, callMode?: MutationCallMode | string) {
     const transformedArgs = await this.transformArgs(args);
     const unsigned = await this.sdk.extrinsics.build(transformedArgs);
@@ -65,7 +66,7 @@ export abstract class MutationMethodBase<A, R>
 
     const { result$ } = await this.sdk.extrinsics.submit(signed, true);
 
-    const transformed$ = result$.pipe(
+    const transformed$ = result$.pipe<SubmittableResultWithParsed<R>>(
       switchMap(async (submittableResult) => {
         const parsed = await this.transformResult(submittableResult);
 

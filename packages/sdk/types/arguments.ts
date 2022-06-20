@@ -13,11 +13,6 @@ export interface SubmitResult {
   result$: Observable<ISubmittableResult>;
 }
 
-export interface ObservableSubmitResult {
-  hash: HexString;
-  result$: Observable<ISubmittableResult>;
-}
-
 export interface SignTxArguments {
   signerPayloadHex: HexString;
 }
@@ -39,12 +34,6 @@ export interface TxBuildArguments {
   args: Array<string | number | BigInt | Record<string, any>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
   era?: number;
   isImmortal?: boolean;
-}
-
-export interface TxBuildOptions {
-  sign?: boolean;
-  submit?: boolean;
-  watch?: boolean;
 }
 
 export interface ApiQueryArguments {
