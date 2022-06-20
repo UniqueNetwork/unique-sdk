@@ -6,5 +6,6 @@ import './augment-sdk';
 
 export * from './tx-utils';
 export * from './sdk-extrinsics';
+export * from './mutation-method-base';
 
 addFeature('extrinsics', SdkExtrinsics);

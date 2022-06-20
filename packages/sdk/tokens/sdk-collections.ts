@@ -4,23 +4,23 @@ import {
   UnsignedTxPayload,
   BurnCollectionArguments,
   TransferCollectionArguments,
+  SdkMutationMethod,
+  CreateCollectionArguments,
+  CollectionInfo,
 } from '@unique-nft/sdk/types';
 
 import { Sdk } from '@unique-nft/sdk';
 import { collectionById } from './methods/collection-by-id/method';
-import {
-  createCollectionEx,
-  createCollectionEx2,
-} from './methods/create-collection-ex/method';
+import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
 
 export class SdkCollections {
-  constructor(readonly sdk: Sdk) {}
+  constructor(readonly sdk: Sdk) {
+    this.create = new CreateCollectionExMutation(this.sdk).getMethod();
+  }
 
   get = collectionById.bind(this.sdk);
 
-  create = createCollectionEx.bind(this.sdk);
-
-  create2 = createCollectionEx2.bind(this.sdk);
+  create: SdkMutationMethod<CreateCollectionArguments, CollectionInfo>;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({

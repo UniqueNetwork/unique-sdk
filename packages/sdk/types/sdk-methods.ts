@@ -14,20 +14,11 @@ import {
   SubmitResult,
   SubmitTxArguments,
   TxBuildArguments,
-  TxBuildOptions,
 } from './arguments';
 import { SignResult } from './polkadot-types';
 
 export interface SdkReadableMethod<A, R> {
   (this: Sdk, args: A): Promise<R>;
-}
-
-export interface SdkWritableMethod<A> {
-  (
-    this: Sdk,
-    args: A,
-    buildExtrinsicOptions?: TxBuildOptions,
-  ): Promise<UnsignedTxPayload>;
 }
 
 export enum MutationCallMode {
@@ -43,36 +34,37 @@ export type SubmittableResultWithParsed<T> = ISubmittableResult & {
 };
 
 export interface SdkMutationMethod<A, R> {
+  (args: A): Promise<UnsignedTxPayload>;
+
   (
-    this: Sdk,
     args: A,
-    callMode: MutationCallMode.Build,
+    callMode: MutationCallMode.Build | 'Build',
   ): Promise<UnsignedTxPayload>;
 
-  (
-    this: Sdk,
-    args: A,
-    callMode: MutationCallMode.Sign,
-  ): Promise<SubmitTxArguments>;
+  (args: A, callMode: MutationCallMode.Sign): Promise<SubmitTxArguments>;
 
-  (this: Sdk, args: A, callMode: MutationCallMode.Submit): Promise<
+  (args: A, callMode: MutationCallMode.Submit | 'Submit'): Promise<
     Omit<SubmitResult, 'result$'>
   >;
 
-  (this: Sdk, args: A, callMode: MutationCallMode.Watch): Promise<
+  (args: A, callMode: MutationCallMode.Watch | 'Watch'): Promise<
     Observable<SubmittableResultWithParsed<R>>
   >;
 
-  (this: Sdk, args: A, callMode: MutationCallMode.WaitCompleted): Promise<
-    SubmittableResultWithParsed<R>
-  >;
+  (
+    args: A,
+    callMode: MutationCallMode.WaitCompleted | 'WaitCompleted',
+  ): Promise<SubmittableResultWithParsed<R>>;
 }
 
-export interface SdkMutationMethodBuilder<A, R> {
-  (
-    transformArgs: (args: A) => UnsignedTxPayload,
-    transformResult: (result: ISubmittableResult) => R,
-  ): SdkMutationMethod<A, R>;
+export interface MutationMethodWrap<A, R> {
+  use: SdkMutationMethod<A, R>;
+
+  getMethod(): SdkMutationMethod<A, R>;
+
+  transformArgs(args: A): Promise<TxBuildArguments>;
+
+  transformResult(result: ISubmittableResult): Promise<R | undefined>;
 }
 
 export interface ChainProperties {
@@ -111,6 +103,7 @@ export interface BurnCollectionArguments {
   collectionId: number;
   address: string;
 }
+
 export interface TransferCollectionArguments {
   collectionId: number;
   from: string;
@@ -127,6 +120,7 @@ export interface CreateTokenArguments extends AddressArguments {
 export interface BurnTokenArguments extends TokenIdArguments {
   address: string;
 }
+
 export interface TransferTokenArguments extends TokenIdArguments {
   from: string;
   to: string;

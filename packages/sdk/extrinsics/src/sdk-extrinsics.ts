@@ -18,7 +18,6 @@ import {
   SdkSigner,
   SignatureType,
   Fee,
-  TxBuildOptions,
 } from '@unique-nft/sdk/types';
 import { formatBalance } from '@unique-nft/sdk/utils';
 import { Submitter } from './submitter';
@@ -36,10 +35,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     this.submitter = new Submitter(sdk.api);
   }
 
-  async build(
-    buildArgs: TxBuildArguments,
-    buildOpts?: TxBuildOptions,
-  ): Promise<UnsignedTxPayload> {
+  async build(buildArgs: TxBuildArguments): Promise<UnsignedTxPayload> {
     const { address } = buildArgs;
 
     const signingInfo = await this.sdk.api.derive.tx.signingInfo(
