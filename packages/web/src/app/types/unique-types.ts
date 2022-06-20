@@ -8,6 +8,7 @@ import {
   CollectionLimits,
   CollectionMode,
   CollectionNesting,
+  CollectionNestingPermissions,
   CollectionPermissions,
   CollectionProperties,
   CollectionSchemaVersion,
@@ -70,6 +71,16 @@ export class CollectionLimitsDto implements CollectionLimits {
   transfersEnabled?: boolean | null;
 }
 
+export class CollectionNestingPermissionsDto
+  implements CollectionNestingPermissions
+{
+  tokenOwner: boolean;
+
+  collectionAdmin: boolean;
+
+  permissive: boolean;
+}
+
 export class CollectionPermissionsDto implements CollectionPermissions {
   @ApiProperty({ enum: CollectionAccess, required: false })
   access?: CollectionAccess | `${CollectionAccess}`;
@@ -78,7 +89,7 @@ export class CollectionPermissionsDto implements CollectionPermissions {
   mintMode?: boolean;
 
   @ApiProperty({ enum: CollectionNesting, required: false })
-  nesting?: CollectionNesting | `${CollectionNesting}`;
+  nesting?: CollectionNestingPermissionsDto;
 }
 
 @ApiExtraModels(CollectionTextFieldDto, CollectionSelectFieldDto)

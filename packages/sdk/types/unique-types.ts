@@ -49,10 +49,16 @@ export interface CollectionLimits {
   transfersEnabled?: boolean | null;
 }
 
+export interface CollectionNestingPermissions {
+  tokenOwner: boolean;
+  collectionAdmin: boolean;
+  permissive: boolean;
+}
+
 export interface CollectionPermissions {
   access?: CollectionAccess | `${CollectionAccess}`;
   mintMode?: boolean;
-  nesting?: CollectionNesting | `${CollectionNesting}`;
+  nesting?: CollectionNestingPermissions;
 }
 
 export interface CollectionProperties {
