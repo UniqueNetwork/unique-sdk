@@ -39,7 +39,7 @@ export class SdkTokens {
 
     if (!tokenData) return null;
 
-    return decodeToken(collection, tokenId, tokenData, this.sdk.options);
+    return decodeToken(collection, tokenId, tokenData);
   }
 
   async create(args: CreateTokenArguments): Promise<UnsignedTxPayload> {
