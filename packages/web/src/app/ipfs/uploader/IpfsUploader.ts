@@ -7,12 +7,15 @@ import { Agent as HttpAgent } from 'http';
 export class IpfsUploader {
   private ipfsUploadUrl: string;
 
+  private ipfsGatewayUrl: string;
+
   private allowedTypes: string;
 
   private isHttpsUrl: boolean;
 
   protected init(configService: ConfigService) {
     this.ipfsUploadUrl = configService.get('ipfsUploadUrl');
+    this.ipfsGatewayUrl = configService.get('ipfsGatewayUrl');
     this.allowedTypes = configService.get('allowedTypes');
     this.isHttpsUrl = this.ipfsUploadUrl?.startsWith('https');
   }
@@ -22,6 +25,10 @@ export class IpfsUploader {
       url: this.ipfsUploadUrl,
       agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
     });
+  }
+
+  protected getIpfsGatewayUrl(): string {
+    return this.ipfsGatewayUrl;
   }
 
   protected async isAllowMimeType(

@@ -37,7 +37,7 @@ export class FileUploader extends IpfsUploader {
         content: file.buffer,
       });
       return {
-        cid: uploaded.cid.toString(),
+        cid: `${this.getIpfsGatewayUrl()}${uploaded.cid.toString()}`,
       };
     } catch (err) {
       throw new IpfsError(WebErrorCodes.UploadFileError, err.message);

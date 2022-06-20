@@ -108,7 +108,7 @@ describe('Ipfs upload', () => {
       });
       expect(ok).toBe(true);
 
-      const downloadUrl = `https://ipfs.io/ipfs/${body.cid}`;
+      const downloadUrl = body.cid;
       console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
     });
@@ -125,7 +125,7 @@ describe('Ipfs upload', () => {
       });
       expect(ok).toBe(true);
 
-      const downloadUrl = `https://ipfs.io/ipfs/${body.cid}/punk-1.png`;
+      const downloadUrl = `${body.cid}/punk-1.png`;
       console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
     });

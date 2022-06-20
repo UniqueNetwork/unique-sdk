@@ -116,7 +116,7 @@ export class ZipUploader extends IpfsUploader {
     if (!rootItem) {
       throw new IpfsError(WebErrorCodes.UploadFileError, 'Root cid not found');
     }
-    return rootItem.cid;
+    return `${this.getIpfsGatewayUrl()}${rootItem.cid}`;
   }
 }
 
