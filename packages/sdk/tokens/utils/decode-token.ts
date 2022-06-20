@@ -9,7 +9,7 @@ import type {
 } from '@unique-nft/sdk/types';
 import { TokenPropertiesKeys } from '@unique-nft/sdk/types';
 
-type IpfsOptions = Pick<SdkOptions, 'ipfsGatewayUrl'>;
+type IpfsOptions = SdkOptions;
 
 export const decodeToken = (
   collection: CollectionInfo,
@@ -40,7 +40,6 @@ export const decodeToken = (
     collection,
     decodedConstData,
     tokenId,
-    ipfsGatewayUrl: options.ipfsGatewayUrl,
   });
 
   const ownerJson = tokenData.owner.value.toHuman() as any;

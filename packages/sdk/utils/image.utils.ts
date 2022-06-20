@@ -18,11 +18,9 @@ const getImageUrlForImageUrlSchema = ({
 
 const getImageUrlForUniqueSchema = ({
   decodedConstData = {},
-  ipfsGatewayUrl,
 }: {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   decodedConstData: Record<string, any>;
-  ipfsGatewayUrl: string;
 }): string | null => {
   const { ipfsJson } = decodedConstData;
 
@@ -34,7 +32,7 @@ const getImageUrlForUniqueSchema = ({
     };
 
     if (ipfsCid) {
-      return ipfsGatewayUrl + ipfsCid;
+      return ipfsCid;
     }
   } catch (e) {
     // do nothing
@@ -47,13 +45,11 @@ export const getTokenUrl = ({
   collection,
   tokenId,
   decodedConstData,
-  ipfsGatewayUrl,
 }: {
   collection: CollectionInfo;
   tokenId: number;
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   decodedConstData?: Record<string, any>;
-  ipfsGatewayUrl: string;
 }): string | null => {
   if (
     collection.properties.schemaVersion === CollectionSchemaVersion.ImageURL
@@ -64,7 +60,7 @@ export const getTokenUrl = ({
     collection.properties.schemaVersion === CollectionSchemaVersion.Unique &&
     decodedConstData
   ) {
-    return getImageUrlForUniqueSchema({ decodedConstData, ipfsGatewayUrl });
+    return getImageUrlForUniqueSchema({ decodedConstData });
   }
 
   return null;
