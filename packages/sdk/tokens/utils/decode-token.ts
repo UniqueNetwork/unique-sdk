@@ -1,6 +1,6 @@
 import { decodeConstData, getTokenUrl } from '@unique-nft/sdk/utils';
 
-import type { UpDataStructsTokenData } from '@unique-nft/types';
+import type { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import type {
   CollectionInfo,
   SdkOptions,

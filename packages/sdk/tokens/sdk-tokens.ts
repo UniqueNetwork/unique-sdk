@@ -1,4 +1,4 @@
-import '@unique-nft/types/augment-api';
+import '@unique-nft/unique-mainnet-types/augment-api';
 
 import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
@@ -11,7 +11,7 @@ import type {
   TransferTokenArguments,
   SdkOptions,
 } from '@unique-nft/sdk/types';
-import { UpDataStructsTokenData } from '@unique-nft/types';
+import { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
 import { SdkCollections } from './sdk-collections';

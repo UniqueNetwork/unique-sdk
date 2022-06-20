@@ -1,6 +1,6 @@
 import type { Option, bool } from '@polkadot/types-codec';
 import type { INumber } from '@polkadot/types-codec/types';
-import { UpDataStructsSponsoringRateLimit } from '@unique-nft/types/default/types';
+import { UpDataStructsSponsoringRateLimit } from '@unique-nft/unique-mainnet-types/default/types';
 
 export function toNumber(input: Option<INumber>): number | null {
   return input.unwrapOr(undefined)?.toNumber() || null;
