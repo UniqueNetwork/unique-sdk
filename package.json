@@ -14,7 +14,7 @@
     "lint:fix": "eslint ./packages/** --fix",
     "start": "node ./dist/packages/web/main.js",
     "postinstall": "npm run fix:unique:nft:types && npm run husky:install",
-    "fix:unique:nft:types": "find ./node_modules/@unique-nft/types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
+    "fix:unique:nft:types": "find ./node_modules/@unique-nft/unique-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
     "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js"
   },
@@ -26,7 +26,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.1",
     "@polkadot/api": "^8.6.2",
-    "@unique-nft/types": "^0.6.0-4",
+    "@unique-nft/unique-mainnet-types": "0.6.1",
     "cache-manager": "^4.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",

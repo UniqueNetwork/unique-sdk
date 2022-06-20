@@ -4,6 +4,12 @@ import { CollectionFields } from './unique-fields';
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
 
+export enum CollectionMode {
+  Nft = 'Nft',
+  Fungible = 'Fungible',
+  ReFungible = 'ReFungible',
+}
+
 export enum CollectionAccess {
   Normal = 'Normal',
   AllowList = 'AllowList',
@@ -20,10 +26,39 @@ export enum CollectionSchemaVersion {
   Unique = 'Unique',
 }
 
+export enum MetaUpdatePermission {
+  ItemOwner = 'ItemOwner',
+  Admin = 'Admin',
+  None = 'None',
+}
+
+export interface CollectionSponsorship {
+  address: string;
+  isConfirmed: boolean;
+}
+
+export interface CollectionLimits {
+  accountTokenOwnershipLimit?: number | null;
+  sponsoredDataSize?: number | null;
+  sponsoredDataRateLimit?: number | null;
+  tokenLimit?: number | null;
+  sponsorTransferTimeout?: number | null;
+  sponsorApproveTimeout?: number | null;
+  ownerCanTransfer?: boolean | null;
+  ownerCanDestroy?: boolean | null;
+  transfersEnabled?: boolean | null;
+}
+
+export interface CollectionNestingPermissions {
+  tokenOwner: boolean;
+  collectionAdmin: boolean;
+  permissive: boolean;
+}
+
 export interface CollectionPermissions {
   access?: CollectionAccess | `${CollectionAccess}`;
   mintMode?: boolean;
-  nesting?: CollectionNesting | `${CollectionNesting}`;
+  nesting?: CollectionNestingPermissions;
 }
 
 export interface CollectionProperties {
@@ -32,6 +67,20 @@ export interface CollectionProperties {
   variableOnChainSchema?: string | null;
   constOnChainSchema?: INamespace | null;
   fields?: CollectionFields;
+}
+
+export interface CollectionInfoBase {
+  mode?: CollectionMode | `${CollectionMode}`;
+  name: string;
+  description: string;
+  tokenPrefix: string;
+  sponsorship?: CollectionSponsorship | null;
+  limits?: CollectionLimits;
+  metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
+
+  properties: CollectionProperties;
+  permissions?: CollectionPermissions;
+  tokenPropertyPermissions?: TokenPropertiesPermissions;
 }
 
 export enum CollectionPropertiesKeys {
@@ -53,6 +102,12 @@ export interface TokenPropertyPermissions {
   mutable?: boolean;
   collectionAdmin?: boolean;
   tokenOwner?: boolean;
+}
+
+export interface CollectionInfo extends CollectionInfoBase {
+  id: number;
+  owner: string;
+  // todo tokensCount: number
 }
 
 export interface TokenProperties {

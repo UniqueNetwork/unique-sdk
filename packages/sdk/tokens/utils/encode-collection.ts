@@ -12,7 +12,9 @@ import {
 import type {
   UpDataStructsCreateCollectionData,
   UpDataStructsCollectionPermissions,
-} from '@unique-nft/types/default';
+  UpDataStructsAccessMode,
+  UpDataStructsNestingPermissions,
+} from '@unique-nft/unique-mainnet-types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
 import { encodeCollectionFields } from './encode-collection-fields';
 
@@ -59,8 +61,18 @@ const encodeCollectionPermissions = (
     'UpDataStructsCollectionPermissions',
     {
       mintMode: permissions.mintMode,
-      nesting: permissions.nesting,
-      access: permissions.access,
+      nesting: registry.createType<UpDataStructsNestingPermissions>(
+        'UpDataStructsNestingPermissions',
+        {
+          tokenOwner: permissions.nesting?.tokenOwner,
+          collectionAdmin: permissions.nesting?.collectionAdmin,
+          permissive: permissions.nesting?.permissive,
+        },
+      ),
+      access: registry.createType<UpDataStructsAccessMode>(
+        'UpDataStructsAccessMode',
+        'Normal',
+      ),
     },
   );
 

@@ -1,5 +1,7 @@
 import '@unique-nft/types/augment-api';
 import '@unique-nft/sdk/extrinsics';
+import '@unique-nft/unique-mainnet-types/augment-api';
+
 import {
   UnsignedTxPayload,
   BurnCollectionArguments,

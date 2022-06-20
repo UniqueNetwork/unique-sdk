@@ -15,7 +15,7 @@ import type {
   UpDataStructsRpcCollection,
   UpDataStructsSponsorshipState,
   UpDataStructsPropertyKeyPermission,
-} from '@unique-nft/types/default';
+} from '@unique-nft/unique-mainnet-types/default';
 
 import type {
   CollectionInfoBase,
@@ -61,11 +61,18 @@ export const decodeCollectionLimits = (
 
 export const decodeCollectionPermissions = (
   permissions: UpDataStructsCollectionPermissions,
-): CollectionPermissions => ({
-  access: permissions.access.unwrapOrDefault()?.type,
-  mintMode: toBoolean(permissions.mintMode) || false,
-  nesting: permissions.nesting.unwrapOrDefault()?.type,
-});
+): CollectionPermissions => {
+  const nesting = permissions.nesting.unwrapOrDefault();
+  return {
+    access: permissions.access.unwrapOrDefault()?.type,
+    mintMode: toBoolean(permissions.mintMode) || false,
+    nesting: {
+      tokenOwner: nesting?.tokenOwner.isTrue,
+      permissive: nesting?.permissive.isTrue,
+      collectionAdmin: nesting?.collectionAdmin.isTrue,
+    },
+  };
+};
 
 export const decodeCollectionProperties = (
   properties: UpDataStructsProperty[],
