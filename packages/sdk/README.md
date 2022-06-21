@@ -15,8 +15,8 @@
 
 
 # @unique-nft/sdk
-SDK is an JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance etc.
-At the moment the library is an pre-alpha version. We will be grateful for the feedback and ideas for improvement.
+SDK is a JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance, etc.
+At the moment, the library is a pre-alpha version. We will be grateful for the feedback and ideas for improvement. ```
 
 ___
 #  Table of Contents
@@ -69,11 +69,11 @@ ___
 
 Unique SDK was developed as an add-on of
 <a href="https://polkadot.js.org/docs/api/start" target="_blank">Polkadot{.js} ApiPromise</a>,
-extends it with simple methods to work with the Unique Network blockchains
+extending it with simple methods to work with the Unique Network blockchains
 (Opal, Quartz, Unique).
 However, Unique SDK can be connected to any network based on the
-<a href="https://substrate.io" target="_blank">Substrate framework</a>
-and the main modules (extrinsics, balance, query, sign etc.) can also be used.
+<a href="https://substrate.io" target="_blank">Substrate framework</a>,
+and the main modules (extrinsics, balance, query, sign, etc.) can also be used.
 
 ___
 ## Modules
@@ -107,7 +107,7 @@ console.log(sdk.myOwnFeature.hello());
 
 ```
 
-Now the SDK includes 4 modules
+Now the SDK includes 5 modules
 
 - [Extrinsics](./extrinsics) - for build, sign and submit extrinsics
 - [State Queries](./state-queries) - queries blockchain storage
@@ -127,10 +127,11 @@ We have divided all SDK methods into two types
    (e.g. balance, or token properties)
 
 ```typescript
+import "@unique-nft/sdk/tokens"
+
 const collectionId = 1;
 const tokenId = 3456;
 const token = await sdk.tokens.get({ collectionId, tokenId });
-```
 2) [Mutation](#mutation-method) methods for updating the state of the blockchain
 ```typescript
 const transferArgs = {
@@ -142,7 +143,7 @@ const transferArgs = {
 const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
 ```
 ___
-### Query method
+### Query methods
 Queries to blockchain storage that return data in human format
 
 ```typescript
@@ -162,9 +163,9 @@ const { raw, amount, amountWithUnit, formatted, unit } = await sdk.balance.get({
 ```
 
 ___
-### Mutation method
+### Mutation methods
 By default, they return an unsigned extension.
-To apply this change in blockchain state, you must sign it
+To apply this change in the blockchain state, you must sign it
 
 ```typescript
 import { createSigner } from "@unique-nft/sdk/sign";
