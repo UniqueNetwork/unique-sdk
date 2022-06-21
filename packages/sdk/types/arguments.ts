@@ -6,8 +6,6 @@ import { HexString } from '@polkadot/util/types';
 import { Observable } from 'rxjs';
 import { SignatureType, SignResult } from './polkadot-types';
 
-export * from '@unique-nft/sdk/tokens/types';
-
 export interface SubmitResult {
   hash: HexString;
   result$: Observable<ISubmittableResult>;

@@ -12,19 +12,21 @@ import {
   AddressArguments,
   AnyObject,
   Balance,
+  ChainProperties,
+  Fee,
+  TransferBuildArguments,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/types';
+import {
   BurnCollectionArguments,
   BurnTokenArguments,
-  ChainProperties,
   CollectionIdArguments,
   CreateCollectionArguments,
   CreateTokenArguments,
-  Fee,
   TokenIdArguments,
-  TransferBuildArguments,
   TransferCollectionArguments,
   TransferTokenArguments,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/types';
+} from '@unique-nft/sdk/tokens';
 import { HexString } from '@polkadot/util/types';
 
 import { CollectionInfoBaseDto } from './unique-types';

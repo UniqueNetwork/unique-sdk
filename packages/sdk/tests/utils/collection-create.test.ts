@@ -1,15 +1,14 @@
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
+import { Sdk } from '@unique-nft/sdk';
 import {
   CollectionFields,
   CollectionFieldTypes,
   CollectionInfo,
-  CreateCollectionArguments,
 } from '@unique-nft/sdk/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
-import '@unique-nft/sdk/tokens';
-import { Sdk } from '@unique-nft/sdk';
+import { CreateCollectionArguments } from '@unique-nft/sdk/tokens';
 import { signWithAccount } from '../testing-utils';
 
 export const constOnChainSchema: INamespace = {
@@ -49,7 +48,7 @@ const fields: CollectionFields = [
 ];
 
 export type TestCollectionInitial = Omit<CreateCollectionArguments, 'address'>;
-const defaultCollectionInitial: TestCollectionInitial = {
+export const defaultCollectionInitial: TestCollectionInitial = {
   name: `foo_${Math.floor(Math.random() * 1000)}`,
   description: 'bar',
   tokenPrefix: 'BAZ',

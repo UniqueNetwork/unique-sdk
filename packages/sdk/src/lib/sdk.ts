@@ -4,6 +4,7 @@ import { unique } from '@unique-nft/unique-mainnet-types/definitions';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 
 import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 export class Sdk {
   readonly isReady: Promise<boolean>;
@@ -42,5 +43,12 @@ export class Sdk {
       wsUrl: this.options.chainWsUrl,
       genesisHash: this.api.genesisHash.toHex(), // todo hex?
     };
+  }
+
+  transformAddress(address: string): string {
+    return encodeAddress(
+      decodeAddress(address),
+      this.chainProperties().SS58Prefix,
+    );
   }
 }

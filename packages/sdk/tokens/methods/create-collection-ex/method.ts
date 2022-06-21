@@ -1,17 +1,16 @@
-import {
-  CollectionInfo,
-  CreateCollectionArguments,
-  TxBuildArguments,
-} from '@unique-nft/sdk/types';
-import { encodeCollection } from '@unique-nft/sdk/tokens';
+import { TxBuildArguments } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
-import { u32, u8 } from '@polkadot/types-codec';
-import { AccountId32 } from '@polkadot/types/interfaces/runtime';
+import { u32 } from '@polkadot/types-codec';
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
+import { encodeCollection } from '../../utils';
+import { CollectionIdArguments } from '../collection-by-id/types';
+import { CreateCollectionArguments } from './types';
+
+/* eslint-disable class-methods-use-this */
 
 export class CreateCollectionExMutation extends MutationMethodBase<
   CreateCollectionArguments,
-  CollectionInfo
+  CollectionIdArguments
 > {
   async transformArgs(
     args: CreateCollectionArguments,
@@ -33,7 +32,7 @@ export class CreateCollectionExMutation extends MutationMethodBase<
 
   async transformResult(
     result: ISubmittableResult,
-  ): Promise<CollectionInfo | undefined> {
+  ): Promise<CollectionIdArguments | undefined> {
     const createCollectionEvent = result.findRecord(
       'common',
       'CollectionCreated',
@@ -41,16 +40,10 @@ export class CreateCollectionExMutation extends MutationMethodBase<
 
     if (!createCollectionEvent) return undefined;
 
-    const [id] = createCollectionEvent.event.data as unknown as [
-      u32,
-      u8,
-      AccountId32,
-    ];
+    const [id] = createCollectionEvent.event.data as unknown as [u32];
 
-    const collectionInfo = await this.sdk.collections.get({
+    return {
       collectionId: id.toNumber(),
-    });
-
-    return collectionInfo ?? undefined;
+    };
   }
 }

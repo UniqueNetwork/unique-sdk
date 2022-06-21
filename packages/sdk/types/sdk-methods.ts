@@ -4,11 +4,8 @@ import {
   SignerPayloadRaw,
   ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
-import { Sdk } from '@unique-nft/sdk';
 import { Observable } from 'rxjs';
-import { AnyObject } from './unique-types';
 import {
-  CollectionIdArguments,
   SignTxArguments,
   SignTxResult,
   SubmitResult,
@@ -18,7 +15,7 @@ import {
 import { SignResult } from './polkadot-types';
 
 export interface SdkReadableMethod<A, R> {
-  (this: Sdk, args: A): Promise<R>;
+  (args: A): Promise<R | null>;
 }
 
 export enum MutationCallMode {
@@ -29,8 +26,12 @@ export enum MutationCallMode {
   WaitCompleted = 'WaitCompleted',
 }
 
-export type SubmittableResultWithParsed<T> = ISubmittableResult & {
+export type SubmittableResultTransformed<T> = ISubmittableResult & {
   parsed?: T;
+};
+
+export type SubmittableResultCompleted<T> = ISubmittableResult & {
+  parsed: T;
 };
 
 export interface SdkMutationMethod<A, R> {
@@ -48,13 +49,13 @@ export interface SdkMutationMethod<A, R> {
   >;
 
   (args: A, callMode: MutationCallMode.Watch | 'Watch'): Promise<
-    Observable<SubmittableResultWithParsed<R>>
+    Observable<SubmittableResultTransformed<R>>
   >;
 
   (
     args: A,
     callMode: MutationCallMode.WaitCompleted | 'WaitCompleted',
-  ): Promise<SubmittableResultWithParsed<R>>;
+  ): Promise<SubmittableResultTransformed<R>>;
 }
 
 export interface MutationMethodWrap<A, R> {
@@ -91,39 +92,8 @@ export interface TransferBuildArguments {
   amount: number;
 }
 
-export interface TokenIdArguments extends CollectionIdArguments {
-  tokenId: number;
-}
-
 export interface AddressArguments {
   address: string;
-}
-
-export interface BurnCollectionArguments {
-  collectionId: number;
-  address: string;
-}
-
-export interface TransferCollectionArguments {
-  collectionId: number;
-  from: string;
-  to: string;
-}
-
-export interface CreateTokenArguments extends AddressArguments {
-  // todo - rename "address" field to "author" or "creator" ?
-  collectionId: number;
-  owner?: string;
-  constData: AnyObject;
-}
-
-export interface BurnTokenArguments extends TokenIdArguments {
-  address: string;
-}
-
-export interface TransferTokenArguments extends TokenIdArguments {
-  from: string;
-  to: string;
 }
 
 export interface UnsignedTxPayload {

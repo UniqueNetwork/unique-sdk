@@ -1,28 +1,32 @@
-import '@unique-nft/types/augment-api';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/unique-mainnet-types/augment-api';
 
 import {
   UnsignedTxPayload,
-  BurnCollectionArguments,
-  TransferCollectionArguments,
   SdkMutationMethod,
-  CreateCollectionArguments,
   CollectionInfo,
+  SdkReadableMethod,
 } from '@unique-nft/sdk/types';
 
 import { Sdk } from '@unique-nft/sdk';
 import { collectionById } from './methods/collection-by-id/method';
 import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
+import {
+  BurnCollectionArguments,
+  CreateCollectionArguments,
+  TransferCollectionArguments,
+  CollectionIdArguments,
+} from './types';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
-    this.create = new CreateCollectionExMutation(this.sdk).getMethod();
+    this.create = new CreateCollectionExMutation(sdk).getMethod();
+    this.get = collectionById.bind(sdk);
   }
 
-  get = collectionById.bind(this.sdk);
+  get: SdkReadableMethod<CollectionIdArguments, CollectionInfo>;
 
-  create: SdkMutationMethod<CreateCollectionArguments, CollectionInfo>;
+  create: SdkMutationMethod<CreateCollectionArguments, CollectionIdArguments>;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({

@@ -2,6 +2,8 @@ import { SubmitTxArguments, TxBuildArguments } from '@unique-nft/sdk/types';
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 import { BuildExtrinsicError } from '@unique-nft/sdk/errors';
 import { ApiPromise } from '@polkadot/api';
+import { IEventRecord, ISubmittableResult } from '@polkadot/types/types';
+import { Codec } from '@polkadot/types-codec/types';
 import { verifyTxSignatureOrThrow } from './tx-utils';
 
 export const buildUnsignedSubmittable = (
@@ -38,3 +40,14 @@ export const buildSignedSubmittable = (
 
   return submittable;
 };
+
+export function findEventRecord<T extends Codec[]>(
+  result: ISubmittableResult,
+  section: string,
+  method: string,
+): IEventRecord<T> | undefined {
+  const eventRecord = result.findRecord(section, method);
+
+  // todo - bad hack, but api.events.section.method.is does not work
+  return eventRecord ? (eventRecord as unknown as IEventRecord<T>) : undefined;
+}

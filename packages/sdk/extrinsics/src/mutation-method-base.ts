@@ -3,7 +3,7 @@ import {
   MutationCallMode,
   MutationMethodWrap,
   SubmitResult,
-  SubmittableResultWithParsed,
+  SubmittableResultTransformed,
   SubmitTxArguments,
   TxBuildArguments,
   UnsignedTxPayload,
@@ -37,12 +37,12 @@ export abstract class MutationMethodBase<A, R>
   use(
     args: A,
     callMode: MutationCallMode.Watch | 'Watch',
-  ): Promise<Observable<SubmittableResultWithParsed<R>>>;
+  ): Promise<Observable<SubmittableResultTransformed<R>>>;
 
   use(
     args: A,
     callMode: MutationCallMode.WaitCompleted | 'WaitCompleted',
-  ): Promise<SubmittableResultWithParsed<R>>;
+  ): Promise<SubmittableResultTransformed<R>>;
 
   async use(args: A, callMode?: MutationCallMode | string) {
     const transformedArgs = await this.transformArgs(args);
@@ -66,7 +66,7 @@ export abstract class MutationMethodBase<A, R>
 
     const { result$ } = await this.sdk.extrinsics.submit(signed, true);
 
-    const transformed$ = result$.pipe<SubmittableResultWithParsed<R>>(
+    const transformed$ = result$.pipe<SubmittableResultTransformed<R>>(
       switchMap(async (submittableResult) => {
         const parsed = await this.transformResult(submittableResult);
 

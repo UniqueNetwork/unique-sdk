@@ -1,14 +1,11 @@
 import { Sdk } from '@unique-nft/sdk';
-import {
-  CollectionIdArguments,
-  CollectionInfo,
-  SdkReadableMethod,
-} from '@unique-nft/sdk/types';
-import { decodeCollection } from '@unique-nft/sdk/tokens';
+import { CollectionInfo, SdkReadableMethod } from '@unique-nft/sdk/types';
+import { decodeCollection } from '../../utils';
+import { CollectionIdArguments } from './types';
 
 export const collectionById: SdkReadableMethod<
   CollectionIdArguments,
-  CollectionInfo | null
+  CollectionInfo
 > = async function (this: Sdk, { collectionId }) {
   const collectionOption = await this.api.rpc.unique.collectionById(
     collectionId,

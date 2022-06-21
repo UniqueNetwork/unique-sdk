@@ -10,8 +10,10 @@ export {
   encodeCollection,
   decodeCollection,
 } from './utils';
+
 export { SdkCollections } from './sdk-collections';
 export { SdkTokens } from './sdk-tokens';
+export * from './types';
 
 addFeature('collections', SdkCollections);
 addFeature('tokens', SdkTokens);
