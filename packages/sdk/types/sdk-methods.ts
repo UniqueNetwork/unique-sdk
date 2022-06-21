@@ -26,13 +26,14 @@ export enum MutationCallMode {
   WaitCompleted = 'WaitCompleted',
 }
 
-export type SubmittableResultTransformed<T> = ISubmittableResult & {
+export interface SubmittableResultInProcess<T> extends ISubmittableResult {
   parsed?: T;
-};
+}
 
-export type SubmittableResultCompleted<T> = ISubmittableResult & {
+export interface SubmittableResultCompleted<T> extends ISubmittableResult {
+  isCompleted: true;
   parsed: T;
-};
+}
 
 export interface SdkMutationMethod<A, R> {
   (args: A): Promise<UnsignedTxPayload>;
@@ -49,13 +50,13 @@ export interface SdkMutationMethod<A, R> {
   >;
 
   (args: A, callMode: MutationCallMode.Watch | 'Watch'): Promise<
-    Observable<SubmittableResultTransformed<R>>
+    Observable<SubmittableResultInProcess<R>>
   >;
 
   (
     args: A,
     callMode: MutationCallMode.WaitCompleted | 'WaitCompleted',
-  ): Promise<SubmittableResultTransformed<R>>;
+  ): Promise<SubmittableResultInProcess<R>>;
 }
 
 export interface MutationMethodWrap<A, R> {

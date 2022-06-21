@@ -78,9 +78,9 @@ describe(MutationMethodBase.name, () => {
     const to = sdk.transformAddress(alice.address);
     const amount = 100;
 
-    const result = await testMethod({ from, to, amount }, 'WaitCompleted');
+    const { parsed } = await testMethod({ from, to, amount }, 'WaitCompleted');
 
-    expect(result.parsed?.concatenated).toEqual([from, to, amount].join('_'));
+    expect(parsed.concatenated).toEqual([from, to, amount].join('_'));
 
     expect(transformArgs).toBeCalledTimes(1);
     expect(transformArgs).toBeCalledWith({ from, to, amount });

@@ -3,13 +3,15 @@ import {
   MutationCallMode,
   MutationMethodWrap,
   SubmitResult,
-  SubmittableResultTransformed,
+  SubmittableResultCompleted,
+  SubmittableResultInProcess,
   SubmitTxArguments,
   TxBuildArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { lastValueFrom, Observable, switchMap } from 'rxjs';
+import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 
 export abstract class MutationMethodBase<A, R>
   implements MutationMethodWrap<A, R>
@@ -37,12 +39,12 @@ export abstract class MutationMethodBase<A, R>
   use(
     args: A,
     callMode: MutationCallMode.Watch | 'Watch',
-  ): Promise<Observable<SubmittableResultTransformed<R>>>;
+  ): Promise<Observable<SubmittableResultInProcess<R>>>;
 
   use(
     args: A,
     callMode: MutationCallMode.WaitCompleted | 'WaitCompleted',
-  ): Promise<SubmittableResultTransformed<R>>;
+  ): Promise<SubmittableResultCompleted<R>>;
 
   async use(args: A, callMode?: MutationCallMode | string) {
     const transformedArgs = await this.transformArgs(args);
@@ -66,9 +68,13 @@ export abstract class MutationMethodBase<A, R>
 
     const { result$ } = await this.sdk.extrinsics.submit(signed, true);
 
-    const transformed$ = result$.pipe<SubmittableResultTransformed<R>>(
+    const transformed$ = result$.pipe<SubmittableResultInProcess<R>>(
       switchMap(async (submittableResult) => {
         const parsed = await this.transformResult(submittableResult);
+
+        if (submittableResult.isCompleted && !parsed) {
+          throw new SubmitExtrinsicError(`Extrinsic completed with no result`);
+        }
 
         return { ...submittableResult, parsed };
       }),
