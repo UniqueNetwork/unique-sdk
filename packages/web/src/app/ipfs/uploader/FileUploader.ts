@@ -10,8 +10,7 @@ import { IpfsUploader } from './IpfsUploader';
 @Injectable()
 export class FileUploader extends IpfsUploader {
   constructor(configService: ConfigService) {
-    super();
-    this.init(configService);
+    super(configService);
   }
 
   public async upload(file): Promise<IpfsUploadResponse> {
@@ -37,7 +36,7 @@ export class FileUploader extends IpfsUploader {
         content: file.buffer,
       });
       return {
-        cid: `${this.getIpfsGatewayUrl()}${uploaded.cid.toString()}`,
+        cid: uploaded.cid.toString(),
       };
     } catch (err) {
       throw new IpfsError(WebErrorCodes.UploadFileError, err.message);

@@ -105,10 +105,11 @@ describe('Ipfs upload', () => {
 
       expect(body).toMatchObject({
         cid: expect.any(String),
+        fileUrl: expect.any(String),
       });
       expect(ok).toBe(true);
 
-      const downloadUrl = body.cid;
+      const downloadUrl = body.fileUrl;
       console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
     });
@@ -122,10 +123,11 @@ describe('Ipfs upload', () => {
 
       expect(body).toMatchObject({
         cid: expect.any(String),
+        fileUrl: expect.any(String),
       });
       expect(ok).toBe(true);
 
-      const downloadUrl = `${body.cid}/punk-1.png`;
+      const downloadUrl = `${body.fileUrl}/punk-1.png`;
       console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
     });

@@ -5,30 +5,21 @@ import { Agent as HttpsAgent } from 'https';
 import { Agent as HttpAgent } from 'http';
 
 export class IpfsUploader {
-  private ipfsUploadUrl: string;
+  private ipfsUploadUrl: string = this.configService.get('ipfsUploadUrl');
 
-  private ipfsGatewayUrl: string;
+  protected ipfsGatewayUrl: string = this.configService.get('ipfsGatewayUrl');
 
-  private allowedTypes: string;
+  private allowedTypes: string = this.configService.get('allowedTypes');
 
-  private isHttpsUrl: boolean;
+  private isHttpsUrl: boolean = this.ipfsUploadUrl?.startsWith('https');
 
-  protected init(configService: ConfigService) {
-    this.ipfsUploadUrl = configService.get('ipfsUploadUrl');
-    this.ipfsGatewayUrl = configService.get('ipfsGatewayUrl');
-    this.allowedTypes = configService.get('allowedTypes');
-    this.isHttpsUrl = this.ipfsUploadUrl?.startsWith('https');
-  }
+  constructor(private configService: ConfigService) {}
 
   protected createClient(): IPFSHTTPClient {
     return create({
       url: this.ipfsUploadUrl,
       agent: this.isHttpsUrl ? new HttpsAgent() : new HttpAgent(),
     });
-  }
-
-  protected getIpfsGatewayUrl(): string {
-    return this.ipfsGatewayUrl;
   }
 
   protected async isAllowMimeType(

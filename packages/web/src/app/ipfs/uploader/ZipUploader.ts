@@ -16,8 +16,7 @@ export class ZipUploader extends IpfsUploader {
   protected static rootPath = 'files';
 
   constructor(configService: ConfigService) {
-    super();
-    this.init(configService);
+    super(configService);
   }
 
   public async upload(file): Promise<IpfsUploadResponse> {
@@ -116,7 +115,7 @@ export class ZipUploader extends IpfsUploader {
     if (!rootItem) {
       throw new IpfsError(WebErrorCodes.UploadFileError, 'Root cid not found');
     }
-    return `${this.getIpfsGatewayUrl()}${rootItem.cid}`;
+    return rootItem.cid;
   }
 }
 
