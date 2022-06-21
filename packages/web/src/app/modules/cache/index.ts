@@ -4,7 +4,9 @@ import * as redisStore from 'cache-manager-redis-store';
 
 export const registerCache = () => {
   const { REDIS_HOST, REDIS_PORT, REDIS_DB, CACHE_TTL } = process.env;
+
   const ttl = +CACHE_TTL || 600;
+
   if (REDIS_HOST) {
     return CacheModule.register<ClientOpts>({
       store: redisStore,
@@ -16,6 +18,7 @@ export const registerCache = () => {
       ttl,
     });
   }
+
   return CacheModule.register({
     ttl,
   });
