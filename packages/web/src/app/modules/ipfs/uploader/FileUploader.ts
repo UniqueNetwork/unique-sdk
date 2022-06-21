@@ -2,9 +2,9 @@ import { extname } from 'path';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { IpfsError } from '../../errors/ipfs-error';
-import { WebErrorCodes } from '../../errors/codes';
-import { IpfsUploadResponse } from '../../types/requests';
+import { IpfsError } from '../../../errors/ipfs-error';
+import { WebErrorCodes } from '../../../errors/codes';
+import { IpfsUploadResponse } from '../../../types/requests';
 import { IpfsUploader } from './IpfsUploader';
 
 @Injectable()

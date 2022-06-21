@@ -12,9 +12,9 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { SdkValidationPipe } from '../validation';
-import { WebExceptionsFilter } from '../utils/exception-filter';
-import { IpfsUploadResponse } from '../types/requests';
+import { SdkValidationPipe } from '../../validation';
+import { WebExceptionsFilter } from '../../utils/exception-filter';
+import { IpfsUploadResponse } from '../../types/requests';
 import { FileUploader } from './uploader/FileUploader';
 import { ZipUploader } from './uploader/ZipUploader';
 

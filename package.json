@@ -28,6 +28,7 @@
     "@polkadot/api": "^8.6.2",
     "@unique-nft/unique-mainnet-types": "0.6.1",
     "cache-manager": "^4.0.1",
+    "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "file-type": "16.5.3",
