@@ -111,7 +111,7 @@ export abstract class MutationMethodBase<A, R>
 
     const completed = await lastValueFrom(submitted$);
 
-    if (!completed.parsed) throw new SubmitExtrinsicError();
+    if (completed.parsed === undefined) throw new SubmitExtrinsicError();
 
     return {
       ...completed,
