@@ -26,7 +26,11 @@ import {
   verifyTxSignatureOrThrow,
 } from './tx-utils';
 
-import { buildUnsignedSubmittable } from './submittable-utils';
+import {
+  buildSubmittableFromArgs,
+  buildSubmittable,
+  getAddress,
+} from './submittable-utils';
 
 export class SdkExtrinsics implements ISdkExtrinsics {
   private submitter: Submitter;
@@ -75,7 +79,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
       signedExtensions,
     };
 
-    const { method, version } = buildUnsignedSubmittable(
+    const { method, version } = buildSubmittableFromArgs(
       this.sdk.api,
       buildArgs,
     );
@@ -95,10 +99,13 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     return signerPayloadToUnsignedTxPayload(this.sdk.api, signerPayload);
   }
 
-  async getFee(buildArgs: TxBuildArguments): Promise<Fee> {
-    const submittable = buildUnsignedSubmittable(this.sdk.api, buildArgs);
+  async getFee(
+    buildArgs: TxBuildArguments | UnsignedTxPayload | SubmitTxArguments,
+  ): Promise<Fee> {
+    const submittable = buildSubmittable(this.sdk.api, buildArgs);
+    const address = getAddress(buildArgs);
 
-    const { partialFee } = await submittable.paymentInfo(buildArgs.address);
+    const { partialFee } = await submittable.paymentInfo(address);
 
     return formatBalance(this.sdk.api, partialFee);
   }

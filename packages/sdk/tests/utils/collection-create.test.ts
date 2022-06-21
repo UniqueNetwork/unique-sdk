@@ -69,7 +69,7 @@ export async function createCollection(
     ...collectionData,
     address: account.address,
   };
-  const txPayload = await sdk.collections.create(createData);
+  const txPayload = await sdk.collections.create.build(createData);
 
   const signature = signWithAccount(sdk, account, txPayload.signerPayloadHex);
 
