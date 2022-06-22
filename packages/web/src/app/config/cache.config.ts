@@ -1,5 +1,3 @@
-import process from 'process';
-
 export enum CacheType {
   DEFAULT = 'Default',
   REDIS = 'Redis',
@@ -23,15 +21,16 @@ export interface RedisCacheConfig extends CacheConfigBase {
 
 export type CacheConfig = DefaultCacheConfig | RedisCacheConfig;
 
-export function createCacheConfig(): CacheConfig {
-  const ttl = +process.env.CACHE_TTL || 600;
+export function createCacheConfig(env: Record<string, string>): CacheConfig {
+  const { CACHE_TTL, REDIS_HOST, REDIS_PORT, REDIS_DB } = env;
+  const ttl = +CACHE_TTL || 600;
 
-  if (process.env.REDIS_HOST) {
+  if (REDIS_HOST) {
     return {
       type: CacheType.REDIS,
-      host: process.env.REDIS_HOST,
-      port: +process.env.REDIS_PORT || 6379,
-      db: +process.env.REDIS_DB || 0,
+      host: REDIS_HOST,
+      port: +REDIS_PORT || 6379,
+      db: +REDIS_DB || 0,
       ttl,
     };
   }

@@ -3,7 +3,7 @@ import { createCacheConfig } from './cache.config';
 
 describe('cache.config', () => {
   it('ok - default', () => {
-    const config = createCacheConfig();
+    const config = createCacheConfig({});
 
     expect(config).toMatchObject({
       type: 'Default',
@@ -12,12 +12,12 @@ describe('cache.config', () => {
   });
 
   it('ok - redis', () => {
-    process.env.REDIS_HOST = 'redis.host';
-    process.env.REDIS_PORT = '1234';
-    process.env.REDIS_DB = '1';
-    process.env.CACHE_TTL = '300';
-
-    const config = createCacheConfig();
+    const config = createCacheConfig({
+      REDIS_HOST: 'redis.host',
+      REDIS_PORT: '1234',
+      REDIS_DB: '1',
+      CACHE_TTL: '300',
+    });
 
     expect(config).toMatchObject({
       type: 'Redis',

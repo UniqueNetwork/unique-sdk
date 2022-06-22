@@ -45,7 +45,7 @@ const loadConfig = (): Config => ({
         'application/json',
       ],
 
-  cache: createCacheConfig(),
+  cache: createCacheConfig(process.env),
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({
