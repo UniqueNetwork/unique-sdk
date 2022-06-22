@@ -5,13 +5,17 @@ import { Agent as HttpsAgent } from 'https';
 import { Agent as HttpAgent } from 'http';
 
 export class IpfsUploader {
-  private ipfsUploadUrl: string = this.configService.get('ipfsUploadUrl');
+  private readonly ipfsUploadUrl: string =
+    this.configService.get('ipfsUploadUrl');
 
-  protected ipfsGatewayUrl: string = this.configService.get('ipfsGatewayUrl');
+  protected readonly ipfsGatewayUrl: string =
+    this.configService.get('ipfsGatewayUrl');
 
-  private allowedTypes: string = this.configService.get('allowedTypes');
+  private readonly allowedTypes: string =
+    this.configService.get('allowedTypes');
 
-  private isHttpsUrl: boolean = this.ipfsUploadUrl?.startsWith('https');
+  private readonly isHttpsUrl: boolean =
+    this.ipfsUploadUrl?.startsWith('https');
 
   constructor(private configService: ConfigService) {}
 
