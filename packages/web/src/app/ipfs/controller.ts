@@ -34,6 +34,15 @@ export class IpfsController {
     this.ipfsGatewayUrl = configService.get('ipfsGatewayUrl');
   }
 
+  private addFileUrl({ cid }: IpfsUploadResponse): IpfsUploadResponse {
+    return {
+      ...{ cid },
+      ...(this.ipfsGatewayUrl
+        ? { fileUrl: `${this.ipfsGatewayUrl}${cid}` }
+        : {}),
+    };
+  }
+
   @Post('upload-file')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -54,12 +63,8 @@ export class IpfsController {
     @Body() body,
     @Res({ passthrough: true }) response,
   ): Promise<IpfsUploadResponse> {
-    return this.fileUploader.upload(file).then(({ cid }) => ({
-      ...{ cid },
-      ...(this.ipfsGatewayUrl
-        ? { fileUrl: `${this.ipfsGatewayUrl}${cid}` }
-        : {}),
-    }));
+    const uploadResponse = await this.fileUploader.upload(file);
+    return this.addFileUrl(uploadResponse);
   }
 
   @Post('upload-zip')
@@ -82,11 +87,7 @@ export class IpfsController {
     @Body() body,
     @Res({ passthrough: true }) response,
   ): Promise<IpfsUploadResponse> {
-    return this.zipUploader.upload(file).then(({ cid }) => ({
-      ...{ cid },
-      ...(this.ipfsGatewayUrl
-        ? { fileUrl: `${this.ipfsGatewayUrl}${cid}` }
-        : {}),
-    }));
+    const uploadResponse = await this.zipUploader.upload(file);
+    return this.addFileUrl(uploadResponse);
   }
 }

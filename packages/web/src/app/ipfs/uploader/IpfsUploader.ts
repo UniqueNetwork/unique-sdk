@@ -8,9 +8,6 @@ export class IpfsUploader {
   private readonly ipfsUploadUrl: string =
     this.configService.get('ipfsUploadUrl');
 
-  protected readonly ipfsGatewayUrl: string =
-    this.configService.get('ipfsGatewayUrl');
-
   private readonly allowedTypes: string =
     this.configService.get('allowedTypes');
 
