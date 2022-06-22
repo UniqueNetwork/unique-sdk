@@ -103,12 +103,15 @@ describe('Ipfs upload', () => {
         .post(`/api/ipfs/upload-file`)
         .attach('file', punk1FilePath);
 
-      expect(body).toMatchObject({
-        cid: expect.any(String),
-        fileUrl: expect.any(String),
-      });
+      expect(body).toEqual(
+        expect.objectContaining({
+          cid: expect.any(String),
+        }),
+      );
+
       expect(ok).toBe(true);
 
+      if (!config.get('ipfsGatewayUrl')) return;
       const downloadUrl = body.fileUrl;
       console.log('downloadUrl', downloadUrl);
       await downloadFileTest(downloadUrl, punk1FilePath);
@@ -121,15 +124,60 @@ describe('Ipfs upload', () => {
         .post(`/api/ipfs/upload-zip`)
         .attach('file', zipFilePath);
 
+      expect(body).toEqual(
+        expect.objectContaining({
+          cid: expect.any(String),
+        }),
+      );
+
+      expect(ok).toBe(true);
+
+      if (!config.get('ipfsGatewayUrl')) return;
+      const downloadUrl = `${body.fileUrl}/punk-1.png`;
+      console.log('downloadUrl', downloadUrl);
+      await downloadFileTest(downloadUrl, punk1FilePath);
+    });
+
+    it('existence fileUrl property', async () => {
+      if (skipTests || !config.get('ipfsGatewayUrl')) return;
+
+      app = await createApp();
+      config = app.get(ConfigService);
+      if (!config.get('ipfsUploadUrl')) {
+        skipTests = true;
+        console.log('skipped file upload test');
+      }
+
+      const { ok, body } = await request(app.getHttpServer())
+        .post(`/api/ipfs/upload-file`)
+        .attach('file', punk1FilePath);
+
       expect(body).toMatchObject({
         cid: expect.any(String),
         fileUrl: expect.any(String),
       });
       expect(ok).toBe(true);
+    });
 
-      const downloadUrl = `${body.fileUrl}/punk-1.png`;
-      console.log('downloadUrl', downloadUrl);
-      await downloadFileTest(downloadUrl, punk1FilePath);
+    it('none fileUrl property', async () => {
+      if (skipTests) return;
+
+      process.env.IPFS_GATEWAY_URL = '';
+      app = await createApp();
+      config = app.get(ConfigService);
+      if (!config.get('ipfsUploadUrl')) {
+        skipTests = true;
+        console.log('skipped file upload test');
+      }
+
+      const { ok, body } = await request(app.getHttpServer())
+        .post(`/api/ipfs/upload-file`)
+        .attach('file', punk1FilePath);
+
+      expect(body).toMatchObject({
+        cid: expect.any(String),
+      });
+      expect(ok).toBe(true);
     });
   });
 });
