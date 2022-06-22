@@ -10,7 +10,7 @@ import { encodeCollection } from '../utils';
 
 /* eslint-disable class-methods-use-this */
 
-export class CreateCollectionMutation extends MutationMethodBase<
+export class CollectionCreationMutation extends MutationMethodBase<
   CreateCollectionArguments,
   CollectionIdArguments
 > {

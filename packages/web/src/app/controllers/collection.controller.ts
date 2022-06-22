@@ -46,7 +46,7 @@ export class CollectionController {
   async createCollection(
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.create.build(args);
+    return this.sdk.collections.creation.build(args);
   }
 
   @Delete()
