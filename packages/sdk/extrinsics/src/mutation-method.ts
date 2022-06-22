@@ -9,7 +9,14 @@ import {
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
-import { lastValueFrom, Observable, switchMap } from 'rxjs';
+import {
+  lastValueFrom,
+  Observable,
+  switchMap,
+  from,
+  mergeMap,
+  identity,
+} from 'rxjs';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
 
@@ -30,7 +37,7 @@ export interface MutationMethodWrap<A, R> {
 
   submitWatch(
     args: A | UnsignedTxPayload | SubmitTxArguments,
-  ): Promise<Observable<SubmittableResultInProcess<R>>>;
+  ): Observable<SubmittableResultInProcess<R>>;
 
   submitWaitResult: MutationMethod<A, R>;
 
@@ -83,24 +90,31 @@ export abstract class MutationMethodBase<A, R>
   }
 
   // todo - hide async inside Observable and return just Observable<SubmittableResultInProcess<R>
-  async submitWatch(
+  submitWatch(
     args: UnsignedTxPayload | SubmitTxArguments | A,
-  ): Promise<Observable<SubmittableResultInProcess<R>>> {
-    const submitTxArguments = isSubmitTxArguments(args)
-      ? args
-      : await this.sign(args);
+  ): Observable<SubmittableResultInProcess<R>> {
+    const getSubmittableResult$ = async () => {
+      const submitTxArguments = isSubmitTxArguments(args)
+        ? args
+        : await this.sign(args);
 
-    const { result$ } = await this.sdk.extrinsics.submit(
-      submitTxArguments,
-      true,
-    );
+      const { result$ } = await this.sdk.extrinsics.submit(
+        submitTxArguments,
+        true,
+      );
 
-    return result$.pipe<SubmittableResultInProcess<R>>(
-      switchMap(async (submittableResult) => {
-        const parsed = await this.transformResult(submittableResult);
+      return result$;
+    };
 
-        return { submittableResult, parsed };
-      }),
+    const tryParse = async (submittableResult: ISubmittableResult) => {
+      const parsed = await this.transformResult(submittableResult);
+
+      return { submittableResult, parsed };
+    };
+
+    return from(getSubmittableResult$()).pipe(
+      mergeMap(identity),
+      switchMap(tryParse),
     );
   }
 
