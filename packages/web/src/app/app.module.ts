@@ -23,15 +23,10 @@ import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
 import { IpfsModule } from './modules/ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
-import { registerCache } from './modules/cache';
+import { cacheProvider } from './modules/cache';
 
 @Module({
-  imports: [
-    GlobalConfigModule,
-    SignerMiddleware,
-    IpfsModule.register(),
-    registerCache(),
-  ],
+  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
   controllers: [
     ChainController,
     ExtrinsicsController,
@@ -44,6 +39,7 @@ import { registerCache } from './modules/cache';
   ],
   providers: [
     sdkProvider,
+    cacheProvider,
     {
       provide: APP_FILTER,
       useClass: SdkExceptionsFilter,

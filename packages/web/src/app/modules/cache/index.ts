@@ -1,25 +1,34 @@
-import { CacheModule } from '@nestjs/common';
-import type { ClientOpts } from 'redis';
+import { CACHE_MANAGER } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
+import { ConfigService } from '@nestjs/config';
+import { caching, Cache } from 'cache-manager';
 
-export const registerCache = () => {
-  const { REDIS_HOST, REDIS_PORT, REDIS_DB, CACHE_TTL } = process.env;
+import { CacheConfig, CacheType } from '../../config/cache.config';
 
-  const ttl = +CACHE_TTL || 600;
+export const cacheProvider = {
+  inject: [ConfigService],
+  provide: CACHE_MANAGER,
+  useFactory: (configService: ConfigService): Cache => {
+    const cacheConfig: CacheConfig = configService.get('cache');
 
-  if (REDIS_HOST) {
-    return CacheModule.register<ClientOpts>({
-      store: redisStore,
+    switch (cacheConfig.type) {
+      case CacheType.DEFAULT:
+        return caching({
+          ttl: cacheConfig.ttl,
 
-      host: REDIS_HOST,
-      port: +REDIS_PORT || 6379,
-      db: +REDIS_DB || 0,
+          store: 'memory',
+        });
+      case CacheType.REDIS:
+        return caching({
+          ttl: cacheConfig.ttl,
 
-      ttl,
-    });
-  }
-
-  return CacheModule.register({
-    ttl,
-  });
+          store: redisStore,
+          host: cacheConfig.host,
+          port: cacheConfig.port,
+          db: cacheConfig.db,
+        });
+      default:
+        throw new Error('Invalid cache config');
+    }
+  },
 };
