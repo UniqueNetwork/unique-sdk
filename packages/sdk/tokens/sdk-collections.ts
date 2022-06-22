@@ -1,7 +1,8 @@
 import '@unique-nft/unique-mainnet-types/augment-api';
 
-import { ApiPromise } from '@polkadot/api';
-import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { Sdk } from '@unique-nft/sdk';
+import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+
 import {
   UnsignedTxPayload,
   BurnCollectionArguments,
@@ -10,17 +11,18 @@ import {
   CreateCollectionArguments,
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
-
 import { decodeCollection } from './utils/decode-collection';
-import { encodeCollection } from './utils/encode-collection';
-
-interface Sdk {
-  api: ApiPromise;
-  extrinsics: SdkExtrinsics;
-}
+import { CreateCollectionExMutation } from './mutations/create-collection-ex';
 
 export class SdkCollections {
-  constructor(readonly sdk: Sdk) {}
+  constructor(readonly sdk: Sdk) {
+    this.creation = new CreateCollectionExMutation(sdk);
+  }
+
+  creation: MutationMethodWrap<
+    CreateCollectionArguments,
+    CollectionIdArguments
+  >;
 
   async get({
     collectionId,
@@ -39,24 +41,6 @@ export class SdkCollections {
       id: collectionId,
       owner: collection.owner.toString(),
     };
-  }
-
-  async create(
-    collection: CreateCollectionArguments,
-  ): Promise<UnsignedTxPayload> {
-    const { address, ...rest } = collection;
-
-    const encodedCollection = encodeCollection(
-      this.sdk.api.registry,
-      rest,
-    ).toHex();
-
-    return this.sdk.extrinsics.build({
-      address,
-      section: 'unique',
-      method: 'createCollectionEx',
-      args: [encodedCollection],
-    });
   }
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
