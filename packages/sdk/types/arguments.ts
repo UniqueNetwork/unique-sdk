@@ -45,3 +45,14 @@ export interface ApiQueryArguments {
   method: string;
   args: Array<string | number | BigInt | Record<string, any>>;
 }
+
+export interface SubmittableResultInProcess<T> {
+  submittableResult: ISubmittableResult;
+  parsed?: T;
+}
+
+export interface SubmittableResultCompleted<T> {
+  submittableResult: ISubmittableResult;
+  isCompleted: true;
+  parsed: T;
+}
