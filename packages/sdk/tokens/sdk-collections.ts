@@ -12,11 +12,11 @@ import {
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
 import { decodeCollection } from './utils/decode-collection';
-import { CollectionCreationMutation } from './mutations/collection-creation';
+import { CreateCollectionExMutation } from './mutations/create-collection-ex';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
-    this.creation = new CollectionCreationMutation(sdk);
+    this.creation = new CreateCollectionExMutation(sdk);
   }
 
   creation: MutationMethodWrap<
