@@ -54,5 +54,6 @@ export interface SubmittableResultInProcess<T> {
 export interface SubmittableResultCompleted<T> {
   submittableResult: ISubmittableResult;
   isCompleted: true;
-  parsed: T;
+  parsed: T; // тут неудобно, пушто я хочу `const { collectionId } = await this.sdk.collection.create(...)`
+  // а тут надо доставать еще `parsed`
 }

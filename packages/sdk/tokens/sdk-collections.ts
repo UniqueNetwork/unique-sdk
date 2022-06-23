@@ -15,14 +15,18 @@ import { decodeCollection } from './utils/decode-collection';
 import { CreateCollectionExMutation } from './mutations/create-collection-ex';
 
 export class SdkCollections {
-  constructor(readonly sdk: Sdk) {
-    this.creation = new CreateCollectionExMutation(sdk);
-  }
 
   creation: MutationMethodWrap<
     CreateCollectionArguments,
     CollectionIdArguments
-  >;
+  > = new CreateCollectionExMutation(this.sdk);
+
+  create = this.creation.submitWaitResult;
+
+  constructor(
+    readonly sdk: Sdk,
+  ) {
+  }
 
   async get({
     collectionId,
