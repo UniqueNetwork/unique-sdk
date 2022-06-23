@@ -6,47 +6,72 @@ import { SubstratePrimaryModule } from '../modules/substrate/substrate.primary.m
 import { SubstrateModule } from '../modules/substrate/substrate.module';
 import { Config } from '../config/config.module';
 
+function createDescription(
+  swagger,
+  chainWsUrl,
+  secondaryChainWsUrl,
+  name,
+  isSecondary,
+) {
+  let mainDescription = `Main connection to ${chainWsUrl}`;
+  let secondaryDescription = '';
+  if (secondaryChainWsUrl && name) {
+    secondaryDescription = `Secondary substrate connection to ${secondaryChainWsUrl}`;
+    if (isSecondary) {
+      secondaryDescription = `<b>${secondaryDescription}</b>`;
+      mainDescription = `${mainDescription}. Go to <a href="/${swagger}">swagger</a>`;
+    } else {
+      mainDescription = `<b>${mainDescription}</b>`;
+      secondaryDescription = `${secondaryDescription}. Go to <a href="/${swagger}/${name}">swagger/${name}</a>`;
+    }
+  }
+  return ['Unique SDK HTTP API', mainDescription, secondaryDescription]
+    .filter((el) => el)
+    .join('\n\n');
+}
+
 export const addSwagger = (app: INestApplication) => {
   const configService: ConfigService<Config> = app.get(ConfigService);
-  const { chainWsUrl, name } =
+  const chainWsUrl = configService.get('chainWsUrl');
+  const swagger = configService.get('swagger');
+  const { chainWsUrl: secondaryChainWsUrl, name } =
     configService.get<Config['secondary']>('secondary');
-  const secondaryDescription =
-    chainWsUrl && name
-      ? [
-          `Instance have secondary substrate connection with prefix ${name}`,
-          `please see swagger at <a href="./${name}">${configService.get(
-            'swagger',
-          )}/${name}</a>`,
-        ].join('\n\n')
-      : null;
 
-  const config = new DocumentBuilder()
-    .addSecurity('SeedAuth', {
-      description: 'Example: "Seed phrase1 phrase2 phrase3 ..."',
-      type: 'apiKey',
-      in: 'header',
-      name: 'Authorization',
-    })
-    .setTitle('Unique SDK')
-    .setDescription(
-      [
-        `Unique SDK HTTP API`,
-        `connected to ${configService.get('chainWsUrl')}`,
-        secondaryDescription,
-      ].join('\n\n'),
-    )
-    .setVersion('1.0')
-    .build();
+  function createDocumentBuilder(description) {
+    return new DocumentBuilder()
+      .addSecurity('SeedAuth', {
+        description: 'Example: "Seed phrase1 phrase2 phrase3 ..."',
+        type: 'apiKey',
+        in: 'header',
+        name: 'Authorization',
+      })
+      .setTitle('Unique SDK')
+      .setDescription(description)
+      .setVersion('1.0')
+      .build();
+  }
+
+  const config = createDocumentBuilder(
+    createDescription(swagger, chainWsUrl, secondaryChainWsUrl, name, false),
+  );
 
   const uniqueDocument = SwaggerModule.createDocument(app, config, {
     include: [UniqueModule, SubstratePrimaryModule],
   });
   SwaggerModule.setup(configService.get('swagger'), app, uniqueDocument);
 
-  if (secondaryDescription) {
-    const secondaryDocument = SwaggerModule.createDocument(app, config, {
-      include: [SubstrateModule],
-    });
+  if (secondaryChainWsUrl && name) {
+    const secondaryConfig = createDocumentBuilder(
+      createDescription(swagger, chainWsUrl, secondaryChainWsUrl, name, true),
+    );
+
+    const secondaryDocument = SwaggerModule.createDocument(
+      app,
+      secondaryConfig,
+      {
+        include: [SubstrateModule],
+      },
+    );
     SwaggerModule.setup(
       `${configService.get('swagger')}/${name}`,
       app,
