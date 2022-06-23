@@ -51,7 +51,6 @@ describe('Sdk signers', () => {
     const signer: SdkSigner = await createSigner(signerOptions);
     const options: SdkOptions = {
       chainWsUrl: defOptions.chainWsUrl,
-      ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
       signer,
     };
     return Sdk.create(options);

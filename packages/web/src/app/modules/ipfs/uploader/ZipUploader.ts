@@ -16,8 +16,7 @@ export class ZipUploader extends IpfsUploader {
   protected static rootPath = 'files';
 
   constructor(configService: ConfigService) {
-    super();
-    this.init(configService);
+    super(configService);
   }
 
   public async upload(file): Promise<IpfsUploadResponse> {

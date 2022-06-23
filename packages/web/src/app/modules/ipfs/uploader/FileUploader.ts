@@ -10,8 +10,7 @@ import { IpfsUploader } from './IpfsUploader';
 @Injectable()
 export class FileUploader extends IpfsUploader {
   constructor(configService: ConfigService) {
-    super();
-    this.init(configService);
+    super(configService);
   }
 
   public async upload(file): Promise<IpfsUploadResponse> {

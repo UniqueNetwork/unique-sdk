@@ -14,4 +14,10 @@ export class IpfsUploadResponse {
     description: 'File address',
   })
   cid: string;
+
+  @ApiProperty({
+    description: 'IPFS gateway file URL',
+    required: false,
+  })
+  fileUrl?: string;
 }

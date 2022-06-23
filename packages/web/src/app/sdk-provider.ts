@@ -26,7 +26,6 @@ export const sdkProvider: Provider = {
     const sdk = new Sdk({
       signer,
       chainWsUrl: configService.get('chainWsUrl'),
-      ipfsGatewayUrl: configService.get('ipfsGatewayUrl'),
     });
 
     await sdk.isReady;

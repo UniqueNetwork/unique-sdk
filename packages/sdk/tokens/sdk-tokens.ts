@@ -16,7 +16,7 @@ import {
   BurnTokenArguments,
   TokenIdArguments,
   TransferTokenArguments,
-} from './methods/collection-by-id/types';
+} from './types';
 
 interface Sdk {
   api: ApiPromise;
@@ -41,7 +41,7 @@ export class SdkTokens {
 
     if (!tokenData) return null;
 
-    return decodeToken(collection, tokenId, tokenData, this.sdk.options);
+    return decodeToken(collection, tokenId, tokenData);
   }
 
   async create(args: CreateTokenArguments): Promise<UnsignedTxPayload> {
