@@ -6,7 +6,7 @@ import {
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
-import { encodeCollection } from '../utils';
+import { encodeCollection } from '../../utils';
 
 /* eslint-disable class-methods-use-this */
 

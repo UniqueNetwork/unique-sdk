@@ -12,7 +12,7 @@ import {
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
 import { decodeCollection } from './utils/decode-collection';
-import { CreateCollectionExMutation } from './mutations/create-collection-ex';
+import { CreateCollectionExMutation } from './mutations/create-collection-ex/method';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
