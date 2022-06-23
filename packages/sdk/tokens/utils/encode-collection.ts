@@ -17,6 +17,7 @@ import type {
 } from '@unique-nft/unique-mainnet-types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
 import { encodeCollectionFields } from './encode-collection-fields';
+import { validateOnChainSchema } from './validator';
 
 type CollectionProperty = {
   key: CollectionPropertiesKeys;
@@ -39,6 +40,8 @@ const encodeCollectionProperties = (
       value: JSON.stringify(constOnChainSchema),
     });
   } else if (properties.constOnChainSchema) {
+    validateOnChainSchema(properties.constOnChainSchema);
+
     encodedProperties.push({
       key: CollectionPropertiesKeys.constOnChainSchema,
       value: JSON.stringify(properties.constOnChainSchema),
