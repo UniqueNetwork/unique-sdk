@@ -75,31 +75,31 @@ export class ChainPropertiesResponse implements ChainProperties {
 export class BalanceResponse implements Balance {
   @IsNumberString()
   @ApiProperty({
-    example: '89980000000000001',
+    example: '92485000000000000',
   })
   raw: string;
 
   @IsNumber()
-  @ApiProperty({ example: 0.0899 })
-  amount: number;
+  @ApiProperty({ example: '0.092485000000000000' })
+  amount: string;
 
   @IsString()
   @ApiProperty({
-    example: '89.9800 mQTZ',
+    example: '92.4850 m',
   })
   formatted: string;
 
   @IsString()
   @ApiProperty({
-    example: '0.0899 QTZ',
-  })
-  amountWithUnit: string;
-
-  @IsString()
-  @ApiProperty({
-    example: 'QTZ',
+    example: 'UNQ',
   })
   unit: string;
+
+  @IsInt()
+  @ApiProperty({
+    example: 18,
+  })
+  decimals: number;
 }
 
 export class FeeResponse extends BalanceResponse implements Fee {}
