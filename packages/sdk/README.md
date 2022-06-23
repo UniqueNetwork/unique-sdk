@@ -84,20 +84,28 @@ of NPM package, this allows you to flexibly manage dependencies, do not include 
 into the application bundle assembly, expand the SDK with your own modules.
 
 ```typescript
-import { Sdk, addFeature } from "@unique-nft/sdk";
+import { Sdk } from "@unique-nft/sdk";
 
 // ... 
 
 import '@unique-nft/sdk/extrinsics'; // Augment SDK with the `extrinsic` property
-import { addFeature } from './add-feature';
 
-// ... 
+// ...
+
+import { addFeature } from '@unique-nft/sdk';
+
 class MyOwnSdkModule {
   constructor(private sdk: Sdk) {
   }
   
   public hello() {
     return 'world!';
+  }
+}
+
+declare module "@unique-nft/sdk" {
+  export interface Sdk {
+    myOwnFeature: MyOwnSdkModule;
   }
 }
 
@@ -179,8 +187,7 @@ And send an extrinsic and a signature to it in the blockchain
 ```typescript
 const hash = await sdk.extrinsics.submit({
   signature,
-  signatureType,
-  ...unsignedExtrinsic,
+  signerPayloadJSON: unsignedExtrinsic.signerPayloadJSON,
 });
 ```
 
