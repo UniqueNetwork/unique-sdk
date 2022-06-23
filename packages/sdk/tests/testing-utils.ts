@@ -8,7 +8,6 @@ import { Sdk } from '../src/lib/sdk';
 
 export const getDefaultSdkOptions = (): SdkOptions => ({
   chainWsUrl: 'wss://ws-rc.unique.network',
-  ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
 });
 
 export async function createSdk(signerOptions?: SignerOptions): Promise<Sdk> {
@@ -18,7 +17,6 @@ export async function createSdk(signerOptions?: SignerOptions): Promise<Sdk> {
     : undefined;
   const options: SdkOptions = {
     chainWsUrl: defOptions.chainWsUrl,
-    ipfsGatewayUrl: defOptions.ipfsGatewayUrl,
     signer,
   };
   return Sdk.create(options);

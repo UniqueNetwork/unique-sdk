@@ -3,19 +3,15 @@ import { decodeConstData, getTokenUrl } from '@unique-nft/sdk/utils';
 import type { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import type {
   CollectionInfo,
-  SdkOptions,
   TokenInfo,
   TokenProperties,
 } from '@unique-nft/sdk/types';
 import { TokenPropertiesKeys } from '@unique-nft/sdk/types';
 
-type IpfsOptions = Pick<SdkOptions, 'ipfsGatewayUrl'>;
-
 export const decodeToken = (
   collection: CollectionInfo,
   tokenId: number,
   tokenData: UpDataStructsTokenData,
-  options: IpfsOptions,
 ): TokenInfo => {
   let constData: Uint8Array | null = null;
   tokenData.properties.forEach((prop) => {
@@ -40,7 +36,6 @@ export const decodeToken = (
     collection,
     decodedConstData,
     tokenId,
-    ipfsGatewayUrl: options.ipfsGatewayUrl,
   });
 
   const ownerJson = tokenData.owner.value.toHuman() as any;
