@@ -2,23 +2,22 @@
 import { INamespace } from 'protobufjs';
 import { ApiProperty, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import {
-  CollectionAccess,
   CollectionFieldTypes,
-  CollectionLimits,
-  CollectionNesting,
-  CollectionNestingPermissions,
-  CollectionPermissions,
-  CollectionProperties,
   CollectionSchemaVersion,
   TokenInfo,
   TokenProperties,
-  TokenPropertiesPermissions,
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 import {
+  CollectionAccess,
   CollectionInfoBase,
+  CollectionLimits,
   CollectionMode,
+  CollectionNestingPermissions,
+  CollectionPermissions,
+  CollectionProperties,
   MetaUpdatePermission,
+  TokenPropertiesPermissions,
 } from '@unique-nft/sdk/tokens/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
@@ -90,7 +89,7 @@ export class CollectionPermissionsDto implements CollectionPermissions {
   @ApiProperty({ required: false })
   mintMode?: boolean;
 
-  @ApiProperty({ enum: CollectionNesting, required: false })
+  @ApiProperty({ required: false })
   nesting?: CollectionNestingPermissionsDto;
 }
 

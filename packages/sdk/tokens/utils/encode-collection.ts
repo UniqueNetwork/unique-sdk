@@ -1,11 +1,7 @@
 import type { Registry } from '@polkadot/types/types';
 import {
-  CollectionProperties,
   TokenPropertiesKeys,
-  TokenPropertiesPermissions,
   TokenPropertyPermissions,
-  CollectionPermissions,
-  CollectionPropertiesKeys,
 } from '@unique-nft/sdk/types';
 import type {
   UpDataStructsCreateCollectionData,
@@ -17,7 +13,13 @@ import { stringToUTF16 } from '@unique-nft/sdk/utils';
 import { encodeCollectionFields } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
 import { CollectionInfo } from '../mutations/collection-by-id/types';
-import { CollectionMode } from '../mutations/create-collection-ex/types';
+import {
+  CollectionMode,
+  CollectionProperties,
+  TokenPropertiesPermissions,
+  CollectionPermissions,
+  CollectionPropertiesKeys,
+} from '../mutations/create-collection-ex/types';
 
 type CollectionProperty = {
   key: CollectionPropertiesKeys;
