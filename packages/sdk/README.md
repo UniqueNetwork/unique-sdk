@@ -14,210 +14,226 @@
 
 
 
-# Intro
-SDK is an JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance etc.
-At the moment the library is an pre-alpha version. We will be grateful for the feedback and ideas for improvement.
+# @unique-nft/sdk
+SDK is a JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance, etc.
+At the moment, the library is a pre-alpha version. We will be grateful for the feedback and ideas for improvement. ```
 
+___
 #  Table of Contents
 
 - [Installation](#Installation)
-- [Initialize SDK](#Initialize-SDK)
-- [Usage examples](#Usage-examples)
-  - [Collection creation](#Collection-creation)
-  - [Token creation](#Token-creation)
-  - [Token transfer](#Token-transfern)
+- [Initialize](#Initialize-SDK)
+- [Design](#design)
+  - [Modules](#modules)
+  - [Mutation and Query method](#mutation-and-query-methods)
 
+___
 # Installation
-Install the package:
+
+### npm
 ```shell
-npm i --save @unique-nft/sdk
+npm install @unique-nft/sdk
 ```
 
+### yarn
+```shell
+yarn add @unique-nft/sdk
+```
+
+### git
+```shell
+git clone https://github.com/UniqueNetwork/unique-sdk
+cd unique-sdk
+npm install
+npm run build:sdk
+```
+___
 # Initialize SDK
-```ts
-import { SdkSigner } from "@unique-nft/sdk/types";
+
+```typescript
 import { createSigner } from "@unique-nft/sdk/sign";
 import { Sdk } from "@unique-nft/sdk";
 
-export async function createSdk(): Promise<Sdk> {
-  const options = {
+(async () => {
+  const sdk = await Sdk.create({
     chainWsUrl: 'wss://quartz.unique.network',
-    ipfsGatewayUrl: 'https://ipfs.unique.network/ipfs/',
-  }
-  const signerOptions = {
-    seed: '//Alice', // Signer seed phrase
-  };
-  const signer: SdkSigner = await createSigner(signerOptions);
-  return await Sdk.create({
-    ...options,
-    signer,
+    signer: await createSigner({
+      seed: '//Alice', // Signer seed phrase if you want to sign extrinsics
+    }),
   });
-}
-
+})();
 ```
 
-# Usage examples
+___
+# Design
 
-## Collection creation
-<details>
-<summary>Collapse</summary>
+Unique SDK was developed as an add-on of
+<a href="https://polkadot.js.org/docs/api/start" target="_blank">Polkadot{.js} ApiPromise</a>,
+extending it with simple methods to work with the Unique Network blockchains
+(Opal, Quartz, Unique).
+However, Unique SDK can be connected to any network based on the
+<a href="https://substrate.io" target="_blank">Substrate framework</a>,
+and the main modules (extrinsics, balance, query, sign, etc.) can also be used.
 
+___
+## Modules
 
-```ts
+By default, the SDK implements only a connection to the blockchain network,
+and modules expand its capabilities. Modules are implemented as secondary endpoints
+of NPM package, this allows you to flexibly manage dependencies, do not include unnecessary modules
+into the application bundle assembly, expand the SDK with your own modules.
+
+```typescript
 import { Sdk } from "@unique-nft/sdk";
-import { INamespace } from "protobufjs";
-import {
-  CreateCollectionArguments,
-  SignTxResult,
-  SubmitTxArguments,
-  UnsignedTxPayload,
-} from "@unique-nft/sdk/types";
-import { ISubmittableResult } from "@polkadot/types/types/extrinsic";
-import '@unique-nft/sdk/tokens';
-import '@unique-nft/sdk/extrinsics';
 
-export async function createCollection(sdk: Sdk, address: string): Promise<number> {
-    const constOnChainSchema: INamespace = {
-        nested: {
-            onChainMetaData: {
-                nested: {
-                    NFTMeta: {
-                        fields: {
-                            FieldA: {
-                                id: 1,
-                                rule: 'required',
-                                type: 'string',
-                            },
-                            FieldB: {
-                                id: 2,
-                                rule: 'required',
-                                type: 'string',
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    };
+// ... 
 
-    const createArgs: CreateCollectionArguments = {
-        name: 'My collection',
-        description: 'my test collection',
-        tokenPrefix: 'FOO',
-        properties: {
-            schemaVersion: 'Unique',
-            constOnChainSchema,
-        },
-        address,
-    };
-    const txPayload: UnsignedTxPayload = await sdk.collections.create(createArgs);
+import '@unique-nft/sdk/extrinsics'; // Augment SDK with the `extrinsic` property
 
-    const signTxResult: SignTxResult = await sdk.extrinsics.sign(txPayload);
+// ...
 
-    const submitTxArgs: SubmitTxArguments = {
-        signerPayloadJSON: txPayload.signerPayloadJSON,
-        signature: signTxResult.signature
-    };
+import { addFeature } from '@unique-nft/sdk';
 
-    return new Promise(resolve => {
-        let collectionId = 0;
-        function resultCallback(result: ISubmittableResult) {
-            const createdEvent = result.events.find(event => event.event.method === 'CollectionCreated');
-            if (createdEvent) collectionId = +createdEvent.event.data[0];
-            if (result.isCompleted) resolve(collectionId);
-        }
-        sdk.extrinsics.submit(submitTxArgs, resultCallback);
-    })
+class MyOwnSdkModule {
+  constructor(private sdk: Sdk) {
+  }
+  
+  public hello() {
+    return 'world!';
+  }
 }
+
+declare module "@unique-nft/sdk" {
+  export interface Sdk {
+    myOwnFeature: MyOwnSdkModule;
+  }
+}
+
+addFeature('myOwnFeature', MyOwnSdkModule);
+
+console.log(sdk.myOwnFeature.hello());
+
 ```
 
-</details>
+Now the SDK includes 5 modules
 
-## Token creation
-```ts
+- [Extrinsics](./extrinsics) - for build, sign and submit extrinsics
+- [State Queries](./state-queries) - queries blockchain storage
+- [Sign](./sign) - account management: sign, addresses
+- [Balance](./balance) - get and transfers native substrate token
+- [Tokens](./tokens) - operations with NFT of Unique Network blockchains (Opal, Unique, Quartz)
+
+Modules can be dependent on each other. So, for example, the Balance Module depends
+from the Extrinsic Module,
+because it generates extrinsics of the transfer and submits them to the blockchain.
+
+___
+## Mutation and Query methods
+
+We have divided all SDK methods into two types
+1) [Query](#query-method) methods for reading blockchain storage
+   (e.g. balance, or token properties)
+
+```typescript
+import "@unique-nft/sdk/tokens"
+
+const collectionId = 1;
+const tokenId = 3456;
+const token = await sdk.tokens.get({ collectionId, tokenId });
+2) [Mutation](#mutation-method) methods for updating the state of the blockchain
+```typescript
+const transferArgs = {
+  tokenId,
+  collectionId,
+  from: addressFrom,
+  to: addressTo,
+}
+const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
+```
+___
+### Query methods
+Queries to blockchain storage that return data in human format
+
+```typescript
+
+const address = 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx';
+/**
+ * returns
+ * {
+ *  "raw": "0",
+ *  "amount": 0,
+ *  "amountWithUnit": "0",
+ *  "formatted": "0",
+ *  "unit": "UNQ"
+ * }
+ */
+const { raw, amount, amountWithUnit, formatted, unit } = await sdk.balance.get({ address });
+```
+
+___
+### Mutation methods
+By default, they return an unsigned extension.
+To apply this change in the blockchain state, you must sign it
+
+```typescript
+import { createSigner } from "@unique-nft/sdk/sign";
+const signer: SdkSigner = await createSigner(signerOptions);
+const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
+const { signature, signatureType } = await signer.sign(unsignedExtrinsic);
+```
+
+And send an extrinsic and a signature to it in the blockchain
+
+```typescript
+const hash = await sdk.extrinsics.submit({
+  signature,
+  signerPayloadJSON: unsignedExtrinsic.signerPayloadJSON,
+});
+```
+
+For convenience, we have implemented a [complex method](./extrinsics#complex):
+if you initialize the SDK with a signer, you can sign and send extrinsics
+seamlessly, without separate actions
+
+```typescript
+import { SdkSigner } from "@unique-nft/sdk/types";
+import { createSigner } from "@unique-nft/sdk/sign";
 import { Sdk } from "@unique-nft/sdk";
-import {
-  CreateTokenArguments,
-  SignTxResult,
-  SubmitTxArguments,
-  UnsignedTxPayload,
-} from "@unique-nft/sdk/types";
-import { ISubmittableResult } from "@polkadot/types/types/extrinsic";
-import '@unique-nft/sdk/tokens';
-import '@unique-nft/sdk/extrinsics';
+import "@unique-nft/sdk/balance";
+import { ExtrinsicOptions } from "@unique-nft/sdk/extrinsics";
 
-export async function createToken(sdk: Sdk, address: string, collectionId: number): Promise<number> {
-    const constData = {
-        FieldA: 'My field a',
-        FieldB: 'My field b',
-    };
+const sdk = await Sdk.create({
+  chainWsUrl: 'wss://quartz.unique.network',
+  signer: await createSigner({
+    seed: '//Alice', // Signer seed phrase
+  }),
+});
 
-    const createArgs: CreateTokenArguments = {
-        address,
-        owner: address,
-        collectionId,
-        constData,
-    };
-    const txPayload: UnsignedTxPayload = await sdk.tokens.create(createArgs);
+/**
+ * returns unsigned extrinsic
+ */
+const unsignedExtrinsic = await sdk.balance.transfer(transferArgs);
 
-    const signTxResult: SignTxResult = await sdk.extrinsics.sign(txPayload);
+/**
+ * return signed extrinsic (unsigned extrinsic + signature + signature type)
+ */
+const signedExtrinsic = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Sign);
 
-    const submitTxArgs: SubmitTxArguments = {
-        signerPayloadJSON: txPayload.signerPayloadJSON,
-        signature: signTxResult.signature
-    };
+/**
+ * submitting extrinsic and returns hash
+ */
+const hash = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Submit);
 
-    return new Promise(resolve => {
-        let tokenId = 0;
-        function resultCallback(result: ISubmittableResult) {
-            const createdEvent = result.events.find(event => event.event.method === 'ItemCreated');
-            if (createdEvent) tokenId = +createdEvent.event.data[1];
-            if (result.isCompleted) resolve(tokenId);
-        }
-        sdk.extrinsics.submit(submitTxArgs, resultCallback);
-    })
-}
+/**
+ * submitting extrinsic and returns final result (status, events, other human info)
+ */
+const result = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Watch);
 ```
 
-## Token transfer
-```ts
-import { Sdk } from "@unique-nft/sdk";
-import {
-  SignTxResult,
-  SubmitTxArguments,
-  TransferTokenArguments,
-} from "@unique-nft/sdk/types";
-import { ISubmittableResult } from "@polkadot/types/types/extrinsic";
-import '@unique-nft/sdk/tokens';
-import '@unique-nft/sdk/extrinsics';
+When we pass the `ExtrinsicOptions.Watch` option, the method will parse the event data
+and return the data associated with this extrinsic
 
-export async function transferToken(
-    sdk: Sdk,
-    addressFrom: string,
-    addressTo: string,
-    collectionId: number,
-    tokenId: number
-) {
-    const transferArgs: TransferTokenArguments = {
-        from: addressFrom,
-        to: addressTo,
-        tokenId: tokenId,
-        collectionId: collectionId,
-    }
-    const txPayload = await sdk.tokens.transfer(transferArgs);
-
-    const signTxResult: SignTxResult = await sdk.extrinsics.sign(txPayload);
-
-    const submitTxArgs: SubmitTxArguments = {
-        signerPayloadJSON: txPayload.signerPayloadJSON,
-        signature: signTxResult.signature
-    };
-
-    return new Promise(resolve => {
-        function resultCallback(result: ISubmittableResult) {
-            if (result.isCompleted) resolve(true);
-        }
-        sdk.extrinsics.submit(submitTxArgs, resultCallback);
-    })
-}
+```typescript
+const { collectionId } = await sdk.collections.create({ ... }, ExtrinsicOptions.Watch);
 ```
+
