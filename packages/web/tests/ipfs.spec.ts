@@ -141,13 +141,6 @@ describe('Ipfs upload', () => {
     it('existence fileUrl property', async () => {
       if (skipTests || !config.get('ipfsGatewayUrl')) return;
 
-      app = await createApp();
-      config = app.get(ConfigService);
-      if (!config.get('ipfsUploadUrl')) {
-        skipTests = true;
-        console.log('skipped file upload test');
-      }
-
       const { ok, body } = await request(app.getHttpServer())
         .post(`/api/ipfs/upload-file`)
         .attach('file', punk1FilePath);
@@ -165,10 +158,6 @@ describe('Ipfs upload', () => {
       process.env.IPFS_GATEWAY_URL = '';
       app = await createApp();
       config = app.get(ConfigService);
-      if (!config.get('ipfsUploadUrl')) {
-        skipTests = true;
-        console.log('skipped file upload test');
-      }
 
       const { ok, body } = await request(app.getHttpServer())
         .post(`/api/ipfs/upload-file`)
