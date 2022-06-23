@@ -29,10 +29,12 @@ export const buildUnsignedSubmittable = (
   api: ApiPromise,
   unsignedTxPayload: UnsignedTxPayload,
 ): SubmittableExtrinsic => {
-  const { signerPayloadJSON, signerPayloadHex } = unsignedTxPayload;
+  const { signerPayloadJSON } = unsignedTxPayload;
 
   try {
-    return api.tx(signerPayloadHex);
+    const extrinsic = api.registry.createType('Extrinsic', signerPayloadJSON);
+
+    return api.tx(extrinsic);
   } catch (error) {
     throw BuildExtrinsicError.wrapError(error, signerPayloadJSON);
   }

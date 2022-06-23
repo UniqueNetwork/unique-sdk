@@ -7,7 +7,9 @@ import {
   IsInt,
   IsNumberString,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import {
   AddressArguments,
   AnyObject,
@@ -34,6 +36,12 @@ import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+});
+
+const AnyToBoolean = Transform(({ obj = {}, key }) => {
+  const asString = String(obj && obj[key]).toLowerCase();
+
+  return asString === 'true' || asString === '1';
 });
 
 export class ChainPropertiesResponse implements ChainProperties {
@@ -104,6 +112,7 @@ export class TransferBuildBody implements TransferBuildArguments {
   address: string;
 
   @ValidAddress()
+  @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
   @AddressApiProperty
   destination: string;
 
@@ -113,6 +122,13 @@ export class TransferBuildBody implements TransferBuildArguments {
     example: 0.01,
   })
   amount: number;
+
+  @AnyToBoolean
+  @IsBoolean()
+  @ApiProperty({
+    example: true,
+  })
+  withFee?: boolean;
 }
 
 export class CollectionIdQuery implements CollectionIdArguments {
@@ -233,6 +249,11 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
 
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
+}
+
+export class UnsignedTxPayloadResponseWithFee extends UnsignedTxPayloadResponse {
+  @ApiProperty({ type: FeeResponse, required: false })
+  fee?: Balance;
 }
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}
