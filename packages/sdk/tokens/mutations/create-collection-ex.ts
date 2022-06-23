@@ -20,6 +20,7 @@ export class CreateCollectionExMutation extends MutationMethodBase<
     const { address, ...rest } = args;
 
     const encodedCollection = encodeCollection(
+      // @ts-ignore
       this.sdk.api.registry,
       rest,
     ).toHex();

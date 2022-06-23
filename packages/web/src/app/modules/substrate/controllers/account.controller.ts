@@ -11,13 +11,13 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { generateAccount, getAccountFromMnemonic } from '@unique-nft/sdk/sign';
 
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { SdkValidationPipe } from '../validation';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { SdkValidationPipe } from '../../../validation';
 import {
   AccountResponse,
   GenerateAccountBody,
   GetAccountQuery,
-} from '../types/signer-payload';
+} from '../../../types/signer-payload';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

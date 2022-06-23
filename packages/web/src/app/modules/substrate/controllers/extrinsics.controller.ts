@@ -16,24 +16,24 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { Cache } from 'cache-manager';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { VerificationResultResponse } from '../types/requests';
-import { Signer } from '../decorators/signer.decorator';
-import { SdkValidationPipe } from '../validation';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { VerificationResultResponse } from '../../../types/requests';
+import { Signer } from '../../../decorators/signer.decorator';
+import { SdkValidationPipe } from '../../../validation';
 import {
   FeeResponse,
   UnsignedTxPayloadBody,
   UnsignedTxPayloadResponse,
-} from '../types/sdk-methods';
+} from '../../../types/sdk-methods';
 import {
   ExtrinsicResultRequest,
   SignTxResultResponse,
   SubmitResultResponse,
   SubmitTxBody,
   TxBuildBody,
-} from '../types/arguments';
-import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
-import { serializeResult } from '../utils/submittable-result-transformer';
+} from '../../../types/arguments';
+import { ExtrinsicResultResponse } from '../../../types/extrinsic-result-response';
+import { serializeResult } from '../../../utils/submittable-result-transformer';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

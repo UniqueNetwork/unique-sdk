@@ -11,15 +11,15 @@ import {
 import { Sdk } from '@unique-nft/sdk';
 
 import { ApiTags } from '@nestjs/swagger';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { SdkValidationPipe } from '../validation';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { SdkValidationPipe } from '../../../validation';
 import {
   AddressQuery,
   AllBalancesResponse,
   TransferBuildBody,
   UnsignedTxPayloadResponseWithFee,
   WithFeeQuery,
-} from '../types/sdk-methods';
+} from '../../../types/sdk-methods';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

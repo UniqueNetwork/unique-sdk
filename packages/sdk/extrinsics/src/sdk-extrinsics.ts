@@ -107,6 +107,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
 
     const { partialFee } = await submittable.paymentInfo(address);
 
+    // @ts-ignore
     return formatBalance(this.sdk.api, partialFee);
   }
 
