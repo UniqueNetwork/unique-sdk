@@ -18,6 +18,7 @@ import {
   BalanceResponse,
   TransferBuildBody,
   UnsignedTxPayloadResponseWithFee,
+  WithFeeQuery,
 } from '../types/sdk-methods';
 
 @UsePipes(SdkValidationPipe)
@@ -34,9 +35,10 @@ export class BalanceController {
 
   @Post('transfer')
   async transferBuild(
-    @Body() { withFee, ...rest }: TransferBuildBody,
+    @Query() { withFee }: WithFeeQuery,
+    @Body() args: TransferBuildBody,
   ): Promise<UnsignedTxPayloadResponseWithFee> {
-    const unsignedTxPayload = await this.sdk.balance.transfer(rest);
+    const unsignedTxPayload = await this.sdk.balance.transfer(args);
 
     if (!withFee) return unsignedTxPayload;
 

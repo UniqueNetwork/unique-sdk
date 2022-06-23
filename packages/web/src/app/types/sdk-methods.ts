@@ -44,6 +44,17 @@ const AnyToBoolean = Transform(({ obj = {}, key }) => {
   return asString === 'true' || asString === '1';
 });
 
+export class WithFeeQuery {
+  @AnyToBoolean
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty({
+    example: true,
+    required: false,
+  })
+  withFee?: boolean;
+}
+
 export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({
     example: 255,
@@ -122,13 +133,6 @@ export class TransferBuildBody implements TransferBuildArguments {
     example: 0.01,
   })
   amount: number;
-
-  @AnyToBoolean
-  @IsBoolean()
-  @ApiProperty({
-    example: true,
-  })
-  withFee?: boolean;
 }
 
 export class CollectionIdQuery implements CollectionIdArguments {
