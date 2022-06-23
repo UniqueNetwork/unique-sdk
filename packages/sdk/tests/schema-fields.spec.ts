@@ -1,32 +1,37 @@
 import { encodeCollectionFields } from '@unique-nft/sdk/tokens/utils/encode-collection-fields';
 import { CollectionFields, CollectionFieldTypes } from '@unique-nft/sdk/types';
-import { Root, INamespace } from 'protobufjs';
+import { INamespace } from 'protobufjs';
 import { decodeCollectionFields } from '@unique-nft/sdk/tokens/utils/decode-collection-fields';
+import { ValidationError } from '@unique-nft/sdk/errors';
+import { validateOnChainSchema } from '@unique-nft/sdk/tokens/utils/validator';
 
 const fields: CollectionFields = [
   {
+    id: 1,
     name: 'text_required',
     type: CollectionFieldTypes.TEXT,
     required: true,
   },
   {
+    id: 2,
     name: 'text_optional',
     type: CollectionFieldTypes.TEXT,
-    required: false,
   },
   {
+    id: 3,
     name: 'select_required',
     type: CollectionFieldTypes.SELECT,
     required: true,
     items: ['{"en":"select required 1"}', '{"en":"select required 2"}'],
   },
   {
+    id: 4,
     name: 'select_optional',
     type: CollectionFieldTypes.SELECT,
-    required: false,
     items: ['{"en":"select optional 1"}', '{"en":"select optional 2"}'],
   },
   {
+    id: 5,
     name: 'mselect',
     type: CollectionFieldTypes.SELECT,
     multi: true,
@@ -102,14 +107,134 @@ export const constOnChainSchema: INamespace = {
   },
 };
 
-describe('Collections fields', () => {
-  it('encode fields', () => {
-    const encoded = encodeCollectionFields(fields);
-    expect(encoded).toMatchObject(constOnChainSchema);
+describe('Collections fields & schema', () => {
+  describe('fields', () => {
+    it('encode', () => {
+      const encoded = encodeCollectionFields(fields);
+      expect(encoded).toMatchObject(constOnChainSchema);
+    });
+
+    it('decode', () => {
+      const decoded = decodeCollectionFields(constOnChainSchema);
+      expect(decoded).toMatchObject(fields);
+    });
+
+    it('validation, unique id', () => {
+      expect(() => {
+        encodeCollectionFields([
+          {
+            id: 1,
+            name: 'a',
+            type: CollectionFieldTypes.TEXT,
+          },
+          {
+            id: 1,
+            name: 'b',
+            type: CollectionFieldTypes.TEXT,
+          },
+        ]);
+      }).toThrow(
+        new ValidationError('The "id" property in fields list must be unique'),
+      );
+    });
+
+    it('validation, unique name', () => {
+      expect(() => {
+        encodeCollectionFields([
+          {
+            id: 1,
+            name: 'a',
+            type: CollectionFieldTypes.TEXT,
+          },
+          {
+            id: 2,
+            name: 'a',
+            type: CollectionFieldTypes.TEXT,
+          },
+        ]);
+      }).toThrow(
+        new ValidationError(
+          'The "name" property in fields list must be unique',
+        ),
+      );
+    });
   });
 
-  it('decode schema', () => {
-    const decoded = decodeCollectionFields(constOnChainSchema);
-    expect(decoded).toMatchObject(fields);
+  describe('schema', () => {
+    it('validation, no such type NFTMeta', () => {
+      expect(() => {
+        validateOnChainSchema({
+          nested: {
+            onChainMetaData: {},
+          },
+        });
+      }).toThrow(new ValidationError('no such type: NFTMeta'));
+    });
+
+    it('validation, invalid rule', () => {
+      expect(() => {
+        validateOnChainSchema({
+          nested: {
+            onChainMetaData: {
+              nested: {
+                NFTMeta: {
+                  fields: {
+                    fieldA: {
+                      id: 1,
+                      type: 'string',
+                      rule: 'invalid_rule',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+      }).toThrow(new ValidationError(`rule must be a string rule`));
+    });
+
+    it('validation, invalid string rule', () => {
+      expect(() => {
+        validateOnChainSchema({
+          nested: {
+            onChainMetaData: {
+              nested: {
+                NFTMeta: {
+                  fields: {
+                    fieldA: {
+                      id: 1,
+                      type: 'string',
+                      rule: 'repeated',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+      }).toThrow(new ValidationError(`Invalid rule in string field`));
+    });
+
+    it('validation, no such Enum in Root', () => {
+      expect(() => {
+        validateOnChainSchema({
+          nested: {
+            onChainMetaData: {
+              nested: {
+                NFTMeta: {
+                  fields: {
+                    fieldA: {
+                      id: 1,
+                      type: 'select',
+                      rule: 'required',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+      }).toThrow(new ValidationError(`no such Enum 'fieldA' in Root`));
+    });
   });
 });

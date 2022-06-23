@@ -1,11 +1,13 @@
 import {
+  CollectionField,
   CollectionFields,
   CollectionFieldTypes,
   CollectionSelectField,
 } from '@unique-nft/sdk/types';
-import { INamespace, IField, IEnum } from 'protobufjs';
+import { IEnum, IField, INamespace } from 'protobufjs';
+import { ValidationError } from '@unique-nft/sdk/errors';
 
-const encodeSelectField = (selectField: CollectionSelectField): IEnum => {
+const encodeEnum = (selectField: CollectionSelectField): IEnum => {
   const options: Record<string, string> = {};
 
   const values: Record<string, number> = {};
@@ -24,49 +26,82 @@ const encodeSelectField = (selectField: CollectionSelectField): IEnum => {
   };
 };
 
+export const encodeField = (field: CollectionField): IField => {
+  const { id, type, name, required } = field;
+
+  const rule = required ? 'required' : 'optional';
+
+  let selectField: CollectionSelectField;
+
+  switch (type) {
+    case CollectionFieldTypes.TEXT:
+      return {
+        id,
+        rule,
+        type: 'string',
+      };
+    case CollectionFieldTypes.SELECT:
+      selectField = field as CollectionSelectField;
+
+      if (selectField.multi) {
+        if (required) {
+          throw new ValidationError(
+            `Multiselect field "${name}" cannot be required`,
+            { field },
+          );
+        }
+
+        return {
+          id,
+          rule: 'repeated',
+          type: name,
+        };
+      }
+
+      return {
+        id,
+        rule,
+        type: name,
+      };
+    default:
+      throw new ValidationError('Invalid collection field type', { field });
+  }
+};
+
 export const encodeCollectionFields = (
   collectionFields: CollectionFields,
 ): INamespace => {
-  const protobufTypes: Record<string, object> = {};
+  const protobufEnums: Record<string, IEnum> = {};
 
   const protobufFields: Record<string, IField> = {};
 
+  const idsContainer: Record<number, true> = {};
+
+  const namesContainer: Record<string, true> = {};
+
   collectionFields.forEach((field, index) => {
-    const { type, name, required } = field;
+    const { id, name, type } = field;
 
-    const id = index + 1;
+    if (idsContainer[id]) {
+      throw new ValidationError(
+        `The "id" property in fields list must be unique`,
+        { field },
+      );
+    }
+    idsContainer[id] = true;
 
-    let selectField: CollectionSelectField;
+    if (namesContainer[name]) {
+      throw new ValidationError(
+        `The "name" property in fields list must be unique`,
+        { field },
+      );
+    }
+    namesContainer[name] = true;
 
-    switch (type) {
-      case CollectionFieldTypes.TEXT:
-        protobufFields[name] = {
-          id,
-          rule: required ? 'required' : 'optional',
-          type: 'string',
-        };
-        break;
-      case CollectionFieldTypes.SELECT:
-        selectField = field as CollectionSelectField;
+    protobufFields[name] = encodeField(field);
 
-        if (selectField.multi) {
-          protobufFields[name] = {
-            id,
-            rule: 'repeated',
-            type: name,
-          };
-        } else {
-          protobufFields[name] = {
-            id,
-            rule: required ? 'required' : 'optional',
-            type: name,
-          };
-        }
-
-        protobufTypes[name] = encodeSelectField(selectField);
-        break;
-      default:
-        throw new Error('Invalid collection field type');
+    if (type === CollectionFieldTypes.SELECT) {
+      protobufEnums[name] = encodeEnum(field as CollectionSelectField);
     }
   });
 
@@ -77,7 +112,7 @@ export const encodeCollectionFields = (
           NFTMeta: {
             fields: protobufFields,
           },
-          ...protobufTypes,
+          ...protobufEnums,
         },
       },
     },

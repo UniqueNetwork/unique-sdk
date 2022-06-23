@@ -4,6 +4,7 @@ export enum CollectionFieldTypes {
 }
 
 export interface CollectionFieldBase {
+  id: number;
   name: string;
   type: CollectionFieldTypes;
   required?: boolean;

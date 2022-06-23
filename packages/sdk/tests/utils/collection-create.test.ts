@@ -37,11 +37,13 @@ export const constOnChainSchema: INamespace = {
 
 const fields: CollectionFields = [
   {
+    id: 1,
     type: CollectionFieldTypes.TEXT,
     name: 'ipfsJson',
     required: true,
   },
   {
+    id: 2,
     type: CollectionFieldTypes.TEXT,
     name: 'name',
     required: true,

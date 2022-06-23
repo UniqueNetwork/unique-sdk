@@ -12,6 +12,7 @@ const decodeField = (
 ): CollectionField => {
   if (field.type === 'string') {
     return {
+      id: field.id,
       type: CollectionFieldTypes.TEXT,
       name,
       required: field.rule === 'required',
@@ -27,6 +28,7 @@ const decodeField = (
 
   if (field.rule === 'repeated') {
     return {
+      id: field.id,
       type: CollectionFieldTypes.SELECT,
       name,
       items,
@@ -35,6 +37,7 @@ const decodeField = (
   }
 
   return {
+    id: field.id,
     type: CollectionFieldTypes.SELECT,
     name,
     items,
