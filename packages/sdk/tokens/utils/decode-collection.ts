@@ -18,7 +18,6 @@ import type {
 } from '@unique-nft/unique-mainnet-types/default';
 
 import type {
-  CollectionInfoBase,
   CollectionLimits,
   CollectionPermissions,
   CollectionProperties,
@@ -32,6 +31,7 @@ import {
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 import { decodeCollectionFields } from './decode-collection-fields';
+import { CollectionInfoBase } from '../mutations/create-collection-ex/types';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,

@@ -4,6 +4,7 @@ import {
   SignerPayloadRaw,
   ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
+
 import { AnyObject } from './unique-types';
 import {
   SignTxArguments,
@@ -38,14 +39,6 @@ export interface TransferBuildArguments {
   amount: number;
 }
 
-export interface CollectionIdArguments {
-  collectionId: number;
-}
-
-export interface TokenIdArguments extends CollectionIdArguments {
-  tokenId: number;
-}
-
 export interface AddressArguments {
   address: string;
 }
@@ -65,14 +58,6 @@ export interface CreateTokenArguments extends AddressArguments {
   collectionId: number;
   owner?: string;
   constData: AnyObject;
-}
-
-export interface BurnTokenArguments extends TokenIdArguments {
-  address: string;
-}
-export interface TransferTokenArguments extends TokenIdArguments {
-  from: string;
-  to: string;
 }
 
 export interface UnsignedTxPayload {

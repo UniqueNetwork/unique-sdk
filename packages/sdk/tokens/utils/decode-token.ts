@@ -2,12 +2,12 @@ import { decodeConstData, getTokenUrl } from '@unique-nft/sdk/utils';
 
 import type { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import type {
-  CollectionInfo,
   SdkOptions,
   TokenInfo,
   TokenProperties,
 } from '@unique-nft/sdk/types';
 import { TokenPropertiesKeys } from '@unique-nft/sdk/types';
+import { CollectionInfo } from '../mutations/collection-by-id/types';
 
 type IpfsOptions = Pick<SdkOptions, 'ipfsGatewayUrl'>;
 
@@ -37,7 +37,8 @@ export const decodeToken = (
   };
 
   const tokenUrl = getTokenUrl({
-    collection,
+    schemaVersion: collection.properties.schemaVersion,
+    offchainSchema: collection.properties.offchainSchema,
     decodedConstData,
     tokenId,
     ipfsGatewayUrl: options.ipfsGatewayUrl,

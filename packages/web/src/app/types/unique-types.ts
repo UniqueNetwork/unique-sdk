@@ -4,20 +4,22 @@ import { ApiProperty, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import {
   CollectionAccess,
   CollectionFieldTypes,
-  CollectionInfoBase,
   CollectionLimits,
-  CollectionMode,
   CollectionNesting,
   CollectionNestingPermissions,
   CollectionPermissions,
   CollectionProperties,
   CollectionSchemaVersion,
-  MetaUpdatePermission,
   TokenInfo,
   TokenProperties,
   TokenPropertiesPermissions,
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
+import {
+  CollectionInfoBase,
+  CollectionMode,
+  MetaUpdatePermission,
+} from '@unique-nft/sdk/tokens/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
 import {

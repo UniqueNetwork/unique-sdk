@@ -1,5 +1,4 @@
 import { INamespace } from 'protobufjs';
-import { CollectionInfoBase } from '@unique-nft/sdk/types';
 import { CollectionFields } from './unique-fields';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -77,12 +76,6 @@ export interface TokenPropertyPermissions {
   mutable?: boolean;
   collectionAdmin?: boolean;
   tokenOwner?: boolean;
-}
-
-export interface CollectionInfo extends CollectionInfoBase {
-  id: number;
-  owner: string;
-  // todo tokensCount: number
 }
 
 export interface TokenProperties {

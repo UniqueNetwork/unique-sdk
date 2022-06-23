@@ -1,22 +1,25 @@
 import '@unique-nft/unique-mainnet-types/augment-api';
 
 import { Sdk } from '@unique-nft/sdk';
-import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+import { MutationMethodWrap, QueryMethod } from '@unique-nft/sdk/extrinsics';
 
 import {
   UnsignedTxPayload,
   BurnCollectionArguments,
-  CollectionIdArguments,
-  CollectionInfo,
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
-import { decodeCollection } from './utils/decode-collection';
 import { CreateCollectionExMutation } from './mutations/create-collection-ex/method';
 import { CreateCollectionArguments } from './mutations/create-collection-ex/types';
+import { collectionById } from './mutations/collection-by-id/method';
+import {
+  CollectionIdArguments,
+  CollectionInfo,
+} from './mutations/collection-by-id/types';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
     this.creation = new CreateCollectionExMutation(sdk);
+    this.get = collectionById.bind(sdk);
   }
 
   creation: MutationMethodWrap<
@@ -24,24 +27,7 @@ export class SdkCollections {
     CollectionIdArguments
   >;
 
-  async get({
-    collectionId,
-  }: CollectionIdArguments): Promise<CollectionInfo | null> {
-    const collectionOption = await this.sdk.api.rpc.unique.collectionById(
-      collectionId,
-    );
-
-    const collection = collectionOption.unwrapOr(null);
-    if (!collection) return null;
-
-    const decoded = decodeCollection(collection);
-
-    return {
-      ...decoded,
-      id: collectionId,
-      owner: collection.owner.toString(),
-    };
-  }
+  get: QueryMethod<CollectionIdArguments, CollectionInfo>;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
