@@ -1,12 +1,9 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import {
-  CreateCollectionArguments,
-  TxBuildArguments,
-  CollectionIdArguments,
-} from '@unique-nft/sdk/types';
+import { TxBuildArguments, CollectionIdArguments } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { encodeCollection } from '../../utils';
+import { CreateCollectionArguments } from './types';
 
 /* eslint-disable class-methods-use-this */
 

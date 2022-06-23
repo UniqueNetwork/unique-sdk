@@ -1,14 +1,9 @@
 import { INamespace } from 'protobufjs';
+import { CollectionInfoBase } from '@unique-nft/sdk/types';
 import { CollectionFields } from './unique-fields';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
-
-export enum CollectionMode {
-  Nft = 'Nft',
-  Fungible = 'Fungible',
-  ReFungible = 'ReFungible',
-}
 
 export enum CollectionAccess {
   Normal = 'Normal',
@@ -24,12 +19,6 @@ export enum CollectionNesting {
 export enum CollectionSchemaVersion {
   ImageURL = 'ImageURL',
   Unique = 'Unique',
-}
-
-export enum MetaUpdatePermission {
-  ItemOwner = 'ItemOwner',
-  Admin = 'Admin',
-  None = 'None',
 }
 
 export interface CollectionSponsorship {
@@ -67,20 +56,6 @@ export interface CollectionProperties {
   variableOnChainSchema?: string | null;
   constOnChainSchema?: INamespace | null;
   fields?: CollectionFields;
-}
-
-export interface CollectionInfoBase {
-  mode?: CollectionMode | `${CollectionMode}`;
-  name: string;
-  description: string;
-  tokenPrefix: string;
-  sponsorship?: CollectionSponsorship | null;
-  limits?: CollectionLimits;
-  metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
-
-  properties: CollectionProperties;
-  permissions?: CollectionPermissions;
-  tokenPropertyPermissions?: TokenPropertiesPermissions;
 }
 
 export enum CollectionPropertiesKeys {

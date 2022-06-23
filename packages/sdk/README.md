@@ -140,6 +140,8 @@ import "@unique-nft/sdk/tokens"
 const collectionId = 1;
 const tokenId = 3456;
 const token = await sdk.tokens.get({ collectionId, tokenId });
+```
+
 2) [Mutation](#mutation-method) methods for updating the state of the blockchain
 ```typescript
 const transferArgs = {

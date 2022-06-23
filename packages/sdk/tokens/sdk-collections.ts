@@ -8,11 +8,11 @@ import {
   BurnCollectionArguments,
   CollectionIdArguments,
   CollectionInfo,
-  CreateCollectionArguments,
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
 import { decodeCollection } from './utils/decode-collection';
 import { CreateCollectionExMutation } from './mutations/create-collection-ex/method';
+import { CreateCollectionArguments } from './mutations/create-collection-ex/types';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {

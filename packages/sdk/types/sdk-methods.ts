@@ -4,7 +4,7 @@ import {
   SignerPayloadRaw,
   ISubmittableResult,
 } from '@polkadot/types/types/extrinsic';
-import { AnyObject, CollectionInfoBase } from './unique-types';
+import { AnyObject } from './unique-types';
 import {
   SignTxArguments,
   SignTxResult,
@@ -47,10 +47,6 @@ export interface TokenIdArguments extends CollectionIdArguments {
 }
 
 export interface AddressArguments {
-  address: string;
-}
-
-export interface CreateCollectionArguments extends CollectionInfoBase {
   address: string;
 }
 
