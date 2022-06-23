@@ -1,5 +1,5 @@
 import { Module, DynamicModule } from '@nestjs/common';
-import { GlobalConfigModule } from '../config/config.module';
+import { GlobalConfigModule } from '../../config/config.module';
 import { IpfsController } from './controller';
 import { FileUploader } from './uploader/FileUploader';
 import { ZipUploader } from './uploader/ZipUploader';

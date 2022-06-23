@@ -1,5 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import * as process from 'process';
+import { CacheConfig, createCacheConfig } from './cache.config';
 
 export type Config = {
   isProduction: boolean;
@@ -12,6 +13,8 @@ export type Config = {
 
   ipfsUploadUrl: string;
   allowedTypes: Array<string>;
+
+  cache: CacheConfig;
 };
 
 export type SignerConfig = {
@@ -41,6 +44,8 @@ const loadConfig = (): Config => ({
         'text/json',
         'application/json',
       ],
+
+  cache: createCacheConfig(process.env),
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

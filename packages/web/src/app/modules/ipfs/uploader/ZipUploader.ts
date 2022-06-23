@@ -4,9 +4,9 @@ import { promisify } from 'util';
 import { fromBuffer as yauzlFromBuffer, ZipFile, Entry } from 'yauzl';
 import { Readable as ReadableStream } from 'stream';
 
-import { IpfsError } from '../../errors/ipfs-error';
-import { WebErrorCodes } from '../../errors/codes';
-import { IpfsUploadResponse } from '../../types/requests';
+import { IpfsError } from '../../../errors/ipfs-error';
+import { WebErrorCodes } from '../../../errors/codes';
+import { IpfsUploadResponse } from '../../../types/requests';
 import { IpfsUploader } from './IpfsUploader';
 
 const openZip = promisify<Buffer, object, ZipFile>(yauzlFromBuffer);

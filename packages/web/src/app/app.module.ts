@@ -4,7 +4,6 @@ import {
   NestModule,
   RequestMethod,
   MiddlewareConsumer,
-  CacheModule,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 
@@ -22,18 +21,12 @@ import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
 import { sdkProvider } from './sdk-provider';
-import { IpfsModule } from './ipfs/module';
+import { IpfsModule } from './modules/ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
+import { cacheProvider } from './modules/cache';
 
 @Module({
-  imports: [
-    GlobalConfigModule,
-    SignerMiddleware,
-    IpfsModule.register(),
-    CacheModule.register({
-      ttl: 600,
-    }),
-  ],
+  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
   controllers: [
     ChainController,
     ExtrinsicsController,
@@ -46,6 +39,7 @@ import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-typ
   ],
   providers: [
     sdkProvider,
+    cacheProvider,
     {
       provide: APP_FILTER,
       useClass: SdkExceptionsFilter,
