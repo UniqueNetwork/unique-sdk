@@ -16,7 +16,7 @@ import {
   BurnTokenArguments,
   TokenIdArguments,
   TransferTokenArguments,
-} from './mutations/collection-by-id/types';
+} from './methods/collection-by-id/types';
 
 interface Sdk {
   api: ApiPromise;

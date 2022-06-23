@@ -8,13 +8,13 @@ import {
   BurnCollectionArguments,
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
-import { CreateCollectionExMutation } from './mutations/create-collection-ex/method';
-import { CreateCollectionArguments } from './mutations/create-collection-ex/types';
-import { collectionById } from './mutations/collection-by-id/method';
+import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
+import { CreateCollectionArguments } from './methods/create-collection-ex/types';
+import { collectionById } from './methods/collection-by-id/method';
 import {
   CollectionIdArguments,
   CollectionInfo,
-} from './mutations/collection-by-id/types';
+} from './methods/collection-by-id/types';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {

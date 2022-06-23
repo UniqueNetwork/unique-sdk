@@ -31,7 +31,7 @@ import {
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
-} from '../mutations/create-collection-ex/types';
+} from '../methods/create-collection-ex/types';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,

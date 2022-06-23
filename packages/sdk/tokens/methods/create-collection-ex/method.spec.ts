@@ -11,8 +11,6 @@ import { CreateCollectionArguments } from './types';
 describe('create-collection-ex', () => {
   let sdk: Sdk;
 
-  let account: KeyringPair;
-
   let creation: CreateCollectionExMutation;
 
   let createArgs: CreateCollectionArguments;
@@ -22,14 +20,10 @@ describe('create-collection-ex', () => {
       seed: '//Alice',
     });
 
-    const testAccounts = await getKeyringPairs();
-
-    account = testAccounts.alice;
-
     creation = new CreateCollectionExMutation(sdk);
 
     createArgs = {
-      address: account.address,
+      address: '123',
       name: `foo_${Math.floor(Math.random() * 1000)}`,
       description: 'bar',
       tokenPrefix: 'BAZ',
@@ -47,27 +41,4 @@ describe('create-collection-ex', () => {
       args: [expect.any(String)],
     });
   });
-
-  it('create - ok', async () => {
-    const createResult = await creation.submitWaitResult(createArgs);
-
-    expect(createResult).toMatchObject({
-      submittableResult: expect.any(Object),
-      isCompleted: true,
-      parsed: {
-        collectionId: expect.any(Number),
-      },
-    });
-
-    const collection = await sdk.collections.get({
-      collectionId: createResult.parsed.collectionId,
-    });
-
-    expect(collection).toMatchObject({
-      owner: createArgs.address,
-      name: createArgs.name,
-      description: createArgs.description,
-      tokenPrefix: createArgs.tokenPrefix,
-    });
-  }, 30_000);
 });

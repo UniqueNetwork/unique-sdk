@@ -7,7 +7,7 @@ import type {
   TokenProperties,
 } from '@unique-nft/sdk/types';
 import { TokenPropertiesKeys } from '@unique-nft/sdk/types';
-import { CollectionInfo } from '../mutations/collection-by-id/types';
+import { CollectionInfo } from '../methods/collection-by-id/types';
 
 type IpfsOptions = Pick<SdkOptions, 'ipfsGatewayUrl'>;
 

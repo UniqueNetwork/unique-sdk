@@ -12,14 +12,14 @@ import type {
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
 import { encodeCollectionFields } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
-import { CollectionInfo } from '../mutations/collection-by-id/types';
+import { CollectionInfo } from '../methods/collection-by-id/types';
 import {
   CollectionMode,
   CollectionProperties,
   TokenPropertiesPermissions,
   CollectionPermissions,
   CollectionPropertiesKeys,
-} from '../mutations/create-collection-ex/types';
+} from '../methods/create-collection-ex/types';
 
 type CollectionProperty = {
   key: CollectionPropertiesKeys;

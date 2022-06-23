@@ -1,2 +1,2 @@
-export * from './mutations/create-collection-ex/types';
-export * from './mutations/collection-by-id/types';
+export * from './methods/create-collection-ex/types';
+export * from './methods/collection-by-id/types';
