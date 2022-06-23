@@ -83,6 +83,7 @@ export interface UnsignedTxPayload {
   signerPayloadJSON: SignerPayloadJSON;
   signerPayloadRaw: SignerPayloadRaw;
   signerPayloadHex: HexString;
+  fee?: Balance;
 }
 
 export interface ISdkExtrinsics {

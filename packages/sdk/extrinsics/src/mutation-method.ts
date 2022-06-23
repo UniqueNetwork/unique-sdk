@@ -55,10 +55,19 @@ export abstract class MutationMethodBase<A, R>
 
   abstract transformResult(result: ISubmittableResult): Promise<R | undefined>;
 
-  async build(args: A): Promise<UnsignedTxPayload> {
+  async build(
+    args: A,
+    withFee = false,
+  ): Promise<UnsignedTxPayload> {
     const transformedArgs = await this.transformArgs(args);
-
-    return this.sdk.extrinsics.build(transformedArgs);
+    const extrinsic = await this.sdk.extrinsics.build(transformedArgs);
+    if (!withFee) {
+      return extrinsic;
+    }
+    return {
+      ... extrinsic,
+      fee: await this.getFee(extrinsic),
+    };
   }
 
   async getFee(
