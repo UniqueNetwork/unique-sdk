@@ -9,9 +9,9 @@ import {
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { Sdk } from '@unique-nft/sdk';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { ApiRequestParams, ApiRequestBody } from '../types/arguments';
-import { SdkValidationPipe } from '../validation';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { ApiRequestParams, ApiRequestBody } from '../../../types/arguments';
+import { SdkValidationPipe } from '../../../validation';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)

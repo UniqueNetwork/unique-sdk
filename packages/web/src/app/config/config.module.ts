@@ -12,6 +12,12 @@ export type Config = {
 
   ipfsUploadUrl: string;
   allowedTypes: Array<string>;
+
+  secondary: {
+    chainWsUrl?: string;
+    name?: string;
+    signer?: SignerConfig;
+  };
 };
 
 export type SignerConfig = {
@@ -41,6 +47,11 @@ const loadConfig = (): Config => ({
         'text/json',
         'application/json',
       ],
+
+  secondary: {
+    chainWsUrl: process.env.SECONDARY_CHAIN_WS_URL || undefined,
+    name: process.env.SECONDARY_CHAIN_NAME || undefined,
+  },
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

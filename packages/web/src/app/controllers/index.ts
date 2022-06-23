@@ -1,9 +1,9 @@
-export { ChainController } from './chain.controller';
-export { BalanceController } from './balance.controller';
-export { ExtrinsicsController } from './extrinsics.controller';
-export { CollectionController } from './collection.controller';
-export { TokenController } from './token.controller';
-export { AccountController } from './account.controller';
-export { QueryController } from './query.controller';
+export { ChainController } from '../modules/substrate/controllers/chain.controller';
+export { BalanceController } from '../modules/substrate/controllers/balance.controller';
+export { ExtrinsicsController } from '../modules/substrate/controllers/extrinsics.controller';
+export { CollectionController } from '../modules/unique/controllers/collection.controller';
+export { TokenController } from '../modules/unique/controllers/token.controller';
+export { AccountController } from '../modules/substrate/controllers/account.controller';
+export { QueryController } from '../modules/substrate/controllers/query.controller';
 export { IpfsController } from '../ipfs/controller';
-export { InfoController } from './info.controller';
+export { InfoController } from '../modules/substrate/controllers/info.controller';
