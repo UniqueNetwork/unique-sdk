@@ -10,12 +10,13 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
-
 async function sdkFactory(
   chainWsUrl: Config['chainWsUrl'] | Config['secondary']['chainWsUrl'],
   signerOptions: Config['signer'] | Config['secondary']['signer'],
 ): Promise<Sdk> {
-  const signer = signerOptions?.seed ? await createSigner(signerOptions as SeedSignerOptions) : null;
+  const signer = signerOptions?.seed
+    ? await createSigner(signerOptions as SeedSignerOptions)
+    : null;
   const sdk = new Sdk({
     signer,
     chainWsUrl,
@@ -26,26 +27,19 @@ async function sdkFactory(
   return sdk;
 }
 
-
 @Module({
-  providers: [
-    SdkProviderModule.primaryProvider(),
-  ],
-  exports: [
-    Sdk,
-  ],
+  providers: [SdkProviderModule.primaryProvider()],
+  exports: [Sdk],
 })
 export class SdkProviderModule {
-
   static primaryProvider(): FactoryProvider {
     return {
       provide: Sdk,
-      useFactory: async (configService: ConfigService<Config>) => {
-        return sdkFactory(
+      useFactory: async (configService: ConfigService<Config>) =>
+        sdkFactory(
           configService.get('chainWsUrl'),
           configService.get('signer'),
-        );
-      },
+        ),
       inject: [ConfigService],
     };
   }
@@ -67,11 +61,8 @@ export class SdkProviderModule {
   static forSecondary(): DynamicModule {
     return {
       module: SdkProviderModule,
-      providers: [
-        SdkProviderModule.secondaryProvider(),
-      ],
-      exports: [ Sdk ],
+      providers: [SdkProviderModule.secondaryProvider()],
+      exports: [Sdk],
     };
   }
-
 }
