@@ -2,7 +2,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
-import { TxBuildArguments } from '@unique-nft/sdk/types';
+import { TxBuildArguments, Balance } from '@unique-nft/sdk/types';
 
 import { Sdk } from '../src/lib/sdk';
 import {
@@ -55,10 +55,10 @@ describe(Sdk.name, () => {
     const feeFromUnsigned = await sdk.extrinsics.getFee(txPayload);
     const feeFromSigned = await sdk.extrinsics.getFee(signed);
 
-    expect(feeFromArgs).toMatchObject({
-      amount: expect.any(Number),
-      amountWithUnit: expect.any(String),
+    expect(feeFromArgs).toMatchObject<Balance>({
+      amount: expect.any(String),
       formatted: expect.any(String),
+      decimals: expect.any(Number),
       raw: expect.any(String),
       unit: expect.any(String),
     });
