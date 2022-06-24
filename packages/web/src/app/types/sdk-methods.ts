@@ -12,6 +12,7 @@ import {
 import { Transform } from 'class-transformer';
 import {
   AddressArguments,
+  AllBalances,
   AnyObject,
   Balance,
   BurnCollectionArguments,
@@ -111,6 +112,17 @@ export class BalanceResponse implements Balance {
     example: 18,
   })
   decimals: number;
+}
+
+export class AllBalancesResponse implements AllBalances {
+  @ApiProperty({ type: BalanceResponse })
+  availableBalance: BalanceResponse;
+
+  @ApiProperty({ type: BalanceResponse })
+  lockedBalance: BalanceResponse;
+
+  @ApiProperty({ type: BalanceResponse })
+  freeBalance: BalanceResponse;
 }
 
 export class FeeResponse extends BalanceResponse implements Fee {}

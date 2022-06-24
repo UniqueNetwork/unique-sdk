@@ -15,7 +15,7 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SdkValidationPipe } from '../validation';
 import {
   AddressQuery,
-  BalanceResponse,
+  AllBalancesResponse,
   TransferBuildBody,
   UnsignedTxPayloadResponseWithFee,
   WithFeeQuery,
@@ -29,7 +29,7 @@ export class BalanceController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
+  async getBalance(@Query() args: AddressQuery): Promise<AllBalancesResponse> {
     return this.sdk.balance.get(args);
   }
 

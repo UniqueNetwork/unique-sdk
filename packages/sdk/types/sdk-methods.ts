@@ -30,6 +30,12 @@ export interface Balance {
   formatted: string;
 }
 
+export interface AllBalances {
+  availableBalance: Balance;
+  lockedBalance: Balance;
+  freeBalance: Balance;
+}
+
 export type Fee = Balance;
 
 export interface TransferBuildArguments {
