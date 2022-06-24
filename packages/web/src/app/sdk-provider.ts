@@ -23,13 +23,9 @@ export const sdkProvider: Provider = {
     const signerOptions: SignerOptions = createSignerOptions(configService);
     const signer = signerOptions ? await createSigner(signerOptions) : null;
 
-    const sdk = new Sdk({
+    return Sdk.create({
       signer,
       chainWsUrl: configService.get('chainWsUrl'),
     });
-
-    await sdk.isReady;
-
-    return sdk;
   },
 };
