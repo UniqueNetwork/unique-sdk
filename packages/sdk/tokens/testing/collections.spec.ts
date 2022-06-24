@@ -3,6 +3,7 @@ import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import { Sdk } from '@unique-nft/sdk';
+import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
 
 import { CreateCollectionExMutation } from '../methods/create-collection-ex/method';
@@ -52,8 +53,10 @@ describe('create-collection-ex', () => {
       collectionId: createResult.parsed.collectionId,
     });
 
+    expect(createArgs.address).toBe(
+      collection ? normalizeAddress(collection.owner) : null,
+    );
     expect(collection).toMatchObject({
-      owner: createArgs.address,
       name: createArgs.name,
       description: createArgs.description,
       tokenPrefix: createArgs.tokenPrefix,
