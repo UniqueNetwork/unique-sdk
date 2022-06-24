@@ -18,7 +18,7 @@ import {
   CollectionProperties,
   MetaUpdatePermission,
   TokenPropertiesPermissions,
-} from '@unique-nft/sdk/tokens/types';
+} from '../../../../sdk/tokens/methods/create-collection-ex/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
 import {

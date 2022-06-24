@@ -73,8 +73,9 @@ describe(BalanceController.name, () => {
       expect(response.ok).toEqual(true);
 
       expect(response.body).toMatchObject({
-        amount: expect.any(Number),
-        formatted: expect.any(String),
+        availableBalance: expect.any(Object),
+        freeBalance: expect.any(Object),
+        lockedBalance: expect.any(Object),
       });
     });
 

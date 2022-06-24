@@ -38,12 +38,16 @@ describe(BalanceController.name, () => {
     it('comparison GET balance on chainWsUrl and secondary', async () => {
       if (!(secondaryChainWsUrl && name)) return;
       const {
-        body: { unit },
+        body: {
+          availableBalance: { unit },
+        },
       } = await request(app.getHttpServer())
         .get(`/api/balance`)
         .query({ address: alice.address });
       const {
-        body: { unit: secondaryUnit },
+        body: {
+          availableBalance: { unit: secondaryUnit },
+        },
       } = await request(app.getHttpServer())
         .get(`/api/${name}/balance`)
         .query({ address: alice.address });
