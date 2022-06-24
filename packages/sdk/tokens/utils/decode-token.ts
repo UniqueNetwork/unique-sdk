@@ -1,12 +1,9 @@
 import { decodeConstData, getTokenUrl } from '@unique-nft/sdk/utils';
 
 import type { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
-import type {
-  CollectionInfo,
-  TokenInfo,
-  TokenProperties,
-} from '@unique-nft/sdk/types';
+import type { TokenInfo, TokenProperties } from '@unique-nft/sdk/types';
 import { TokenPropertiesKeys } from '@unique-nft/sdk/types';
+import { CollectionInfo } from '../methods/collection-by-id/types';
 
 export const decodeToken = (
   collection: CollectionInfo,
@@ -33,7 +30,8 @@ export const decodeToken = (
   };
 
   const tokenUrl = getTokenUrl({
-    collection,
+    schemaVersion: collection.properties.schemaVersion,
+    offchainSchema: collection.properties.offchainSchema,
     decodedConstData,
     tokenId,
   });

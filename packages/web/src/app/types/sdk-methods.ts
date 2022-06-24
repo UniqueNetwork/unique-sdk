@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsBoolean,
 } from 'class-validator';
+import { HexString } from '@polkadot/util/types';
 import { Transform } from 'class-transformer';
 import {
   AddressArguments,
@@ -16,19 +17,20 @@ import {
   AnyObject,
   Balance,
   BurnCollectionArguments,
-  BurnTokenArguments,
   ChainProperties,
-  CollectionIdArguments,
-  CreateCollectionArguments,
   CreateTokenArguments,
   Fee,
-  TokenIdArguments,
   TransferBuildArguments,
   TransferCollectionArguments,
-  TransferTokenArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
-import { HexString } from '@polkadot/util/types';
+import {
+  BurnTokenArguments,
+  CollectionIdArguments,
+  TokenIdArguments,
+  TransferTokenArguments,
+  CreateCollectionArguments,
+} from '@unique-nft/sdk/tokens/types';
 
 import { CollectionInfoBaseDto } from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';

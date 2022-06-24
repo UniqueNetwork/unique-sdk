@@ -1,4 +1,5 @@
 import { addFeature } from '@unique-nft/sdk';
+import '@unique-nft/sdk/extrinsics';
 
 import { SdkCollections } from './sdk-collections';
 import { SdkTokens } from './sdk-tokens';

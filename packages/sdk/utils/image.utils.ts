@@ -1,13 +1,13 @@
-import { CollectionInfo, CollectionSchemaVersion } from '@unique-nft/sdk/types';
+import { CollectionSchemaVersion } from '@unique-nft/sdk/types';
 
 const getImageUrlForImageUrlSchema = ({
   tokenId,
-  collection,
+  offchainSchema,
 }: {
   tokenId: number;
-  collection: CollectionInfo;
+  offchainSchema?: string;
 }): string | null => {
-  const urlTemplate = collection.properties.offchainSchema;
+  const urlTemplate = offchainSchema;
 
   if (urlTemplate && urlTemplate.includes('{id}')) {
     return urlTemplate.replace('{id}', tokenId.toString());
@@ -42,24 +42,21 @@ const getImageUrlForUniqueSchema = ({
 };
 
 export const getTokenUrl = ({
-  collection,
+  schemaVersion,
+  offchainSchema,
   tokenId,
   decodedConstData,
 }: {
-  collection: CollectionInfo;
+  schemaVersion?: string;
+  offchainSchema?: string;
   tokenId: number;
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   decodedConstData?: Record<string, any>;
 }): string | null => {
-  if (
-    collection.properties.schemaVersion === CollectionSchemaVersion.ImageURL
-  ) {
-    return getImageUrlForImageUrlSchema({ collection, tokenId });
+  if (schemaVersion === CollectionSchemaVersion.ImageURL) {
+    return getImageUrlForImageUrlSchema({ offchainSchema, tokenId });
   }
-  if (
-    collection.properties.schemaVersion === CollectionSchemaVersion.Unique &&
-    decodedConstData
-  ) {
+  if (schemaVersion === CollectionSchemaVersion.Unique && decodedConstData) {
     return getImageUrlForUniqueSchema({ decodedConstData });
   }
 

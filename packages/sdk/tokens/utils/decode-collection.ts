@@ -17,21 +17,21 @@ import type {
   UpDataStructsPropertyKeyPermission,
 } from '@unique-nft/unique-mainnet-types/default';
 
-import type {
+import {
+  CollectionSchemaVersion,
+  TokenPropertiesKeys,
+  TokenPropertyPermissions,
+} from '@unique-nft/sdk/types';
+import { decodeCollectionFields } from './decode-collection-fields';
+import {
   CollectionInfoBase,
   CollectionLimits,
   CollectionPermissions,
   CollectionProperties,
   CollectionSponsorship,
-} from '@unique-nft/sdk/types';
-import {
-  CollectionPropertiesKeys,
-  CollectionSchemaVersion,
-  TokenPropertiesKeys,
   TokenPropertiesPermissions,
-  TokenPropertyPermissions,
-} from '@unique-nft/sdk/types';
-import { decodeCollectionFields } from './decode-collection-fields';
+  CollectionPropertiesKeys,
+} from '../methods/create-collection-ex/types';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
