@@ -198,44 +198,56 @@ if you initialize the SDK with a signer, you can sign and send extrinsics
 seamlessly, without separate actions
 
 ```typescript
-import { SdkSigner } from "@unique-nft/sdk/types";
-import { createSigner } from "@unique-nft/sdk/sign";
-import { Sdk } from "@unique-nft/sdk";
-import "@unique-nft/sdk/balance";
-import { ExtrinsicOptions } from "@unique-nft/sdk/extrinsics";
+import { CreateCollectionArguments } from '@unique-nft/sdk/types';
+import { createSigner } from '@unique-nft/sdk/sign';
+import { Sdk } from '@unique-nft/sdk';
+import '@unique-nft/sdk/tokens';
 
 const sdk = await Sdk.create({
-  chainWsUrl: 'wss://quartz.unique.network',
-  signer: await createSigner({
-    seed: '//Alice', // Signer seed phrase
-  }),
+    chainWsUrl: 'wss://quartz.unique.network',
+    signer: await createSigner({
+        seed: '//Alice', // Signer seed phrase
+    }),
 });
+
+const myCollection: CreateCollectionArguments = {
+    address: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx',
+    description: 'Just sample collection',
+    name: 'Sample',
+    tokenPrefix: 'SMPL',
+    properties: {},
+};
 
 /**
  * returns unsigned extrinsic
  */
-const unsignedExtrinsic = await sdk.balance.transfer(transferArgs);
+const unsignedExtrinsic = await sdk.collections.creation.build(myCollection);
 
 /**
  * return signed extrinsic (unsigned extrinsic + signature + signature type)
  */
-const signedExtrinsic = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Sign);
+const signedExtrinsic = await sdk.collections.creation.sign(myCollection);
 
 /**
- * submitting extrinsic and returns hash
+ * submitting extrinsic and returns extrinsic hash
  */
-const hash = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Submit);
+const { hash } = await sdk.collections.creation.submit(myCollection);
 
 /**
- * submitting extrinsic and returns final result (status, events, other human info)
+ * submitting extrinsic and returns Observable of extrinsic progress
  */
-const result = await sdk.balance.transfer(transferArgs, ExtrinsicOptions.Watch);
+const newCollection$ = sdk.collections.creation.submitWatch(myCollection);
+
+newCollection$.subscribe({
+    next: (next) =>
+        console.log(next.parsed?.collectionId || next.submittableResult.status),
+});
+
+/**
+ * submitting extrinsic, returns final extrinsic result (status, events, other human info) and parsed data
+ */
+const result = await sdk.collections.creation.submitWaitResult(myCollection);
+
+console.log(`Created collection with id ${result.parsed.collectionId}`);
+
 ```
-
-When we pass the `ExtrinsicOptions.Watch` option, the method will parse the event data
-and return the data associated with this extrinsic
-
-```typescript
-const { collectionId } = await sdk.collections.create({ ... }, ExtrinsicOptions.Watch);
-```
-
