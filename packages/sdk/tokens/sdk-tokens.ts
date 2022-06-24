@@ -4,17 +4,19 @@ import { ApiPromise } from '@polkadot/api';
 import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
 import type {
   UnsignedTxPayload,
-  TokenIdArguments,
   TokenInfo,
-  BurnTokenArguments,
   CreateTokenArguments,
-  TransferTokenArguments,
   SdkOptions,
 } from '@unique-nft/sdk/types';
 import { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
 import { SdkCollections } from './sdk-collections';
+import {
+  BurnTokenArguments,
+  TokenIdArguments,
+  TransferTokenArguments,
+} from './types';
 
 interface Sdk {
   api: ApiPromise;

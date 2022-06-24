@@ -1,6 +1,5 @@
 import { Root, Type, IField, INamespace } from 'protobufjs';
 import { ValidationError } from '@unique-nft/sdk/errors';
-import * as console from 'console';
 
 export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
   let root: Root;

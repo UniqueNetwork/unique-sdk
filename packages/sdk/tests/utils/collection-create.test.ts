@@ -1,11 +1,10 @@
 import { INamespace } from 'protobufjs';
 import { KeyringPair } from '@polkadot/keyring/types';
+import { CollectionFields, CollectionFieldTypes } from '@unique-nft/sdk/types';
 import {
-  CollectionFields,
-  CollectionFieldTypes,
   CollectionInfo,
   CreateCollectionArguments,
-} from '@unique-nft/sdk/types';
+} from '@unique-nft/sdk/tokens/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
