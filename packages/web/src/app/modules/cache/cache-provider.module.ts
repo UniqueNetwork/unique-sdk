@@ -1,11 +1,11 @@
-import { CACHE_MANAGER } from '@nestjs/common';
+import { CACHE_MANAGER, Global, Module, Provider } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
 import { ConfigService } from '@nestjs/config';
 import { caching, Cache } from 'cache-manager';
 
 import { CacheConfig, CacheType } from '../../config/cache.config';
 
-export const cacheProvider = {
+const cacheProvider: Provider = {
   inject: [ConfigService],
   provide: CACHE_MANAGER,
   useFactory: (configService: ConfigService): Cache => {
@@ -32,3 +32,14 @@ export const cacheProvider = {
     }
   },
 };
+
+@Global()
+@Module({
+  providers: [
+    cacheProvider,
+  ],
+  exports: [
+    CACHE_MANAGER,
+  ],
+})
+export class CacheProviderModule {}

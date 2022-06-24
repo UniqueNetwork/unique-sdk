@@ -50,7 +50,9 @@ describe('watch TX', () => {
   it('watch extrinsic failed', async () => {
     const balance = await sdk.balance.get({ address: eve.address });
 
-    const signedTransfer = await getSignedTransfer(balance.raw);
+    const signedTransfer = await getSignedTransfer(
+      balance.availableBalance.raw,
+    );
 
     const failed = await sdk.extrinsics
       .submitWaitCompleted(signedTransfer)
