@@ -4,6 +4,7 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
+// todo - encode address to same SS58 ?
 export function NotYourselfAddress(
   property: string,
   validationOptions?: ValidationOptions,

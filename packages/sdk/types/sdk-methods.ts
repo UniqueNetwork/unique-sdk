@@ -25,10 +25,16 @@ export interface ChainProperties {
 
 export interface Balance {
   raw: string;
-  amount: number;
-  amountWithUnit: string;
-  formatted: string;
   unit: string;
+  decimals: number;
+  amount: string;
+  formatted: string;
+}
+
+export interface AllBalances {
+  availableBalance: Balance;
+  lockedBalance: Balance;
+  freeBalance: Balance;
 }
 
 export type Fee = Balance;

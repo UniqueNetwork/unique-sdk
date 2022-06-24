@@ -1,6 +1,6 @@
 import {
   AddressArguments,
-  Balance,
+  AllBalances,
   TransferBuildArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
@@ -23,14 +23,17 @@ export class SdkBalance {
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  async get(args: AddressArguments): Promise<Balance> {
+  async get(args: AddressArguments): Promise<AllBalances> {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
-    const { availableBalance } = await this.sdk.api.derive.balances.all(
-      args.address,
-    );
+    const { availableBalance, lockedBalance, freeBalance } =
+      await this.sdk.api.derive.balances.all(args.address);
 
-    return formatBalance(this.sdk.api, availableBalance);
+    return {
+      availableBalance: formatBalance(this.sdk.api, availableBalance),
+      lockedBalance: formatBalance(this.sdk.api, lockedBalance),
+      freeBalance: formatBalance(this.sdk.api, freeBalance),
+    };
   }
 
   async transfer(args: TransferBuildArguments): Promise<UnsignedTxPayload> {
