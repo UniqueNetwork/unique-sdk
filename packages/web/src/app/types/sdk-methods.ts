@@ -7,9 +7,12 @@ import {
   IsInt,
   IsNumberString,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import {
   AddressArguments,
+  AllBalances,
   AnyObject,
   Balance,
   BurnCollectionArguments,
@@ -35,6 +38,23 @@ const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
 });
+
+const AnyToBoolean = Transform(({ obj = {}, key }) => {
+  const asString = String(obj && obj[key]).toLowerCase();
+
+  return asString === 'true' || asString === '1';
+});
+
+export class WithFeeQuery {
+  @AnyToBoolean
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty({
+    example: true,
+    required: false,
+  })
+  withFee?: boolean;
+}
 
 export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({
@@ -67,31 +87,42 @@ export class ChainPropertiesResponse implements ChainProperties {
 export class BalanceResponse implements Balance {
   @IsNumberString()
   @ApiProperty({
-    example: '89980000000000001',
+    example: '92485000000000000',
   })
   raw: string;
 
   @IsNumber()
-  @ApiProperty({ example: 0.0899 })
-  amount: number;
+  @ApiProperty({ example: '0.092485000000000000' })
+  amount: string;
 
   @IsString()
   @ApiProperty({
-    example: '89.9800 mQTZ',
+    example: '92.4850 m',
   })
   formatted: string;
 
   @IsString()
   @ApiProperty({
-    example: '0.0899 QTZ',
-  })
-  amountWithUnit: string;
-
-  @IsString()
-  @ApiProperty({
-    example: 'QTZ',
+    example: 'UNQ',
   })
   unit: string;
+
+  @IsInt()
+  @ApiProperty({
+    example: 18,
+  })
+  decimals: number;
+}
+
+export class AllBalancesResponse implements AllBalances {
+  @ApiProperty({ type: BalanceResponse })
+  availableBalance: BalanceResponse;
+
+  @ApiProperty({ type: BalanceResponse })
+  lockedBalance: BalanceResponse;
+
+  @ApiProperty({ type: BalanceResponse })
+  freeBalance: BalanceResponse;
 }
 
 export class FeeResponse extends BalanceResponse implements Fee {}
@@ -104,6 +135,7 @@ export class TransferBuildBody implements TransferBuildArguments {
   address: string;
 
   @ValidAddress()
+  @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
   @AddressApiProperty
   destination: string;
 
@@ -233,6 +265,11 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
 
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
+}
+
+export class UnsignedTxPayloadResponseWithFee extends UnsignedTxPayloadResponse {
+  @ApiProperty({ type: FeeResponse, required: false })
+  fee?: Balance;
 }
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}

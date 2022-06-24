@@ -15,9 +15,10 @@ import { SdkExceptionsFilter } from '../utils/exception-filter';
 import { SdkValidationPipe } from '../validation';
 import {
   AddressQuery,
-  BalanceResponse,
+  AllBalancesResponse,
   TransferBuildBody,
-  UnsignedTxPayloadResponse,
+  UnsignedTxPayloadResponseWithFee,
+  WithFeeQuery,
 } from '../types/sdk-methods';
 
 @UsePipes(SdkValidationPipe)
@@ -28,14 +29,21 @@ export class BalanceController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get()
-  async getBalance(@Query() args: AddressQuery): Promise<BalanceResponse> {
+  async getBalance(@Query() args: AddressQuery): Promise<AllBalancesResponse> {
     return this.sdk.balance.get(args);
   }
 
   @Post('transfer')
   async transferBuild(
+    @Query() { withFee }: WithFeeQuery,
     @Body() args: TransferBuildBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.balance.transfer(args);
+  ): Promise<UnsignedTxPayloadResponseWithFee> {
+    const unsignedTxPayload = await this.sdk.balance.transfer(args);
+
+    if (!withFee) return unsignedTxPayload;
+
+    const fee = await this.sdk.extrinsics.getFee(unsignedTxPayload);
+
+    return { ...unsignedTxPayload, fee };
   }
 }
