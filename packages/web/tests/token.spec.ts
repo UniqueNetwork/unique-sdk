@@ -6,7 +6,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
 import { createCollection, getKeyringPairs } from '@unique-nft/sdk/tests';
 import { createApp } from './utils.test';
-import { TokenController } from '../src/app/controllers';
+import { TokenController } from '../src/app/modules/unique/controllers/token.controller';
 
 describe(TokenController.name, () => {
   let app: INestApplication;

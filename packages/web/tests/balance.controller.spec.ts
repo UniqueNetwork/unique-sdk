@@ -7,7 +7,7 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
-import { BalanceController } from '../src/app/controllers';
+import { BalanceController } from '../src/app/modules/substrate/controllers/balance.controller';
 import { createApp } from './utils.test';
 
 describe(BalanceController.name, () => {
