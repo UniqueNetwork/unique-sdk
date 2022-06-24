@@ -12,6 +12,8 @@
 [![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 </div>
 
+___
+# Be aware, this is ALPHA version, package is under construction.
 
 
 # @unique-nft/sdk
