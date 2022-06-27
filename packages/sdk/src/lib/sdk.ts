@@ -44,11 +44,11 @@ export class Sdk {
 
   async connect() {
     const prefix = await getPrefix(this.options.chainWsUrl);
-    const provider = new WsProvider(this.options.chainWsUrl);
-
     if (!rpcByPrefix[prefix]) {
       throw new Error(`Invalid prefix "${prefix}"`);
     }
+
+    const provider = new WsProvider(this.options.chainWsUrl);
 
     this.#api = new ApiPromise({
       provider,
