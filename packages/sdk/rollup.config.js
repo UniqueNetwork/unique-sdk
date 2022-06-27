@@ -57,8 +57,8 @@ const DTS_CONFIG = {
   },
 };
 
-const onGenerateBundle = (options, bundle) => {
-  allBundles.push({ options, bundle });
+const onGenerateBundle = (bundleOptions, bundleData) => {
+  allBundles.push({ options: bundleOptions, bundle: bundleData });
 
   if (allBundles.length === bundlesCount) {
     const allImportsSet = new Set();
@@ -76,26 +76,19 @@ const onGenerateBundle = (options, bundle) => {
 
       const current = allExports[pathRequest] || {};
 
-      switch (ext) {
-        case '.cjs': {
-          current.require = pathResult;
-          break;
-        }
-        case '.ts': {
-          current.types = pathResult;
-          break;
-        }
-        case '.js': {
-          current.default = pathResult;
-          break;
-        }
+      if (ext === '.cjs') {
+        current.require = pathResult;
+      } else if (ext === '.ts') {
+        current.types = pathResult;
+      } else if (ext === '.js') {
+        current.default = pathResult;
       }
 
-      const currentSorted = JSON.parse(
+      allExports[pathRequest] = JSON.parse(
         JSON.stringify(current, ['types', 'require', 'default']),
       );
 
-      return (allExports[pathRequest] = currentSorted);
+      return allExports;
     });
 
     const dependencies = Object.entries(mainPackageJson.dependencies).reduce(
@@ -132,6 +125,11 @@ const onGenerateBundle = (options, bundle) => {
         null,
         2,
       ),
+    );
+
+    fs.cpSync(
+      path.resolve(SRC_FOLDER, 'README.md'),
+      path.resolve(DIST_FOLDER, 'README.md'),
     );
   }
 };

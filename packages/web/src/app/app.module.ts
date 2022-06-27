@@ -6,40 +6,25 @@ import {
   MiddlewareConsumer,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-
-import {
-  BalanceController,
-  ChainController,
-  CollectionController,
-  ExtrinsicsController,
-  TokenController,
-  AccountController,
-  QueryController,
-  InfoController,
-} from './controllers';
 import { GlobalConfigModule } from './config/config.module';
 import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
-import { sdkProvider } from './sdk-provider';
 import { IpfsModule } from './modules/ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
-import { cacheProvider } from './modules/cache';
+import { UniqueModule } from './modules/unique/unique.module';
+import { SubstrateModule } from './modules/substrate/substrate.module';
+import { CacheProviderModule } from './modules/cache/cache-provider.module';
 
 @Module({
-  imports: [GlobalConfigModule, SignerMiddleware, IpfsModule.register()],
-  controllers: [
-    ChainController,
-    ExtrinsicsController,
-    BalanceController,
-    CollectionController,
-    TokenController,
-    AccountController,
-    QueryController,
-    InfoController,
+  imports: [
+    GlobalConfigModule,
+    UniqueModule,
+    SignerMiddleware,
+    SubstrateModule.forSecondary(),
+    IpfsModule.register(),
+    CacheProviderModule,
   ],
   providers: [
-    sdkProvider,
-    cacheProvider,
     {
       provide: APP_FILTER,
       useClass: SdkExceptionsFilter,

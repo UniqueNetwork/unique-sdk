@@ -2,8 +2,8 @@ import { Controller, Get, UseFilters } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SdkExceptionsFilter } from '../utils/exception-filter';
-import { ChainPropertiesResponse } from '../types/sdk-methods';
+import { SdkExceptionsFilter } from '../../../utils/exception-filter';
+import { ChainPropertiesResponse } from '../../../types/sdk-methods';
 
 @UseFilters(SdkExceptionsFilter)
 @ApiTags('chain')

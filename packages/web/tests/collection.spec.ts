@@ -4,7 +4,7 @@ import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { createApp } from './utils.test';
 
-import { CollectionController } from '../src/app/controllers';
+import { CollectionController } from '../src/app/modules/unique/controllers/collection.controller';
 
 describe(CollectionController.name, () => {
   let app: INestApplication;
