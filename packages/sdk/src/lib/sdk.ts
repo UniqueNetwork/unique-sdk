@@ -25,23 +25,23 @@ async function getPrefix(chainWsUrl: string): Promise<number> {
 }
 
 export class Sdk {
-  readonly isReady: Promise<boolean>;
+  isReady: Promise<boolean>;
 
-  readonly api: ApiPromise;
+  api: ApiPromise;
 
   signer?: SdkSigner;
 
   static async create(options: SdkOptions): Promise<Sdk> {
-    const { chainWsUrl } = options;
-    const prefix = await getPrefix(chainWsUrl);
-
-    const sdk = new Sdk(options, prefix);
+    const sdk = new Sdk(options);
     await sdk.isReady;
 
     return sdk;
   }
 
-  constructor(public readonly options: SdkOptions, prefix: number) {
+  constructor(public readonly options: SdkOptions) {}
+
+  async connect() {
+    const prefix = await getPrefix(this.options.chainWsUrl);
     const provider = new WsProvider(this.options.chainWsUrl);
 
     if (!rpcByPrefix[prefix]) {
