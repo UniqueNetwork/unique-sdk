@@ -12,13 +12,16 @@ export const getDefaultSdkOptions = (): SdkOptions => ({
 
 export async function createSdk(signerOptions?: SignerOptions): Promise<Sdk> {
   const defOptions = getDefaultSdkOptions();
+
   const signer: SdkSigner | undefined = signerOptions
     ? await createSigner(signerOptions)
     : undefined;
+
   const options: SdkOptions = {
     chainWsUrl: defOptions.chainWsUrl,
     signer,
   };
+
   return Sdk.create(options);
 }
 
