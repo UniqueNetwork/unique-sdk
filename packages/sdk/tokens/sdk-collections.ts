@@ -17,16 +17,17 @@ import {
 } from './methods/collection-by-id/types';
 
 export class SdkCollections {
-  constructor(readonly sdk: Sdk) {}
+  constructor(readonly sdk: Sdk) {
+    this.get = collectionById.bind(this.sdk);
+    this.creation = new CreateCollectionExMutation(this.sdk);
+  }
 
-  get: QueryMethod<CollectionIdArguments, CollectionInfo> = collectionById.bind(
-    this.sdk,
-  );
+  get: QueryMethod<CollectionIdArguments, CollectionInfo>;
 
   creation: MutationMethodWrap<
     CreateCollectionArguments,
     CollectionIdArguments
-  > = new CreateCollectionExMutation(this.sdk);
+  >;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({

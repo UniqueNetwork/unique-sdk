@@ -25,20 +25,22 @@ async function getPrefix(chainWsUrl: string): Promise<number> {
 }
 
 export class Sdk {
-  isReady: Promise<boolean>;
-
-  api: ApiPromise;
+  #api: ApiPromise;
 
   signer?: SdkSigner;
 
   static async create(options: SdkOptions): Promise<Sdk> {
     const sdk = new Sdk(options);
-    await sdk.isReady;
+    await sdk.connect();
 
     return sdk;
   }
 
   constructor(public readonly options: SdkOptions) {}
+
+  get api() {
+    return this.#api;
+  }
 
   async connect() {
     const prefix = await getPrefix(this.options.chainWsUrl);
@@ -48,14 +50,14 @@ export class Sdk {
       throw new Error(`Invalid prefix "${prefix}"`);
     }
 
-    this.api = new ApiPromise({
+    this.#api = new ApiPromise({
       provider,
       rpc: {
         unique: rpcByPrefix[prefix],
       },
     });
 
-    this.isReady = this.api.isReady.then(() => true);
+    await this.api.isReady;
 
     this.signer = this.options.signer;
   }
