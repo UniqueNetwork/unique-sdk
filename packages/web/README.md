@@ -117,6 +117,19 @@ PORT=3000
 IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
 ```
 
+##### Cache manager
+Extrinsics cache time:
+```bash
+CACHE_TTL=600
+```
+
+To set up the Redis store to cache extrinsics:
+```bash
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+```
+
 ## Swagger
 ```
 https://web-quartz.unique.network/swagger
