@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import request from 'supertest';
-import { ErrorCodes } from '@unique-nft/sdk/errors';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
