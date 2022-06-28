@@ -5,6 +5,7 @@ import {
   decodeAddress,
   encodeAddress,
 } from '@polkadot/util-crypto';
+import { Address } from '@unique-nft/sdk/types';
 
 export const utf16ToString = (input: Array<{ toNumber(): number }>): string =>
   String.fromCharCode(...input.map((char) => char.toNumber()));
@@ -26,12 +27,12 @@ export function bytesToJson(input: Bytes): any | undefined {
   }
 }
 
-export function normalizeAddress(address: string, ss58Format?: number) {
+export function normalizeAddress(address: Address, ss58Format?: number) {
   return encodeAddress(decodeAddress(address), ss58Format);
 }
 
 export async function normalizeAddressAsync(
-  address: string,
+  address: Address,
   ss58Format?: number,
 ): Promise<string> {
   await cryptoWaitReady();

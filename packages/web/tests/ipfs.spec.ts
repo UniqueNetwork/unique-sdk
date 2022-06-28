@@ -74,7 +74,7 @@ describe('Ipfs upload', () => {
     async function downloadFileTest(
       fileUrl: string,
       originalFilePath: string,
-    ): Promise<any> {
+    ): Promise<void> {
       const rnd = Math.floor(Math.random() * 1_000_000);
       const outputLocationPath = `${downloadDir}/file-${rnd}`;
       const writer = fs.createWriteStream(outputLocationPath);

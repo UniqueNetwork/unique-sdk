@@ -1,4 +1,3 @@
-import * as process from 'process';
 import { createCacheConfig } from './cache.config';
 
 describe('cache.config', () => {
