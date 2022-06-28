@@ -7,6 +7,9 @@ import { SubstrateModule } from '../modules/substrate/substrate.module';
 import { Config } from '../config/config.module';
 import { IpfsModule } from '../modules/ipfs/module';
 
+const getAppsLink = (wsUrl: string): string =>
+  `(<a target="_blank" href="https://polkadot.js.org/apps/?rpc=${wsUrl}">apps ↗</a>)`;
+
 function createDescription(
   swagger,
   chainWsUrl,
@@ -14,10 +17,16 @@ function createDescription(
   name,
   isSecondary,
 ) {
-  let mainDescription = `Main connection to ${chainWsUrl}`;
+  let mainDescription = `Main connection to ${chainWsUrl} ${getAppsLink(
+    chainWsUrl,
+  )}`;
   let secondaryDescription = '';
+
   if (secondaryChainWsUrl && name) {
-    secondaryDescription = `Secondary substrate connection to ${secondaryChainWsUrl}`;
+    secondaryDescription = `Secondary substrate connection to ${secondaryChainWsUrl}  ${getAppsLink(
+      secondaryChainWsUrl,
+    )}`;
+
     if (isSecondary) {
       secondaryDescription = `<b>${secondaryDescription}</b>`;
       mainDescription = `${mainDescription}. Go to <a href="/${swagger}">swagger</a>`;
