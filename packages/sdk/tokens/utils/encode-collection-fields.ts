@@ -79,7 +79,7 @@ export const encodeCollectionFields = (
 
   const namesContainer: Record<string, true> = {};
 
-  collectionFields.forEach((field, index) => {
+  collectionFields.forEach((field) => {
     const { id, name, type } = field;
 
     if (idsContainer[id]) {

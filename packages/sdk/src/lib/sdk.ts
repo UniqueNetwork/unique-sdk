@@ -1,35 +1,62 @@
 import '@unique-nft/unique-mainnet-types/augment-api';
-import { unique } from '@unique-nft/unique-mainnet-types/definitions';
-
+import { unique as uniqueNetwork } from '@unique-nft/unique-mainnet-types/definitions';
+import { unique as quartzNetwork } from '@unique-nft/quartz-mainnet-types/definitions';
+import { unique as opalNetwork } from '@unique-nft/opal-testnet-types/definitions';
 import { ApiPromise, WsProvider } from '@polkadot/api';
-
 import { SdkOptions, SdkSigner, ChainProperties } from '@unique-nft/sdk/types';
 
-export class Sdk {
-  readonly isReady: Promise<boolean>;
+const rpcByPrefix: Record<number, any> = {
+  7391: uniqueNetwork.rpc,
+  255: quartzNetwork.rpc,
+  42: opalNetwork.rpc,
+};
 
-  readonly api: ApiPromise;
+async function getPrefix(chainWsUrl: string): Promise<number> {
+  const provider = new WsProvider(chainWsUrl);
+
+  const api = new ApiPromise({ provider });
+  await api.isReady;
+
+  const prefix = api.registry.chainSS58 || 0;
+
+  await api.disconnect();
+
+  return prefix;
+}
+
+export class Sdk {
+  #api: ApiPromise;
 
   signer?: SdkSigner;
 
   static async create(options: SdkOptions): Promise<Sdk> {
     const sdk = new Sdk(options);
-    await sdk.isReady;
+    await sdk.connect();
 
     return sdk;
   }
 
-  constructor(public readonly options: SdkOptions) {
+  constructor(public readonly options: SdkOptions) {}
+
+  get api() {
+    return this.#api;
+  }
+
+  async connect() {
+    const prefix = await getPrefix(this.options.chainWsUrl);
+
     const provider = new WsProvider(this.options.chainWsUrl);
 
-    this.api = new ApiPromise({
+    const rpc = rpcByPrefix[prefix]
+      ? { unique: rpcByPrefix[prefix] }
+      : undefined;
+
+    this.#api = new ApiPromise({
       provider,
-      rpc: {
-        unique: unique.rpc,
-      },
+      rpc,
     });
 
-    this.isReady = this.api.isReady.then(() => true);
+    await this.api.isReady;
 
     this.signer = this.options.signer;
   }

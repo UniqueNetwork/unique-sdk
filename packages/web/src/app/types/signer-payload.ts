@@ -7,7 +7,7 @@ import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from '@polkadot/types/types/extrinsic';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { SignatureType } from '@unique-nft/sdk/types';
 import {
   Account,

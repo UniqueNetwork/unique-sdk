@@ -3,6 +3,7 @@ import {
   createSdk,
   getKeyringPairs,
 } from '@unique-nft/sdk/tests/testing-utils';
+import { SeedSigner } from '../sign';
 
 describe(AnyMutation.name, () => {
   it('works', async () => {
@@ -34,4 +35,26 @@ describe(AnyMutation.name, () => {
       });
     });
   }, 30_000);
+
+  it('signer mutation option', async () => {
+    const sdk = await createSdk();
+    const { alice, bob } = await getKeyringPairs();
+
+    const mutationWrap = new AnyMutation(sdk);
+
+    const mutationArgs = {
+      address: bob.address,
+      section: 'balances',
+      method: 'transfer',
+      args: [alice.address, 100],
+    };
+
+    const signer = new SeedSigner({ seed: '//Bob' });
+
+    await expect(() => mutationWrap.submit(mutationArgs)).rejects.toThrowError(
+      'No signer provided',
+    );
+
+    await expect(() => mutationWrap.submit(mutationArgs, { signer })).resolves;
+  });
 });

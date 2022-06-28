@@ -1,5 +1,6 @@
 import { INamespace } from 'protobufjs';
 import {
+  Address,
   CollectionFields,
   CollectionSchemaVersion,
   TokenPropertyPermissions,
@@ -52,7 +53,7 @@ export enum CollectionPropertiesKeys {
 }
 
 export interface CollectionSponsorship {
-  address: string;
+  address: Address;
   isConfirmed: boolean;
 }
 
@@ -75,5 +76,5 @@ export interface CollectionInfoBase {
 }
 
 export interface CreateCollectionArguments extends CollectionInfoBase {
-  address: string;
+  address: Address;
 }

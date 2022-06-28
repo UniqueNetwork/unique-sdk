@@ -31,7 +31,7 @@ export interface SubmitTxArguments {
 }
 
 export interface TxBuildArguments {
-  address: string;
+  address: Address;
   section: string;
   method: string;
   args: Array<string | number | BigInt | Record<string, any>>; // todo Oo ArgType? see packages/sdk/src/lib/types/index.ts line 31
@@ -56,3 +56,5 @@ export interface SubmittableResultCompleted<T> {
   isCompleted: true;
   parsed: T;
 }
+
+export type Address = string;

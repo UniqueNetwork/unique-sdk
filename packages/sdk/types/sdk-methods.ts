@@ -12,6 +12,7 @@ import {
   SubmitResult,
   SubmitTxArguments,
   TxBuildArguments,
+  Address,
 } from './arguments';
 import { SignResult } from './polkadot-types';
 
@@ -40,18 +41,18 @@ export interface AllBalances {
 export type Fee = Balance;
 
 export interface TransferBuildArguments {
-  address: string;
+  address: Address;
   destination: string;
   amount: number;
 }
 
 export interface AddressArguments {
-  address: string;
+  address: Address;
 }
 
 export interface BurnCollectionArguments {
   collectionId: number;
-  address: string;
+  address: Address;
 }
 export interface TransferCollectionArguments {
   collectionId: number;

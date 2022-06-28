@@ -1,6 +1,7 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
   Balance,
+  SdkSigner,
   SubmitResult,
   SubmittableResultCompleted,
   SubmittableResultInProcess,
@@ -20,23 +21,33 @@ import {
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
 
+export interface MutationOptions {
+  signer?: SdkSigner;
+}
+
 export type MutationMethod<A, R> = (
   args: A | UnsignedTxPayload | SubmitTxArguments,
+  options?: MutationOptions,
 ) => Promise<SubmittableResultCompleted<R>>;
 
 export interface MutationMethodWrap<A, R> {
   build(args: A): Promise<UnsignedTxPayload>;
 
-  sign(args: A | UnsignedTxPayload): Promise<SubmitTxArguments>;
-
   getFee(args: A | UnsignedTxPayload | SubmitTxArguments): Promise<Balance>;
+
+  sign(
+    args: A | UnsignedTxPayload,
+    options?: MutationOptions,
+  ): Promise<SubmitTxArguments>;
 
   submit(
     args: A | UnsignedTxPayload | SubmitTxArguments,
+    options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>>;
 
   submitWatch(
     args: A | UnsignedTxPayload | SubmitTxArguments,
+    options?: MutationOptions,
   ): Observable<SubmittableResultInProcess<R>>;
 
   submitWaitResult: MutationMethod<A, R>;
@@ -70,21 +81,28 @@ export abstract class MutationMethodBase<A, R>
     return this.sdk.extrinsics.getFee(payload);
   }
 
-  async sign(args: UnsignedTxPayload | A): Promise<SubmitTxArguments> {
+  async sign(
+    args: UnsignedTxPayload | A,
+    options?: MutationOptions,
+  ): Promise<SubmitTxArguments> {
     const unsigned = isUnsignedTxPayload(args) ? args : await this.build(args);
 
     const { signerPayloadJSON } = unsigned;
-    const { signature } = await this.sdk.extrinsics.sign(unsigned);
+    const { signature } = await this.sdk.extrinsics.sign(
+      unsigned,
+      options?.signer,
+    );
 
     return { signature, signerPayloadJSON };
   }
 
   async submit(
     args: UnsignedTxPayload | SubmitTxArguments | A,
+    options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
-      : await this.sign(args);
+      : await this.sign(args, options);
 
     return this.sdk.extrinsics.submit(submitTxArguments, false);
   }
@@ -92,11 +110,12 @@ export abstract class MutationMethodBase<A, R>
   // todo - hide async inside Observable and return just Observable<SubmittableResultInProcess<R>
   submitWatch(
     args: UnsignedTxPayload | SubmitTxArguments | A,
+    options?: MutationOptions,
   ): Observable<SubmittableResultInProcess<R>> {
     const getSubmittableResult$ = async () => {
       const submitTxArguments = isSubmitTxArguments(args)
         ? args
-        : await this.sign(args);
+        : await this.sign(args, options);
 
       const { result$ } = await this.sdk.extrinsics.submit(
         submitTxArguments,
@@ -120,8 +139,9 @@ export abstract class MutationMethodBase<A, R>
 
   async submitWaitResult(
     args: UnsignedTxPayload | SubmitTxArguments | A,
+    options?: MutationOptions,
   ): Promise<SubmittableResultCompleted<R>> {
-    const submitted$ = await this.submitWatch(args);
+    const submitted$ = await this.submitWatch(args, options);
 
     const completed = await lastValueFrom(submitted$);
 

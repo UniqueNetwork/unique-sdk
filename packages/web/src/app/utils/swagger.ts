@@ -5,6 +5,7 @@ import { UniqueModule } from '../modules/unique/unique.module';
 import { SubstratePrimaryModule } from '../modules/substrate/substrate.primary.module';
 import { SubstrateModule } from '../modules/substrate/substrate.module';
 import { Config } from '../config/config.module';
+import { IpfsModule } from '../modules/ipfs/module';
 
 function createDescription(
   swagger,
@@ -56,7 +57,7 @@ export const addSwagger = (app: INestApplication) => {
   );
 
   const uniqueDocument = SwaggerModule.createDocument(app, config, {
-    include: [UniqueModule, SubstratePrimaryModule],
+    include: [UniqueModule, SubstratePrimaryModule, IpfsModule],
   });
   SwaggerModule.setup(configService.get('swagger'), app, uniqueDocument);
 

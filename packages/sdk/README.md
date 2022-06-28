@@ -252,4 +252,12 @@ const result = await sdk.collections.creation.submitWaitResult(myCollection);
 
 console.log(`Created collection with id ${result.parsed.collectionId}`);
 
+
+/**
+ * Signer may be provided as option 
+ */
+
+const signer = new SeedSigner({ seed: '//Bob' });
+await sdk.collections.creation.submitWaitResult(myCollection, { signer });
+
 ```

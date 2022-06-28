@@ -4,10 +4,7 @@ import { QueryMethod } from '@unique-nft/sdk/extrinsics';
 import { CollectionIdArguments, CollectionInfo } from './types';
 import { decodeCollection } from '../../utils';
 
-export const collectionById: QueryMethod<
-  CollectionIdArguments,
-  CollectionInfo
-> = async function (
+async function collectionByIdFn(
   this: Sdk,
   args: CollectionIdArguments,
 ): Promise<CollectionInfo | null> {
@@ -25,4 +22,9 @@ export const collectionById: QueryMethod<
     id: args.collectionId,
     owner: collection.owner.toString(),
   };
-};
+}
+
+export const collectionById: QueryMethod<
+  CollectionIdArguments,
+  CollectionInfo
+> = collectionByIdFn;

@@ -8,14 +8,12 @@ import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
 describe('Sdk Queries', () => {
   let sdk: Sdk;
   let alice: KeyringPair;
-  let bob: KeyringPair;
 
   beforeAll(async () => {
     sdk = await Sdk.create(getDefaultSdkOptions());
 
     const testAccounts = await getKeyringPairs();
     alice = testAccounts.alice;
-    bob = testAccounts.bob;
   });
 
   it('derive.balances.all', async () => {

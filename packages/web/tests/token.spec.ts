@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { ErrorCodes } from '../../sdk/errors';
+import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { KeyringPair } from '@polkadot/keyring/types';
-import { Sdk } from '../../sdk/src/lib/sdk';
-import { getKeyringPairs } from '../../sdk/tests/testing-utils';
-import { createCollection } from '../../sdk/tests/utils/collection-create.test';
+import { Sdk } from '@unique-nft/sdk/src/lib/sdk';
+import { getKeyringPairs } from '@unique-nft/sdk/tests/testing-utils';
+import { createCollection } from '@unique-nft/sdk/tests/utils/collection-create.test';
 import { createApp } from './utils.test';
 import { TokenController } from '../src/app/modules/unique/controllers/token.controller';
 

@@ -34,6 +34,7 @@ import {
 } from '../../../types/arguments';
 import { ExtrinsicResultResponse } from '../../../types/extrinsic-result-response';
 import { serializeResult } from '../../../utils/submittable-result-transformer';
+import { CalculateFeeDocs } from '../docs';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -105,7 +106,10 @@ export class ExtrinsicsController {
   }
 
   @Post('calculate-fee')
-  async calculateFee(@Body() args: TxBuildBody): Promise<FeeResponse> {
+  @CalculateFeeDocs
+  async calculateFee(
+    @Body() args: UnsignedTxPayloadBody | SubmitTxBody | TxBuildBody,
+  ): Promise<FeeResponse> {
     return this.sdk.extrinsics.getFee(args);
   }
 

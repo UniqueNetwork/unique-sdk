@@ -22,7 +22,7 @@ async function sdkFactory(
     chainWsUrl,
   });
 
-  await sdk.isReady;
+  await sdk.connect();
 
   return sdk;
 }
@@ -49,10 +49,7 @@ export class SdkProviderModule {
       provide: Sdk,
       useFactory: async (configService: ConfigService<Config>) => {
         const { chainWsUrl, signer } = configService.get('secondary');
-        return sdkFactory(
-          chainWsUrl,
-          signer,
-        );
+        return sdkFactory(chainWsUrl, signer);
       },
       inject: [ConfigService],
     };
