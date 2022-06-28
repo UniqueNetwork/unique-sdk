@@ -38,7 +38,6 @@ export enum CollectionAccess {
 export interface CollectionNestingPermissions {
   tokenOwner: boolean;
   collectionAdmin: boolean;
-  permissive: boolean;
 }
 
 export interface CollectionPermissions {
