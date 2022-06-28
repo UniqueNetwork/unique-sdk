@@ -86,7 +86,21 @@ export class ExtrinsicsController {
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
     const { hash, result$ } = await this.sdk.extrinsics.submit(args, true);
 
-    const updateCache = async (next: ISubmittableResult): Promise<void> => {
+    const updateCache = async (
+      next: ISubmittableResult | Error,
+    ): Promise<void> => {
+      if (next instanceof Error) {
+        await this.cache.set<ExtrinsicResultResponse>(hash, {
+          events: [],
+          isCompleted: true,
+          isError: true,
+          status: 'Error',
+          errorMessage: next.message || next.name,
+        });
+
+        return;
+      }
+
       await this.cache.set(hash, serializeResult(this.sdk.api, next));
     };
 

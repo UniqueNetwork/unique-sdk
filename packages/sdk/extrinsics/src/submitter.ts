@@ -36,8 +36,8 @@ export class Submitter {
     submittable: SubmittableExtrinsic,
   ): Observable<ISubmittableResult> {
     return new Observable<ISubmittableResult>((subscriber): TeardownLogic => {
-      const stopWatching = submittable.send(
-        (nextTxResult: ISubmittableResult) => {
+      const stopWatching = submittable
+        .send((nextTxResult: ISubmittableResult) => {
           if (nextTxResult.isError || nextTxResult.dispatchError) {
             subscriber.error(nextTxResult);
           } else {
@@ -49,8 +49,8 @@ export class Submitter {
           if (nextTxResult.isCompleted) {
             subscriber.complete();
           }
-        },
-      );
+        })
+        .catch((error) => subscriber.error(error));
 
       return () => stopWatching.then();
     });
