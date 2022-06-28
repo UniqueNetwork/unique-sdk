@@ -1,18 +1,18 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
-import { TxBuildArguments } from '@unique-nft/sdk/types';
-import { UpDataStructsCollectionLimitsArguments } from '@unique-nft/sdk/tokens/methods/set-collection-limits/types';
-import { CollectionIdArguments } from '@unique-nft/sdk/tokens/methods/collection-by-id/types';
 import { u32 } from '@polkadot/types-codec';
+import { TxBuildArguments } from '@unique-nft/sdk/types';
+import { CollectionIdArguments } from '../collection-by-id/types';
+import { SetCollectionLimitsArguments } from './types';
 
 /* eslint-disable class-methods-use-this */
 
 export class SetCollectionLimitsMutation extends MutationMethodBase<
-  UpDataStructsCollectionLimitsArguments,
+  SetCollectionLimitsArguments,
   CollectionIdArguments
 > {
   async transformArgs(
-    args: UpDataStructsCollectionLimitsArguments,
+    args: SetCollectionLimitsArguments,
   ): Promise<TxBuildArguments> {
     const { address, collectionId, ...rest } = args;
 
@@ -27,14 +27,14 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
   async transformResult(
     result: ISubmittableResult,
   ): Promise<CollectionIdArguments | undefined> {
-    const createCollectionEvent = result.findRecord(
+    const updateCollectionEvent = result.findRecord(
       'unique',
       'CollectionLimitSet',
     );
 
-    if (!createCollectionEvent) return undefined;
+    if (!updateCollectionEvent) return undefined;
 
-    const [id] = createCollectionEvent.event.data as unknown as [u32];
+    const [id] = updateCollectionEvent.event.data as unknown as [u32];
 
     return {
       collectionId: id.toNumber(),

@@ -19,8 +19,8 @@ The method returns a `parsed` object that contains the `collectionId: number`.
 ## Examples
 
 ```typescript
-import { UpDataStructsCollectionLimitsArguments } from '@unique-nft/sdk/tokens/methods/set-collection-limits/types';
-const limitsArgs: UpDataStructsCollectionLimitsArguments = {
+import { SetCollectionLimitsArguments } from '@unique-nft/sdk/tokens/types';
+const limitsArgs: SetCollectionLimitsArguments = {
   address: '<your account address>',
   collectionId: '<ID of the collection>',
   accountTokenOwnershipLimit: 0,
@@ -30,6 +30,6 @@ const limitsArgs: UpDataStructsCollectionLimitsArguments = {
   ownerCanTransfer: true,
   ownerCanDestroy: true,
 };
-const createResult = await limits.submitWaitResult(limitsArgs);
+const createResult = await sdk.collections.setLimits(limitsArgs);
 const { collectionId } = createResult.parsed;
 ```

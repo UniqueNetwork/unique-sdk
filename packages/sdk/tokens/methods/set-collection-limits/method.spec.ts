@@ -1,7 +1,7 @@
 import { Sdk } from '@unique-nft/sdk';
 import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
 import { SetCollectionLimitsMutation } from '@unique-nft/sdk/tokens/methods/set-collection-limits/method';
-import { UpDataStructsCollectionLimitsArguments } from '@unique-nft/sdk/tokens/methods/set-collection-limits/types';
+import { SetCollectionLimitsArguments } from '@unique-nft/sdk/tokens';
 import { CreateCollectionExMutation } from '@unique-nft/sdk/tokens/methods/create-collection-ex/method';
 import { KeyringPair } from '@polkadot/keyring/types';
 
@@ -12,7 +12,7 @@ describe('set-collection-limits', () => {
 
   let limits: SetCollectionLimitsMutation;
 
-  let limitsArgs: UpDataStructsCollectionLimitsArguments;
+  let limitsArgs: SetCollectionLimitsArguments;
 
   beforeAll(async () => {
     sdk = await createSdk({
