@@ -68,7 +68,6 @@ export const decodeCollectionPermissions = (
     mintMode: toBoolean(permissions.mintMode) || false,
     nesting: {
       tokenOwner: nesting?.tokenOwner.isTrue,
-      permissive: nesting?.permissive.isTrue,
       collectionAdmin: nesting?.collectionAdmin.isTrue,
     },
   };
