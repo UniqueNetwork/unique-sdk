@@ -79,7 +79,7 @@ export const decodeCollectionProperties = (
   properties?: UpDataStructsProperty[],
 ): CollectionProperties => {
   const collectionProperties: CollectionProperties = {};
-  let constOnChainSchema: INamespace;
+  let constOnChainSchema: INamespace | undefined;
 
   properties?.forEach((property) => {
     switch (property.key.toHuman()) {
@@ -98,9 +98,12 @@ export const decodeCollectionProperties = (
         break;
       case CollectionPropertiesKeys.constOnChainSchema:
         constOnChainSchema = bytesToJson(property.value);
+
         collectionProperties.constOnChainSchema = constOnChainSchema;
-        collectionProperties.fields =
-          decodeCollectionFields(constOnChainSchema);
+
+        collectionProperties.fields = constOnChainSchema
+          ? decodeCollectionFields(constOnChainSchema)
+          : undefined;
         break;
       default:
         break;
