@@ -25,13 +25,13 @@ import {
 import { decodeCollectionFields } from './decode-collection-fields';
 import {
   CollectionInfoBase,
-  CollectionLimits,
   CollectionPermissions,
   CollectionProperties,
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
 } from '../methods/create-collection-ex/types';
+import { CollectionLimits } from '../methods/set-collection-limits/types';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,

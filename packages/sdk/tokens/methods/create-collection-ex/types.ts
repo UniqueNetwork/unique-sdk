@@ -5,6 +5,8 @@ import {
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 
+import { CollectionLimits } from '../set-collection-limits/types';
+
 export enum CollectionMode {
   Nft = 'Nft',
   Fungible = 'Fungible',
@@ -15,18 +17,6 @@ export enum MetaUpdatePermission {
   ItemOwner = 'ItemOwner',
   Admin = 'Admin',
   None = 'None',
-}
-
-export interface CollectionLimits {
-  accountTokenOwnershipLimit?: number | null;
-  sponsoredDataSize?: number | null;
-  sponsoredDataRateLimit?: number | null;
-  tokenLimit?: number | null;
-  sponsorTransferTimeout?: number | null;
-  sponsorApproveTimeout?: number | null;
-  ownerCanTransfer?: boolean | null;
-  ownerCanDestroy?: boolean | null;
-  transfersEnabled?: boolean | null;
 }
 
 export enum CollectionAccess {
