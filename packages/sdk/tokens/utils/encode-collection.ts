@@ -71,7 +71,6 @@ const encodeCollectionPermissions = (
         {
           tokenOwner: permissions.nesting?.tokenOwner,
           collectionAdmin: permissions.nesting?.collectionAdmin,
-          permissive: permissions.nesting?.permissive,
         },
       ),
       access: registry.createType<UpDataStructsAccessMode>(
