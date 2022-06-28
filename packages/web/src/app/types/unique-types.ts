@@ -11,7 +11,6 @@ import {
 import {
   CollectionAccess,
   CollectionInfoBase,
-  CollectionLimits,
   CollectionMode,
   CollectionNestingPermissions,
   CollectionPermissions,
@@ -19,6 +18,7 @@ import {
   MetaUpdatePermission,
   TokenPropertiesPermissions,
 } from '@unique-nft/sdk/tokens/types';
+import { CollectionLimits } from '@unique-nft/sdk/tokens/methods/set-collection-limits/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
 import {

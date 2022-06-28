@@ -70,5 +70,5 @@ describe('set-collection-limits', () => {
         collectionId: expect.any(Number),
       },
     });
-  }, 30_000);
+  }, 60_000);
 });
