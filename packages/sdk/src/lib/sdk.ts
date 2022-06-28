@@ -47,7 +47,9 @@ export class Sdk {
 
     const provider = new WsProvider(this.options.chainWsUrl);
 
-    const rpc = rpcByPrefix[prefix] ? { rpc: rpcByPrefix[prefix] } : undefined;
+    const rpc = rpcByPrefix[prefix]
+      ? { unique: rpcByPrefix[prefix] }
+      : undefined;
 
     this.#api = new ApiPromise({
       provider,
