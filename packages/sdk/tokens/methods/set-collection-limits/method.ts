@@ -14,7 +14,11 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
   async transformArgs(
     args: SetCollectionLimitsArguments,
   ): Promise<TxBuildArguments> {
-    const { address, collectionId, ...rest } = args;
+    const {
+      address,
+      collectionId,
+      limits: { ...rest },
+    } = args;
 
     return {
       address,

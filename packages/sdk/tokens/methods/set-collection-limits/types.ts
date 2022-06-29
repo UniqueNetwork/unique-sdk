@@ -10,7 +10,8 @@ export interface CollectionLimits {
   transfersEnabled?: boolean | null;
 }
 
-export interface SetCollectionLimitsArguments extends CollectionLimits {
+export interface SetCollectionLimitsArguments {
+  limits: CollectionLimits;
   address: string;
   collectionId: number;
 }

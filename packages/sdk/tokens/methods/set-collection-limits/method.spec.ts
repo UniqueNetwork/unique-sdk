@@ -27,12 +27,17 @@ describe('set-collection-limits', () => {
     limitsArgs = {
       address: account.address,
       collectionId: 1,
-      accountTokenOwnershipLimit: 0,
-      sponsoredDataSize: 0,
-      tokenLimit: 10,
-      sponsorTransferTimeout: 1,
-      ownerCanTransfer: true,
-      ownerCanDestroy: true,
+      limits: {
+        accountTokenOwnershipLimit: 1000,
+        sponsoredDataSize: 1024,
+        // sponsoredDataRateLimit: 30,
+        tokenLimit: 1000000,
+        sponsorTransferTimeout: 6,
+        sponsorApproveTimeout: 6,
+        ownerCanTransfer: false,
+        ownerCanDestroy: false,
+        transfersEnabled: false,
+      },
     };
   });
 
