@@ -17,8 +17,8 @@ ___
 
 
 # @unique-nft/sdk
-SDK is a JavaScript/TypeScript library which helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance, etc.
-At the moment, the library is a pre-alpha version. We will be grateful for the feedback and ideas for improvement. ```
+SDK is a JavaScript/TypeScript library that helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance, etc.
+At the moment, the library is a pre-alpha version. We will be grateful for the feedback and ideas for improvement.
 
 ___
 #  Table of Contents
@@ -73,17 +73,13 @@ Unique SDK was developed as an add-on of
 <a href="https://polkadot.js.org/docs/api/start" target="_blank">Polkadot{.js} ApiPromise</a>,
 extending it with simple methods to work with the Unique Network blockchains
 (Opal, Quartz, Unique).
-However, Unique SDK can be connected to any network based on the
-<a href="https://substrate.io" target="_blank">Substrate framework</a>,
-and the main modules (extrinsics, balance, query, sign, etc.) can also be used.
+However, Unique SDK can be used with any network based on the
+<a href="https://substrate.io" target="_blank">Substrate framework</a> - main modules (extrinsics, balance, query, sign, etc.) will work with them.
 
 ___
 ## Modules
 
-By default, the SDK implements only a connection to the blockchain network,
-and modules expand its capabilities. Modules are implemented as secondary endpoints
-of NPM package, this allows you to flexibly manage dependencies, do not include unnecessary modules
-into the application bundle assembly, expand the SDK with your own modules.
+By default, the SDK implements only a connection to the blockchain network, and modules expand its capabilities. Modules are implemented as secondary endpoints of npm package, this allows you to flexibly manage dependencies, not include unnecessary modules into the application bundle assembly and expand the SDK with your own modules.
 
 ```typescript
 import { Sdk } from "@unique-nft/sdk";
@@ -117,23 +113,20 @@ console.log(sdk.myOwnFeature.hello());
 
 ```
 
-Now the SDK includes 5 modules
+Currently, the SDK includes 5 modules
 
-- [Extrinsics](./extrinsics) - for build, sign and submit extrinsics
-- [State Queries](./state-queries) - queries blockchain storage
+- [Extrinsics](./extrinsics) - for building, signing, and submitting extrinsics
+- [State Queries](./state-queries) - blockchain queries storage
 - [Sign](./sign) - account management: sign, addresses
 - [Balance](./balance) - get and transfers native substrate token
 - [Tokens](./tokens) - operations with NFT of Unique Network blockchains (Opal, Unique, Quartz)
 
-Modules can be dependent on each other. So, for example, the Balance Module depends
-from the Extrinsic Module,
-because it generates extrinsics of the transfer and submits them to the blockchain.
-
+Modules can be dependent on each other. For example, the Balance Module depends on the Extrinsic Module because it generates transfer extrinsic and submits them to the blockchain.
 ___
 ## Mutation and Query methods
 
-We have divided all SDK methods into two types
-1) [Query](#query-method) methods for reading blockchain storage
+We have classified all SDK methods into two types
+1) [Query](#query-methods) methods for reading blockchain storage
    (e.g. balance, or token properties)
 
 ```typescript
@@ -144,7 +137,7 @@ const tokenId = 3456;
 const token = await sdk.tokens.get({ collectionId, tokenId });
 ```
 
-2) [Mutation](#mutation-method) methods for updating the state of the blockchain
+2) [Mutation](#mutation-methods) methods for updating the state of the blockchain
 ```typescript
 const transferArgs = {
   tokenId,
@@ -156,7 +149,7 @@ const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
 ```
 ___
 ### Query methods
-Queries to blockchain storage that return data in human format
+Queries to blockchain storage that return data in a human-readable format
 
 ```typescript
 
@@ -186,7 +179,7 @@ const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
 const { signature, signatureType } = await signer.sign(unsignedExtrinsic);
 ```
 
-And send an extrinsic and a signature to it in the blockchain
+And send the extrinsic and the signature in the blockchain
 
 ```typescript
 const hash = await sdk.extrinsics.submit({
@@ -195,7 +188,7 @@ const hash = await sdk.extrinsics.submit({
 });
 ```
 
-For convenience, we have implemented a [complex method](./extrinsics#complex):
+For more convenience, we have implemented a [complex method](./extrinsics#complex):
 if you initialize the SDK with a signer, you can sign and send extrinsics
 seamlessly, without separate actions
 
