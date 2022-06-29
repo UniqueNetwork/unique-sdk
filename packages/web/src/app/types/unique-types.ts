@@ -79,7 +79,7 @@ export class CollectionNestingPermissionsDto
 
   collectionAdmin: boolean;
 
-  permissive: boolean;
+  permissive?: boolean;
 }
 
 export class CollectionPermissionsDto implements CollectionPermissions {
