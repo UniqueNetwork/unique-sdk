@@ -1,3 +1,5 @@
+import { UpDataStructsSponsoringRateLimit } from '@unique-nft/unique-mainnet-types/default/types';
+
 export interface CollectionLimits {
   accountTokenOwnershipLimit?: number | null;
   sponsoredDataSize?: number | null;

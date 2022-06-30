@@ -30,7 +30,7 @@ describe('set-collection-limits', () => {
       limits: {
         accountTokenOwnershipLimit: 1000,
         sponsoredDataSize: 1024,
-        // sponsoredDataRateLimit: 30,
+        sponsoredDataRateLimit: 30,
         tokenLimit: 1000000,
         sponsorTransferTimeout: 6,
         sponsorApproveTimeout: 6,

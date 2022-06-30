@@ -2,12 +2,13 @@ import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { TxBuildArguments } from '@unique-nft/sdk/types';
+import { NotFoundException } from '@nestjs/common';
 import {
   CollectionLimits,
   SetCollectionLimitsArguments,
   SetCollectionLimitsResult,
 } from './types';
-import { decodeCollectionLimits } from './utils';
+import { decodeCollectionLimits, encodeSponsoredDataRateLimit } from './utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -24,11 +25,23 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
       limits: { ...rest },
     } = args;
 
+    const encodeRest = {
+      ...rest,
+      ...(rest.sponsoredDataRateLimit
+        ? {
+            sponsoredDataRateLimit: encodeSponsoredDataRateLimit(
+              this.sdk.api.registry,
+              rest.sponsoredDataRateLimit,
+            ),
+          }
+        : {}),
+    };
+
     return {
       address,
       section: 'unique',
       method: 'setCollectionLimits',
-      args: [collectionId, rest],
+      args: [collectionId, encodeRest],
     };
   }
 
@@ -50,7 +63,7 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
     );
 
     const limitsUnWrap = limitsWrap.unwrapOr(null);
-    if (!limitsUnWrap) return undefined;
+    if (!limitsUnWrap) throw new NotFoundException(`error unwrap limits`);
     const limits: CollectionLimits = decodeCollectionLimits(limitsUnWrap);
 
     return {

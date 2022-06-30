@@ -3,6 +3,7 @@ import { CollectionLimits } from '@unique-nft/sdk/tokens';
 import { bool, Option } from '@polkadot/types-codec';
 import { UpDataStructsSponsoringRateLimit } from '@unique-nft/unique-mainnet-types/default/types';
 import { INumber } from '@polkadot/types-codec/types';
+import { Registry } from '@polkadot/types/types';
 
 export function toNumber(input: Option<INumber>): number | null {
   return input.unwrapOr(undefined)?.toNumber() || null;
@@ -37,3 +38,20 @@ export const decodeCollectionLimits = (
   ownerCanDestroy: toBoolean(limits.ownerCanDestroy),
   transfersEnabled: toBoolean(limits.transfersEnabled),
 });
+
+export const encodeSponsoredDataRateLimit = (
+  registry: Registry,
+  input: number | null,
+): UpDataStructsSponsoringRateLimit => {
+  const asObject =
+    input && input > 0
+      ? { Blocks: input, isSponsoringDisabled: false }
+      : { isSponsoringDisabled: true };
+
+  const encoded = registry.createType<UpDataStructsSponsoringRateLimit>(
+    'UpDataStructsSponsoringRateLimit',
+    asObject,
+  );
+
+  return encoded;
+};
