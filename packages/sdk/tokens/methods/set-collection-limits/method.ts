@@ -7,7 +7,7 @@ import {
   SetCollectionLimitsArguments,
   SetCollectionLimitsResult,
 } from './types';
-import { decodeCollectionLimits } from '../../utils/decode-collection';
+import { decodeCollectionLimits } from './utils';
 
 /* eslint-disable class-methods-use-this */
 
