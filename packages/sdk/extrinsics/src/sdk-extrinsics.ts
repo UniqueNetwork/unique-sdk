@@ -114,7 +114,7 @@ export class SdkExtrinsics implements ISdkExtrinsics {
     args: UnsignedTxPayload,
     signer: SdkSigner | undefined = this.sdk.signer,
   ): Promise<SignTxResult> {
-    if (!signer) throw new InvalidSignerError();
+    if (!signer) throw new InvalidSignerError(`No signer provided`);
 
     return signer.sign(args);
   }

@@ -1,5 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { RouterModule } from '@nestjs/core';
+import { Module } from '@nestjs/common';
 import { ExtrinsicsController } from './controllers/extrinsics.controller';
 import { BalanceController } from './controllers/balance.controller';
 import { ChainController } from './controllers/chain.controller';
