@@ -20,16 +20,8 @@ export interface KeyfileSignerOptions {
   type?: SignatureType;
 }
 
-export interface PolkadotExtensionDApp {
-  web3Accounts: () => Promise<any[]>;
-  web3Enable: (appName: string) => Promise<any[]>;
-  web3FromSource: (data: any) => any;
-  isWeb3Injected: boolean;
-}
-
 export interface PolkadotSignerOptions {
-  extensionDApp: PolkadotExtensionDApp;
-  choosePolkadotAccount: (accounts: any[]) => Promise<any>;
+  chooseAccount?: (accounts: any[]) => Promise<any>;
 }
 
 export interface GenerateAccountArguments {

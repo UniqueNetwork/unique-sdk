@@ -8,6 +8,7 @@ import {
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { SeedSignerOptions } from './types';
+import * as console from 'console';
 
 export class SeedSigner implements SdkSigner {
   private readonly pair: KeyringPair;

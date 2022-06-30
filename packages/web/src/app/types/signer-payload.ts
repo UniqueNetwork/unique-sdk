@@ -13,7 +13,7 @@ import {
   Account,
   GenerateAccountArguments,
   GetAccountArguments,
-} from '@unique-nft/sdk/sign';
+} from '@unique-nft/account';
 import { EncryptedJsonDescriptor } from '@polkadot/util-crypto/json/types';
 import { ValidMnemonic } from '../validation';
 

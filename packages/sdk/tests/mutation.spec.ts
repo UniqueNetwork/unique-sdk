@@ -3,7 +3,7 @@ import {
   createSdk,
   getKeyringPairs,
 } from '@unique-nft/sdk/tests/testing-utils';
-import { SeedSigner } from '../sign';
+import { SeedSigner } from '@unique-nft/account';
 
 describe(AnyMutation.name, () => {
   it('works', async () => {

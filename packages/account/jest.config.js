@@ -4,7 +4,7 @@ const esModules = [
 ].join('|');
 
 module.exports = {
-  displayName: 'web',
+  displayName: 'account',
   preset: '../../jest.preset.js',
   maxWorkers: 1,
   globals: {
@@ -12,13 +12,11 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
-  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/packages/web',
-  testPathIgnorePatterns: ['./utils.test.ts'],
-  resolver: './tests/resolver.ts',
+  coverageDirectory: '../../coverage/packages/account',
+  testPathIgnorePatterns: ['./utils/*'],
 };

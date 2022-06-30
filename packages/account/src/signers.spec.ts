@@ -2,18 +2,16 @@ import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
 import { BadSignatureError, InvalidSignerError } from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import {
-  createSigner,
-  KeyfileSigner,
-  SignerOptions,
-} from '@unique-nft/sdk/sign';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
-import { Sdk } from '../src/lib/sdk';
-import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
+import { createSigner } from './factory';
+import { SignerOptions } from './types';
+import { KeyfileSigner } from './keyfile-signer';
+import { Sdk } from '@unique-nft/sdk';
+import { getDefaultSdkOptions, getKeyringPairs } from '@unique-nft/sdk/tests';
 
-describe('Sdk signers', () => {
+describe('Account signers', () => {
   let alice: KeyringPair;
   let bob: KeyringPair;
 

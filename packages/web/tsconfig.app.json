@@ -8,7 +8,9 @@
     "target": "es2015",
     "paths": {
       "@unique-nft/sdk/*": ["packages/sdk/*"],
-      "@unique-nft/sdk": ["packages/sdk/index.ts"]
+      "@unique-nft/sdk": ["packages/sdk/index.ts"],
+      "@unique-nft/account/*": ["packages/account/*"],
+      "@unique-nft/account": ["packages/account/index.ts"]
     }
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts"],

@@ -1,4 +1,7 @@
-const esModules = ['@polkadot/', '@unique-nft/unique-mainnet-types'].join('|');
+const esModules = [
+  '@polkadot-signer/',
+  '@unique-nft/unique-mainnet-types',
+].join('|');
 
 module.exports = {
   displayName: 'sdk',

@@ -11,25 +11,16 @@ import ts from 'typescript';
 const mainPackageJson = require('../../package.json');
 const currentPackageJson = require('./package.json');
 
-const SRC_FOLDER = './packages/sdk';
+const SRC_FOLDER = './packages/account';
 const TS_CONFIG = 'tsconfig.lib.json';
-const DIST_FOLDER = './dist/packages/sdk';
+const DIST_FOLDER = './dist/packages/account';
 
 const EMBEDDED_DEPS = ['@unique-nft/unique-mainnet-types'];
 
 const checkIsEmbedded = (id) =>
   EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
 
-const ENTRY_POINTS = [
-  './index.ts',
-  './extrinsics/index.ts',
-  './balance/index.ts',
-  './state-queries/index.ts',
-  './tokens/index.ts',
-  './utils/index.ts',
-  './types/index.ts',
-  './errors/index.ts',
-];
+const ENTRY_POINTS = ['./index.ts', './polkadot-signer/index.ts'];
 
 let bundlesCount = 0;
 
@@ -154,6 +145,7 @@ const getEntryConfig = (relativeInput) => {
         file: `${outFile}.cjs`,
         format: 'cjs',
         sourcemap: true,
+        inlineDynamicImports: true,
       },
     }),
     getBundleConfig({
@@ -162,6 +154,7 @@ const getEntryConfig = (relativeInput) => {
         file: `${outFile}.js`,
         format: 'es',
         sourcemap: true,
+        inlineDynamicImports: true,
       },
     }),
     getBundleConfig({
@@ -169,6 +162,7 @@ const getEntryConfig = (relativeInput) => {
       output: {
         file: `${outFile}.d.ts`,
         format: 'es',
+        inlineDynamicImports: true,
       },
     }),
   ];

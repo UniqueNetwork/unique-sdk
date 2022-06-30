@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "sdk": "packages/sdk",
-    "web": "packages/web"
+    "web": "packages/web",
+    "account": "packages/account"
   }
 }

@@ -1,10 +1,11 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { generateAccount, getAccountFromMnemonic } from '@unique-nft/sdk/sign';
 import { ValidationError } from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
-describe('Sdk Accounts', () => {
+import { generateAccount, getAccountFromMnemonic } from './accounts';
+
+describe('Accounts', () => {
   beforeAll(async () => {
     await cryptoWaitReady();
   });

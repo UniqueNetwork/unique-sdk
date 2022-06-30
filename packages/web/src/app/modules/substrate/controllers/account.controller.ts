@@ -9,7 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { generateAccount, getAccountFromMnemonic } from '@unique-nft/sdk/sign';
+import { generateAccount, getAccountFromMnemonic } from '@unique-nft/account';
 
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import { SdkValidationPipe } from '../../../validation';

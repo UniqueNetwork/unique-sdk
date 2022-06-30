@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
-    "build:sdk": "nx build sdk",
+    "build:sdk": "rollup -c packages/sdk/rollup.config.js",
+    "build:account": "rollup -c packages/account/rollup.config.js",
     "build:web": "nx build web",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
@@ -42,7 +43,8 @@
     "rxjs": "^7.0.0",
     "swagger-ui-express": "^4.3.0",
     "tslib": "^2.0.0",
-    "yauzl": "^2.10.0"
+    "yauzl": "^2.10.0",
+    "@polkadot/extension-dapp": "^0.44.1"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",
