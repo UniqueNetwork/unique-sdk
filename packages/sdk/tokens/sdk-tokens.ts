@@ -14,6 +14,7 @@ import { NestTokenMutation } from './methods/nest-token';
 import { UnnestTokenMutation } from './methods/unnest-token';
 import { tokenChildrenQuery } from './methods/token-children';
 import { tokenParentQuery } from './methods/token-parent';
+import { topmostTokenOwnerQuery } from './methods/topmost-token-owner';
 import {
   BurnTokenArguments,
   NestTokenArguments,
@@ -26,6 +27,8 @@ import {
   UnnestTokenResult,
   TokenParentArguments,
   TokenParentResult,
+  TopmostTokenOwnerArguments,
+  TopmostTokenOwnerResult,
 } from './types';
 
 export class SdkTokens {
@@ -34,6 +37,7 @@ export class SdkTokens {
     this.unnestToken = new UnnestTokenMutation(this.sdk);
     this.tokenChildren = tokenChildrenQuery.bind(this.sdk);
     this.tokenParent = tokenParentQuery.bind(this.sdk);
+    this.topmostTokenOwner = topmostTokenOwnerQuery.bind(this.sdk);
   }
 
   nestToken: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -43,6 +47,11 @@ export class SdkTokens {
   tokenChildren: QueryMethod<TokenChildrenArguments, TokenChildrenResult>;
 
   tokenParent: QueryMethod<TokenParentArguments, TokenParentResult>;
+
+  topmostTokenOwner: QueryMethod<
+    TopmostTokenOwnerArguments,
+    TopmostTokenOwnerResult
+  >;
 
   async get({
     collectionId,

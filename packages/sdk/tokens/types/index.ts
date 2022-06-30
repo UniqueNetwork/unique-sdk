@@ -6,6 +6,7 @@ export * from '../methods/nest-token/types';
 export * from '../methods/unnest-token/types';
 export * from '../methods/token-children/types';
 export * from '../methods/token-parent/types';
+export * from '../methods/topmost-token-owner/types';
 
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
