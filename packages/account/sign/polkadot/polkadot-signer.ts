@@ -12,7 +12,7 @@ import {
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { BadSignatureError } from '@unique-nft/sdk/errors';
-import { PolkadotSignerOptions } from '../src/types';
+import { PolkadotSignerOptions } from '../index';
 
 export class PolkadotSigner implements SdkSigner {
   constructor(private readonly options: PolkadotSignerOptions) {}

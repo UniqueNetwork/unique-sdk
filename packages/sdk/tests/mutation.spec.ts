@@ -36,7 +36,7 @@ describe(AnyMutation.name, () => {
     });
   }, 30_000);
 
-  it('signer mutation option', async () => {
+  it('sign mutation option', async () => {
     const sdk = await createSdk();
     const { alice, bob } = await getKeyringPairs();
 
@@ -52,7 +52,7 @@ describe(AnyMutation.name, () => {
     const signer = new SeedSigner({ seed: '//Bob' });
 
     await expect(() => mutationWrap.submit(mutationArgs)).rejects.toThrowError(
-      'No signer provided',
+      'No sign provided',
     );
 
     await expect(() => mutationWrap.submit(mutationArgs, { signer })).resolves;

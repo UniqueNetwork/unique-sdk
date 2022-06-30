@@ -8,7 +8,7 @@ import {
   SignResult,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
-import { KeyfileSignerOptions } from './types';
+import { KeyfileSignerOptions } from '../sign';
 
 export class KeyfileSigner implements SdkSigner {
   private readonly pair: KeyringPair;

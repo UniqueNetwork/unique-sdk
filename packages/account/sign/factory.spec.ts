@@ -4,9 +4,9 @@ import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { createSignerSync } from './factory';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
-import { PolkadotSigner } from '../polkadot-signer';
+import { PolkadotSigner } from './polkadot';
 
-jest.mock('./polkadot-signer/polkadot-signer');
+jest.mock('./sign/polkadot/polkadot-signer');
 
 describe('Factory', () => {
   beforeAll(async () => {
@@ -51,7 +51,7 @@ describe('Factory', () => {
     expect(signer).toBeInstanceOf(KeyfileSigner);
   });
 
-  it('create polkadot-signer', async () => {
+  it('create polkadot', async () => {
     const signer = new PolkadotSigner({
       chooseAccount: (
         accounts: InjectedAccountWithMeta[],

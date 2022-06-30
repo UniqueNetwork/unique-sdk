@@ -20,7 +20,11 @@ const EMBEDDED_DEPS = ['@unique-nft/unique-mainnet-types'];
 const checkIsEmbedded = (id) =>
   EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
 
-const ENTRY_POINTS = ['./index.ts', './polkadot-signer/index.ts'];
+const ENTRY_POINTS = [
+  './index.ts',
+  './sign/index.ts',
+  './sign/polkadot/index.ts',
+];
 
 let bundlesCount = 0;
 

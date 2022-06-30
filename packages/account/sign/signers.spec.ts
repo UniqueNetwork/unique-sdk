@@ -5,11 +5,11 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
-import { createSigner } from './factory';
-import { SignerOptions } from './types';
-import { KeyfileSigner } from './keyfile-signer';
 import { Sdk } from '@unique-nft/sdk';
 import { getDefaultSdkOptions, getKeyringPairs } from '@unique-nft/sdk/tests';
+import { createSigner } from './factory';
+import { SignerOptions } from '../sign';
+import { KeyfileSigner } from './keyfile-signer';
 
 describe('Account signers', () => {
   let alice: KeyringPair;

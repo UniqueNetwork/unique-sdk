@@ -11,6 +11,7 @@
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
     "test:web": "nx test web",
+    "test:account": "nx test account",
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "eslint ./packages/** --fix",
     "start": "node ./dist/packages/web/main.js",
