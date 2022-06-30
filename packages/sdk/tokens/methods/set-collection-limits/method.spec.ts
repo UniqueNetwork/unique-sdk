@@ -1,9 +1,9 @@
 import { Sdk } from '@unique-nft/sdk';
 import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
-import { SetCollectionLimitsMutation } from '@unique-nft/sdk/tokens/methods/set-collection-limits/method';
-import { SetCollectionLimitsArguments } from '@unique-nft/sdk/tokens';
-import { CreateCollectionExMutation } from '@unique-nft/sdk/tokens/methods/create-collection-ex/method';
 import { KeyringPair } from '@polkadot/keyring/types';
+import { SetCollectionLimitsMutation } from './method';
+import { SetCollectionLimitsArguments } from './types';
+import { CreateCollectionExMutation } from '../create-collection-ex/method';
 
 describe('set-collection-limits', () => {
   let sdk: Sdk;

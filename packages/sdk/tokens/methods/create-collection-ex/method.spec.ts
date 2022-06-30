@@ -1,6 +1,3 @@
-import '@unique-nft/sdk/balance';
-import '@unique-nft/sdk/extrinsics';
-import '@unique-nft/sdk/tokens';
 import { Sdk } from '@unique-nft/sdk';
 import { createSdk } from '@unique-nft/sdk/tests';
 

@@ -1,9 +1,9 @@
 import { UpDataStructsCollectionLimits } from '@unique-nft/unique-mainnet-types/default/index';
-import { CollectionLimits } from '@unique-nft/sdk/tokens';
 import { bool, Option } from '@polkadot/types-codec';
 import { UpDataStructsSponsoringRateLimit } from '@unique-nft/unique-mainnet-types/default/types';
 import { INumber } from '@polkadot/types-codec/types';
 import { Registry } from '@polkadot/types/types';
+import { CollectionLimits } from './types';
 
 export function toNumber(input: Option<INumber>): number | null {
   return input.unwrapOr(undefined)?.toNumber() || null;
