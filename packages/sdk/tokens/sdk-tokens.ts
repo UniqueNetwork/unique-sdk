@@ -1,32 +1,42 @@
 import '@unique-nft/unique-mainnet-types/augment-api';
 
-import { ApiPromise } from '@polkadot/api';
-import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
+import { MutationMethodWrap, QueryMethod } from '@unique-nft/sdk/extrinsics';
 import type {
   UnsignedTxPayload,
   TokenInfo,
   CreateTokenArguments,
-  SdkOptions,
 } from '@unique-nft/sdk/types';
 import { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
+import { Sdk } from '@unique-nft/sdk';
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
-import { SdkCollections } from './sdk-collections';
+import { NestTokenMutation } from './methods/nest-token';
+import { UnnestTokenMutation } from './methods/unnest-token';
+import { tokenChildrenQuery } from './methods/token-children/method';
 import {
   BurnTokenArguments,
+  NestTokenArguments,
+  NestTokenResult,
+  TokenChildrenArguments,
+  TokenChildrenResult,
   TokenIdArguments,
   TransferTokenArguments,
+  UnnestTokenArguments,
+  UnnestTokenResult,
 } from './types';
 
-interface Sdk {
-  api: ApiPromise;
-  extrinsics: SdkExtrinsics;
-  options: SdkOptions;
-  collections: SdkCollections;
-}
-
 export class SdkTokens {
-  constructor(readonly sdk: Sdk) {}
+  constructor(readonly sdk: Sdk) {
+    this.nestToken = new NestTokenMutation(this.sdk);
+    this.unnestToken = new UnnestTokenMutation(this.sdk);
+    this.tokenChildren = tokenChildrenQuery.bind(this.sdk);
+  }
+
+  nestToken: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
+
+  unnestToken: MutationMethodWrap<UnnestTokenArguments, UnnestTokenResult>;
+
+  tokenChildren: QueryMethod<TokenChildrenArguments, TokenChildrenResult>;
 
   async get({
     collectionId,
