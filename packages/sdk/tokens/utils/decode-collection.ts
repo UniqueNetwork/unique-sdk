@@ -63,23 +63,25 @@ export const decodeCollectionPermissions = (
   permissions: UpDataStructsCollectionPermissions,
 ): CollectionPermissions => {
   const nesting = permissions.nesting.unwrapOrDefault();
+
   return {
     access: permissions.access.unwrapOrDefault()?.type,
     mintMode: toBoolean(permissions.mintMode) || false,
     nesting: {
-      tokenOwner: nesting?.tokenOwner.isTrue,
-      permissive: nesting?.permissive.isTrue,
-      collectionAdmin: nesting?.collectionAdmin.isTrue,
+      tokenOwner: nesting?.tokenOwner?.isTrue,
+      permissive: nesting?.permissive?.isTrue,
+      collectionAdmin: nesting?.collectionAdmin?.isTrue,
     },
   };
 };
 
 export const decodeCollectionProperties = (
-  properties: UpDataStructsProperty[],
+  properties?: UpDataStructsProperty[],
 ): CollectionProperties => {
   const collectionProperties: CollectionProperties = {};
   let constOnChainSchema: INamespace;
-  properties.forEach((property) => {
+
+  properties?.forEach((property) => {
     switch (property.key.toHuman()) {
       case CollectionPropertiesKeys.offchainSchema:
         collectionProperties.offchainSchema = bytesToString(property.value);
@@ -118,19 +120,13 @@ const decodeTokenPropertyPermissions = (
 const decodeTokenPropertiesPermissions = (
   tokenPropertiesPermissions: UpDataStructsPropertyKeyPermission[],
 ): TokenPropertiesPermissions => {
-  const decodedPermissions: TokenPropertiesPermissions = {};
-  tokenPropertiesPermissions.map((property) => {
-    const key = bytesToString(property.key);
-    switch (key) {
-      case TokenPropertiesKeys.constData:
-        decodedPermissions.constData = decodeTokenPropertyPermissions(property);
-        break;
-      default:
-        break;
-    }
-    return true;
-  });
-  return decodedPermissions;
+  const constProperty = tokenPropertiesPermissions?.find(
+    ({ key }) => bytesToString(key) === TokenPropertiesKeys.constData,
+  );
+
+  return constProperty
+    ? { constData: decodeTokenPropertyPermissions(constProperty) }
+    : {};
 };
 
 export const decodeCollection = (

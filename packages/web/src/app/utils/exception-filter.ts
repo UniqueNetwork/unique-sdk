@@ -5,6 +5,7 @@ import {
   Catch,
   HttpException,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import {
@@ -51,14 +52,22 @@ function createWebException(exception: SdkError | WebError) {
 
 @Catch()
 export class SdkExceptionsFilter extends BaseExceptionFilter {
+  private readonly logger = new Logger(SdkExceptionsFilter.name);
+
   catch(exception: SdkError, host: ArgumentsHost) {
+    this.logger.error(exception, exception.stack);
+
     super.catch(createWebException(exception), host);
   }
 }
 
 @Catch(WebError)
 export class WebExceptionsFilter extends BaseExceptionFilter {
+  private readonly logger = new Logger(WebExceptionsFilter.name);
+
   catch(exception: WebError, host: ArgumentsHost) {
+    this.logger.error(exception, exception.stack);
+
     super.catch(createWebException(exception), host);
   }
 }
