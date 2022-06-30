@@ -3,6 +3,6 @@
   "projects": {
     "sdk": "packages/sdk",
     "web": "packages/web",
-    "account": "packages/account"
+    "accounts": "packages/accounts"
   }
 }

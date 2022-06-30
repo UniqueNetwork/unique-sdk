@@ -4,7 +4,7 @@ import { Keyring } from '@polkadot/keyring';
 import { HexString } from '@polkadot/util/types';
 import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
 import { Sdk } from '@unique-nft/sdk';
-import { createSigner, SignerOptions } from '@unique-nft/account/sign';
+import { createSigner, SignerOptions } from '@unique-nft/accounts/sign';
 
 export const getDefaultSdkOptions = (): SdkOptions => ({
   chainWsUrl: 'wss://ws-rc.unique.network',

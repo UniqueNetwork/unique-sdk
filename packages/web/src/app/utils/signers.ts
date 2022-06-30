@@ -1,5 +1,5 @@
 import { ValidationError } from '@unique-nft/sdk/errors';
-import { createSignerSync, SignerOptions } from '@unique-nft/account/sign';
+import { createSignerSync, SignerOptions } from '@unique-nft/accounts/sign';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { validateSeed } from '../validation';
 

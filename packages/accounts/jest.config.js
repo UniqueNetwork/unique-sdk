@@ -1,7 +1,7 @@
 const esModules = ['@polkadot/', '@unique-nft/unique-mainnet-types'].join('|');
 
 module.exports = {
-  displayName: 'account',
+  displayName: 'accounts',
   preset: '../../jest.preset.js',
   maxWorkers: 1,
   globals: {
@@ -14,6 +14,6 @@ module.exports = {
   },
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/packages/account',
+  coverageDirectory: '../../coverage/packages/accounts',
   testPathIgnorePatterns: ['./utils/*'],
 };

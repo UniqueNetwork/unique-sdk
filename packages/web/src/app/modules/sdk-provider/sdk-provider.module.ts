@@ -1,7 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Sdk } from '@unique-nft/sdk';
-import { createSigner, SeedSignerOptions } from '@unique-nft/account/sign';
+import { createSigner, SeedSignerOptions } from '@unique-nft/accounts/sign';
 import { FactoryProvider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { Config } from '../../config/config.module';
 

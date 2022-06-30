@@ -1,26 +1,26 @@
 {
-  "root": "packages/account",
-  "sourceRoot": "packages/account/src",
+  "root": "packages/accounts",
+  "sourceRoot": "packages/accounts/src",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:package",
       "options": {
-        "project": "packages/account/ng-package.json",
-        "tsConfig": "packages/account/tsconfig.lib.json"
+        "project": "packages/accounts/ng-package.json",
+        "tsConfig": "packages/accounts/tsconfig.lib.json"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/account/**/*.ts"]
+        "lintFilePatterns": ["packages/accounts/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/account"],
+      "outputs": ["coverage/packages/accounts"],
       "options": {
-        "jestConfig": "packages/account/jest.config.js",
+        "jestConfig": "packages/accounts/jest.config.js",
         "passWithNoTests": true
       }
     }

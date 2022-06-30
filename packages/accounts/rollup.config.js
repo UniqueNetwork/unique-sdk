@@ -11,9 +11,9 @@ import ts from 'typescript';
 const mainPackageJson = require('../../package.json');
 const currentPackageJson = require('./package.json');
 
-const SRC_FOLDER = './packages/account';
+const SRC_FOLDER = './packages/accounts';
 const TS_CONFIG = 'tsconfig.lib.json';
-const DIST_FOLDER = './dist/packages/account';
+const DIST_FOLDER = './dist/packages/accounts';
 
 const EMBEDDED_DEPS = ['@unique-nft/unique-mainnet-types'];
 
