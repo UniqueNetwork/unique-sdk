@@ -1,15 +1,8 @@
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
-import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
-import { BadSignatureError, InvalidSignerError } from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import '@unique-nft/sdk/extrinsics';
-import '@unique-nft/sdk/tokens';
-import '@unique-nft/sdk/balance';
-import { Sdk } from '@unique-nft/sdk';
-import { getDefaultSdkOptions, getKeyringPairs } from '@unique-nft/sdk/tests';
-import { createSigner } from './factory';
-import { SignerOptions } from '../sign';
-import { KeyfileSigner } from './keyfile-signer';
+import { Keyring } from '@polkadot/keyring';
+import { signatureVerify } from '@polkadot/util-crypto';
+import { createSignerSync, SignerOptions } from '../sign';
 
 describe('Account signers', () => {
   let alice: KeyringPair;
@@ -35,24 +28,14 @@ describe('Account signers', () => {
     },
   };
 
-  const defOptions = getDefaultSdkOptions();
-
   beforeAll(async () => {
     await cryptoWaitReady();
 
-    const testAccounts = await getKeyringPairs();
-    alice = testAccounts.alice;
-    bob = testAccounts.bob;
-  });
+    const keyring = new Keyring({ type: 'sr25519' });
 
-  async function createSdk(signerOptions: SignerOptions): Promise<Sdk> {
-    const signer: SdkSigner = await createSigner(signerOptions);
-    const options: SdkOptions = {
-      chainWsUrl: defOptions.chainWsUrl,
-      signer,
-    };
-    return Sdk.create(options);
-  }
+    alice = keyring.addFromUri('//Alice');
+    bob = keyring.addFromUri('//Bob');
+  });
 
   function getAddressByName(name: string): string {
     switch (name) {
@@ -67,126 +50,38 @@ describe('Account signers', () => {
     }
   }
 
-  describe('seed/uri', () => {
-    it.each([
-      ['alice', { seed: '//Alice' }],
-      ['testUser', { seed: testUser.seed }],
-    ])(
-      'sign ok - %s',
-      async (addressName: string, signerOptions: SignerOptions) => {
-        const sdk = await createSdk(signerOptions);
-        const unsignedTxPayload = await sdk.balance.transfer({
-          address: getAddressByName(addressName),
-          destination: bob.address,
-          amount: 0.000001,
-        });
-        const { signerPayloadJSON } = unsignedTxPayload;
-
-        const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
-
-        expect(typeof signature).toBe('string');
-        await sdk.extrinsics.verifySignOrThrow({
-          signature,
-          signerPayloadJSON,
-        });
-      },
-    );
-
-    it.each([
-      ['bob', 'alice', { seed: '//Alice' }],
-      ['alice', 'bob', { seed: testUser.seed }],
-    ])(
-      'sign fail - %s->%s',
-      async (
-        addressName: string,
-        destinationName: string,
-        signerOptions: SignerOptions,
-      ) => {
-        const sdk = await createSdk(signerOptions);
-        const unsignedTxPayload = await sdk.balance.transfer({
-          address: getAddressByName(addressName),
-          destination: getAddressByName(destinationName),
-          amount: 0.000001,
-        });
-        const { signerPayloadJSON } = unsignedTxPayload;
-
-        const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
-
-        await expect(async () => {
-          await sdk.extrinsics.verifySignOrThrow({
-            signature,
-            signerPayloadJSON,
-          });
-        }).rejects.toThrowError(new BadSignatureError());
-      },
-    );
-  });
-
-  describe('keyfile', () => {
-    it('create - fail, pass empty', async () => {
-      const sdk = await createSdk({
-        keyfile: testUser.keyfile as KeyringPair$Json,
-        passwordCallback() {
-          return Promise.resolve('');
-        },
-      });
-      await expect(async () => {
-        const signer = sdk.signer as KeyfileSigner;
-        await signer.unlock();
-      }).rejects.toThrowError(
-        new InvalidSignerError('Password was not received'),
-      );
-    });
-
-    it('create - fail, pass invalid', async () => {
-      const sdk = await createSdk({
-        keyfile: testUser.keyfile as KeyringPair$Json,
-        passwordCallback() {
-          return Promise.resolve('123');
-        },
-      });
-      await expect(async () => {
-        const signer = sdk.signer as KeyfileSigner;
-        await signer.unlock();
-      }).rejects.toThrowError(
-        new InvalidSignerError(
-          'Unable to decode using the supplied passphrase',
-        ),
-      );
-    });
-
-    it('create - ok', async () => {
-      await createSdk({
+  it.each([
+    ['alice', { seed: '//Alice' }],
+    ['testUser', { seed: testUser.seed }],
+    [
+      'testUser',
+      {
         keyfile: testUser.keyfile as KeyringPair$Json,
         passwordCallback() {
           return Promise.resolve(testUser.password);
         },
-      });
-    });
+      },
+    ],
+  ])(
+    '%# sign ok - %s',
+    async (addressName: string, signerOptions: SignerOptions) => {
+      const address = getAddressByName(addressName);
+      const signer = createSignerSync(signerOptions);
 
-    it('sign - ok', async () => {
-      const sdk = await createSdk({
-        keyfile: testUser.keyfile as KeyringPair$Json,
-        passwordCallback() {
-          return Promise.resolve(testUser.password);
-        },
-      });
-
-      const unsignedTxPayload = await sdk.balance.transfer({
-        address: testUser.keyfile.address,
-        destination: bob.address,
-        amount: 0.000001,
-      });
-      const { signerPayloadJSON } = unsignedTxPayload;
-
-      const { signature } = await sdk.extrinsics.sign(unsignedTxPayload);
+      const unsignedTxPayload: any = {
+        signerPayloadHex: '0x1234567890',
+        signerPayloadJSON: {},
+        signerPayloadRaw: {},
+      };
+      const { signature } = await signer.sign(unsignedTxPayload);
 
       expect(typeof signature).toBe('string');
-
-      await sdk.extrinsics.verifySignOrThrow({
+      const { isValid } = signatureVerify(
+        unsignedTxPayload.signerPayloadHex,
         signature,
-        signerPayloadJSON,
-      });
-    });
-  });
+        address,
+      );
+      expect(isValid).toBe(true);
+    },
+  );
 });

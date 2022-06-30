@@ -5,13 +5,8 @@ import {
   isWeb3Injected,
 } from '@polkadot/extension-dapp';
 import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import {
-  SdkSigner,
-  SignatureType,
-  SignResult,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/types';
-import { BadSignatureError } from '@unique-nft/sdk/errors';
+import { SignatureType, SignResult } from '../../src/types';
+import { SdkSigner, UnsignedTxPayload } from '../types';
 import { PolkadotSignerOptions } from '../index';
 
 export class PolkadotSigner implements SdkSigner {
@@ -19,17 +14,17 @@ export class PolkadotSigner implements SdkSigner {
 
   private static async getAccounts(): Promise<InjectedAccountWithMeta[]> {
     if (!isWeb3Injected) {
-      throw new BadSignatureError('Polkadot extension not installed');
+      throw new Error('Polkadot extension not installed');
     }
 
     const extensions = await web3Enable('Unique app');
     if (extensions.length === 0) {
-      throw new BadSignatureError('No accounts found');
+      throw new Error('No accounts found');
     }
 
     const injectedAccounts = await web3Accounts();
     if (!injectedAccounts.length) {
-      throw new BadSignatureError('Polkadot account not found');
+      throw new Error('Polkadot account not found');
     }
 
     return injectedAccounts;
@@ -49,7 +44,7 @@ export class PolkadotSigner implements SdkSigner {
 
     const signPayload = injector?.signer?.signPayload;
     if (!signPayload) {
-      throw new BadSignatureError('Fail sign message');
+      throw new Error('Fail sign message');
     }
 
     const { signature } = await signPayload(

@@ -1,7 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { InvalidSignerError } from '@unique-nft/sdk/errors';
-import { SdkSigner } from '@unique-nft/sdk/types';
-import { SignerOptions } from '../sign';
+import { SdkSigner, SignerOptions } from '../sign';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
 
@@ -14,10 +12,10 @@ export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
       return new KeyfileSigner(signerOptions);
     }
   } catch (err: any) {
-    throw new InvalidSignerError(err.message);
+    throw new Error(err.message);
   }
 
-  throw new InvalidSignerError('Not known options');
+  throw new Error('Not known options');
 }
 
 export async function createSigner(

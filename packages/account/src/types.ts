@@ -2,7 +2,18 @@
 import 'reflect-metadata';
 import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
-import { SignatureType } from '@unique-nft/sdk/types';
+
+export enum SignatureType {
+  Sr25519 = 'sr25519',
+  Ed25519 = 'ed25519',
+  Ecdsa = 'ecdsa',
+  Ethereum = 'ethereum',
+}
+
+export interface SignResult {
+  signatureType: SignatureType;
+  signature: HexString;
+}
 
 export interface GenerateAccountArguments {
   password?: string;

@@ -1,6 +1,5 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { ValidationError } from '@unique-nft/sdk/errors';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 import { generateAccount, getAccountFromMnemonic } from './accounts';
@@ -62,8 +61,6 @@ describe('Accounts', () => {
         mnemonic,
         password: 'pass1',
       });
-    }).rejects.toThrowError(
-      new ValidationError('Invalid bip39 mnemonic specified'),
-    );
+    }).rejects.toThrowError(new Error('Invalid bip39 mnemonic specified'));
   });
 });

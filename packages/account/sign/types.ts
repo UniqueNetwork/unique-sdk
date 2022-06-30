@@ -1,8 +1,10 @@
 // eslint-disable-next-line max-classes-per-file
 import 'reflect-metadata';
-import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
+import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
-import { SignatureType } from '@unique-nft/sdk/types';
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+
+import { SignResult, SignatureType } from '../src/types';
 
 export type SignerOptions = SeedSignerOptions | KeyfileSignerOptions;
 
@@ -19,4 +21,18 @@ export interface KeyfileSignerOptions {
 
 export interface PolkadotSignerOptions {
   chooseAccount?: (accounts: any[]) => Promise<any>;
+}
+
+export { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+export { AnyJson, ISubmittableResult } from '@polkadot/types/types';
+export { HexString } from '@polkadot/util/types';
+
+export interface SdkSigner {
+  sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult>;
+}
+
+export interface UnsignedTxPayload {
+  signerPayloadJSON: SignerPayloadJSON;
+  signerPayloadRaw: SignerPayloadRaw;
+  signerPayloadHex: HexString;
 }
