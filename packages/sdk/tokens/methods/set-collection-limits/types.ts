@@ -15,3 +15,8 @@ export interface SetCollectionLimitsArguments {
   address: string;
   collectionId: number;
 }
+
+export interface SetCollectionLimitsResult {
+  collectionId: number;
+  limits: CollectionLimits;
+}

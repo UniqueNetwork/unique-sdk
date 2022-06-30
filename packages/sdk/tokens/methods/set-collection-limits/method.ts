@@ -2,14 +2,18 @@ import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { TxBuildArguments } from '@unique-nft/sdk/types';
-import { CollectionIdArguments } from '../collection-by-id/types';
-import { SetCollectionLimitsArguments } from './types';
+import {
+  CollectionLimits,
+  SetCollectionLimitsArguments,
+  SetCollectionLimitsResult,
+} from './types';
+import { decodeCollectionLimits } from '../../utils/decode-collection';
 
 /* eslint-disable class-methods-use-this */
 
 export class SetCollectionLimitsMutation extends MutationMethodBase<
   SetCollectionLimitsArguments,
-  CollectionIdArguments
+  SetCollectionLimitsResult
 > {
   async transformArgs(
     args: SetCollectionLimitsArguments,
@@ -30,7 +34,7 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
 
   async transformResult(
     result: ISubmittableResult,
-  ): Promise<CollectionIdArguments | undefined> {
+  ): Promise<SetCollectionLimitsResult | undefined> {
     const updateCollectionEvent = result.findRecord(
       'unique',
       'CollectionLimitSet',
@@ -40,8 +44,18 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
 
     const [id] = updateCollectionEvent.event.data as unknown as [u32];
 
+    // todo this.sdk.api.rpc.unique.effectiveCollectionLimits -> this.sdk.collection.getCollectionLimits
+    const limitsWrap = await this.sdk.api.rpc.unique.effectiveCollectionLimits(
+      id.toNumber(),
+    );
+
+    const limitsUnWrap = limitsWrap.unwrapOr(null);
+    if (!limitsUnWrap) return undefined;
+    const limits: CollectionLimits = decodeCollectionLimits(limitsUnWrap);
+
     return {
       collectionId: id.toNumber(),
+      limits,
     };
   }
 }

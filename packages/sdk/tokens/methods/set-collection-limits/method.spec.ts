@@ -73,6 +73,7 @@ describe('set-collection-limits', () => {
       isCompleted: true,
       parsed: {
         collectionId: expect.any(Number),
+        limits: expect.any(Object),
       },
     });
   }, 60_000);
