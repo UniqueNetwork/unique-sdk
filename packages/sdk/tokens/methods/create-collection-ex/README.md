@@ -29,7 +29,7 @@ const createArgs: CreateCollectionArguments = {
   tokenPrefix: 'BAZ',
   properties: {},
 };
-const createResult = await sdk.collections.setLimits(createArgs);
+const createResult = await sdk.collections.creation.submitWaitResult(createArgs);
 const { collectionId } = createResult.parsed;
 const collection = await sdk.collections.get({ collectionId });
 ```

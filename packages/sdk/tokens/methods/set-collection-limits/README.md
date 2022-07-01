@@ -39,6 +39,6 @@ const limitsArgs: SetCollectionLimitsArguments = {
       transfersEnabled: false,
   }
 };
-const createResult = await sdk.collections.setLimits(limitsArgs);
-const { collectionId } = createResult.parsed;
+const setResult = await sdk.collections.setLimits.submitWaitResult(limitsArgs);
+const { collectionId, limits } = setResult.parsed;
 ```
