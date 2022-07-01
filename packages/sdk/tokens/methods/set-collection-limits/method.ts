@@ -8,7 +8,8 @@ import {
   SetCollectionLimitsArguments,
   SetCollectionLimitsResult,
 } from './types';
-import { decodeCollectionLimits, encodeSponsoredDataRateLimit } from './utils';
+import { decodeCollectionLimits } from './utils';
+import { encodeSponsoredDataRateLimit } from '../../utils/encode-collection-fields';
 
 /* eslint-disable class-methods-use-this */
 

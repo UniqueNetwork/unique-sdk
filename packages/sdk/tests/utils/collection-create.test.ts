@@ -58,6 +58,17 @@ const defaultCollectionInitial: TestCollectionInitial = {
     schemaVersion: 'Unique',
     fields,
   },
+  limits: {
+    accountTokenOwnershipLimit: 1000,
+    sponsoredDataSize: 1024,
+    sponsoredDataRateLimit: 30,
+    tokenLimit: 1000000,
+    sponsorTransferTimeout: 6,
+    sponsorApproveTimeout: 6,
+    ownerCanTransfer: false,
+    ownerCanDestroy: false,
+    transfersEnabled: false,
+  },
 };
 
 export async function createCollection(
