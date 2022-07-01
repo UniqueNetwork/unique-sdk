@@ -23,8 +23,8 @@ This SDK may be used as an npm package or REST API.
 - [Packages](#packages)
  	- [SDK](#sdk)
   - [Accounts](#accounts)
-	- [Web](#web)
-	- [Recipes](#recipes)
+  - [Web](#web)
+  - [Recipes](#recipes)
 
 # How to start
 Add SDK to your JavaScript/TypeScript project with
