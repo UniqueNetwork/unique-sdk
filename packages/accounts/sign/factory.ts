@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { SdkSigner, SignerOptions } from '../sign';
+import { SdkSigner, SignerOptions } from './types';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
 

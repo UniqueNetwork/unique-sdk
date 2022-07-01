@@ -37,7 +37,7 @@ export class PolkadotSigner implements SdkSigner {
     if (this.options.chooseAccount) {
       injectedAccount = await this.options.chooseAccount(injectedAccounts);
     } else {
-      injectedAccount = injectedAccounts[0];
+      [injectedAccount] = injectedAccounts;
     }
 
     const injector = await web3FromSource(injectedAccount.meta.source);

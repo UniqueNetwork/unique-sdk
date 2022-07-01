@@ -2,8 +2,7 @@ import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { u8aToHex } from '@polkadot/util';
 import { SignatureType, SignResult } from '../src/types';
-import { SdkSigner, UnsignedTxPayload } from './types';
-import { SeedSignerOptions } from '../sign';
+import { SdkSigner, UnsignedTxPayload, SeedSignerOptions } from './types';
 
 export class SeedSigner implements SdkSigner {
   private readonly pair: KeyringPair;

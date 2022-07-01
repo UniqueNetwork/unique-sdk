@@ -1,8 +1,8 @@
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
+import { cryptoWaitReady, signatureVerify } from '@polkadot/util-crypto';
 import { Keyring } from '@polkadot/keyring';
-import { signatureVerify } from '@polkadot/util-crypto';
-import { createSignerSync, SignerOptions } from '../sign';
+import { SignerOptions } from './types';
+import { createSignerSync } from './factory';
 
 describe('Account signers', () => {
   let alice: KeyringPair;
