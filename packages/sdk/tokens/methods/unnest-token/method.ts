@@ -1,6 +1,5 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { TxBuildArguments } from '@unique-nft/sdk/types/arguments';
-import { ISubmittableResult } from '@unique-nft/sdk/types';
+import { TxBuildArguments, ISubmittableResult } from '@unique-nft/sdk/types';
 import { u32 } from '@polkadot/types-codec';
 import { UnnestTokenArguments, UnnestTokenResult } from './types';
 import { getNestingTokenAddress } from '../../utils';

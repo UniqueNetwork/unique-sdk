@@ -10,6 +10,10 @@ export {
   decodeToken,
   encodeCollection,
   decodeCollection,
+  getNestingTokenAddress,
+  isNestingAddress,
+  getCollectionIdFromNestingAddress,
+  getTokenIdFromNestingAddress,
 } from './utils';
 export { SdkCollections } from './sdk-collections';
 export { SdkTokens } from './sdk-tokens';
