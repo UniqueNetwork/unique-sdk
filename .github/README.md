@@ -22,6 +22,7 @@ This SDK may be used as an npm package or REST API.
 - [Getting started](#how-to-start)
 - [Packages](#packages)
  	- [SDK](#sdk)
+  - [Accounts](#accounts)
 	- [Web](#web)
 	- [Recipes](#recipes)
 
@@ -39,6 +40,9 @@ To learn more read <a href="../packages/web#sdk-deployment---getting-started-gui
 
 ## SDK
 <a href="../packages/sdk">SDK package</a> contains npm package of SDK itself.
+
+## Accounts
+<a href="../packages/accounts">Accounts package</a>.
 
 ## Web
 As an alternative to the whole SDK, you can use proxy http serviсe for SDK to implement server logic - <a href="../packages/web">HTTP API Service</a>.
