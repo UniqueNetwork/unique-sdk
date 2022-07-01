@@ -50,7 +50,7 @@ export class CollectionController {
     return this.sdk.collections.creation.build(args);
   }
 
-  @Post('setLimits')
+  @Post('set-limits')
   async setCollectionLimits(
     @Body() args: SetCollectionLimitsBody,
   ): Promise<UnsignedTxPayloadResponse> {
