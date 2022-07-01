@@ -19,7 +19,7 @@ const decodeField = (
     };
   }
 
-  const item: Enum = root.lookupEnum(name);
+  const item: Enum = root.lookupEnum(field.type);
 
   const items: string[] = [];
   if (item && item.options) {
