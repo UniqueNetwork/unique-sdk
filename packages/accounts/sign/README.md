@@ -29,4 +29,4 @@ const signer: SdkSigner = signerOptions(signerOptions);
 
 ## Sign with Polkadot extension
 
-You can see an example [here]('./polkadot/)
+You can see an example [here](./polkadot/)
