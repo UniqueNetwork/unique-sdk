@@ -13,7 +13,6 @@
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "eslint ./packages/** --fix",
     "start": "node ./dist/packages/web/main.js",
-    "postinstall": "npm run fix:unique:nft:types && npm run fix:quartz:nft:types && npm run fix:opal:nft:types && npm run husky:install",
     "fix:unique:nft:types": "find ./node_modules/@unique-nft/unique-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
