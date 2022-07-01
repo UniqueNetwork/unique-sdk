@@ -18,6 +18,7 @@ import {
   BurnCollectionBody,
   CollectionIdQuery,
   CreateCollectionBody,
+  SetCollectionLimitsBody,
   TransferCollectionBody,
   UnsignedTxPayloadResponse,
 } from '../../../types/sdk-methods';
@@ -47,6 +48,13 @@ export class CollectionController {
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.collections.creation.build(args);
+  }
+
+  @Post('setLimits')
+  async setCollectionLimits(
+    @Body() args: SetCollectionLimitsBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    return this.sdk.collections.setLimits.build(args);
   }
 
   @Delete()

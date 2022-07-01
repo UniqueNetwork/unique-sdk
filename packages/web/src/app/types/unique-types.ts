@@ -44,30 +44,72 @@ export class CollectionSponsorship {
 const CollectionLimitItem = ApiProperty({ required: false, example: null });
 
 export class CollectionLimitsDto implements CollectionLimits {
+  @ApiProperty({
+    description: 'Maximum number of tokens that one address can own',
+    example: 1000,
+  })
   @CollectionLimitItem
   accountTokenOwnershipLimit?: number | null;
 
+  @ApiProperty({
+    description:
+      'Maximum byte size of custom token data that can be sponsored when tokens are minted in sponsored mode',
+    example: 1024,
+  })
   @CollectionLimitItem
   sponsoredDataSize?: number | null;
 
+  @ApiProperty({
+    description:
+      'Defines how many blocks need to pass between setVariableMetadata transactions in order for them to be sponsored',
+    example: 30,
+  })
   @CollectionLimitItem
   sponsoredDataRateLimit?: number | null;
 
+  @ApiProperty({
+    description: 'Total amount of tokens that can be minted in this collection',
+    example: 1000000,
+  })
   @CollectionLimitItem
   tokenLimit?: number | null;
 
+  @ApiProperty({
+    description:
+      'Time interval in blocks that defines once per how long a non-privileged user transfer or mint transaction can be sponsored',
+    example: 6,
+  })
   @CollectionLimitItem
   sponsorTransferTimeout?: number | null;
 
+  @ApiProperty({
+    description:
+      'Time interval in blocks that defines once per how long a non-privileged user approve transaction can be sponsored',
+    example: 6,
+  })
   @CollectionLimitItem
   sponsorApproveTimeout?: number | null;
 
+  @ApiProperty({
+    description:
+      'Boolean value that tells if collection owner or admins can transfer or burn tokens owned by other non-privileged users',
+    example: false,
+  })
   @CollectionLimitItem
   ownerCanTransfer?: boolean | null;
 
+  @ApiProperty({
+    description: 'Boolean value that tells if collection owner can destroy it',
+    example: false,
+  })
   @CollectionLimitItem
   ownerCanDestroy?: boolean | null;
 
+  @ApiProperty({
+    description:
+      'Flag that defines whether token transfers between users are currently enabled',
+    example: false,
+  })
   @CollectionLimitItem
   transfersEnabled?: boolean | null;
 }

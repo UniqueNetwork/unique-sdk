@@ -15,7 +15,10 @@ import {
   CollectionIdArguments,
   CollectionInfo,
 } from './methods/collection-by-id/types';
-import { SetCollectionLimitsArguments } from './types';
+import {
+  SetCollectionLimitsArguments,
+  SetCollectionLimitsResult,
+} from './types';
 import { SetCollectionLimitsMutation } from './methods/set-collection-limits/method';
 
 export class SdkCollections {
@@ -34,7 +37,7 @@ export class SdkCollections {
 
   setLimits: MutationMethodWrap<
     SetCollectionLimitsArguments,
-    CollectionIdArguments
+    SetCollectionLimitsResult
   >;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {

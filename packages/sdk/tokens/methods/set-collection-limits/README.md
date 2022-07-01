@@ -22,6 +22,7 @@ The method returns a `parsed` object that contains the `collectionId: number`.
 ## Examples
 
 ```typescript
+import '@unique-nft/sdk/tokens';
 import { SetCollectionLimitsArguments } from '@unique-nft/sdk/tokens/types';
 const limitsArgs: SetCollectionLimitsArguments = {
   address: '<your account address>',
