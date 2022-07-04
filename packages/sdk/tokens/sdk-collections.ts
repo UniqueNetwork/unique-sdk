@@ -10,6 +10,7 @@ import {
 } from '@unique-nft/sdk/types';
 import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
 import { CreateCollectionArguments } from './methods/create-collection-ex/types';
+import { GetCollectionLimitsResult } from './methods/effective-collection-limits/types';
 import { collectionById } from './methods/collection-by-id/method';
 import {
   CollectionIdArguments,
@@ -34,6 +35,8 @@ export class SdkCollections {
     CreateCollectionArguments,
     CollectionIdArguments
   >;
+
+  getLimits: QueryMethod<CollectionIdArguments, GetCollectionLimitsResult>;
 
   setLimits: MutationMethodWrap<
     SetCollectionLimitsArguments,
