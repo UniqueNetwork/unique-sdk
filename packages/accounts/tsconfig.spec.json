@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "ESNext",
+    "types": ["jest", "node"],
+    "allowJs": true,
+    "target": "ES2020"
+  },
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "**/*.ts"]
+}
