@@ -3,7 +3,7 @@ import request from 'supertest';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { KeyringPair } from '@polkadot/keyring/types';
-import { Sdk } from '@unique-nft/sdk/src/lib/sdk';
+import { Sdk } from '@unique-nft/sdk';
 import { getKeyringPairs } from '@unique-nft/sdk/tests/testing-utils';
 import { createCollection } from '@unique-nft/sdk/tests/utils/collection-create.test';
 import { createApp } from './utils.test';

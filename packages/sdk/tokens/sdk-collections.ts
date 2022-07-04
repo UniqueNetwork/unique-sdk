@@ -15,11 +15,17 @@ import {
   CollectionIdArguments,
   CollectionInfo,
 } from './methods/collection-by-id/types';
+import {
+  SetCollectionLimitsArguments,
+  SetCollectionLimitsResult,
+} from './types';
+import { SetCollectionLimitsMutation } from './methods/set-collection-limits/method';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
     this.get = collectionById.bind(this.sdk);
     this.creation = new CreateCollectionExMutation(this.sdk);
+    this.setLimits = new SetCollectionLimitsMutation(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -27,6 +33,11 @@ export class SdkCollections {
   creation: MutationMethodWrap<
     CreateCollectionArguments,
     CollectionIdArguments
+  >;
+
+  setLimits: MutationMethodWrap<
+    SetCollectionLimitsArguments,
+    SetCollectionLimitsResult
   >;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {

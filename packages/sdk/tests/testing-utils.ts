@@ -2,9 +2,13 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { HexString } from '@polkadot/util/types';
-import { SdkOptions, SdkSigner } from '@unique-nft/sdk/types';
-import { createSigner, SignerOptions } from '@unique-nft/sdk/sign';
-import { Sdk } from '../src/lib/sdk';
+import { SdkOptions } from '@unique-nft/sdk/types';
+import { Sdk } from '@unique-nft/sdk';
+import {
+  createSigner,
+  SignerOptions,
+  SdkSigner,
+} from '@unique-nft/accounts/sign';
 
 export const getDefaultSdkOptions = (): SdkOptions => ({
   chainWsUrl: 'wss://ws-rc.unique.network',
@@ -12,13 +16,16 @@ export const getDefaultSdkOptions = (): SdkOptions => ({
 
 export async function createSdk(signerOptions?: SignerOptions): Promise<Sdk> {
   const defOptions = getDefaultSdkOptions();
+
   const signer: SdkSigner | undefined = signerOptions
     ? await createSigner(signerOptions)
     : undefined;
+
   const options: SdkOptions = {
     chainWsUrl: defOptions.chainWsUrl,
     signer,
   };
+
   return Sdk.create(options);
 }
 

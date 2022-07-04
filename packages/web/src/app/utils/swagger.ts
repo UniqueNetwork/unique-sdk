@@ -5,6 +5,10 @@ import { UniqueModule } from '../modules/unique/unique.module';
 import { SubstratePrimaryModule } from '../modules/substrate/substrate.primary.module';
 import { SubstrateModule } from '../modules/substrate/substrate.module';
 import { Config } from '../config/config.module';
+import { IpfsModule } from '../modules/ipfs/module';
+
+const getAppsLink = (wsUrl: string): string =>
+  `(<a target="_blank" href="https://polkadot.js.org/apps/?rpc=${wsUrl}">apps ↗</a>)`;
 
 function createDescription(
   swagger,
@@ -13,10 +17,16 @@ function createDescription(
   name,
   isSecondary,
 ) {
-  let mainDescription = `Main connection to ${chainWsUrl}`;
+  let mainDescription = `Main connection to ${chainWsUrl} ${getAppsLink(
+    chainWsUrl,
+  )}`;
   let secondaryDescription = '';
+
   if (secondaryChainWsUrl && name) {
-    secondaryDescription = `Secondary substrate connection to ${secondaryChainWsUrl}`;
+    secondaryDescription = `Secondary substrate connection to ${secondaryChainWsUrl}  ${getAppsLink(
+      secondaryChainWsUrl,
+    )}`;
+
     if (isSecondary) {
       secondaryDescription = `<b>${secondaryDescription}</b>`;
       mainDescription = `${mainDescription}. Go to <a href="/${swagger}">swagger</a>`;
@@ -56,7 +66,7 @@ export const addSwagger = (app: INestApplication) => {
   );
 
   const uniqueDocument = SwaggerModule.createDocument(app, config, {
-    include: [UniqueModule, SubstratePrimaryModule],
+    include: [UniqueModule, SubstratePrimaryModule, IpfsModule],
   });
   SwaggerModule.setup(configService.get('swagger'), app, uniqueDocument);
 

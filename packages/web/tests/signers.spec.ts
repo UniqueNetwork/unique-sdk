@@ -145,7 +145,7 @@ describe('Web signers', () => {
     });
   });
 
-  describe('signer env/uri', () => {
+  describe('sign env/uri', () => {
     let app: INestApplication;
     beforeAll(async () => {
       process.env.SIGNER_SEED = '//Alice';
@@ -164,7 +164,7 @@ describe('Web signers', () => {
     });
   });
 
-  describe('signer env/seed', () => {
+  describe('sign env/seed', () => {
     let app: INestApplication;
     beforeAll(async () => {
       process.env.SIGNER_SEED = testUser.seed;
@@ -187,7 +187,7 @@ describe('Web signers', () => {
     });
   });
 
-  describe('signer header', () => {
+  describe('sign header', () => {
     let app: INestApplication;
     beforeAll(async () => {
       app = await createApp();

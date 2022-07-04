@@ -1,10 +1,8 @@
 import {
   Controller,
   Post,
-  Res,
   UploadedFile,
   UseInterceptors,
-  Body,
   HttpStatus,
   UsePipes,
   UseFilters,
@@ -58,11 +56,7 @@ export class IpfsController {
   })
   @ApiResponse({ status: HttpStatus.CREATED, type: IpfsUploadResponse })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
-    @UploadedFile() file,
-    @Body() body,
-    @Res({ passthrough: true }) response,
-  ): Promise<IpfsUploadResponse> {
+  async uploadFile(@UploadedFile() file): Promise<IpfsUploadResponse> {
     const uploadResponse = await this.fileUploader.upload(file);
     return this.addFileUrl(uploadResponse);
   }
@@ -82,11 +76,7 @@ export class IpfsController {
   })
   @ApiResponse({ status: HttpStatus.CREATED, type: IpfsUploadResponse })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadZip(
-    @UploadedFile() file,
-    @Body() body,
-    @Res({ passthrough: true }) response,
-  ): Promise<IpfsUploadResponse> {
+  async uploadZip(@UploadedFile() file): Promise<IpfsUploadResponse> {
     const uploadResponse = await this.zipUploader.upload(file);
     return this.addFileUrl(uploadResponse);
   }

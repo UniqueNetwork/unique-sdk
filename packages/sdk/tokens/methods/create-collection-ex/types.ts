@@ -1,9 +1,12 @@
 import { INamespace } from 'protobufjs';
 import {
+  Address,
   CollectionFields,
   CollectionSchemaVersion,
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
+
+import { CollectionLimits } from '../set-collection-limits/types';
 
 export enum CollectionMode {
   Nft = 'Nft',
@@ -17,18 +20,6 @@ export enum MetaUpdatePermission {
   None = 'None',
 }
 
-export interface CollectionLimits {
-  accountTokenOwnershipLimit?: number | null;
-  sponsoredDataSize?: number | null;
-  sponsoredDataRateLimit?: number | null;
-  tokenLimit?: number | null;
-  sponsorTransferTimeout?: number | null;
-  sponsorApproveTimeout?: number | null;
-  ownerCanTransfer?: boolean | null;
-  ownerCanDestroy?: boolean | null;
-  transfersEnabled?: boolean | null;
-}
-
 export enum CollectionAccess {
   Normal = 'Normal',
   AllowList = 'AllowList',
@@ -37,7 +28,6 @@ export enum CollectionAccess {
 export interface CollectionNestingPermissions {
   tokenOwner: boolean;
   collectionAdmin: boolean;
-  permissive: boolean;
 }
 
 export interface CollectionPermissions {
@@ -62,7 +52,7 @@ export enum CollectionPropertiesKeys {
 }
 
 export interface CollectionSponsorship {
-  address: string;
+  address: Address;
   isConfirmed: boolean;
 }
 
@@ -85,5 +75,5 @@ export interface CollectionInfoBase {
 }
 
 export interface CreateCollectionArguments extends CollectionInfoBase {
-  address: string;
+  address: Address;
 }

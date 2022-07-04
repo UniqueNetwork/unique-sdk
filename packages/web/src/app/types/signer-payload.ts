@@ -7,13 +7,13 @@ import {
   SignerPayloadJSON,
   SignerPayloadRaw,
 } from '@polkadot/types/types/extrinsic';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { SignatureType } from '@unique-nft/sdk/types';
 import {
   Account,
   GenerateAccountArguments,
   GetAccountArguments,
-} from '@unique-nft/sdk/sign';
+} from '@unique-nft/accounts';
 import { EncryptedJsonDescriptor } from '@polkadot/util-crypto/json/types';
 import { ValidMnemonic } from '../validation';
 

@@ -1,14 +1,8 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { u8aToHex } from '@polkadot/util';
-import { InvalidSignerError } from '@unique-nft/sdk/errors';
-import {
-  SdkSigner,
-  SignatureType,
-  SignResult,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/types';
-import { KeyfileSignerOptions } from './types';
+import { SignatureType, SignResult } from '../src/types';
+import { SdkSigner, UnsignedTxPayload, KeyfileSignerOptions } from './types';
 
 export class KeyfileSigner implements SdkSigner {
   private readonly pair: KeyringPair;
@@ -24,12 +18,12 @@ export class KeyfileSigner implements SdkSigner {
 
     const password = await this.options.passwordCallback();
     if (!password) {
-      throw new InvalidSignerError('Password was not received');
+      throw new Error('Password was not received');
     }
     try {
       this.pair.unlock(password);
     } catch (err: any) {
-      throw new InvalidSignerError(err.message);
+      throw new Error(err.message);
     }
   }
 
