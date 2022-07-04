@@ -1,3 +1,5 @@
+import { Address } from '@unique-nft/sdk/types';
+
 export type UnnestTokenParentArguments = {
   collectionId: number;
   tokenId: number;
@@ -11,7 +13,7 @@ export type UnnestTokenNestedArguments = {
 export type UnnestTokenArguments = {
   parent: UnnestTokenParentArguments;
   nested: UnnestTokenNestedArguments;
-  address: string;
+  address: Address;
 };
 
 export type UnnestTokenResult = {

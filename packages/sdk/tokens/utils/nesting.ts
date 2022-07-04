@@ -1,4 +1,5 @@
 import { keccakAsHex } from '@polkadot/util-crypto';
+import { Address } from '@unique-nft/sdk/types';
 
 const NESTING_ADDRESS_PREFIX = '0xf8238ccfff8ed887463fd5e0';
 
@@ -29,11 +30,11 @@ export function getNestingTokenAddress(collectionId: number, tokenId: number) {
   return checksumAddress.join('');
 }
 
-export function isNestingAddress(address: string): boolean {
+export function isNestingAddress(address: Address): boolean {
   return address.indexOf(NESTING_ADDRESS_PREFIX) === 0 && address.length === 42;
 }
 
-export function getCollectionIdFromNestingAddress(address: string): number {
+export function getCollectionIdFromNestingAddress(address: Address): number {
   if (!isNestingAddress(address)) return 0;
 
   const collectionString = address.slice(
@@ -44,7 +45,7 @@ export function getCollectionIdFromNestingAddress(address: string): number {
   return parseInt(collectionString, 16);
 }
 
-export function getTokenIdFromNestingAddress(address: string): number {
+export function getTokenIdFromNestingAddress(address: Address): number {
   if (!isNestingAddress(address)) return 0;
 
   const tokenString = address.slice(
