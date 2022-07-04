@@ -4,5 +4,6 @@
 ## Collections
  - [Get Collection by ID](./methods/collection-by-id)
  - [Create Collection](./methods/create-collection-ex)
+ - [Set collection limits](./methods/set-collection-limits)
  
 ## Tokens

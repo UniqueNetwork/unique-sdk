@@ -2,9 +2,6 @@ import { INamespace } from 'protobufjs';
 import {
   bytesToJson,
   bytesToString,
-  sponsoredDataRateLimitToNumber,
-  toBoolean,
-  toNumber,
   utf16ToString,
 } from '@unique-nft/sdk/utils';
 
@@ -25,13 +22,16 @@ import {
 import { decodeCollectionFields } from './decode-collection-fields';
 import {
   CollectionInfoBase,
-  CollectionLimits,
   CollectionPermissions,
   CollectionProperties,
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
 } from '../methods/create-collection-ex/types';
+import {
+  decodeCollectionLimits,
+  toBoolean,
+} from '../methods/set-collection-limits/utils';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
@@ -42,22 +42,6 @@ export const decodeCollectionSponsorship = (
         address: sponsorship.value.toString(),
         isConfirmed: sponsorship.isConfirmed,
       };
-
-export const decodeCollectionLimits = (
-  limits: UpDataStructsCollectionLimits,
-): CollectionLimits => ({
-  accountTokenOwnershipLimit: toNumber(limits.accountTokenOwnershipLimit),
-  sponsoredDataSize: toNumber(limits.sponsoredDataSize),
-  sponsoredDataRateLimit: sponsoredDataRateLimitToNumber(
-    limits.sponsoredDataRateLimit,
-  ),
-  tokenLimit: toNumber(limits.tokenLimit),
-  sponsorTransferTimeout: toNumber(limits.sponsorTransferTimeout),
-  sponsorApproveTimeout: toNumber(limits.sponsorApproveTimeout),
-  ownerCanTransfer: toBoolean(limits.ownerCanTransfer),
-  ownerCanDestroy: toBoolean(limits.ownerCanDestroy),
-  transfersEnabled: toBoolean(limits.transfersEnabled),
-});
 
 export const decodeCollectionPermissions = (
   permissions: UpDataStructsCollectionPermissions,
