@@ -68,8 +68,10 @@ describe('Tokens', () => {
     });
   }, 2 * 60_000);
 
-  it('test', () => {
-    expect(true).toBe(true);
+  it('getNestingTokenAddress', () => {
+    const address = getNestingTokenAddress(1, 1);
+
+    expect(address).toBe('0xF8238ccFFF8ED887463Fd5e00000000100000001');
   });
 
   it('nestToken', async () => {
@@ -85,7 +87,7 @@ describe('Tokens', () => {
       },
     };
 
-    const result = await sdk.tokens.nestToken.submitWaitResult(args);
+    const result = await sdk.tokens.nest.submitWaitResult(args);
 
     const expected: NestTokenResult = {
       collectionId,
@@ -101,7 +103,7 @@ describe('Tokens', () => {
       tokenId: 1,
     };
 
-    const result = await sdk.tokens.tokenChildren(args);
+    const result = await sdk.tokens.children(args);
 
     const expected: TokenChildrenResult = [
       {
@@ -119,7 +121,7 @@ describe('Tokens', () => {
       tokenId: 2,
     };
 
-    const result = await sdk.tokens.tokenParent(args);
+    const result = await sdk.tokens.parent(args);
 
     const expected: TokenParentResult = {
       collectionId,
@@ -136,7 +138,7 @@ describe('Tokens', () => {
       tokenId: 1,
     };
 
-    const result = await sdk.tokens.topmostTokenOwner(args);
+    const result = await sdk.tokens.topmostOwner(args);
 
     const expected: TopmostTokenOwnerResult = account.address;
 
@@ -155,7 +157,7 @@ describe('Tokens', () => {
         tokenId: 2,
       },
     };
-    const result = await sdk.tokens.unnestToken.submitWaitResult(args);
+    const result = await sdk.tokens.unnest.submitWaitResult(args);
 
     const expected: UnnestTokenResult = {
       collectionId,

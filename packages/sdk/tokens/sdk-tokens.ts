@@ -33,22 +33,22 @@ import {
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
-    this.nestToken = new NestTokenMutation(this.sdk);
-    this.unnestToken = new UnnestTokenMutation(this.sdk);
-    this.tokenChildren = tokenChildrenQuery.bind(this.sdk);
-    this.tokenParent = tokenParentQuery.bind(this.sdk);
-    this.topmostTokenOwner = topmostTokenOwnerQuery.bind(this.sdk);
+    this.nest = new NestTokenMutation(this.sdk);
+    this.unnest = new UnnestTokenMutation(this.sdk);
+    this.children = tokenChildrenQuery.bind(this.sdk);
+    this.parent = tokenParentQuery.bind(this.sdk);
+    this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
   }
 
-  nestToken: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
+  nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
 
-  unnestToken: MutationMethodWrap<UnnestTokenArguments, UnnestTokenResult>;
+  unnest: MutationMethodWrap<UnnestTokenArguments, UnnestTokenResult>;
 
-  tokenChildren: QueryMethod<TokenChildrenArguments, TokenChildrenResult>;
+  children: QueryMethod<TokenChildrenArguments, TokenChildrenResult>;
 
-  tokenParent: QueryMethod<TokenParentArguments, TokenParentResult>;
+  parent: QueryMethod<TokenParentArguments, TokenParentResult>;
 
-  topmostTokenOwner: QueryMethod<
+  topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
     TopmostTokenOwnerResult
   >;
