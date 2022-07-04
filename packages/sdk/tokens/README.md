@@ -1,9 +1,15 @@
-
 # Methods for Collections and Tokens
 
 ## Collections
- - [Get Collection by ID](./methods/collection-by-id)
- - [Create Collection](./methods/create-collection-ex)
- - [Set collection limits](./methods/set-collection-limits)
- 
+
+- [Get Collection by ID](./methods/collection-by-id)
+- [Create Collection](./methods/create-collection-ex)
+- [Set collection limits](./methods/set-collection-limits)
+
 ## Tokens
+
+- [Nest token](./methods/nest-token)
+- [Unnest token](./methods/unnest-token)
+- [Token children](./methods/token-children)
+- [Token parent](./methods/token-parent)
+- [Topmost token owner](./methods/topmost-token-owner)

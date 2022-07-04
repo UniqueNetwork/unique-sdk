@@ -1,0 +1,1 @@
+export { topmostTokenOwnerQuery } from './method';
