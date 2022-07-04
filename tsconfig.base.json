@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2017",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
@@ -17,7 +17,9 @@
     "baseUrl": ".",
     "paths": {
       "@unique-nft/sdk/*": ["packages/sdk/*"],
-      "@unique-nft/sdk": ["packages/sdk/index.ts"]
+      "@unique-nft/sdk": ["packages/sdk/index.ts"],
+      "@unique-nft/accounts/*": ["packages/accounts/*"],
+      "@unique-nft/accounts": ["packages/accounts/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

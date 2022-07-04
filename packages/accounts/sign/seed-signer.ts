@@ -1,13 +1,8 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { u8aToHex } from '@polkadot/util';
-import {
-  SdkSigner,
-  SignatureType,
-  SignResult,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/types';
-import { SeedSignerOptions } from './types';
+import { SignatureType, SignResult } from '../src/types';
+import { SdkSigner, UnsignedTxPayload, SeedSignerOptions } from './types';
 
 export class SeedSigner implements SdkSigner {
   private readonly pair: KeyringPair;
