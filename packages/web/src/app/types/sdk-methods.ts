@@ -185,6 +185,11 @@ export class CreateCollectionBody
   address: string;
 }
 
+export class CollectionIdResponse implements CollectionIdArguments {
+  @ApiProperty()
+  collectionId: number;
+}
+
 export class SetCollectionLimitsBody implements SetCollectionLimitsArguments {
   @ApiProperty({
     description: 'The collection limits',
