@@ -6,6 +6,8 @@ import {
 } from '@unique-nft/sdk/types';
 import { IEnum, IField, INamespace } from 'protobufjs';
 import { ValidationError } from '@unique-nft/sdk/errors';
+import { Registry } from '@polkadot/types/types';
+import { UpDataStructsSponsoringRateLimit } from '@unique-nft/unique-mainnet-types/default/types';
 
 const encodeEnum = (selectField: CollectionSelectField): IEnum => {
   const options: Record<string, string> = {};
@@ -117,4 +119,21 @@ export const encodeCollectionFields = (
       },
     },
   };
+};
+
+export const encodeSponsoredDataRateLimit = (
+  registry: Registry,
+  input: number | null,
+): UpDataStructsSponsoringRateLimit => {
+  const asObject =
+    input && input > 0
+      ? { Blocks: input, isSponsoringDisabled: false }
+      : { isSponsoringDisabled: true };
+
+  const encoded = registry.createType<UpDataStructsSponsoringRateLimit>(
+    'UpDataStructsSponsoringRateLimit',
+    asObject,
+  );
+
+  return encoded;
 };

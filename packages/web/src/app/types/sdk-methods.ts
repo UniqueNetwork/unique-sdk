@@ -30,9 +30,10 @@ import {
   TokenIdArguments,
   TransferTokenArguments,
   CreateCollectionArguments,
+  SetCollectionLimitsArguments,
 } from '@unique-nft/sdk/tokens/types';
 
-import { CollectionInfoBaseDto } from './unique-types';
+import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 
@@ -182,6 +183,25 @@ export class CreateCollectionBody
 {
   @AddressApiProperty
   address: string;
+}
+
+export class SetCollectionLimitsBody implements SetCollectionLimitsArguments {
+  @ApiProperty({
+    description: 'The collection limits',
+  })
+  limits: CollectionLimitsDto;
+
+  @ValidAddress()
+  @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({
+    example: 1,
+  })
+  collectionId: number;
 }
 
 export class BurnCollectionBody implements BurnCollectionArguments {

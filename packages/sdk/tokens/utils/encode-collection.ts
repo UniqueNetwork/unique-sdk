@@ -10,6 +10,7 @@ import type {
   UpDataStructsNestingPermissions,
 } from '@unique-nft/unique-mainnet-types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
+import { encodeSponsoredDataRateLimit } from './encode-collection-fields';
 import { encodeCollectionFields } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
 import { CollectionInfo } from '../methods/collection-by-id/types';
@@ -122,6 +123,18 @@ export const encodeCollection = (
     collectionInfo.tokenPropertyPermissions,
   );
 
+  const limits = {
+    ...collectionInfo.limits,
+    ...(collectionInfo.limits?.sponsoredDataRateLimit
+      ? {
+          sponsoredDataRateLimit: encodeSponsoredDataRateLimit(
+            registry,
+            collectionInfo.limits.sponsoredDataRateLimit,
+          ),
+        }
+      : {}),
+  };
+
   const createData = {
     mode: collectionInfo.mode || CollectionMode.Nft,
     name: collectionInfo.name ? stringToUTF16(collectionInfo.name) : undefined,
@@ -131,9 +144,10 @@ export const encodeCollection = (
     tokenPrefix: collectionInfo.tokenPrefix
       ? stringToUTF16(collectionInfo.tokenPrefix)
       : undefined,
+    limits,
     properties,
-    tokenPropertyPermissions,
     permissions,
+    tokenPropertyPermissions,
   };
 
   return registry.createType<UpDataStructsCreateCollectionData>(
