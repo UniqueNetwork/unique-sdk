@@ -2,9 +2,6 @@ import { INamespace } from 'protobufjs';
 import {
   bytesToJson,
   bytesToString,
-  sponsoredDataRateLimitToNumber,
-  toBoolean,
-  toNumber,
   utf16ToString,
 } from '@unique-nft/sdk/utils';
 
@@ -25,13 +22,16 @@ import {
 import { decodeCollectionFields } from './decode-collection-fields';
 import {
   CollectionInfoBase,
-  CollectionLimits,
   CollectionPermissions,
   CollectionProperties,
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
 } from '../methods/create-collection-ex/types';
+import {
+  decodeCollectionLimits,
+  toBoolean,
+} from '../methods/set-collection-limits/utils';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
@@ -43,42 +43,28 @@ export const decodeCollectionSponsorship = (
         isConfirmed: sponsorship.isConfirmed,
       };
 
-export const decodeCollectionLimits = (
-  limits: UpDataStructsCollectionLimits,
-): CollectionLimits => ({
-  accountTokenOwnershipLimit: toNumber(limits.accountTokenOwnershipLimit),
-  sponsoredDataSize: toNumber(limits.sponsoredDataSize),
-  sponsoredDataRateLimit: sponsoredDataRateLimitToNumber(
-    limits.sponsoredDataRateLimit,
-  ),
-  tokenLimit: toNumber(limits.tokenLimit),
-  sponsorTransferTimeout: toNumber(limits.sponsorTransferTimeout),
-  sponsorApproveTimeout: toNumber(limits.sponsorApproveTimeout),
-  ownerCanTransfer: toBoolean(limits.ownerCanTransfer),
-  ownerCanDestroy: toBoolean(limits.ownerCanDestroy),
-  transfersEnabled: toBoolean(limits.transfersEnabled),
-});
-
 export const decodeCollectionPermissions = (
   permissions: UpDataStructsCollectionPermissions,
 ): CollectionPermissions => {
   const nesting = permissions.nesting.unwrapOrDefault();
+
   return {
     access: permissions.access.unwrapOrDefault()?.type,
     mintMode: toBoolean(permissions.mintMode) || false,
     nesting: {
-      tokenOwner: nesting?.tokenOwner.isTrue,
-      collectionAdmin: nesting?.collectionAdmin.isTrue,
+      tokenOwner: nesting?.tokenOwner?.isTrue,
+      collectionAdmin: nesting?.collectionAdmin?.isTrue,
     },
   };
 };
 
 export const decodeCollectionProperties = (
-  properties: UpDataStructsProperty[],
+  properties?: UpDataStructsProperty[],
 ): CollectionProperties => {
   const collectionProperties: CollectionProperties = {};
-  let constOnChainSchema: INamespace;
-  properties.forEach((property) => {
+  let constOnChainSchema: INamespace | undefined;
+
+  properties?.forEach((property) => {
     switch (property.key.toHuman()) {
       case CollectionPropertiesKeys.offchainSchema:
         collectionProperties.offchainSchema = bytesToString(property.value);
@@ -96,8 +82,9 @@ export const decodeCollectionProperties = (
       case CollectionPropertiesKeys.constOnChainSchema:
         constOnChainSchema = bytesToJson(property.value);
         collectionProperties.constOnChainSchema = constOnChainSchema;
+
         collectionProperties.fields =
-          decodeCollectionFields(constOnChainSchema);
+          constOnChainSchema && decodeCollectionFields(constOnChainSchema);
         break;
       default:
         break;
@@ -117,19 +104,13 @@ const decodeTokenPropertyPermissions = (
 const decodeTokenPropertiesPermissions = (
   tokenPropertiesPermissions: UpDataStructsPropertyKeyPermission[],
 ): TokenPropertiesPermissions => {
-  const decodedPermissions: TokenPropertiesPermissions = {};
-  tokenPropertiesPermissions.map((property) => {
-    const key = bytesToString(property.key);
-    switch (key) {
-      case TokenPropertiesKeys.constData:
-        decodedPermissions.constData = decodeTokenPropertyPermissions(property);
-        break;
-      default:
-        break;
-    }
-    return true;
-  });
-  return decodedPermissions;
+  const constProperty = tokenPropertiesPermissions?.find(
+    ({ key }) => bytesToString(key) === TokenPropertiesKeys.constData,
+  );
+
+  return constProperty
+    ? { constData: decodeTokenPropertyPermissions(constProperty) }
+    : {};
 };
 
 export const decodeCollection = (

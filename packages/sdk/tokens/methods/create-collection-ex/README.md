@@ -8,7 +8,7 @@
 - **mode** - The collection type (`Nft`, `Fungible`, or `ReFungible`)
 - **tokenPrefix** - Token prefix (text, up to 4 characters)
 - **sponsorship** - This field tells if sponsorship is enabled and what address is the current collection sponsor.
-- **limits** - [Collection limits](#todo)
+- **limits** - [Collection limits](../set-collection-limits#arguments)
 - **metaUpdatePermission** - [Permission](#todo) for update meta (ItemOwner, Admin, None)
 - **properties** - [Collection properties](#todo)
 - **permissions** - [Collection permissions](#todo)
@@ -29,7 +29,7 @@ const createArgs: CreateCollectionArguments = {
   tokenPrefix: 'BAZ',
   properties: {},
 };
-const createResult = await creation.submitWaitResult(createArgs);
+const createResult = await sdk.collections.creation.submitWaitResult(createArgs);
 const { collectionId } = createResult.parsed;
 const collection = await sdk.collections.get({ collectionId });
 ```
