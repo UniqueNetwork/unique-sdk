@@ -10,7 +10,7 @@ import type {
   UpDataStructsNestingPermissions,
 } from '@unique-nft/unique-mainnet-types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
-import { encodeSponsoredDataRateLimit } from '@unique-nft/sdk/tokens/utils/encode-collection-fields';
+import { encodeSponsoredDataRateLimit } from './encode-collection-fields';
 import { encodeCollectionFields } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
 import { CollectionInfo } from '../methods/collection-by-id/types';
