@@ -1,0 +1,1 @@
+export { tokenParentQuery } from './method';
