@@ -4,6 +4,7 @@
 
 - [Get Collection by ID](./methods/collection-by-id)
 - [Create Collection](./methods/create-collection-ex)
+- [Get effective limits by collection ID](./methods/effective-collection-limits)
 - [Set collection limits](./methods/set-collection-limits)
 
 ## Tokens

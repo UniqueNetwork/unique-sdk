@@ -10,7 +10,9 @@ import {
 } from '@unique-nft/sdk/types';
 import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
 import { CreateCollectionArguments } from './methods/create-collection-ex/types';
+import { GetCollectionLimitsResult } from './methods/effective-collection-limits/types';
 import { collectionById } from './methods/collection-by-id/method';
+import { effectiveCollectionLimits } from './methods/effective-collection-limits/method';
 import {
   CollectionIdArguments,
   CollectionInfo,
@@ -24,6 +26,7 @@ import { SetCollectionLimitsMutation } from './methods/set-collection-limits/met
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
     this.get = collectionById.bind(this.sdk);
+    this.getLimits = effectiveCollectionLimits.bind(this.sdk);
     this.creation = new CreateCollectionExMutation(this.sdk);
     this.setLimits = new SetCollectionLimitsMutation(this.sdk);
   }
@@ -34,6 +37,8 @@ export class SdkCollections {
     CreateCollectionArguments,
     CollectionIdArguments
   >;
+
+  getLimits: QueryMethod<CollectionIdArguments, GetCollectionLimitsResult>;
 
   setLimits: MutationMethodWrap<
     SetCollectionLimitsArguments,

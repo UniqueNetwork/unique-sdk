@@ -1,5 +1,6 @@
 import { Root, Type, IField, INamespace } from 'protobufjs';
 import { ValidationError } from '@unique-nft/sdk/errors';
+import { encodeToken } from './encode-token';
 
 export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
   let root: Root;
@@ -18,6 +19,7 @@ export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
 
   const idsContainer: Record<string, boolean> = {};
 
+  const payload: Record<string, any> = {};
   Object.keys(nftMetaType.fields).forEach((name) => {
     const field: IField = nftMetaType.fields[name];
 
@@ -32,6 +34,7 @@ export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
     idsContainer[id] = true;
 
     if (field.type === 'string') {
+      payload[name] = 'test';
       if (
         field.rule &&
         field.rule !== 'required' &&
@@ -40,6 +43,7 @@ export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
         throw new ValidationError(`Invalid rule in string field`, { field });
       }
     } else {
+      payload[name] = 0;
       try {
         root.lookupEnum(name);
       } catch (err) {
@@ -47,4 +51,10 @@ export const validateOnChainSchema = (constOnChainSchema: INamespace) => {
       }
     }
   });
+
+  try {
+    encodeToken(payload, constOnChainSchema);
+  } catch (err) {
+    throw ValidationError.wrapError(err);
+  }
 };
