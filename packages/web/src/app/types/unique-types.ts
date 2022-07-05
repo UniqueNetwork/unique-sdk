@@ -268,6 +268,13 @@ export class CollectionInfoResponse extends CollectionInfoBaseDto {
   owner: string;
 }
 
+export class EffectiveCollectionLimitsResponse extends CollectionLimitsDto {
+  @ApiProperty({
+    example: 1,
+  })
+  collectionId: number;
+}
+
 export class TokenPropertiesResponse implements TokenProperties {
   @ApiProperty({
     example: {
