@@ -40,6 +40,7 @@ const encodeCollectionProperties = (
   }
   if (properties.fields) {
     const constOnChainSchema = encodeCollectionFields(properties.fields);
+    validateOnChainSchema(constOnChainSchema);
     encodedProperties.push({
       key: CollectionPropertiesKeys.constOnChainSchema,
       value: JSON.stringify(constOnChainSchema),
