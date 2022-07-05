@@ -4,7 +4,7 @@
 
 - **address** - The address of collection owner
 - **collectionId** - ID of the collection to set limits for
-- **limits** - the collection new limits. List of optional fields:
+- **limits** - [the effective limits of the collection](../effective-collection-limits). List of optional fields:
   - **accountTokenOwnershipLimit** - Maximum number of tokens that one address can own
   - **sponsoredDataSize** - Maximum byte size of custom token data that can be sponsored when tokens are minted in sponsored mode
   - **sponsoredDataRateLimit** - Defines how many blocks need to pass between setVariableMetadata transactions in order for them to be sponsored

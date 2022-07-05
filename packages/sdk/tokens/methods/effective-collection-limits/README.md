@@ -1,6 +1,9 @@
 # Get effective limits by collection ID
 
-Return the effective limits of the collection instead of null for default values
+By default, the collection limit is not set (their value is null).
+This limit value can be seen when requesting a collection using [Get collection by ID](../collection-by-id) method.
+If the limit is not set by the user, then the default limit is actually applied to the collection.
+The values of the limits actually applied to the collection (default and user-set) can be obtained using Get effective limits by collection ID method.
 
 ## Arguments
 
