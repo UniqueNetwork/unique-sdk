@@ -23,7 +23,7 @@ const collectionCreateController = getControllerClass({
   controllers: [
     TokenController,
     CollectionController,
-    collectionCreateController,
+    // collectionCreateController,
   ],
 })
 export class UniqueModule {}

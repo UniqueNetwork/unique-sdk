@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 
 import { Sdk } from '@unique-nft/sdk';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import {
   BurnCollectionBody,
@@ -24,6 +24,12 @@ import {
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
 import { CollectionInfoResponse } from '../../../types/unique-types';
+import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+import { CollectionIdArguments, CreateCollectionArguments } from '@unique-nft/sdk/tokens';
+import {
+  MutationMethod,
+  MutationOptions,
+} from '../../../utils/mutation-controller/mutation-method.decorator';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -43,12 +49,27 @@ export class CollectionController {
     throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
-  @Post()
-  async createCollection(
-    @Body() args: CreateCollectionBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.creation.build(args);
+  @MutationMethod(
+    Post(),
+    CreateCollectionBody,
+  )
+  @ApiOperation({
+    description:
+      'My description',
+  })
+  createCollectionMutation(): MutationMethodWrap<
+    CreateCollectionArguments,
+    CollectionIdArguments
+    > {
+    return this.sdk.collections.creation;
   }
+
+  // @Post()
+  // async createCollection(
+  //   @Body() args: CreateCollectionBody,
+  // ): Promise<UnsignedTxPayloadResponse> {
+  //   return this.sdk.collections.creation.build(args);
+  // }
 
   @Post('set-limits')
   async setCollectionLimits(
