@@ -23,7 +23,10 @@ import {
   UnsignedTxPayloadResponse,
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
-import { CollectionInfoResponse } from '../../../types/unique-types';
+import {
+  CollectionInfoResponse,
+  EffectiveCollectionLimitsResponse,
+} from '../../../types/unique-types';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -48,6 +51,17 @@ export class CollectionController {
     @Body() args: CreateCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.collections.creation.build(args);
+  }
+
+  @Get('limits')
+  async effectiveCollectionLimits(
+    @Query() args: CollectionIdQuery,
+  ): Promise<EffectiveCollectionLimitsResponse> {
+    const collection = await this.sdk.collections.getLimits(args);
+
+    if (collection) return collection;
+
+    throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
   @Post('set-limits')

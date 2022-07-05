@@ -64,9 +64,20 @@ export class SdkTokens {
     const tokenData: UpDataStructsTokenData =
       await this.sdk.api.rpc.unique.tokenData(collectionId, tokenId);
 
+    let owner = null;
+    if (!(tokenData.owner.value.toHuman() as any)) {
+      owner = await this.sdk.api.rpc.unique.tokenOwner(collectionId, tokenId);
+    }
+
     if (!tokenData) return null;
 
-    return decodeToken(collection, tokenId, tokenData);
+    const tokenDataWithOwner = owner ? { ...tokenData, ...owner } : tokenData;
+
+    return decodeToken(
+      collection,
+      tokenId,
+      tokenDataWithOwner as UpDataStructsTokenData,
+    );
   }
 
   async create(args: CreateTokenArguments): Promise<UnsignedTxPayload> {
