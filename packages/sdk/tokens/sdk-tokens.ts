@@ -57,6 +57,13 @@ export class SdkTokens {
     collectionId,
     tokenId,
   }: TokenIdArguments): Promise<TokenInfo | null> {
+
+    const exists = await this.sdk.api.rpc.unique.tokenExists(collectionId, tokenId);
+
+    if (!exists.toHuman()) {
+      return null;
+    }
+
     const collection = await this.sdk.collections.get({ collectionId });
 
     if (!collection) return null;
