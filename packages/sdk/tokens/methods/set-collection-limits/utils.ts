@@ -31,7 +31,7 @@ export function toBoolean(input: Option<bool>): boolean | null {
 
 export function sponsoredDataRateLimitToNumber(
   input: Option<UpDataStructsSponsoringRateLimit>,
-): number {
+): number | null {
   let sponsoringRateLimit = input.unwrapOr(undefined);
   if (sponsoringRateLimit === undefined) {
     sponsoringRateLimit = input.toHuman() as unknown as UpDataStructsSponsoringRateLimit;
@@ -39,7 +39,7 @@ export function sponsoredDataRateLimitToNumber(
 
   return sponsoringRateLimit && sponsoringRateLimit.isBlocks
     ? sponsoringRateLimit.asBlocks.toNumber()
-    : 0; // todo точно?
+    : null;
 }
 
 export const decodeCollectionLimits = (
