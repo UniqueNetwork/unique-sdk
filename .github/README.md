@@ -11,22 +11,25 @@
 [![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 </div>
 
+# SDK Readme
 
-# Intro
+# Table of Contents
+
+- [Intro](#intro)
+- [Getting started](#how-to-start)
+- [Packages](#packages)
+  - [SDK](#sdk)
+  - [Accounts](#accounts)
+  - [Web](#web)
+- [Recipes](#recipes)
+
+## Intro
 
 The SDK is intended for developers whose goal is to implement Unique Network functions avoiding working with a low-level blockchain API.
 This SDK may be used as an npm package or REST API.
 
-## Table of Contents
 
-- [Getting started](#how-to-start)
-- [Packages](#packages)
- 	- [SDK](#sdk)
-  - [Accounts](#accounts)
-  - [Web](#web)
-  - [Recipes](#recipes)
-
-# How to start
+## How to start
 Add SDK to your JavaScript/TypeScript project with
 
     npm install @unique-nft/sdk
@@ -36,15 +39,15 @@ or deploy your own SDK as HTTP REST Service with
 You can also use <a href="../packages/web#public-endpoints">Public endpoints</a>.
 To learn more read <a href="../packages/web#sdk-deployment---getting-started-guide">SDK Deployment guide</a>:  <a href="../packages/web/README.md#docker">Docker</a>, <a href="../packages/web/README.md#git">Git</a>.
 
-# Packages
+## Packages
 
-## SDK
+### SDK
 <a href="../packages/sdk">SDK package</a> contains npm package of SDK itself.
 
-## Accounts
+### Accounts
 <a href="../packages/accounts">Accounts package</a>.
 
-## Web
+### Web
 As an alternative to the whole SDK, you can use proxy http serviсe for SDK to implement server logic - <a href="../packages/web">HTTP API Service</a>.
 It is created to interact with the blockchain using simple HTTP requests.
 In general, this service provides the following functions:
