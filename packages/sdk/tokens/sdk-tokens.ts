@@ -71,12 +71,12 @@ export class SdkTokens {
     const tokenData: UpDataStructsTokenData =
       await this.sdk.api.rpc.unique.tokenData(collectionId, tokenId);
 
+    if (!tokenData) return null;
+
     let owner = null;
     if (!(tokenData.owner.value.toHuman() as any)) {
       owner = await this.sdk.api.rpc.unique.tokenOwner(collectionId, tokenId);
     }
-
-    if (!tokenData) return null;
 
     const tokenDataWithOwner = owner ? { ...tokenData, ...owner } : tokenData;
 
