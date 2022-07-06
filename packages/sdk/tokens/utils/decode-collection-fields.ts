@@ -48,13 +48,18 @@ const decodeField = (
 export const decodeCollectionFields = (
   constOnChainSchema: INamespace,
 ): CollectionFields => {
-  const root = Root.fromJSON(constOnChainSchema);
+  try {
+    const root = Root.fromJSON(constOnChainSchema);
 
-  const nftMetaType = root.lookupType('NFTMeta');
-  if (!nftMetaType) return [];
+    const nftMetaType = root.lookupType('NFTMeta');
+    if (!nftMetaType) return [];
 
-  const { fields } = nftMetaType;
-  if (!fields) return [];
+    const { fields } = nftMetaType;
+    if (!fields) return [];
 
-  return Object.keys(fields).map((key) => decodeField(key, fields[key], root));
+    return Object.keys(fields).map((key) => decodeField(key, fields[key], root));
+  } catch (e) {
+    console.warn(e); // todo logger?
+    return [];
+  }
 };
