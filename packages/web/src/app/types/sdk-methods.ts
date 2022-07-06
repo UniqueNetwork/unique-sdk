@@ -35,7 +35,6 @@ import {
   SetCollectionLimitsArguments,
   NestTokenArguments,
   UnnestTokenArguments,
-  TokenChildrenArguments,
   TokenChildrenResult,
   TokenParentResult,
   TopmostTokenOwnerResult,
@@ -157,26 +156,25 @@ export class TransferBuildBody implements TransferBuildArguments {
   amount: number;
 }
 
-export class CollectionIdQuery implements CollectionIdArguments {
-  @IsInt()
+export class CollectionId {
+  @ApiProperty({ example: 1 })
   @IsPositive()
-  @ApiProperty({
-    example: 1,
-  })
+  @IsInt()
   collectionId: number;
 }
 
-export class TokenIdQuery
-  extends CollectionIdQuery
-  implements TokenIdArguments
-{
+export class TokenId extends CollectionId {
+  @ApiProperty({ example: 1 })
   @IsPositive()
   @IsInt()
-  @ApiProperty({
-    example: 1,
-  })
   tokenId: number;
 }
+
+export class CollectionIdQuery
+  extends CollectionId
+  implements CollectionIdArguments {}
+
+export class TokenIdQuery extends TokenId implements TokenIdArguments {}
 
 export class AddressQuery implements AddressArguments {
   @ValidAddress()
@@ -266,14 +264,14 @@ export class CreateTokenBody
   constData: AnyObject;
 }
 
-export class BurnTokenBody extends TokenIdQuery implements BurnTokenArguments {
+export class BurnTokenBody extends TokenId implements BurnTokenArguments {
   @ValidAddress()
   @AddressApiProperty
   address: string;
 }
 
 export class TransferTokenBody
-  extends TokenIdQuery
+  extends TokenId
   implements TransferTokenArguments
 {
   @ValidAddress()
@@ -303,30 +301,6 @@ export class UnsignedTxPayloadResponseWithFee extends UnsignedTxPayloadResponse 
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}
 
-export class ParentToken {
-  @ApiProperty({ example: 1 })
-  @IsPositive()
-  @IsInt()
-  tokenId: number;
-
-  @ApiProperty({ example: 1 })
-  @IsPositive()
-  @IsInt()
-  collectionId: number;
-}
-
-export class NestedToken {
-  @ApiProperty({ example: 1 })
-  @IsPositive()
-  @IsInt()
-  tokenId: number;
-
-  @ApiProperty({ example: 1 })
-  @IsPositive()
-  @IsInt()
-  collectionId: number;
-}
-
 export class NestTokenBody implements NestTokenArguments {
   @ValidAddress()
   @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
@@ -334,11 +308,11 @@ export class NestTokenBody implements NestTokenArguments {
 
   @ValidateNested()
   @ApiProperty({ description: 'Parent token object' })
-  parent: ParentToken;
+  parent: TokenId;
 
   @ValidateNested()
   @ApiProperty({ description: 'Nested token object' })
-  nested: NestedToken;
+  nested: TokenId;
 }
 
 export class UnnestTokenBody implements UnnestTokenArguments {
@@ -348,33 +322,19 @@ export class UnnestTokenBody implements UnnestTokenArguments {
 
   @ValidateNested()
   @ApiProperty({ description: 'Parent token object' })
-  parent: ParentToken;
+  parent: TokenId;
 
   @ValidateNested()
   @ApiProperty({ description: 'Nested token object' })
-  nested: NestedToken;
-}
-
-export class TokenChild {
-  @ApiProperty({ example: 1 })
-  collectionId: number;
-
-  @ApiProperty({ example: 1 })
-  tokenId: number;
+  nested: TokenId;
 }
 
 export class TokenChildrenResponse {
-  @ApiProperty({ type: TokenChild, isArray: true })
+  @ApiProperty({ type: TokenId, isArray: true })
   children: TokenChildrenResult;
 }
 
-export class TokenParentResponse implements TokenParentResult {
-  @ApiProperty({ example: 1 })
-  collectionId: number;
-
-  @ApiProperty({ example: 1 })
-  tokenId: number;
-
+export class TokenParentResponse extends TokenId implements TokenParentResult {
   @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
   address: Address;
 }
