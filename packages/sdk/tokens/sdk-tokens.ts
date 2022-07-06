@@ -57,19 +57,26 @@ export class SdkTokens {
     collectionId,
     tokenId,
   }: TokenIdArguments): Promise<TokenInfo | null> {
+
     const collection = await this.sdk.collections.get({ collectionId });
 
     if (!collection) return null;
 
+    const exists = await this.sdk.api.rpc.unique.tokenExists(collectionId, tokenId);
+
+    if (!exists.toHuman()) {
+      return null;
+    }
+
     const tokenData: UpDataStructsTokenData =
       await this.sdk.api.rpc.unique.tokenData(collectionId, tokenId);
+
+    if (!tokenData) return null;
 
     let owner = null;
     if (!(tokenData.owner.value.toHuman() as any)) {
       owner = await this.sdk.api.rpc.unique.tokenOwner(collectionId, tokenId);
     }
-
-    if (!tokenData) return null;
 
     const tokenDataWithOwner = owner ? { ...tokenData, ...owner } : tokenData;
 
