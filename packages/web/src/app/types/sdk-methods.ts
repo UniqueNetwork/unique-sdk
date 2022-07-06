@@ -8,10 +8,12 @@ import {
   IsNumberString,
   IsOptional,
   IsBoolean,
+  ValidateNested,
 } from 'class-validator';
 import { HexString } from '@polkadot/util/types';
 import { Transform } from 'class-transformer';
 import {
+  Address,
   AddressArguments,
   AllBalances,
   AnyObject,
@@ -31,8 +33,13 @@ import {
   TransferTokenArguments,
   CreateCollectionArguments,
   SetCollectionLimitsArguments,
+  NestTokenArguments,
+  UnnestTokenArguments,
+  TokenChildrenArguments,
+  TokenChildrenResult,
+  TokenParentResult,
+  TopmostTokenOwnerResult,
 } from '@unique-nft/sdk/tokens/types';
-
 import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
@@ -295,3 +302,84 @@ export class UnsignedTxPayloadResponseWithFee extends UnsignedTxPayloadResponse 
 }
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}
+
+export class ParentToken {
+  @ApiProperty({ example: 1 })
+  @IsPositive()
+  @IsInt()
+  tokenId: number;
+
+  @ApiProperty({ example: 1 })
+  @IsPositive()
+  @IsInt()
+  collectionId: number;
+}
+
+export class NestedToken {
+  @ApiProperty({ example: 1 })
+  @IsPositive()
+  @IsInt()
+  tokenId: number;
+
+  @ApiProperty({ example: 1 })
+  @IsPositive()
+  @IsInt()
+  collectionId: number;
+}
+
+export class NestTokenBody implements NestTokenArguments {
+  @ValidAddress()
+  @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
+  address: Address;
+
+  @ValidateNested()
+  @ApiProperty({ description: 'Parent token object' })
+  parent: ParentToken;
+
+  @ValidateNested()
+  @ApiProperty({ description: 'Nested token object' })
+  nested: NestedToken;
+}
+
+export class UnnestTokenBody implements UnnestTokenArguments {
+  @ValidAddress()
+  @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
+  address: Address;
+
+  @ValidateNested()
+  @ApiProperty({ description: 'Parent token object' })
+  parent: ParentToken;
+
+  @ValidateNested()
+  @ApiProperty({ description: 'Nested token object' })
+  nested: NestedToken;
+}
+
+export class TokenChild {
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+}
+
+export class TokenChildrenResponse {
+  @ApiProperty({ type: TokenChild, isArray: true })
+  children: TokenChildrenResult;
+}
+
+export class TokenParentResponse implements TokenParentResult {
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
+  address: Address;
+}
+
+export class TopmostTokenOwnerResponse {
+  @ApiProperty({ example: 'unjq56sK9skTMR1MyPLsDFXkQdRNNrD1gzE4wRJSYm2k6GjJn' })
+  topmostOwner: TopmostTokenOwnerResult;
+}
