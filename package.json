@@ -8,6 +8,7 @@
     "build:sdk": "rollup -c packages/sdk/rollup.config.js",
     "build:accounts": "rollup -c packages/accounts/rollup.config.js",
     "build:web": "nx build web",
+    "build:thin-client": "rollup -c packages/thin-client/rollup.config.js",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
     "test:web": "nx test web",
