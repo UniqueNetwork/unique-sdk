@@ -16,6 +16,18 @@ export class BalanceClient {
     });
   }
 
+  async get(address: string) {
+    try {
+      return await this.instance.get('balance', {
+        params: {
+          address,
+        },
+      });
+    } catch (e) {
+      return { success: false };
+    }
+  }
+
   async transfer(
     address: string,
     destination: string,

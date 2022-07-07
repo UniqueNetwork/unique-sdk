@@ -11,6 +11,15 @@ describe('set balance', () => {
     bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
   });
 
+  it('get balance', async () => {
+    const response: { data: object } = await balanceClient.get(aliceAddress);
+    expect(response.data).toMatchObject({
+      availableBalance: expect.any(Object),
+      lockedBalance: expect.any(Object),
+      freeBalance: expect.any(Object),
+    });
+  });
+
   it('transfer', async () => {
     const response: { data: object } = await balanceClient.transfer(
       aliceAddress,
