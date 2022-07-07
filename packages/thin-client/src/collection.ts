@@ -1,30 +1,22 @@
-import Axios, { AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
 
-export class CollectionClient {
-  private baseUrl: string;
-
-  private seed: string;
-
+export class Collection {
   private instance: AxiosInstance;
 
-  constructor(baseUrl: string, seed: string) {
-    this.baseUrl = `${baseUrl}`;
-    this.seed = seed;
-    this.instance = Axios.create({
-      baseURL: this.baseUrl,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-    });
+  constructor(instance: AxiosInstance) {
+    this.instance = instance;
   }
 
-  async get(address: string) {
+  async get(collectionId: number) {
     try {
-      return await this.instance.get('collection', {
+      const collectionResponse = await this.instance.get('collection', {
         params: {
-          address,
+          collectionId,
         },
       });
+      return collectionResponse.data;
     } catch (e) {
-      return { success: false };
+      throw new Error('Get collection error');
     }
   }
 }

@@ -1,17 +1,24 @@
-import { CollectionClient } from './collections';
+import * as process from 'process';
+import { Client } from './index';
 
 describe('collection', () => {
-  let collectionClient: any;
+  let client: any;
 
   beforeAll(async () => {
-    collectionClient = new CollectionClient(
-      'http://localhost:3000/',
+    client = new Client(
+      process.env['API_URL'] || 'http://localhost:3000/',
       '//Alice',
     );
   });
 
-  it('get collection', async () => {
-    const response: { data: { id: number } } = await collectionClient.get(1);
-    expect(response.data.id).toEqual(1);
+  describe('get collection', () => {
+    it('success', async () => {
+      const response: { id: number } = await client.collection.get(1);
+      expect(response.id).toEqual(1);
+    });
+
+    it('error', async () => {
+      expect(client.collection.get(-1)).rejects.toThrow(Error);
+    });
   });
 });

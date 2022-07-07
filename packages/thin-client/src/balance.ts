@@ -1,30 +1,29 @@
-import Axios, { AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
+import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 
-export class BalanceClient {
-  private baseUrl: string;
+export class Balance {
+  private instance: AxiosInstance;
 
   private seed: string;
 
-  private instance: AxiosInstance;
-
-  constructor(baseUrl: string, seed: string) {
-    this.baseUrl = `${baseUrl}`;
+  constructor(instance: AxiosInstance, seed: string) {
+    this.instance = instance;
     this.seed = seed;
-    this.instance = Axios.create({
-      baseURL: this.baseUrl,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-    });
   }
 
   async get(address: string) {
     try {
-      return await this.instance.get('balance', {
-        params: {
-          address,
+      const balanceResponse: { data: object } = await this.instance.get(
+        'balance',
+        {
+          params: {
+            address,
+          },
         },
-      });
+      );
+      return balanceResponse.data;
     } catch (e) {
-      return { success: false };
+      throw new Error('Balance transfer error');
     }
   }
 
@@ -57,7 +56,7 @@ export class BalanceClient {
         await this.instance.post(`/extrinsic/sign`, buildResponse.data, {
           headers: { Authorization: `Seed ${this.seed}` },
         });
-      return await this.instance.post(
+      const submitResponse: { data: object } = await this.instance.post(
         `/extrinsic/submit`,
         {
           signature: signResponse.data.signature,
@@ -67,8 +66,9 @@ export class BalanceClient {
           headers: { Authorization: `Seed ${this.seed}` },
         },
       );
+      return submitResponse.data;
     } catch (e) {
-      return { success: false };
+      throw new Error('Balance transfer error');
     }
   }
 }
