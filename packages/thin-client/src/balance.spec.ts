@@ -1,4 +1,4 @@
-import { BalanceClient } from './index';
+import { BalanceClient } from './balance';
 
 describe('set balance', () => {
   let balanceClient: any;
