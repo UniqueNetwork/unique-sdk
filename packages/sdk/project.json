@@ -3,10 +3,9 @@
   "sourceRoot": "packages/sdk/src",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:package",
+      "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "project": "packages/sdk/ng-package.json",
-        "tsConfig": "packages/sdk/tsconfig.lib.json"
+        "packageName": "sdk"
       }
     },
     "lint": {

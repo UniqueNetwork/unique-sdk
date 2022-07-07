@@ -3,10 +3,9 @@
   "sourceRoot": "packages/accounts/src",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:package",
+      "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "project": "packages/accounts/ng-package.json",
-        "tsConfig": "packages/accounts/tsconfig.lib.json"
+        "packageName": "accounts"
       }
     },
     "lint": {
