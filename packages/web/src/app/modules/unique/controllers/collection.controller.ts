@@ -25,9 +25,9 @@ import {
 import { SdkValidationPipe } from '../../../validation';
 import {
   CollectionInfoResponse,
+  CollectionInfoWithSchemaResponse,
   EffectiveCollectionLimitsResponse,
 } from '../../../types/unique-types';
-import { UniqueCollectionSchemaDecodedResponse } from '../../../types/unique-schema';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -50,7 +50,7 @@ export class CollectionController {
   @Get('new')
   async getCollectionNew(
     @Query() args: CollectionIdQuery,
-  ): Promise<UniqueCollectionSchemaDecodedResponse> {
+  ): Promise<CollectionInfoWithSchemaResponse> {
     const collection = await this.sdk.collections.get_new(args);
 
     if (collection) return collection;

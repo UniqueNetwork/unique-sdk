@@ -24,7 +24,7 @@ async function tokenByIdFn(
     collectionId,
     tokenId,
     tokenData,
-    uniqueCollection,
+    uniqueCollection.schema,
   );
 
   if (!tokenDecodingResult.isValid)

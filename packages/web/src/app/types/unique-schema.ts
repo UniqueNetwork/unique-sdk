@@ -14,7 +14,7 @@ import {
 } from '@unique-nft/api';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UniqueCollectionSchemaDecodedResponse
+export class UniqueCollectionSchemaDecodedDto
   implements UniqueCollectionSchemaDecoded
 {
   @ApiProperty()

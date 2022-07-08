@@ -17,8 +17,9 @@ import {
   CollectionProperties,
   MetaUpdatePermission,
   TokenPropertiesPermissions,
+  CollectionInfoWithSchema,
+  CollectionLimits,
 } from '@unique-nft/sdk/tokens/types';
-import { CollectionLimits } from '@unique-nft/sdk/tokens/methods/set-collection-limits/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
 import {
@@ -26,6 +27,7 @@ import {
   CollectionSelectFieldDto,
   CollectionTextFieldDto,
 } from './unique-fileds';
+import { UniqueCollectionSchemaDecodedDto } from './unique-schema';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
@@ -266,6 +268,14 @@ export class CollectionInfoResponse extends CollectionInfoBaseDto {
     example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
   })
   owner: string;
+}
+
+export class CollectionInfoWithSchemaResponse
+  extends CollectionInfoResponse
+  implements CollectionInfoWithSchema
+{
+  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto })
+  schema: UniqueCollectionSchemaDecodedDto;
 }
 
 export class EffectiveCollectionLimitsResponse extends CollectionLimitsDto {

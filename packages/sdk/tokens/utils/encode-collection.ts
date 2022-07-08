@@ -110,21 +110,13 @@ const encodeTokenPropertyPermissions = (
   return encodedPermissions;
 };
 
-export const encodeCollection = (
+export const encodeCollectionBase = (
   registry: Registry,
   collectionInfo: Partial<CollectionInfo>,
 ): UpDataStructsCreateCollectionData => {
-  const properties = collectionInfo.properties
-    ? encodeCollectionProperties(collectionInfo.properties)
-    : [];
-
   const permissions = collectionInfo.permissions
     ? encodeCollectionPermissions(registry, collectionInfo.permissions)
     : {};
-
-  const tokenPropertyPermissions = encodeTokenPropertyPermissions(
-    collectionInfo.tokenPropertyPermissions,
-  );
 
   const limits = {
     ...collectionInfo.limits,
@@ -148,13 +140,32 @@ export const encodeCollection = (
       ? stringToUTF16(collectionInfo.tokenPrefix)
       : undefined,
     limits,
-    properties,
     permissions,
-    tokenPropertyPermissions,
   };
 
   return registry.createType<UpDataStructsCreateCollectionData>(
     'UpDataStructsCreateCollectionData',
     createData,
+  );
+};
+
+export const encodeCollection = (
+  registry: Registry,
+  collectionInfo: Partial<CollectionInfo>,
+): UpDataStructsCreateCollectionData => {
+  const properties = collectionInfo.properties
+    ? encodeCollectionProperties(collectionInfo.properties)
+    : [];
+
+  const tokenPropertyPermissions = encodeTokenPropertyPermissions(
+    collectionInfo.tokenPropertyPermissions,
+  );
+
+  const base = encodeCollectionBase(registry, collectionInfo);
+
+  return registry.createType<UpDataStructsCreateCollectionData>(
+    'UpDataStructsCreateCollectionData',
+    base,
+    { properties, tokenPropertyPermissions },
   );
 };

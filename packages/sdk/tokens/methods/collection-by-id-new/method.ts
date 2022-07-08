@@ -1,15 +1,17 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
-import { SchemaTools, UniqueCollectionSchemaDecoded } from '@unique-nft/api';
+import { SchemaTools } from '@unique-nft/api';
 import { bytesToString } from '@unique-nft/sdk/utils';
 import { SdkError } from '@unique-nft/sdk/errors';
 
 import { CollectionIdArguments } from '../collection-by-id/types';
+import { CollectionInfoWithSchema } from './types';
+import { decodeCollectionBase } from '../../utils/decode-collection';
 
 async function collectionByIdNewFn(
   this: Sdk,
   { collectionId }: CollectionIdArguments,
-): Promise<UniqueCollectionSchemaDecoded | null> {
+): Promise<CollectionInfoWithSchema | null> {
   const collectionOption = await this.api.rpc.unique.collectionById(
     collectionId,
   );
@@ -33,10 +35,15 @@ async function collectionByIdNewFn(
     // @ts-ignore
     throw SdkError.wrapError(decodingResult.validationError);
 
-  return decodingResult.decoded;
+  return {
+    ...decodeCollectionBase(collection),
+    id: collectionId,
+    owner: collection.owner.toString(),
+    schema: decodingResult.decoded,
+  };
 }
 
 export const collectionByIdNew: QueryMethod<
   CollectionIdArguments,
-  UniqueCollectionSchemaDecoded
+  CollectionInfoWithSchema
 > = collectionByIdNewFn;
