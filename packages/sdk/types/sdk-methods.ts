@@ -40,12 +40,6 @@ export interface AllBalances {
 
 export type Fee = Balance;
 
-export interface TransferBuildArguments {
-  address: Address;
-  destination: string;
-  amount: number;
-}
-
 export interface AddressArguments {
   address: Address;
 }

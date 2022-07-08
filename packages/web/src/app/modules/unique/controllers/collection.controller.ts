@@ -13,6 +13,11 @@ import {
 
 import { Sdk } from '@unique-nft/sdk';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+import {
+  CollectionIdArguments,
+  CreateCollectionArguments,
+} from '@unique-nft/sdk/tokens';
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import {
   BurnCollectionBody,
@@ -24,8 +29,6 @@ import {
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
 import { CollectionInfoResponse } from '../../../types/unique-types';
-import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
-import { CollectionIdArguments, CreateCollectionArguments } from '@unique-nft/sdk/tokens';
 import {
   MutationMethod,
   MutationOptions,
@@ -49,18 +52,14 @@ export class CollectionController {
     throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
-  @MutationMethod(
-    Post(),
-    CreateCollectionBody,
-  )
+  @MutationMethod(Post(), CreateCollectionBody)
   @ApiOperation({
-    description:
-      'My description',
+    description: 'My description',
   })
   createCollectionMutation(): MutationMethodWrap<
     CreateCollectionArguments,
     CollectionIdArguments
-    > {
+  > {
     return this.sdk.collections.creation;
   }
 

@@ -20,7 +20,6 @@ import {
   ChainProperties,
   CreateTokenArguments,
   Fee,
-  TransferBuildArguments,
   TransferCollectionArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
@@ -32,6 +31,7 @@ import {
   CreateCollectionArguments,
   SetCollectionLimitsArguments,
 } from '@unique-nft/sdk/tokens/types';
+import { TransferBuildArguments } from '@unique-nft/sdk/balance/types';
 
 import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';

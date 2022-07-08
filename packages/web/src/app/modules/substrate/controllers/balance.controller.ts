@@ -38,7 +38,7 @@ export class BalanceController {
     @Query() { withFee }: WithFeeQuery,
     @Body() args: TransferBuildBody,
   ): Promise<UnsignedTxPayloadResponseWithFee> {
-    const unsignedTxPayload = await this.sdk.balance.transfer(args);
+    const unsignedTxPayload = await this.sdk.balance.transfer.build(args);
 
     if (!withFee) return unsignedTxPayload;
 
