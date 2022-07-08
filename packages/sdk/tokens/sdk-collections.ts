@@ -24,6 +24,8 @@ import {
 } from './types';
 import { SetCollectionLimitsMutation } from './methods/set-collection-limits/method';
 import { CollectionInfoWithSchema } from './methods/collection-by-id-new/types';
+import { CreateCollectionExNewMutation } from './methods/create-collection-ex-new/method';
+import { CreateCollectionNewArguments } from './methods/create-collection-ex-new/types';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
@@ -31,6 +33,7 @@ export class SdkCollections {
     this.get_new = collectionByIdNew.bind(this.sdk);
     this.getLimits = effectiveCollectionLimits.bind(this.sdk);
     this.creation = new CreateCollectionExMutation(this.sdk);
+    this.creation_new = new CreateCollectionExNewMutation(this.sdk);
     this.setLimits = new SetCollectionLimitsMutation(this.sdk);
   }
 
@@ -40,6 +43,11 @@ export class SdkCollections {
 
   creation: MutationMethodWrap<
     CreateCollectionArguments,
+    CollectionIdArguments
+  >;
+
+  creation_new: MutationMethodWrap<
+    CreateCollectionNewArguments,
     CollectionIdArguments
   >;
 
