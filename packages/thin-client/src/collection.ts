@@ -5,9 +5,13 @@ export class Collection {
 
   constructor(instance: AxiosInstance) {
     this.instance = instance;
+
+    // todo тут смотри, я бы отнаследовался от другого класса ... ща накидаю
   }
 
-  async get(collectionId: number) {
+  async get(collectionId: number) { // а вот нет, у тебя должен быть один-в-один интерфейс с сдк
+    // todo а значит await client.collections.get({ collectionId });
+    // todo надо вытащить типизацию из сваггера и класть в пакетик
     try {
       const collectionResponse = await this.instance.get('collection', {
         params: {
