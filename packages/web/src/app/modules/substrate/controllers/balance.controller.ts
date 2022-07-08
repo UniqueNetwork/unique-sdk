@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Post,
@@ -7,19 +6,24 @@ import {
   UseFilters,
   UsePipes,
 } from '@nestjs/common';
-
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Sdk } from '@unique-nft/sdk';
-
-import { ApiTags } from '@nestjs/swagger';
+import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+import {
+  BalanceTransferResult,
+  TransferBuildArguments,
+} from '@unique-nft/sdk/balance';
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import { SdkValidationPipe } from '../../../validation';
 import {
   AddressQuery,
   AllBalancesResponse,
   TransferBuildBody,
-  UnsignedTxPayloadResponseWithFee,
-  WithFeeQuery,
 } from '../../../types/sdk-methods';
+import {
+  BalanceTransferResultResponse,
+  MutationMethod,
+} from '../../../decorators/mutation-method';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -33,17 +37,18 @@ export class BalanceController {
     return this.sdk.balance.get(args);
   }
 
-  @Post('transfer')
-  async transferBuild(
-    @Query() { withFee }: WithFeeQuery,
-    @Body() args: TransferBuildBody,
-  ): Promise<UnsignedTxPayloadResponseWithFee> {
-    const unsignedTxPayload = await this.sdk.balance.transfer.build(args);
-
-    if (!withFee) return unsignedTxPayload;
-
-    const fee = await this.sdk.extrinsics.getFee(unsignedTxPayload);
-
-    return { ...unsignedTxPayload, fee };
+  @MutationMethod(
+    Post('transfer'),
+    TransferBuildBody,
+    BalanceTransferResultResponse,
+  )
+  @ApiOperation({
+    description: 'Transfer balance',
+  })
+  transferMutation(): MutationMethodWrap<
+    TransferBuildArguments,
+    BalanceTransferResult
+  > {
+    return this.sdk.balance.transfer;
   }
 }

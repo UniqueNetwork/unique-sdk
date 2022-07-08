@@ -25,6 +25,8 @@ describe('balance-transfer', () => {
 
     transfer = new BalanceTransferMutation(sdk);
 
+    // 5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty
+    // 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
     createArgs = {
       address: testAccounts.bob.address,
       destination: testAccounts.alice.address,

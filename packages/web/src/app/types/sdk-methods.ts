@@ -31,11 +31,15 @@ import {
   CreateCollectionArguments,
   SetCollectionLimitsArguments,
 } from '@unique-nft/sdk/tokens/types';
-import { TransferBuildArguments } from '@unique-nft/sdk/balance/types';
+import {
+  BalanceTransferResult,
+  TransferBuildArguments,
+} from '@unique-nft/sdk/balance/types';
 
 import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
+import { SubmitTxBody } from './arguments';
 
 const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
@@ -292,11 +296,9 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
 
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
-}
 
-export class UnsignedTxPayloadResponseWithFee extends UnsignedTxPayloadResponse {
   @ApiProperty({ type: FeeResponse, required: false })
-  fee?: Balance;
+  fee?: FeeResponse;
 }
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}

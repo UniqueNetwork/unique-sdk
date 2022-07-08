@@ -22,6 +22,7 @@ import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import {
   BurnCollectionBody,
   CollectionIdQuery,
+  CollectionIdResponse,
   CreateCollectionBody,
   SetCollectionLimitsBody,
   TransferCollectionBody,
@@ -29,10 +30,7 @@ import {
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
 import { CollectionInfoResponse } from '../../../types/unique-types';
-import {
-  MutationMethod,
-  MutationOptions,
-} from '../../../utils/mutation-controller/mutation-method.decorator';
+import { MutationMethod } from '../../../decorators/mutation-method';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -52,7 +50,7 @@ export class CollectionController {
     throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
-  @MutationMethod(Post(), CreateCollectionBody)
+  @MutationMethod(Post(), CreateCollectionBody, CollectionIdResponse)
   @ApiOperation({
     description: 'My description',
   })
