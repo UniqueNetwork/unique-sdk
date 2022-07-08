@@ -25,7 +25,6 @@ import {
 import { SdkValidationPipe } from '../../../validation';
 import {
   CollectionInfoResponse,
-  CollectionInfoWithSchemaResponse,
   EffectiveCollectionLimitsResponse,
 } from '../../../types/unique-types';
 
@@ -34,24 +33,13 @@ import {
 @ApiTags('collection')
 @Controller('collection')
 export class CollectionController {
-  constructor(private readonly sdk: Sdk) {}
+  constructor(readonly sdk: Sdk) {}
 
   @Get()
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
     const collection = await this.sdk.collections.get(args);
-
-    if (collection) return collection;
-
-    throw new NotFoundException(`no collection with id ${args.collectionId}`);
-  }
-
-  @Get('new')
-  async getCollectionNew(
-    @Query() args: CollectionIdQuery,
-  ): Promise<CollectionInfoWithSchemaResponse> {
-    const collection = await this.sdk.collections.get_new(args);
 
     if (collection) return collection;
 
