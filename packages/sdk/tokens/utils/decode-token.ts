@@ -41,7 +41,7 @@ export const decodeToken = (
     id: tokenId,
     collectionId: collection.id,
     url: tokenUrl,
-    owner: ownerJson ? ownerJson.Substrate : null,
+    owner: ownerJson ? ownerJson.Substrate || ownerJson.Ethereum : null,
     properties: tokenProperties,
   };
 };

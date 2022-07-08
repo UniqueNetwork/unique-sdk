@@ -1,0 +1,1 @@
+export { NestTokenMutation } from './method';

@@ -13,24 +13,25 @@
 </div>
 
 ___
+
+# SDK npm
+
 # Be aware, this is ALPHA version, package is under construction.
 
-
-# @unique-nft/sdk
-SDK is a JavaScript/TypeScript library that helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance, etc.
-At the moment, the library is a pre-alpha version. We will be grateful for the feedback and ideas for improvement.
-
-___
 #  Table of Contents
 
+- [@unique-nft/sdk](#@unique-nft/sdk)
 - [Installation](#Installation)
 - [Initialize](#Initialize-SDK)
 - [Design](#design)
   - [Modules](#modules)
   - [Mutation and Query method](#mutation-and-query-methods)
 
-___
-# Installation
+## @unique-nft/sdk
+SDK is a JavaScript/TypeScript library that helps to interact with UniqueNetwork using simple methods instead of low-level API. With SDK you can mint collections and tokens, manage account balance, etc.
+At the moment, the library is a pre-alpha version. We will be grateful for the feedback and ideas for improvement.
+
+## Installation
 
 ### npm
 ```shell
@@ -50,7 +51,7 @@ npm install
 npm run build:sdk
 ```
 ___
-# Initialize SDK
+## Initialize SDK
 
 ```typescript
 import { createSigner } from "@unique-nft/sdk/sign";
@@ -67,7 +68,7 @@ import { Sdk } from "@unique-nft/sdk";
 ```
 
 ___
-# Design
+## Design
 
 Unique SDK was developed as an add-on of
 <a href="https://polkadot.js.org/docs/api/start" target="_blank">Polkadot{.js} ApiPromise</a>,
@@ -77,7 +78,7 @@ However, Unique SDK can be used with any network based on the
 <a href="https://substrate.io" target="_blank">Substrate framework</a> - main modules (extrinsics, balance, query, sign, etc.) will work with them.
 
 ___
-## Modules
+### Modules
 
 By default, the SDK implements only a connection to the blockchain network, and modules expand its capabilities. Modules are implemented as secondary endpoints of npm package, this allows you to flexibly manage dependencies, not include unnecessary modules into the application bundle assembly and expand the SDK with your own modules.
 
@@ -124,7 +125,7 @@ Currently, the SDK includes 5 modules
 
 Modules can be dependent on each other. For example, the Balance Module depends on the Extrinsic Module because it generates transfer extrinsic and submits them to the blockchain.
 ___
-## Mutation and Query methods
+### Mutation and Query methods
 
 We have classified all SDK methods into two types
 1) [Query](#query-methods) methods for reading blockchain storage
@@ -149,7 +150,7 @@ const transferArgs = {
 const unsignedExtrinsic = await sdk.tokens.transfer(transferArgs);
 ```
 ___
-### Query methods
+#### Query methods
 Queries to blockchain storage that return data in a human-readable format
 
 ```typescript
@@ -169,7 +170,7 @@ const { raw, amount, amountWithUnit, formatted, unit } = await sdk.balance.get({
 ```
 
 ___
-### Mutation methods
+#### Mutation methods
 By default, they return an unsigned extension.
 To apply this change in the blockchain state, you must sign it
 

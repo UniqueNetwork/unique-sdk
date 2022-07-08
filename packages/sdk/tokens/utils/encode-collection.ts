@@ -10,7 +10,10 @@ import type {
   UpDataStructsNestingPermissions,
 } from '@unique-nft/unique-mainnet-types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
-import { encodeSponsoredDataRateLimit, encodeCollectionFields } from './encode-collection-fields';
+import {
+  encodeSponsoredDataRateLimit,
+  encodeCollectionFields,
+} from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
 import { CollectionInfo } from '../methods/collection-by-id/types';
 import {
@@ -37,6 +40,7 @@ const encodeCollectionProperties = (
   }
   if (properties.fields) {
     const constOnChainSchema = encodeCollectionFields(properties.fields);
+    validateOnChainSchema(constOnChainSchema);
     encodedProperties.push({
       key: CollectionPropertiesKeys.constOnChainSchema,
       value: JSON.stringify(constOnChainSchema),
