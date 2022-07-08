@@ -27,6 +27,7 @@ import {
   CollectionInfoResponse,
   EffectiveCollectionLimitsResponse,
 } from '../../../types/unique-types';
+import { UniqueCollectionSchemaDecodedResponse } from '../../../types/unique-schema';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -40,6 +41,17 @@ export class CollectionController {
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoResponse> {
     const collection = await this.sdk.collections.get(args);
+
+    if (collection) return collection;
+
+    throw new NotFoundException(`no collection with id ${args.collectionId}`);
+  }
+
+  @Get('new')
+  async getCollectionNew(
+    @Query() args: CollectionIdQuery,
+  ): Promise<UniqueCollectionSchemaDecodedResponse> {
+    const collection = await this.sdk.collections.get_new(args);
 
     if (collection) return collection;
 

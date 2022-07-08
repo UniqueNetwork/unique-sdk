@@ -29,6 +29,7 @@ import {
   TopmostTokenOwnerResponse,
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
+import { UniqueTokenDecodedResponse } from '../../../types/unique-schema';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -40,6 +41,19 @@ export class TokenController {
   @Get()
   async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
     const token = await this.sdk.tokens.get(args);
+
+    if (token) return token;
+
+    throw new NotFoundException(
+      `no token with id ${args.collectionId} - ${args.tokenId}`,
+    );
+  }
+
+  @Get('new')
+  async getTokenNew(
+    @Query() args: TokenIdQuery,
+  ): Promise<UniqueTokenDecodedResponse> {
+    const token = await this.sdk.tokens.get_new(args);
 
     if (token) return token;
 
