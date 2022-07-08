@@ -64,7 +64,7 @@ const useSubmitWatch = async (
   mutationOptions: SdkMutationOptions,
   fee?: Balance,
 ) => {
-  const { mutationMethod, cache, sdk } = methodOptions;
+  const { mutationMethod, cache } = methodOptions;
 
   const hash = uuid.v4();
 
@@ -122,12 +122,13 @@ const useResult = async (
 
   const { mutationMethod } = methodOptions;
 
-  const { isCompleted, parsed } = await mutationMethod.submitWaitResult(
+  const { submittableResult, parsed } = await mutationMethod.submitWaitResult(
     buildResult,
     mutationOptions,
   );
+
   return {
-    isCompleted,
+    isError: submittableResult.isError,
     parsed,
     fee,
   };

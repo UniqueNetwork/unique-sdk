@@ -11,10 +11,7 @@ import {
 import { Cache } from 'cache-manager';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Sdk } from '@unique-nft/sdk';
-import {
-  BalanceTransferResult,
-  BalanceTransferArguments,
-} from '@unique-nft/sdk/balance';
+import { BalanceTransferResult } from '@unique-nft/sdk/balance';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
 import { SdkValidationPipe } from '../../../../validation';
 import {
@@ -51,13 +48,12 @@ export class BalanceController {
     description: 'Transfer balance',
   })
   transferMutation(): MutationMethodOptions<
-    BalanceTransferArguments,
+    BalanceTransferBody,
     BalanceTransferResult
   > {
     return {
       mutationMethod: this.sdk.balance.transfer,
       cache: this.cache,
-      sdk: this.sdk,
     };
   }
 }

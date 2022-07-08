@@ -7,11 +7,9 @@ import {
   IsInt,
   IsNumberString,
   IsOptional,
-  IsBoolean,
   ValidateNested,
 } from 'class-validator';
 import { HexString } from '@polkadot/util/types';
-import { Transform } from 'class-transformer';
 import {
   Address,
   AddressArguments,
@@ -30,7 +28,6 @@ import {
   CollectionIdArguments,
   TokenIdArguments,
   TransferTokenArguments,
-  CreateCollectionArguments,
   SetCollectionLimitsArguments,
   NestTokenArguments,
   UnnestTokenArguments,
@@ -38,33 +35,15 @@ import {
   TokenParentResult,
   TopmostTokenOwnerResult,
 } from '@unique-nft/sdk/tokens/types';
-import { BalanceTransferArguments } from '@unique-nft/sdk/balance/types';
 
-import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
-import { NotYourselfAddress, ValidAddress } from '../validation';
+import { CollectionLimitsDto } from './unique-types';
+import { ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 
 export const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
 });
-
-const AnyToBoolean = Transform(({ obj = {}, key }) => {
-  const asString = String(obj && obj[key]).toLowerCase();
-
-  return asString === 'true' || asString === '1';
-});
-
-export class WithFeeQuery {
-  @AnyToBoolean
-  @IsOptional()
-  @IsBoolean()
-  @ApiProperty({
-    example: true,
-    required: false,
-  })
-  withFee?: boolean;
-}
 
 export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({
@@ -161,19 +140,6 @@ export class AddressQuery implements AddressArguments {
   @ValidAddress()
   @ApiProperty()
   address: string;
-}
-
-export class CreateCollectionBody
-  extends CollectionInfoBaseDto
-  implements CreateCollectionArguments
-{
-  @AddressApiProperty
-  address: string;
-}
-
-export class CollectionIdResponse implements CollectionIdArguments {
-  @ApiProperty()
-  collectionId: number;
 }
 
 export class SetCollectionLimitsBody implements SetCollectionLimitsArguments {

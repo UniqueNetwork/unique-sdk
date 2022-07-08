@@ -6,7 +6,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
 import { SubmitResult } from '@unique-nft/sdk/types';
 import { Cache } from 'cache-manager';
-import { Sdk } from '@unique-nft/sdk';
 import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
 import { FeeResponse } from '../../types/sdk-methods';
 import { SubmitTxBody } from '../../types/arguments';
@@ -19,8 +18,7 @@ const AnyToBoolean = Transform(({ obj = {}, key }) => {
 
 export interface MutationMethodOptions<A, R> {
   mutationMethod: MutationMethodWrap<A, R>;
-  cache?: Cache;
-  sdk?: Sdk;
+  cache: Cache;
 }
 
 export enum MutationUse {
@@ -81,7 +79,7 @@ export class SubmitWatchCache<T extends object> {
 
 export class MutationResponse {
   @ApiProperty({ type: Boolean })
-  isCompleted: boolean;
+  isError: boolean;
 
   @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;
