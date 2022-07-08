@@ -33,6 +33,10 @@ import {
   TopmostTokenOwnerArguments,
   TopmostTokenOwnerResult,
 } from './types';
+import {
+  CreateTokenNewArguments,
+  CreateTokenNewMutation,
+} from './methods/create-token';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -42,6 +46,7 @@ export class SdkTokens {
     this.parent = tokenParentQuery.bind(this.sdk);
     this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
     this.get_new = tokenById.bind(this.sdk);
+    this.create_new = new CreateTokenNewMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -53,6 +58,8 @@ export class SdkTokens {
   parent: QueryMethod<TokenParentArguments, TokenParentResult>;
 
   get_new: QueryMethod<TokenIdArguments, UniqueTokenDecoded>;
+
+  create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
 
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
