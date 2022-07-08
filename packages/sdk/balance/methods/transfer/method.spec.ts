@@ -6,7 +6,7 @@ import {
 } from '@unique-nft/sdk/tests';
 
 import { BalanceTransferMutation } from './method';
-import { TransferBuildArguments } from './types';
+import { BalanceTransferArguments } from './types';
 
 describe('balance-transfer', () => {
   let sdk: Sdk;
@@ -14,7 +14,7 @@ describe('balance-transfer', () => {
 
   let transfer: BalanceTransferMutation;
 
-  let createArgs: TransferBuildArguments;
+  let createArgs: BalanceTransferArguments;
 
   beforeAll(async () => {
     sdk = await createSdk({

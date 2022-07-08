@@ -1,21 +1,17 @@
-import {
-  AddressArguments,
-  AllBalances,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/types';
+import { AddressArguments, AllBalances } from '@unique-nft/sdk/types';
+import { Sdk } from '@unique-nft/sdk';
 import { formatBalance } from '@unique-nft/sdk/utils';
 import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
-import { BalanceTransferMutation } from '@unique-nft/sdk/balance/methods/transfer/method';
-import { Sdk } from '@unique-nft/sdk';
 import {
   BalanceTransferResult,
-  TransferBuildArguments,
+  BalanceTransferArguments,
 } from './methods/transfer/types';
+import { BalanceTransferMutation } from './methods/transfer/method';
 
 export class SdkBalance {
   private readonly multiplierToRaw: number;
 
-  transfer: MutationMethodWrap<TransferBuildArguments, BalanceTransferResult>;
+  transfer: MutationMethodWrap<BalanceTransferArguments, BalanceTransferResult>;
 
   constructor(private readonly sdk: Sdk) {
     const tokenDecimals = this.sdk.api.registry.chainDecimals[0];
@@ -35,15 +31,5 @@ export class SdkBalance {
       lockedBalance: formatBalance(this.sdk.api, lockedBalance),
       freeBalance: formatBalance(this.sdk.api, freeBalance),
     };
-  }
-
-  async transferOld(args: TransferBuildArguments): Promise<UnsignedTxPayload> {
-    const amountRaw = BigInt(args.amount * this.multiplierToRaw);
-    return this.sdk.extrinsics.build({
-      address: args.address,
-      section: 'balances',
-      method: 'transfer',
-      args: [args.destination, amountRaw],
-    });
   }
 }

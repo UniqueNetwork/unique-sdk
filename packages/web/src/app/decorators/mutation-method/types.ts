@@ -1,16 +1,15 @@
 /* eslint-disable max-classes-per-file */
 
 import { IsBoolean, IsOptional, IsEnum } from 'class-validator';
-import { Type } from '@nestjs/common';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
-import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
 import { SubmitResult } from '@unique-nft/sdk/types';
+import { Cache } from 'cache-manager';
+import { Sdk } from '@unique-nft/sdk';
+import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
 import { FeeResponse } from '../../types/sdk-methods';
 import { SubmitTxBody } from '../../types/arguments';
-
-export type DtoFor<T> = { new (...args: any[]): T };
 
 const AnyToBoolean = Transform(({ obj = {}, key }) => {
   const asString = String(obj && obj[key]).toLowerCase();
@@ -18,49 +17,21 @@ const AnyToBoolean = Transform(({ obj = {}, key }) => {
   return asString === 'true' || asString === '1';
 });
 
-export type ControllerOptions<A, R> = {
-  sectionPath: string;
-  tag?: string;
-  methodPath?: string;
-  MutationConstructor: Type<MutationMethodWrap<A, R>>;
-  inputDto: DtoFor<A>;
-  outputDto: DtoFor<R>;
-};
-
-export enum Status {
-  pending = 'pending',
-  success = 'success',
-  error = 'error',
-}
-
-export type ResultOrError<T> = {
-  status: Status;
-  result?: T;
-  error?: Error;
-};
-
-export interface GetResult {
-  submissionId: string;
-}
-
-export enum Action {
-  build = 'build',
-  sign = 'sign',
-  submit = 'submit',
-}
-
-export interface ActionResult {
-  action: Action;
+export interface MutationMethodOptions<A, R> {
+  mutationMethod: MutationMethodWrap<A, R>;
+  cache?: Cache;
+  sdk?: Sdk;
 }
 
 export enum MutationUse {
   Build = 'Build',
   Sign = 'Sign',
   Submit = 'Submit',
+  SubmitWatch = 'SubmitWatch',
   Result = 'Result',
 }
 
-export class MutationOptions {
+export class MutationMethodQuery {
   @AnyToBoolean
   @IsOptional()
   @IsBoolean()
@@ -81,12 +52,12 @@ export class MutationOptions {
   use?: MutationUse;
 }
 
-export class SignResultResponse extends SubmitTxBody {
+export class SignResponse extends SubmitTxBody {
   @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;
 }
 
-export class SubmitResultResponse implements Omit<SubmitResult, 'result$'> {
+export class SubmitResponse implements Omit<SubmitResult, 'result$'> {
   @ApiProperty({ type: String, required: true })
   hash: HexString;
 
@@ -94,27 +65,24 @@ export class SubmitResultResponse implements Omit<SubmitResult, 'result$'> {
   fee?: FeeResponse;
 }
 
-export class MutationResultResponse {
+export class SubmitWatchCache<T extends object> {
   @ApiProperty({ type: Boolean })
   isCompleted: boolean;
+
+  @ApiProperty({ type: Boolean })
+  isError: boolean;
+
+  @ApiProperty({ type: Boolean })
+  parsed: T;
 
   @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;
 }
 
-export class BalanceTransferResultResponse extends MutationResultResponse {
-  @ApiProperty({
-    type: 'object',
-    properties: {
-      success: {
-        type: 'boolean',
-      },
-    },
-  })
-  parsed: {
-    success: boolean;
-  };
+export class MutationResponse {
+  @ApiProperty({ type: Boolean })
+  isCompleted: boolean;
 
-  @ApiProperty({ type: FeeResponse })
+  @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;
 }

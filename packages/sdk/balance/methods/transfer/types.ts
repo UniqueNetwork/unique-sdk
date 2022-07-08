@@ -1,6 +1,6 @@
 import { Address } from '@unique-nft/sdk/types';
 
-export interface TransferBuildArguments {
+export interface BalanceTransferArguments {
   address: Address;
   destination: string;
   amount: number;

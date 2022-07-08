@@ -1,13 +1,13 @@
+import { Sdk } from '@unique-nft/sdk';
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { TxBuildArguments } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
-import { Sdk } from '@unique-nft/sdk';
-import { BalanceTransferResult, TransferBuildArguments } from './types';
+import { BalanceTransferResult, BalanceTransferArguments } from './types';
 
 /* eslint-disable class-methods-use-this */
 
 export class BalanceTransferMutation extends MutationMethodBase<
-  TransferBuildArguments,
+  BalanceTransferArguments,
   BalanceTransferResult
 > {
   private readonly multiplierToRaw: number;
@@ -18,7 +18,9 @@ export class BalanceTransferMutation extends MutationMethodBase<
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  async transformArgs(args: TransferBuildArguments): Promise<TxBuildArguments> {
+  async transformArgs(
+    args: BalanceTransferArguments,
+  ): Promise<TxBuildArguments> {
     const { address, destination, amount } = args;
 
     const amountRaw = BigInt(amount * this.multiplierToRaw);

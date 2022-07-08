@@ -38,13 +38,13 @@ import {
   TokenParentResult,
   TopmostTokenOwnerResult,
 } from '@unique-nft/sdk/tokens/types';
-import { TransferBuildArguments } from '@unique-nft/sdk/balance/types';
+import { BalanceTransferArguments } from '@unique-nft/sdk/balance/types';
 
 import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 
-const AddressApiProperty = ApiProperty({
+export const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
 });
@@ -136,26 +136,6 @@ export class AllBalancesResponse implements AllBalances {
 }
 
 export class FeeResponse extends BalanceResponse implements Fee {}
-
-export class TransferBuildBody implements TransferBuildArguments {
-  @IsString()
-  @ValidAddress()
-  @NotYourselfAddress('destination')
-  @AddressApiProperty
-  address: string;
-
-  @ValidAddress()
-  @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
-  @AddressApiProperty
-  destination: string;
-
-  @IsNumber()
-  @IsPositive()
-  @ApiProperty({
-    example: 0.01,
-  })
-  amount: number;
-}
 
 export class CollectionId {
   @ApiProperty({ example: 1 })
