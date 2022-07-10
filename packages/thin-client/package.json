@@ -1,5 +1,11 @@
 {
   "name": "@unique-nft/thin-client",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "scripts": {
+    "generate-types": "npx swagger-typescript-api -p https://web.uniquenetwork.dev/swagger-json -o ./src/types --no-client"
+  },
+  "devDependencies": {
+    "swagger-typescript-api": "^9.3.1"
+  }
 }
