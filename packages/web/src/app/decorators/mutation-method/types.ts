@@ -16,8 +16,8 @@ const AnyToBoolean = Transform(({ obj = {}, key }) => {
   return asString === 'true' || asString === '1';
 });
 
-export interface MutationMethodOptions<A, R> {
-  mutationMethod: MutationMethodWrap<A, R>;
+export interface MutationMethodOptions {
+  mutationMethod: MutationMethodWrap<any, any>;
   cache: Cache;
 }
 

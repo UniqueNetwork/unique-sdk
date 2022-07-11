@@ -60,10 +60,7 @@ export class CollectionController {
   @ApiOperation({
     description: 'Create a new collection',
   })
-  createCollectionMutation(): MutationMethodOptions<
-    CreateCollectionBody,
-    CollectionIdArguments
-  > {
+  createCollectionMutation(): MutationMethodOptions {
     return {
       mutationMethod: this.sdk.collections.creation,
       cache: this.cache,

@@ -47,10 +47,7 @@ export class BalanceController {
   @ApiOperation({
     description: 'Transfer balance',
   })
-  transferMutation(): MutationMethodOptions<
-    BalanceTransferBody,
-    BalanceTransferResult
-  > {
+  transferMutation(): MutationMethodOptions {
     return {
       mutationMethod: this.sdk.balance.transfer,
       cache: this.cache,

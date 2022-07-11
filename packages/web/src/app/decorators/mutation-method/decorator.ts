@@ -29,7 +29,7 @@ import {
 } from './types';
 
 const useSign = async (
-  methodOptions: MutationMethodOptions<any, any>,
+  methodOptions: MutationMethodOptions,
   buildResult: UnsignedTxPayload,
   mutationOptions: SdkMutationOptions,
   fee?: Balance,
@@ -44,7 +44,7 @@ const useSign = async (
 };
 
 const useSubmit = async (
-  methodOptions: MutationMethodOptions<any, any>,
+  methodOptions: MutationMethodOptions,
   buildResult: UnsignedTxPayload,
   mutationOptions: SdkMutationOptions,
   fee?: Balance,
@@ -59,16 +59,17 @@ const useSubmit = async (
 };
 
 const useSubmitWatch = async (
-  methodOptions: MutationMethodOptions<any, any>,
+  methodOptions: MutationMethodOptions,
   buildResult: UnsignedTxPayload,
   mutationOptions: SdkMutationOptions,
   fee?: Balance,
 ) => {
   const { mutationMethod, cache } = methodOptions;
 
-  const hash = uuid.v4();
-
-  const result = await mutationMethod.submitWatch(buildResult, mutationOptions);
+  const { hash, result$ } = await mutationMethod.submitWatch(
+    buildResult,
+    mutationOptions,
+  );
 
   const updateCache = async (
     next: SubmittableResultInProcess<any> | Error,
@@ -99,7 +100,7 @@ const useSubmitWatch = async (
     fee,
   });
 
-  result.subscribe({
+  result$.subscribe({
     next: updateCache,
     error: updateCache,
   });
@@ -111,7 +112,7 @@ const useSubmitWatch = async (
 };
 
 const useResult = async (
-  methodOptions: MutationMethodOptions<any, any>,
+  methodOptions: MutationMethodOptions,
   buildResult: UnsignedTxPayload,
   mutationOptions: SdkMutationOptions,
   fee?: Balance,
@@ -178,7 +179,7 @@ const createMutationCallback = (target, propertyKey) => {
   const original = target[propertyKey];
 
   return async function (body, query: MutationMethodQuery, signer?: SdkSigner) {
-    const methodOptions: MutationMethodOptions<any, any> = original.call(this);
+    const methodOptions: MutationMethodOptions = original.call(this);
 
     const { mutationMethod } = methodOptions;
 
