@@ -8,7 +8,7 @@
 
 ## Returns
 
-The method returns a `parsed` object that contains the `success: bollean`.
+The method returns a `parsed` object that contains the `success: boolean`.
 
 ## Examples
 

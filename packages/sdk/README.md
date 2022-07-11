@@ -121,7 +121,6 @@ Currently, the SDK includes 5 modules
 - [Sign](./sign) - account management: sign, addresses
 - [Balance](./balance) - get and transfers native substrate token
 - [Tokens](./tokens) - operations with NFT of Unique Network blockchains (Opal, Unique, Quartz)
-- [Balance](./balance) - operations with account balance
 
 Modules can be dependent on each other. For example, the Balance Module depends on the Extrinsic Module because it generates transfer extrinsic and submits them to the blockchain.
 ___
