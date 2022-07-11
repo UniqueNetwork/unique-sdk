@@ -29,6 +29,21 @@ async function buildExecutor(options, globalOptions) {
     checkIsEmbedded,
   });
 
+  const allBundles = await runRollup(configsList, distDir);
+
+  await createAssets({
+    allBundles,
+    srcDir,
+    distDir,
+    mainPackageJson,
+    currentPackageJson,
+    checkIsEmbedded,
+  });
+
+  return { success: true };
+}
+
+async function runRollup(configsList, distDir) {
   const allBundles = [];
 
   for (let i = 0; i < configsList.length; i++) {
@@ -54,16 +69,7 @@ async function buildExecutor(options, globalOptions) {
     });
   }
 
-  await createAssets({
-    allBundles,
-    srcDir,
-    distDir,
-    mainPackageJson,
-    currentPackageJson,
-    checkIsEmbedded,
-  });
-
-  return { success: true };
+  return allBundles;
 }
 
 async function createDir(dirPath) {
