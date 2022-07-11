@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
-    "build:sdk": "rollup -c packages/sdk/rollup.config.js",
-    "build:accounts": "rollup -c packages/accounts/rollup.config.js",
+    "build:sdk": "rollup -c packages/sdk/rollup.options.js",
+    "build:accounts": "rollup -c packages/accounts/rollup.options.js",
     "build:web": "nx build web",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
@@ -20,7 +20,7 @@
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
-    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js"
+    "rollup:build:sdk": "rollup -c packages/sdk/rollup.options.js"
   },
   "private": true,
   "dependencies": {
