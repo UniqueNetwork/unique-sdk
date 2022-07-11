@@ -1,8 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import Axios, { AxiosInstance } from 'axios';
 
-const baseUrl = 'http://localhost:3000';
-
 interface BalanceTransferRequest {
   address: string;
   destination: string;
@@ -27,15 +25,18 @@ class Mutation<A, R> {
     private readonly path: string,
   ) {
     this.instance = Axios.create({
-      baseURL: baseUrl,
+      baseURL: this.section.client.options.url,
       headers: { 'Access-Control-Allow-Origin': '*' },
     });
   }
 
   async build(args: A) {
-    // todo post или get выбрать в зависимости от method
-    const collectionResponse = await this.instance.post(this.url, args);
-    return collectionResponse.data;
+    const response = await this.instance({
+      method: this.method,
+      url: `${this.url}?withFee=true&use=Build`,
+      data: args,
+    });
+    return response.data;
   }
 
   // eslint-disable-next-line class-methods-use-this
