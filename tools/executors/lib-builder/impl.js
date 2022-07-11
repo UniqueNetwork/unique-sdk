@@ -12,11 +12,9 @@ const checkIsEmbedded = (id) =>
   EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
 
 async function buildExecutor(options) {
-  const { packageName } = options;
+  const { packageName, entryPoints } = options;
 
-  const projectDir = `../../../packages/${packageName}/`;
-  const { entryPoints } = require(`${projectDir}/rollup.options.js`);
-  const currentPackageJson = require(`${projectDir}/package.json`);
+  const currentPackageJson = require(`../../../packages/${packageName}/package.json`);
 
   const srcDir = `./packages/${packageName}`;
 

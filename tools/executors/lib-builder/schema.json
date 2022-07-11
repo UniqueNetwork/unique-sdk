@@ -6,6 +6,10 @@
     "packageName": {
       "type": "string",
       "description": "Package name (eg sdk, accounts)"
+    },
+    "entryPoints": {
+      "type": "array",
+      "description": "Entry points list"
     }
   }
 }

@@ -5,7 +5,12 @@
     "build": {
       "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "packageName": "accounts"
+        "packageName": "accounts",
+        "entryPoints": [
+          "./index.ts",
+          "./sign/index.ts",
+          "./sign/polkadot/index.ts"
+        ]
       }
     },
     "lint": {

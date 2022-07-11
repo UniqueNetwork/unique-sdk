@@ -5,7 +5,17 @@
     "build": {
       "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "packageName": "sdk"
+        "packageName": "sdk",
+        "entryPoints": [
+          "./index.ts",
+          "./extrinsics/index.ts",
+          "./balance/index.ts",
+          "./state-queries/index.ts",
+          "./tokens/index.ts",
+          "./utils/index.ts",
+          "./types/index.ts",
+          "./errors/index.ts"
+        ]
       }
     },
     "lint": {
