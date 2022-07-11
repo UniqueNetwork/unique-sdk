@@ -1,5 +1,5 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { TxBuildArguments } from '@unique-nft/sdk/types';
+import { TokenPayload, TxBuildArguments } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { SdkError } from '@unique-nft/sdk/errors';
@@ -21,16 +21,17 @@ export class CreateTokenNewMutation extends MutationMethodBase<
     const collection = await this.sdk.collections.get_new({ collectionId });
     if (!collection) throw new SdkError(`no collection ${collectionId}`);
 
-    const encodedToken = SchemaTools.encodeUnique.token(
-      data,
-      collection.schema,
-    );
+    const properties = SchemaTools.encodeUnique.token(data, collection.schema);
+
+    const tokenData: TokenPayload = {
+      NFT: { properties },
+    };
 
     return {
       address,
       section: 'unique',
       method: 'createItem',
-      args: [collectionId, { substrate: owner || address }, encodedToken],
+      args: [collectionId, { substrate: owner || address }, tokenData],
     };
   }
 
