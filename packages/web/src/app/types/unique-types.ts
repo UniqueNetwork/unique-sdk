@@ -174,11 +174,13 @@ export class CollectionPropertiesDto implements CollectionProperties {
     required: false,
     example: [
       {
+        id: 1,
         type: CollectionFieldTypes.TEXT,
         name: 'name',
         required: true,
       },
       {
+        id: 2,
         type: CollectionFieldTypes.SELECT,
         name: 'mode',
         required: false,

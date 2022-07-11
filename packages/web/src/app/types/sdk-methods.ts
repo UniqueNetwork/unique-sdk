@@ -7,11 +7,9 @@ import {
   IsInt,
   IsNumberString,
   IsOptional,
-  IsBoolean,
   ValidateNested,
 } from 'class-validator';
 import { HexString } from '@polkadot/util/types';
-import { Transform } from 'class-transformer';
 import {
   Address,
   AddressArguments,
@@ -22,7 +20,6 @@ import {
   ChainProperties,
   CreateTokenArguments,
   Fee,
-  TransferBuildArguments,
   TransferCollectionArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
@@ -31,44 +28,22 @@ import {
   CollectionIdArguments,
   TokenIdArguments,
   TransferTokenArguments,
-  CreateCollectionArguments,
   SetCollectionLimitsArguments,
   NestTokenArguments,
   UnnestTokenArguments,
   TokenChildrenResult,
   TokenParentResult,
   TopmostTokenOwnerResult,
-  CreateCollectionNewArguments,
 } from '@unique-nft/sdk/tokens/types';
-import {
-  CollectionInfoBaseDto,
-  CollectionInfoWithPropertiesDto,
-  CollectionLimitsDto,
-} from './unique-types';
-import { NotYourselfAddress, ValidAddress } from '../validation';
+
+import { CollectionLimitsDto } from './unique-types';
+import { ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 
-const AddressApiProperty = ApiProperty({
+export const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
 });
-
-const AnyToBoolean = Transform(({ obj = {}, key }) => {
-  const asString = String(obj && obj[key]).toLowerCase();
-
-  return asString === 'true' || asString === '1';
-});
-
-export class WithFeeQuery {
-  @AnyToBoolean
-  @IsOptional()
-  @IsBoolean()
-  @ApiProperty({
-    example: true,
-    required: false,
-  })
-  withFee?: boolean;
-}
 
 export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({
@@ -141,26 +116,6 @@ export class AllBalancesResponse implements AllBalances {
 
 export class FeeResponse extends BalanceResponse implements Fee {}
 
-export class TransferBuildBody implements TransferBuildArguments {
-  @IsString()
-  @ValidAddress()
-  @NotYourselfAddress('destination')
-  @AddressApiProperty
-  address: string;
-
-  @ValidAddress()
-  @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
-  @AddressApiProperty
-  destination: string;
-
-  @IsNumber()
-  @IsPositive()
-  @ApiProperty({
-    example: 0.01,
-  })
-  amount: number;
-}
-
 export class CollectionId {
   @ApiProperty({ example: 1 })
   @IsPositive()
@@ -184,22 +139,6 @@ export class TokenIdQuery extends TokenId implements TokenIdArguments {}
 export class AddressQuery implements AddressArguments {
   @ValidAddress()
   @ApiProperty()
-  address: string;
-}
-
-export class CreateCollectionBody
-  extends CollectionInfoWithPropertiesDto
-  implements CreateCollectionArguments
-{
-  @AddressApiProperty
-  address: string;
-}
-
-export class CreateCollectionNewBody
-  extends CollectionInfoBaseDto
-  implements CreateCollectionNewArguments
-{
-  @AddressApiProperty
   address: string;
 }
 
@@ -305,11 +244,9 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
 
   @ApiProperty({ type: String })
   signerPayloadHex: HexString;
-}
 
-export class UnsignedTxPayloadResponseWithFee extends UnsignedTxPayloadResponse {
   @ApiProperty({ type: FeeResponse, required: false })
-  fee?: Balance;
+  fee?: FeeResponse;
 }
 
 export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}

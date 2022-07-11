@@ -1,4 +1,8 @@
-const esModules = ['@polkadot/', '@unique-nft/unique-mainnet-types'].join('|');
+const esModules = [
+  '@polkadot/',
+  '@unique-nft/unique-mainnet-types',
+  '@unique-nft/quartz-mainnet-types',
+].join('|');
 
 module.exports = {
   displayName: 'web',
