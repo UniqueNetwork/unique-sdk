@@ -6,7 +6,6 @@ import {
   DecodedInfixOrUrlOrCidAndHash,
   UniqueCollectionSchemaDecoded,
 } from '@unique-nft/api';
-import { AttributeSchemaDto, OldPropertiesDto } from './base-dtos';
 import {
   AttributesSchemaApiProperty,
   AttributesSchemaVersionApiProperty,
@@ -18,6 +17,8 @@ import {
   SchemaVersionApiProperty,
   SpatialObjectDto,
   VideoDto,
+  AttributeSchemaDto,
+  OldPropertiesDto,
 } from './shared';
 
 @ApiExtraModels(AttributeSchemaDto)

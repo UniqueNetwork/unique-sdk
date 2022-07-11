@@ -28,7 +28,7 @@ import {
   CollectionSelectFieldDto,
   CollectionTextFieldDto,
 } from './unique-fileds';
-import { UniqueCollectionSchemaDecodedDto } from './unique-schema/collection-schema-decoded';
+import { UniqueCollectionSchemaDecodedDto } from './unique-schema';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;

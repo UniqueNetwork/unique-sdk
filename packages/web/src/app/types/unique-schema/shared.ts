@@ -1,16 +1,109 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import { SchemaObjectMetadata } from '@nestjs/swagger/dist/interfaces/schema-object-metadata.interface';
 import {
   AttributeKind,
+  AttributeSchema,
   AttributeType,
   COLLECTION_SCHEMA_NAME,
+  LocalizedStringDictionary,
   UrlTemplateString,
 } from '@unique-nft/api';
-import {
-  AttributeSchemaDto,
-  decodedInfixOrUrlOrCidAndHashSchema,
+
+const infixOrUrlOrCidAndHashSchema: SchemaObjectMetadata = {
+  oneOf: [
+    {
+      type: 'object',
+      properties: {
+        urlInfix: { type: 'string' },
+        hash: { type: 'string', nullable: true },
+      },
+    },
+    {
+      type: 'object',
+      properties: {
+        url: { type: 'string' },
+        hash: { type: 'string', nullable: true },
+      },
+    },
+    {
+      type: 'object',
+      properties: {
+        ipfsCid: { type: 'string' },
+        hash: { type: 'string', nullable: true },
+      },
+    },
+  ],
+};
+
+const decodedInfixOrUrlOrCidAndHashSchema: SchemaObjectMetadata = {
+  ...infixOrUrlOrCidAndHashSchema,
+  properties: {
+    fullUrl: {
+      type: 'string',
+      nullable: true,
+    },
+  },
+};
+
+export const InfixOrUrlOrCidAndHashSchemaApiProperty = ApiProperty(
   infixOrUrlOrCidAndHashSchema,
-} from './base-dtos';
+);
+
+export const DecodedInfixOrUrlOrCidAndHashSchemaApiProperty = ApiProperty(
+  decodedInfixOrUrlOrCidAndHashSchema,
+);
+
+const localizedStringDictionarySchema = {
+  type: 'object',
+  additionalProperties: { type: 'string' },
+  example: {
+    en: 'Hello!',
+    fr: 'Bonjour!',
+  },
+};
+
+export class AttributeSchemaDto implements AttributeSchema {
+  @ApiProperty({
+    type: 'object',
+    additionalProperties: {
+      oneOf: [
+        { type: 'string' },
+        { type: 'number' },
+        localizedStringDictionarySchema,
+      ],
+    },
+  })
+  enumValues: { [p: number]: number | string | LocalizedStringDictionary };
+
+  @ApiProperty({
+    oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
+  })
+  name: string | LocalizedStringDictionary;
+
+  @ApiProperty()
+  optional?: boolean;
+
+  @ApiProperty({ enum: AttributeKind })
+  kind: AttributeKind;
+
+  @ApiProperty({ enum: AttributeType })
+  type: AttributeType;
+}
+
+export class OldPropertiesDto {
+  @ApiProperty()
+  _old_schemaVersion?: string;
+
+  @ApiProperty()
+  _old_offchainSchema?: string;
+
+  @ApiProperty()
+  _old_constOnChainSchema?: string;
+
+  @ApiProperty()
+  _old_variableOnChainSchema?: string;
+}
 
 export const AttributesSchemaApiProperty = ApiProperty({
   type: 'object',
@@ -36,14 +129,6 @@ export const AttributesSchemaApiProperty = ApiProperty({
     },
   },
 });
-
-export const InfixOrUrlOrCidAndHashSchemaApiProperty = ApiProperty(
-  infixOrUrlOrCidAndHashSchema,
-);
-
-export const DecodedInfixOrUrlOrCidAndHashSchemaApiProperty = ApiProperty(
-  decodedInfixOrUrlOrCidAndHashSchema,
-);
 
 export const SchemaNameApiProperty = ApiProperty({
   example: COLLECTION_SCHEMA_NAME.unique,
@@ -86,3 +171,7 @@ export class AudioDto extends SpatialObjectDto {
   @ApiProperty()
   isLossless?: boolean;
 }
+
+export const StringOrLocalizedString = ApiProperty({
+  oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
+});

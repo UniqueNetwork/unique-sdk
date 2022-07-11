@@ -15,10 +15,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CreateTokenNewArguments } from '@unique-nft/sdk/tokens/methods/create-token';
 import { Address } from '@unique-nft/sdk/types';
 import {
-  decodedInfixOrUrlOrCidAndHashSchema,
-  infixOrUrlOrCidAndHashSchema,
-  localizedStringDictionarySchema,
-} from './base-dtos';
+  DecodedInfixOrUrlOrCidAndHashSchemaApiProperty,
+  InfixOrUrlOrCidAndHashSchemaApiProperty,
+  StringOrLocalizedString,
+} from './shared';
+
+export { UniqueCollectionSchemaToCreateDto } from './collection-schema-to-create';
+export { UniqueCollectionSchemaDecodedDto } from './collection-schema-decoded';
 
 export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty()
@@ -27,7 +30,7 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty()
   collectionId: CollectionId;
 
-  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
+  @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   image: DecodedInfixOrUrlOrCidAndHash;
 
   @ApiProperty()
@@ -36,17 +39,17 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty()
   tokenId: TokenId;
 
-  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
+  @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   audio?: DecodedInfixOrUrlOrCidAndHash;
 
-  @ApiProperty({ oneOf: [{ type: 'string' }, localizedStringDictionarySchema] })
+  @StringOrLocalizedString
   description?: string | LocalizedStringDictionary;
 
-  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
-  imagePreview?: DecodedInfixOrUrlOrCidAndHash;
-
-  @ApiProperty({ oneOf: [{ type: 'string' }, localizedStringDictionarySchema] })
+  @StringOrLocalizedString
   name?: string | LocalizedStringDictionary;
+
+  @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
+  imagePreview?: DecodedInfixOrUrlOrCidAndHash;
 
   @ApiProperty({
     type: 'object',
@@ -58,14 +61,14 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   })
   nestingParentToken?: { collectionId: CollectionId; tokenId: TokenId };
 
-  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
+  @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   spatialObject?: DecodedInfixOrUrlOrCidAndHash;
 
-  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
+  @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   video?: DecodedInfixOrUrlOrCidAndHash;
 }
 
-class UniqueTokenToCreateDto implements UniqueTokenToCreate {
+class UniqueTokenDataToCreateDto implements UniqueTokenToCreate {
   @ApiProperty({
     type: 'object',
     example: {
@@ -77,7 +80,7 @@ class UniqueTokenToCreateDto implements UniqueTokenToCreate {
   })
   encodedAttributes: EncodedTokenAttributes;
 
-  @ApiProperty(infixOrUrlOrCidAndHashSchema)
+  @InfixOrUrlOrCidAndHashSchemaApiProperty
   image: InfixOrUrlOrCidAndHash;
 }
 
@@ -88,8 +91,8 @@ export class CreateTokenNewDto implements CreateTokenNewArguments {
   @ApiProperty()
   collectionId: number;
 
-  @ApiProperty()
-  data: UniqueTokenToCreateDto;
+  @ApiProperty({ type: UniqueTokenDataToCreateDto })
+  data: UniqueTokenDataToCreateDto;
 
   @ApiProperty()
   owner?: Address;
