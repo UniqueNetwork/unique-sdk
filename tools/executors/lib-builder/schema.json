@@ -7,6 +7,10 @@
       "type": "string",
       "description": "Package name (eg sdk, accounts)"
     },
+    "distDir": {
+      "type": "string",
+      "description": "Destination directory path"
+    },
     "entryPoints": {
       "type": "array",
       "description": "Entry points list"

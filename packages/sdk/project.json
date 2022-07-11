@@ -6,6 +6,7 @@
       "executor": "./tools/executors/lib-builder:run-build",
       "options": {
         "packageName": "sdk",
+        "distDir": "./dist/packages/sdk",
         "entryPoints": [
           "./index.ts",
           "./extrinsics/index.ts",

@@ -6,6 +6,7 @@
       "executor": "./tools/executors/lib-builder:run-build",
       "options": {
         "packageName": "accounts",
+        "distDir": "./dist/packages/accounts",
         "entryPoints": [
           "./index.ts",
           "./sign/index.ts",

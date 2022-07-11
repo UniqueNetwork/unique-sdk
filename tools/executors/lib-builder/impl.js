@@ -11,14 +11,15 @@ const EMBEDDED_DEPS = ['@unique-nft/unique-mainnet-types'];
 const checkIsEmbedded = (id) =>
   EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
 
-async function buildExecutor(options) {
-  const { packageName, entryPoints } = options;
+async function buildExecutor(options, globalOptions) {
+  const { packageName, entryPoints, distDir } = options;
 
-  const currentPackageJson = require(`../../../packages/${packageName}/package.json`);
+  const { sourceRoot } = globalOptions.workspace.projects[packageName];
 
-  const srcDir = `./packages/${packageName}`;
+  const srcDir = path.resolve(sourceRoot, '..');
 
-  const distDir = `./dist/packages/${packageName}`;
+  const currentPackageJson = require(path.resolve(srcDir, 'package.json'));
+
   await createDir(distDir);
 
   const configsList = createConfigs({
@@ -40,7 +41,7 @@ async function buildExecutor(options) {
     const bundle = await rollup(config);
 
     const writeResult = await bundle.write({
-      dir: `dist/packages/${packageName}`,
+      dir: distDir,
     });
 
     allBundles.push({
