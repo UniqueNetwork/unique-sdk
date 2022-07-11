@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           npm ci
-          npm run rollup:build:sdk
+          npm run build:sdk
       - name: NPM Publish
         working-directory: ./dist/packages/sdk
         shell: bash
