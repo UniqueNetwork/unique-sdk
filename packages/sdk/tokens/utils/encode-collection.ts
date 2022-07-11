@@ -15,13 +15,14 @@ import {
   encodeCollectionFields,
 } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
-import { CollectionInfo } from '../methods/collection-by-id/types';
 import {
   CollectionMode,
   CollectionProperties,
   TokenPropertiesPermissions,
   CollectionPermissions,
   CollectionPropertiesKeys,
+  CollectionInfoWithProperties,
+  CollectionInfoBase,
 } from '../methods/create-collection-ex/types';
 
 type CollectionProperty = {
@@ -112,7 +113,7 @@ const encodeTokenPropertyPermissions = (
 
 export const encodeCollectionBase = (
   registry: Registry,
-  collectionInfo: Partial<CollectionInfo>,
+  collectionInfo: Partial<CollectionInfoBase>,
 ): UpDataStructsCreateCollectionData => {
   const permissions = collectionInfo.permissions
     ? encodeCollectionPermissions(registry, collectionInfo.permissions)
@@ -151,7 +152,7 @@ export const encodeCollectionBase = (
 
 export const encodeCollection = (
   registry: Registry,
-  collectionInfo: Partial<CollectionInfo>,
+  collectionInfo: Partial<CollectionInfoWithProperties>,
 ): UpDataStructsCreateCollectionData => {
   const properties = collectionInfo.properties
     ? encodeCollectionProperties(collectionInfo.properties)

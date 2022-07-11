@@ -1,12 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import {
-  CollectionAttributesSchema,
   UniqueTokenDecoded,
-  COLLECTION_SCHEMA_NAME,
   CollectionId,
   DecodedInfixOrUrlOrCidAndHash,
-  UniqueCollectionSchemaDecoded,
-  UrlTemplateString,
   TokenId,
   SubOrEthAddressObj,
   DecodedAttributes,
@@ -18,59 +14,11 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateTokenNewArguments } from '@unique-nft/sdk/tokens/methods/create-token';
 import { Address } from '@unique-nft/sdk/types';
-import { infixOrUrlOrCidAndHashSchema } from './base-dtos';
-
-export class UniqueCollectionSchemaDecodedDto
-  implements UniqueCollectionSchemaDecoded
-{
-  @ApiProperty()
-  attributesSchema: CollectionAttributesSchema;
-
-  @ApiProperty()
-  attributesSchemaVersion: string;
-
-  @ApiProperty()
-  collectionId: CollectionId;
-
-  @ApiProperty()
-  coverPicture: DecodedInfixOrUrlOrCidAndHash;
-
-  @ApiProperty()
-  image: { urlTemplate: UrlTemplateString };
-
-  @ApiProperty()
-  schemaName: COLLECTION_SCHEMA_NAME;
-
-  @ApiProperty()
-  schemaVersion: string;
-
-  @ApiProperty()
-  audio?: {
-    urlTemplate?: UrlTemplateString;
-    format: string;
-    isLossless?: boolean;
-  };
-
-  @ApiProperty()
-  coverPicturePreview?: DecodedInfixOrUrlOrCidAndHash;
-
-  @ApiProperty()
-  imagePreview?: { urlTemplate?: UrlTemplateString };
-
-  @ApiProperty()
-  oldProperties?: {
-    _old_schemaVersion?: string;
-    _old_offchainSchema?: string;
-    _old_constOnChainSchema?: string;
-    _old_variableOnChainSchema?: string;
-  };
-
-  @ApiProperty()
-  spatialObject?: { urlTemplate?: UrlTemplateString; format: string };
-
-  @ApiProperty()
-  video?: { urlTemplate?: UrlTemplateString };
-}
+import {
+  decodedInfixOrUrlOrCidAndHashSchema,
+  infixOrUrlOrCidAndHashSchema,
+  localizedStringDictionarySchema,
+} from './base-dtos';
 
 export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty()
@@ -79,7 +27,7 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty()
   collectionId: CollectionId;
 
-  @ApiProperty()
+  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
   image: DecodedInfixOrUrlOrCidAndHash;
 
   @ApiProperty()
@@ -88,25 +36,32 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty()
   tokenId: TokenId;
 
-  @ApiProperty()
+  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
   audio?: DecodedInfixOrUrlOrCidAndHash;
 
-  @ApiProperty()
+  @ApiProperty({ oneOf: [{ type: 'string' }, localizedStringDictionarySchema] })
   description?: string | LocalizedStringDictionary;
 
-  @ApiProperty()
+  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
   imagePreview?: DecodedInfixOrUrlOrCidAndHash;
 
-  @ApiProperty()
+  @ApiProperty({ oneOf: [{ type: 'string' }, localizedStringDictionarySchema] })
   name?: string | LocalizedStringDictionary;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'object',
+    required: false,
+    properties: {
+      collectionId: { type: 'number' },
+      tokenId: { type: 'number' },
+    },
+  })
   nestingParentToken?: { collectionId: CollectionId; tokenId: TokenId };
 
-  @ApiProperty()
+  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
   spatialObject?: DecodedInfixOrUrlOrCidAndHash;
 
-  @ApiProperty()
+  @ApiProperty(decodedInfixOrUrlOrCidAndHashSchema)
   video?: DecodedInfixOrUrlOrCidAndHash;
 }
 

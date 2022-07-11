@@ -69,11 +69,19 @@ export interface CollectionInfoBase {
   limits?: CollectionLimits;
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
 
-  properties: CollectionProperties;
   permissions?: CollectionPermissions;
+}
+
+export interface CollectionInfoWithProperties extends CollectionInfoBase {
+  properties: CollectionProperties;
   tokenPropertyPermissions?: TokenPropertiesPermissions;
 }
 
-export interface CreateCollectionArguments extends CollectionInfoBase {
+export interface CreateCollectionArguments
+  extends CollectionInfoWithProperties {
+  address: Address;
+}
+
+export interface CreateCollectionNewArguments extends CollectionInfoBase {
   address: Address;
 }

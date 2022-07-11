@@ -19,6 +19,7 @@ import {
   TokenPropertiesPermissions,
   CollectionInfoWithSchema,
   CollectionLimits,
+  CollectionInfoWithProperties,
 } from '@unique-nft/sdk/tokens/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
@@ -27,7 +28,7 @@ import {
   CollectionSelectFieldDto,
   CollectionTextFieldDto,
 } from './unique-fileds';
-import { UniqueCollectionSchemaDecodedDto } from './unique-schema';
+import { UniqueCollectionSchemaDecodedDto } from './unique-schema/collection-schema-decoded';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
@@ -39,7 +40,7 @@ export class CollectionSponsorship {
   })
   address: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: false })
   isConfirmed: boolean;
 }
 
@@ -119,8 +120,10 @@ export class CollectionLimitsDto implements CollectionLimits {
 export class CollectionNestingPermissionsDto
   implements CollectionNestingPermissions
 {
+  @ApiProperty()
   tokenOwner: boolean;
 
+  @ApiProperty()
   collectionAdmin: boolean;
 }
 
@@ -243,13 +246,18 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
   @ApiProperty({ enum: MetaUpdatePermission, required: false })
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
 
-  @ApiProperty()
-  properties: CollectionPropertiesDto;
-
   @ApiProperty({
     required: false,
   })
   permissions?: CollectionPermissionsDto;
+}
+
+export class CollectionInfoWithPropertiesDto
+  extends CollectionInfoBaseDto
+  implements CollectionInfoWithProperties
+{
+  @ApiProperty()
+  properties: CollectionPropertiesDto;
 
   @ApiProperty({
     required: false,

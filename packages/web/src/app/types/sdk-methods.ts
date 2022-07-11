@@ -38,8 +38,13 @@ import {
   TokenChildrenResult,
   TokenParentResult,
   TopmostTokenOwnerResult,
+  CreateCollectionNewArguments,
 } from '@unique-nft/sdk/tokens/types';
-import { CollectionInfoBaseDto, CollectionLimitsDto } from './unique-types';
+import {
+  CollectionInfoBaseDto,
+  CollectionInfoWithPropertiesDto,
+  CollectionLimitsDto,
+} from './unique-types';
 import { NotYourselfAddress, ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 
@@ -183,8 +188,16 @@ export class AddressQuery implements AddressArguments {
 }
 
 export class CreateCollectionBody
-  extends CollectionInfoBaseDto
+  extends CollectionInfoWithPropertiesDto
   implements CreateCollectionArguments
+{
+  @AddressApiProperty
+  address: string;
+}
+
+export class CreateCollectionNewBody
+  extends CollectionInfoBaseDto
+  implements CreateCollectionNewArguments
 {
   @AddressApiProperty
   address: string;

@@ -25,7 +25,7 @@ import {
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
 import {
-  CollectionInfoResponse,
+  CollectionInfoWithPropertiesDto,
   CollectionInfoWithSchemaResponse,
   EffectiveCollectionLimitsResponse,
 } from '../../../types/unique-types';
@@ -79,7 +79,7 @@ export class CollectionController extends BaseCollectionController {
   @Get()
   async getCollection(
     @Query() args: CollectionIdQuery,
-  ): Promise<CollectionInfoResponse> {
+  ): Promise<CollectionInfoWithPropertiesDto> {
     const collection = await this.sdk.collections.get(args);
 
     if (collection) return collection;

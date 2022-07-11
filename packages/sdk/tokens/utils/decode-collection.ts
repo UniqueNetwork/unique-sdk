@@ -26,6 +26,7 @@ import {
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
+  CollectionInfoWithProperties,
 } from '../methods/create-collection-ex/types';
 import {
   decodeCollectionLimits,
@@ -111,7 +112,6 @@ export const decodeCollectionBase = (
   limits: decodeCollectionLimits(collection.limits),
 
   permissions: decodeCollectionPermissions(collection.permissions),
-  properties: {},
 });
 
 const decodeTokenPropertiesPermissions = (
@@ -128,7 +128,7 @@ const decodeTokenPropertiesPermissions = (
 
 export const decodeCollection = (
   collection: UpDataStructsRpcCollection,
-): CollectionInfoBase => ({
+): CollectionInfoWithProperties => ({
   ...decodeCollectionBase(collection),
   properties: decodeCollectionProperties(collection.properties),
   tokenPropertyPermissions: decodeTokenPropertiesPermissions(
