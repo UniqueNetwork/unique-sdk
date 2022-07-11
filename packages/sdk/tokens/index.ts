@@ -19,5 +19,7 @@ export { SdkCollections } from './sdk-collections';
 export { SdkTokens } from './sdk-tokens';
 export * from './types';
 
+export { CreateCollectionExMutation } from './methods/create-collection-ex';
+
 addFeature('collections', SdkCollections);
 addFeature('tokens', SdkTokens);
