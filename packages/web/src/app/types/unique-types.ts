@@ -17,7 +17,6 @@ import {
   CollectionProperties,
   MetaUpdatePermission,
   TokenPropertiesPermissions,
-  CollectionInfoWithSchema,
   CollectionLimits,
   CollectionInfoWithProperties,
 } from '@unique-nft/sdk/tokens/types';
@@ -28,7 +27,6 @@ import {
   CollectionSelectFieldDto,
   CollectionTextFieldDto,
 } from './unique-fileds';
-import { UniqueCollectionSchemaDecodedDto } from './unique-schema';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
@@ -280,14 +278,6 @@ export class CollectionInfoResponse extends CollectionInfoBaseDto {
   owner: string;
 }
 
-export class CollectionInfoWithSchemaResponse
-  extends CollectionInfoResponse
-  implements CollectionInfoWithSchema
-{
-  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto })
-  schema: UniqueCollectionSchemaDecodedDto;
-}
-
 export class EffectiveCollectionLimitsResponse extends CollectionLimitsDto {
   @ApiProperty({
     example: 1,
@@ -333,17 +323,3 @@ export class TokenInfoResponse implements TokenInfo {
 
   properties: TokenPropertiesResponse;
 }
-
-export type TokenPayload =
-  | {
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      NFT: any;
-    }
-  | {
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      Fungible: any;
-    }
-  | {
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      ReFungible: any;
-    };

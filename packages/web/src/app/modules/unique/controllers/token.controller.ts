@@ -30,10 +30,7 @@ import {
   TopmostTokenOwnerResponse,
 } from '../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../validation';
-import {
-  CreateTokenNewDto,
-  UniqueTokenDecodedResponse,
-} from '../../../types/unique-schema';
+import { CreateTokenNewDto, UniqueTokenDecodedResponse } from './unique-schema';
 
 export class BaseTokenController {
   constructor(readonly sdk: Sdk) {}
