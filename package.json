@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
-    "build:sdk": "rollup -c packages/sdk/rollup.options.js",
-    "build:accounts": "rollup -c packages/accounts/rollup.options.js",
+    "build:sdk": "nx build sdk",
+    "build:accounts": "nx build accounts",
     "build:web": "nx build web",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
