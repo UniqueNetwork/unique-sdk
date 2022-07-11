@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ExtrinsicsController } from './controllers/extrinsics.controller';
-import { BalanceController } from './controllers/balance.controller';
+import { BalanceController } from './controllers/balance/controller';
 import { ChainController } from './controllers/chain.controller';
 import { InfoController } from './controllers/info.controller';
 import { QueryController } from './controllers/query.controller';

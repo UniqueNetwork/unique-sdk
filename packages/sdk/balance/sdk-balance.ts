@@ -1,26 +1,23 @@
-import {
-  AddressArguments,
-  AllBalances,
-  TransferBuildArguments,
-  UnsignedTxPayload,
-} from '@unique-nft/sdk/types';
+import { AddressArguments, AllBalances } from '@unique-nft/sdk/types';
+import { Sdk } from '@unique-nft/sdk';
 import { formatBalance } from '@unique-nft/sdk/utils';
-import { SdkStateQueries } from '@unique-nft/sdk/state-queries';
-import { ApiPromise } from '@polkadot/api';
-import { SdkExtrinsics } from '@unique-nft/sdk/extrinsics';
-
-interface Sdk {
-  api: ApiPromise;
-  extrinsics: SdkExtrinsics;
-  stateQueries: SdkStateQueries;
-}
+import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+import {
+  BalanceTransferResult,
+  BalanceTransferArguments,
+} from './methods/transfer/types';
+import { BalanceTransferMutation } from './methods/transfer/method';
 
 export class SdkBalance {
   private readonly multiplierToRaw: number;
 
+  transfer: MutationMethodWrap<BalanceTransferArguments, BalanceTransferResult>;
+
   constructor(private readonly sdk: Sdk) {
     const tokenDecimals = this.sdk.api.registry.chainDecimals[0];
     this.multiplierToRaw = 10 ** tokenDecimals;
+
+    this.transfer = new BalanceTransferMutation(this.sdk);
   }
 
   async get(args: AddressArguments): Promise<AllBalances> {
@@ -34,15 +31,5 @@ export class SdkBalance {
       lockedBalance: formatBalance(this.sdk.api, lockedBalance),
       freeBalance: formatBalance(this.sdk.api, freeBalance),
     };
-  }
-
-  async transfer(args: TransferBuildArguments): Promise<UnsignedTxPayload> {
-    const amountRaw = BigInt(args.amount * this.multiplierToRaw);
-    return this.sdk.extrinsics.build({
-      address: args.address,
-      section: 'balances',
-      method: 'transfer',
-      args: [args.destination, amountRaw],
-    });
   }
 }
