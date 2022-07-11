@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TokenController } from './controllers/token.controller';
-import { TokenNewController } from './controllers/token.new.controller';
-import { CollectionController } from './controllers/collection.controller';
-import { CollectionNewController } from './controllers/collection.new.controller';
+import {
+  TokenController,
+  NewTokenController,
+} from './controllers/token.controller';
+import {
+  CollectionController,
+  NewCollectionController,
+} from './controllers/collection.controller';
 import { SubstrateModule } from '../substrate/substrate.module';
 import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
 
@@ -10,9 +14,9 @@ import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
   imports: [SdkProviderModule, SubstrateModule.forPrimary()],
   controllers: [
     TokenController,
-    TokenNewController,
+    NewTokenController,
     CollectionController,
-    CollectionNewController,
+    NewCollectionController,
   ],
 })
 export class UniqueModule {}

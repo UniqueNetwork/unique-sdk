@@ -11,8 +11,14 @@ import {
   SubOrEthAddressObj,
   DecodedAttributes,
   LocalizedStringDictionary,
+  UniqueTokenToCreate,
+  EncodedTokenAttributes,
+  InfixOrUrlOrCidAndHash,
 } from '@unique-nft/api';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateTokenNewArguments } from '@unique-nft/sdk/tokens/methods/create-token';
+import { Address } from '@unique-nft/sdk/types';
+import { infixOrUrlOrCidAndHashSchema } from './base-dtos';
 
 export class UniqueCollectionSchemaDecodedDto
   implements UniqueCollectionSchemaDecoded
@@ -102,4 +108,34 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
 
   @ApiProperty()
   video?: DecodedInfixOrUrlOrCidAndHash;
+}
+
+class UniqueTokenToCreateDto implements UniqueTokenToCreate {
+  @ApiProperty({
+    type: 'object',
+    example: {
+      0: 'sample',
+      1: 1,
+      2: [1, 2, 3],
+      3: { en: 'sample' },
+    },
+  })
+  encodedAttributes: EncodedTokenAttributes;
+
+  @ApiProperty(infixOrUrlOrCidAndHashSchema)
+  image: InfixOrUrlOrCidAndHash;
+}
+
+export class CreateTokenNewDto implements CreateTokenNewArguments {
+  @ApiProperty()
+  address: Address;
+
+  @ApiProperty()
+  collectionId: number;
+
+  @ApiProperty()
+  data: UniqueTokenToCreateDto;
+
+  @ApiProperty()
+  owner?: Address;
 }
