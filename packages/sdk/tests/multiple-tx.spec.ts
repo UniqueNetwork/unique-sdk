@@ -22,11 +22,12 @@ describe('multiple TXs', () => {
   });
 
   const makeTransfer = async (amount: number): Promise<void> => {
-    const { signerPayloadJSON, signerPayloadHex } = await sdk.balance.transfer({
-      address: eve.address,
-      destination: ferdie.address,
-      amount,
-    });
+    const { signerPayloadJSON, signerPayloadHex } =
+      await sdk.balance.transfer.build({
+        address: eve.address,
+        destination: ferdie.address,
+        amount,
+      });
 
     const signature = signWithAccount(sdk, eve, signerPayloadHex);
 

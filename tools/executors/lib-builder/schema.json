@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "cli": "nx",
+  "properties": {
+    "packageName": {
+      "type": "string",
+      "description": "Package name (eg sdk, accounts)"
+    },
+    "distDir": {
+      "type": "string",
+      "description": "Destination directory path"
+    },
+    "entryPoints": {
+      "type": "array",
+      "description": "Entry points list"
+    }
+  }
+}

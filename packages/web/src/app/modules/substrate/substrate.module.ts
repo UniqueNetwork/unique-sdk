@@ -1,7 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { ExtrinsicsController } from './controllers/extrinsics.controller';
-import { BalanceController } from './controllers/balance.controller';
+import { BalanceController } from './controllers/balance';
 import { ChainController } from './controllers/chain.controller';
 import { InfoController } from './controllers/info.controller';
 import { QueryController } from './controllers/query.controller';
