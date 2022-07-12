@@ -1,15 +1,19 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
 
-import { GetCollectionStatsResult } from './types';
+import { CollectionStatsResult } from './types';
 
-async function collectionStatsFn(this: Sdk): Promise<GetCollectionStatsResult> {
+async function collectionStatsFn(this: Sdk): Promise<CollectionStatsResult> {
   const collectionStats = await this.api.rpc.unique.collectionStats();
 
-  // todo: correct decode
+  const statsJson = collectionStats.toJSON() as {
+    created: number;
+    destroyed: number;
+    alive: number;
+  };
 
-  return collectionStats.toJSON() as GetCollectionStatsResult;
+  return statsJson;
 }
 
-export const collectionStats: QueryMethod<void, GetCollectionStatsResult> =
+export const collectionStats: QueryMethod<void, CollectionStatsResult> =
   collectionStatsFn;

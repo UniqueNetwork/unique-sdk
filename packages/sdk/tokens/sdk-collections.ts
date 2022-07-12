@@ -11,7 +11,7 @@ import {
 import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
 import { CreateCollectionArguments } from './methods/create-collection-ex/types';
 import { GetCollectionLimitsResult } from './methods/effective-collection-limits/types';
-import { GetCollectionStatsResult } from './methods/collection-stats/types';
+import { CollectionStatsResult } from './methods/collection-stats/types';
 import { collectionById } from './methods/collection-by-id/method';
 import { effectiveCollectionLimits } from './methods/effective-collection-limits/method';
 import {
@@ -48,7 +48,7 @@ export class SdkCollections {
     SetCollectionLimitsResult
   >;
 
-  collectionStats: QueryMethod<void, GetCollectionStatsResult>;
+  collectionStats: QueryMethod<void, CollectionStatsResult>;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({
