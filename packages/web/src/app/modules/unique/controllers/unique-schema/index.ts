@@ -11,10 +11,11 @@ import {
   EncodedTokenAttributes,
   InfixOrUrlOrCidAndHash,
 } from '@unique-nft/api';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { CreateTokenNewArguments } from '@unique-nft/sdk/tokens/methods/create-token';
 import { Address } from '@unique-nft/sdk/types';
 import {
+  DecodedAttributeDto,
   DecodedInfixOrUrlOrCidAndHashSchemaApiProperty,
   InfixOrUrlOrCidAndHashSchemaApiProperty,
   StringOrLocalizedString,
@@ -23,8 +24,12 @@ import {
 export { UniqueCollectionSchemaToCreateDto } from './collection-schema-to-create';
 export { UniqueCollectionSchemaDecodedDto } from './collection-schema-decoded';
 
+@ApiExtraModels(DecodedAttributeDto)
 export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
-  @ApiProperty()
+  @ApiProperty({
+    type: 'array',
+    items: { $ref: getSchemaPath(DecodedAttributeDto) },
+  })
   attributes: DecodedAttributes;
 
   @ApiProperty()

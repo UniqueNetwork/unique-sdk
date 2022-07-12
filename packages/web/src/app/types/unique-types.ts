@@ -321,5 +321,6 @@ export class TokenInfoResponse implements TokenInfo {
   })
   url: string | null;
 
+  @ApiProperty({ type: TokenPropertiesResponse })
   properties: TokenPropertiesResponse;
 }

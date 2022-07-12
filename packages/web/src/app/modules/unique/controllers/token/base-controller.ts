@@ -1,7 +1,6 @@
-/* eslint-disable max-classes-per-file */
+import { Sdk } from '@unique-nft/sdk';
 import {
   Body,
-  Controller,
   Delete,
   Get,
   HttpCode,
@@ -10,27 +9,18 @@ import {
   Patch,
   Post,
   Query,
-  UseFilters,
-  UsePipes,
 } from '@nestjs/common';
-import { Sdk } from '@unique-nft/sdk';
-import { ApiTags } from '@nestjs/swagger';
-import { SdkExceptionsFilter } from '../../../utils/exception-filter';
-import { TokenInfoResponse } from '../../../types/unique-types';
 import {
   BurnTokenBody,
-  CreateTokenBody,
-  TokenIdQuery,
-  TransferTokenBody,
-  UnsignedTxPayloadResponse,
   NestTokenBody,
-  UnnestTokenBody,
   TokenChildrenResponse,
+  TokenIdQuery,
   TokenParentResponse,
   TopmostTokenOwnerResponse,
-} from '../../../types/sdk-methods';
-import { SdkValidationPipe } from '../../../validation';
-import { CreateTokenNewDto, UniqueTokenDecodedResponse } from './unique-schema';
+  TransferTokenBody,
+  UnnestTokenBody,
+} from './types';
+import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 
 export class BaseTokenController {
   constructor(readonly sdk: Sdk) {}
@@ -98,63 +88,5 @@ export class BaseTokenController {
         `no topmost owner for token with id ${args.collectionId} - ${args.tokenId}`,
       );
     }
-  }
-}
-
-@UsePipes(SdkValidationPipe)
-@UseFilters(SdkExceptionsFilter)
-@ApiTags('token')
-@Controller('token')
-export class TokenController extends BaseTokenController {
-  constructor(readonly sdk: Sdk) {
-    super(sdk);
-  }
-
-  @Get()
-  async getToken(@Query() args: TokenIdQuery): Promise<TokenInfoResponse> {
-    const token = await this.sdk.tokens.get(args);
-
-    if (token) return token;
-
-    throw new NotFoundException(
-      `no token with id ${args.collectionId} - ${args.tokenId}`,
-    );
-  }
-
-  @Post()
-  async createToken(
-    @Body() args: CreateTokenBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.create(args);
-  }
-}
-
-@UsePipes(SdkValidationPipe)
-@UseFilters(SdkExceptionsFilter)
-@ApiTags('token-new')
-@Controller('token-new')
-export class NewTokenController extends BaseTokenController {
-  constructor(readonly sdk: Sdk) {
-    super(sdk);
-  }
-
-  @Get()
-  async getTokenNew(
-    @Query() args: TokenIdQuery,
-  ): Promise<UniqueTokenDecodedResponse> {
-    const token = await this.sdk.tokens.get_new(args);
-
-    if (token) return token;
-
-    throw new NotFoundException(
-      `no token with id ${args.collectionId} - ${args.tokenId}`,
-    );
-  }
-
-  @Post()
-  async createToken(
-    @Body() args: CreateTokenNewDto,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.create_new.build(args);
   }
 }
