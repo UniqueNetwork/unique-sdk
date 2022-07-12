@@ -1,9 +1,10 @@
 import {
-  COLLECTION_SCHEMA_NAME,
+  CollectionSchemaName,
   CollectionAttributesSchema,
   InfixOrUrlOrCidAndHash,
   UniqueCollectionSchemaToCreate,
-} from '@unique-nft/api';
+} from '@unique-nft/sdk/tokens';
+
 import { ApiProperty } from '@nestjs/swagger';
 import {
   AttributesSchemaApiProperty,
@@ -34,7 +35,7 @@ export class UniqueCollectionSchemaToCreateDto
   image: ImageDto;
 
   @SchemaNameApiProperty
-  schemaName: COLLECTION_SCHEMA_NAME;
+  schemaName: CollectionSchemaName;
 
   @SchemaVersionApiProperty
   schemaVersion: string;

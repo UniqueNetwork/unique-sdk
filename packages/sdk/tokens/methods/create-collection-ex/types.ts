@@ -5,7 +5,6 @@ import {
   CollectionSchemaVersion,
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
-import { UniqueCollectionSchemaToCreate } from '@unique-nft/api';
 
 import { CollectionLimits } from '../set-collection-limits/types';
 
@@ -80,10 +79,5 @@ export interface CollectionInfoWithProperties extends CollectionInfoBase {
 
 export interface CreateCollectionArguments
   extends CollectionInfoWithProperties {
-  address: Address;
-}
-
-export interface CreateCollectionNewArguments extends CollectionInfoBase {
-  schema: UniqueCollectionSchemaToCreate;
   address: Address;
 }

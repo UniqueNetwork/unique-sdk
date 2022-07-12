@@ -1,5 +1,5 @@
-import { CollectionInfoBase } from '@unique-nft/sdk/tokens';
 import { UniqueCollectionSchemaDecoded } from '@unique-nft/api';
+import { CollectionInfoBase } from '../create-collection-ex/types';
 
 export interface CollectionInfoWithSchema extends CollectionInfoBase {
   id: number;

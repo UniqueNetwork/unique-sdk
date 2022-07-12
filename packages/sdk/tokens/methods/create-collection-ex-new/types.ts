@@ -1,6 +1,16 @@
 import { Address } from '@unique-nft/sdk/types';
-import { CollectionInfoBase } from '@unique-nft/sdk/tokens';
 import { UniqueCollectionSchemaToCreate } from '@unique-nft/api';
+import { CollectionInfoBase } from '../create-collection-ex/types';
+
+export {
+  AttributeType,
+  AttributeKind,
+  COLLECTION_SCHEMA_NAME as CollectionSchemaName,
+  CollectionAttributesSchema,
+  InfixOrUrlOrCidAndHash,
+} from '@unique-nft/api';
+
+export { UniqueCollectionSchemaToCreate } from '@unique-nft/api';
 
 export interface CreateCollectionNewArguments extends CollectionInfoBase {
   address: Address;

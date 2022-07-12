@@ -20,15 +20,13 @@ The method returns a `parsed` object that contains the `collectionId: number`.
 ## Examples
 
 ```typescript
-import { CreateCollectionArguments } from '@unique-nft/sdk/types';
-import { CreateCollectionNewArguments } from '@unique-nft/sdk/tokens/methods/create-collection-ex-new';
-
 import {
     UniqueCollectionSchemaToCreate,
-    COLLECTION_SCHEMA_NAME,
+    CollectionSchemaName,
     AttributeType,
     AttributeKind,
-} from '@unique-nft/api';
+    CreateCollectionNewArguments,
+} from '@unique-nft/sdk/tokens';
 
 const collectionSchema: UniqueCollectionSchemaToCreate = {
     schemaName: COLLECTION_SCHEMA_NAME.unique,
