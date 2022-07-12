@@ -19,7 +19,9 @@
     "fix:unique:nft:types": "find ./node_modules/@unique-nft/unique-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
-    "husky:install": "husky install"
+    "husky:install": "husky install",
+    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js",
+    "tools:generate:docs": "ts-node tools/generate-docs.ts"
   },
   "private": true,
   "dependencies": {
