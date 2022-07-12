@@ -53,6 +53,6 @@ export class AppModule implements NestModule {
     );
     consumer
       .apply(SignerMiddleware)
-      .forRoutes({ path: '/extrinsic/*', method: RequestMethod.POST });
+      .forRoutes({ path: '/*', method: RequestMethod.POST });
   }
 }

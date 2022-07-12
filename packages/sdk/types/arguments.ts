@@ -11,9 +11,9 @@ export interface SubmitResult {
   result$: Observable<ISubmittableResult>;
 }
 
-export interface ObservableSubmitResult {
+export interface ObservableSubmitResult<R> {
   hash: HexString;
-  result$: Observable<ISubmittableResult>;
+  result$: Observable<SubmittableResultInProcess<R>>;
 }
 
 export interface SignTxArguments {
