@@ -1,57 +1,30 @@
 import {
   Body,
-  Controller,
   Delete,
   Get,
   NotFoundException,
   Patch,
   Post,
   Query,
-  UseFilters,
-  UsePipes,
+  Inject,
+  CACHE_MANAGER,
 } from '@nestjs/common';
-
+import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
-import { ApiTags } from '@nestjs/swagger';
-import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import {
   BurnCollectionBody,
   CollectionIdQuery,
-  CreateCollectionBody,
   SetCollectionLimitsBody,
   TransferCollectionBody,
   UnsignedTxPayloadResponse,
-} from '../../../types/sdk-methods';
-import { SdkValidationPipe } from '../../../validation';
-import {
-  CollectionInfoResponse,
-  EffectiveCollectionLimitsResponse,
-} from '../../../types/unique-types';
+} from '../../../../types/sdk-methods';
+import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 
-@UsePipes(SdkValidationPipe)
-@UseFilters(SdkExceptionsFilter)
-@ApiTags('collection')
-@Controller('collection')
-export class CollectionController {
-  constructor(private readonly sdk: Sdk) {}
-
-  @Get()
-  async getCollection(
-    @Query() args: CollectionIdQuery,
-  ): Promise<CollectionInfoResponse> {
-    const collection = await this.sdk.collections.get(args);
-
-    if (collection) return collection;
-
-    throw new NotFoundException(`no collection with id ${args.collectionId}`);
-  }
-
-  @Post()
-  async createCollection(
-    @Body() args: CreateCollectionBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.creation.build(args);
-  }
+export class BaseCollectionController {
+  constructor(
+    readonly sdk: Sdk,
+    @Inject(CACHE_MANAGER) readonly cache: Cache,
+  ) {}
 
   @Get('limits')
   async effectiveCollectionLimits(

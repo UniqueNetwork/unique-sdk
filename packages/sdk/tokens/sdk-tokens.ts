@@ -8,6 +8,8 @@ import type {
 } from '@unique-nft/sdk/types';
 import { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import { Sdk } from '@unique-nft/sdk';
+import { UniqueTokenDecoded } from '@unique-nft/api';
+
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
 import { NestTokenMutation } from './methods/nest-token';
@@ -15,6 +17,7 @@ import { UnnestTokenMutation } from './methods/unnest-token';
 import { tokenChildrenQuery } from './methods/token-children';
 import { tokenParentQuery } from './methods/token-parent';
 import { topmostTokenOwnerQuery } from './methods/topmost-token-owner';
+import { tokenById } from './methods/token-by-id/method';
 import {
   BurnTokenArguments,
   NestTokenArguments,
@@ -30,6 +33,10 @@ import {
   TopmostTokenOwnerArguments,
   TopmostTokenOwnerResult,
 } from './types';
+import {
+  CreateTokenNewArguments,
+  CreateTokenNewMutation,
+} from './methods/create-token';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -38,6 +45,8 @@ export class SdkTokens {
     this.children = tokenChildrenQuery.bind(this.sdk);
     this.parent = tokenParentQuery.bind(this.sdk);
     this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
+    this.get_new = tokenById.bind(this.sdk);
+    this.create_new = new CreateTokenNewMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -48,6 +57,10 @@ export class SdkTokens {
 
   parent: QueryMethod<TokenParentArguments, TokenParentResult>;
 
+  get_new: QueryMethod<TokenIdArguments, UniqueTokenDecoded>;
+
+  create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
+
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
     TopmostTokenOwnerResult
@@ -57,12 +70,14 @@ export class SdkTokens {
     collectionId,
     tokenId,
   }: TokenIdArguments): Promise<TokenInfo | null> {
-
     const collection = await this.sdk.collections.get({ collectionId });
 
     if (!collection) return null;
 
-    const exists = await this.sdk.api.rpc.unique.tokenExists(collectionId, tokenId);
+    const exists = await this.sdk.api.rpc.unique.tokenExists(
+      collectionId,
+      tokenId,
+    );
 
     if (!exists.toHuman()) {
       return null;

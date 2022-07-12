@@ -25,7 +25,7 @@ describe('create-collection-ex', () => {
 
     const testAccounts = await getKeyringPairs();
 
-    account = testAccounts.alice;
+    account = testAccounts.eve;
 
     creation = new CreateCollectionExMutation(sdk);
 
