@@ -2,13 +2,17 @@
 
 Returns blockchain collection statistics.
 
+## Arguments
+
+No arguments required.
+
 ## Returns
 
 Blockchain collection stats:
 
-- **created** - The number of total collection created
-- **destroyed** - The number of destroyed collection
-- **alive** - The number of collections that still alive
+- **created** - The number of total collections created
+- **destroyed** - The number of destroyed collections
+- **alive** - The number of collections that are still alive
 
 ## Examples
 
