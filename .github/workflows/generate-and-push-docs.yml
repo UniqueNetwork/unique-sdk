@@ -1,0 +1,29 @@
+name: Generate and push docs
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  generate-and-push-docs:
+    name: Generate and push docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install project dependencies
+        run: npm ci
+      - name: Generate docs
+        run: npm run tools:generate:docs
+      - name: Push docs
+        uses: ./.github/actions/push-docs
+        with:
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+          dst_owner:
+          dst_repo:
+          dst_branch:
+          dst_path: docs/reference/sdk
+          src_path: dist/docs
