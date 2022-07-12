@@ -3,14 +3,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   CollectionIdArguments,
+  CollectionInfoWithSchema,
   CreateCollectionArguments,
+  CreateCollectionNewArguments,
 } from '@unique-nft/sdk/tokens';
-import { CollectionInfoBaseDto } from '../../../../types/unique-types';
+import {
+  CollectionInfoBaseDto,
+  CollectionInfoResponse,
+  CollectionInfoWithPropertiesDto,
+} from '../../../../types/unique-types';
 import { AddressApiProperty } from '../../../../types/sdk-methods';
 import { MutationResponse } from '../../../../decorators/mutation-method';
+import {
+  UniqueCollectionSchemaDecodedDto,
+  UniqueCollectionSchemaToCreateDto,
+} from '../unique-schema';
 
 export class CreateCollectionBody
-  extends CollectionInfoBaseDto
+  extends CollectionInfoWithPropertiesDto
   implements CreateCollectionArguments
 {
   @AddressApiProperty
@@ -25,4 +35,23 @@ export class CreateCollectionParsed implements CollectionIdArguments {
 export class CreateCollectionResponse extends MutationResponse {
   @ApiProperty()
   parsed: CreateCollectionParsed;
+}
+
+export class CreateCollectionNewRequest
+  extends CollectionInfoBaseDto
+  implements CreateCollectionNewArguments
+{
+  @AddressApiProperty
+  address: string;
+
+  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto })
+  schema: UniqueCollectionSchemaToCreateDto;
+}
+
+export class CollectionInfoWithSchemaResponse
+  extends CollectionInfoResponse
+  implements CollectionInfoWithSchema
+{
+  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto })
+  schema: UniqueCollectionSchemaDecodedDto;
 }
