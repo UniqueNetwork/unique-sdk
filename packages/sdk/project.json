@@ -3,10 +3,20 @@
   "sourceRoot": "packages/sdk/src",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:package",
+      "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "project": "packages/sdk/ng-package.json",
-        "tsConfig": "packages/sdk/tsconfig.lib.json"
+        "packageName": "sdk",
+        "distDir": "./dist/packages/sdk",
+        "entryPoints": [
+          "./index.ts",
+          "./extrinsics/index.ts",
+          "./balance/index.ts",
+          "./state-queries/index.ts",
+          "./tokens/index.ts",
+          "./utils/index.ts",
+          "./types/index.ts",
+          "./errors/index.ts"
+        ]
       }
     },
     "lint": {

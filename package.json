@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
-    "build:sdk": "rollup -c packages/sdk/rollup.config.js",
-    "build:accounts": "rollup -c packages/accounts/rollup.config.js",
+    "build:sdk": "nx build sdk",
+    "build:accounts": "nx build accounts",
     "build:web": "nx build web",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
@@ -20,7 +20,8 @@
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
-    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js"
+    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js",
+    "tools:generate:docs": "ts-node tools/generate-docs.ts"
   },
   "private": true,
   "dependencies": {
@@ -31,10 +32,12 @@
     "@nestjs/swagger": "^5.2.1",
     "@polkadot/api": "^8.6.2",
     "@polkadot/extension-dapp": "^0.44.1",
-    "@unique-nft/api": "0.1.5",
-    "@unique-nft/opal-testnet-types": "0.5.3",
-    "@unique-nft/quartz-mainnet-types": "0.6.1",
-    "@unique-nft/unique-mainnet-types": "0.6.3",
+    "@sentry/node": "^7.6.0",
+    "@sentry/tracing": "^7.6.0",
+    "@types/express": "^4.17.13",
+    "@unique-nft/opal-testnet-types": "0.5.2",
+    "@unique-nft/quartz-mainnet-types": "0.6.0",
+    "@unique-nft/unique-mainnet-types": "0.6.2",
     "cache-manager": "^4.0.1",
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",

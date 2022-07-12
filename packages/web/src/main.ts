@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app/app.module';
 import { addSwagger } from './app/utils/swagger';
 import { Config } from './app/config/config.module';
+import { initSentry } from './app/interceptors/sentry.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,8 @@ async function bootstrap() {
   if (prefix) {
     app.setGlobalPrefix(prefix);
   }
+
+  initSentry(app);
 
   // todo `npm start --with-swagger`? `npm run build:web:swagger`?
   addSwagger(app);

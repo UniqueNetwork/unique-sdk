@@ -1,0 +1,30 @@
+name: Publish SDK
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+jobs:
+  build-and-publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install project dependencies
+        run: npm install
+      - name: NPM Build
+        shell: bash
+        run: |
+          npm ci
+          npm run rollup:build:sdk
+      - name: NPM Publish
+        working-directory: ./dist/packages/sdk
+        shell: bash
+        run: |
+          npm version ${{ github.event.inputs.version }}
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+          npm publish --access public
