@@ -154,6 +154,8 @@ function generateMethods() {
   for (const method of methods) {
     const path = join(dir, method.name, 'README.md');
 
+    if (!fs.existsSync(path)) continue;
+
     const input = fs.readFileSync(path, 'utf8');
 
     const match = input.match(/\# (.+)/);
@@ -175,6 +177,8 @@ function generateMethods() {
 
   for (const method of methods) {
     const path = join(dir, method.name, 'README.md');
+
+    if (!fs.existsSync(path)) continue;
 
     let methodContent = fs.readFileSync(path, 'utf8');
 
