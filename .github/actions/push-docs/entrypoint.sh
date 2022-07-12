@@ -32,6 +32,6 @@ cp -R * $GITHUB_WORKSPACE/$DST_REPO/$DST_PATH
 cd $GITHUB_WORKSPACE/$DST_REPO
 
 git add .
-git commit -m "Generate docs from SDK release ${GITHUB_REF#refs/*/v}"
+git commit -m "Generate docs from SDK"
 
 git push $DST_REPO_PATH $DST_BRANCH

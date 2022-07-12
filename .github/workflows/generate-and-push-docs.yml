@@ -3,7 +3,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
-
+  workflow_dispatch:
 jobs:
   generate-and-push-docs:
     name: Generate and push docs
