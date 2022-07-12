@@ -21,6 +21,8 @@ export type Config = {
     name?: string;
     signer?: SignerConfig;
   };
+
+  sentryDsnUrl?: string;
 };
 
 export type SignerConfig = {
@@ -57,6 +59,8 @@ const loadConfig = (): Config => ({
   },
 
   cache: createCacheConfig(process.env),
+
+  sentryDsnUrl: process.env.SENTRY_DSN_URL,
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({
