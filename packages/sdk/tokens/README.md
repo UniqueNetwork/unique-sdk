@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="400px" src="../doc/logo-white.svg" alt="Unique Network">
+    <img width="400px" src="../../../doc/logo-white.svg" alt="Unique Network">
 
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
 [![uniquenetwork](https://img.shields.io/badge/unique-network-blue?style=flat-square)](https://unique.network/)
