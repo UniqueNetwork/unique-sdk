@@ -30,7 +30,7 @@ export type SignerConfig = {
 };
 
 const loadConfig = (): Config => ({
-  environment: process.env.NODE_ENV || 'development',
+  environment: process.env.ENVIRONMENT || 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
   chainWsUrl: process.env.CHAIN_WS_URL,
   prefix: process.env.PREFIX || '',
