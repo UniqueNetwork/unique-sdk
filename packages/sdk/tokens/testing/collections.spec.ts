@@ -8,6 +8,7 @@ import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
 
 import { CreateCollectionExMutation } from '../methods/create-collection-ex/method';
 import { CreateCollectionArguments } from '../methods/create-collection-ex/types';
+import { CollectionStatsResult } from '../methods/collection-stats/types';
 
 describe('create-collection-ex', () => {
   let sdk: Sdk;
@@ -17,6 +18,8 @@ describe('create-collection-ex', () => {
   let creation: CreateCollectionExMutation;
 
   let createArgs: CreateCollectionArguments;
+
+  let beforeCollectionStats: CollectionStatsResult;
 
   beforeAll(async () => {
     sdk = await createSdk({
@@ -36,6 +39,9 @@ describe('create-collection-ex', () => {
       tokenPrefix: 'BAZ',
       properties: {},
     };
+
+    beforeCollectionStats =
+      (await sdk.collections.collectionStats()) as CollectionStatsResult;
   });
 
   it('create and get', async () => {
@@ -61,5 +67,12 @@ describe('create-collection-ex', () => {
       description: createArgs.description,
       tokenPrefix: createArgs.tokenPrefix,
     });
+
+    const afterCollectionStats =
+      (await sdk.collections.collectionStats()) as CollectionStatsResult;
+
+    expect(afterCollectionStats.created).toBe(
+      beforeCollectionStats.created + 1,
+    );
   }, 30_000);
 });
