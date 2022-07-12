@@ -5,11 +5,14 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
+  INestApplication,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import * as Sentry from '@sentry/node';
 import { Request } from 'express';
+import { Config } from '../config/config.module';
 
 const getExtra = (context: ExecutionContext) => {
   const args = context.getArgs();
@@ -44,3 +47,18 @@ export class SentryInterceptor implements NestInterceptor {
     );
   }
 }
+
+export const initSentry = (app: INestApplication) => {
+  const config: ConfigService<Config> = app.get(ConfigService);
+
+  const sentryDsnUrl = config.get('sentryDsnUrl');
+  if (sentryDsnUrl) {
+    Sentry.init({
+      environment: config.get('environment'),
+      dsn: sentryDsnUrl,
+      tracesSampleRate: 1.0,
+    });
+
+    app.useGlobalInterceptors(new SentryInterceptor());
+  }
+};
