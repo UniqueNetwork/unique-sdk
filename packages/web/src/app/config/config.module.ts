@@ -3,7 +3,7 @@ import * as process from 'process';
 import { CacheConfig, createCacheConfig } from './cache.config';
 
 export type Config = {
-  isProduction: boolean;
+  environment: string;
   port: number;
   chainWsUrl: string;
   ipfsGatewayUrl: string;
@@ -30,7 +30,7 @@ export type SignerConfig = {
 };
 
 const loadConfig = (): Config => ({
-  isProduction: process.env.NODE_ENV !== 'development',
+  environment: process.env.NODE_ENV || 'develop',
   port: parseInt(process.env.PORT, 10) || 3000,
   chainWsUrl: process.env.CHAIN_WS_URL,
   prefix: process.env.PREFIX || '',

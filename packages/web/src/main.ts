@@ -27,6 +27,7 @@ async function bootstrap() {
   const sentryDsnUrl = config.get('sentryDsnUrl');
   if (sentryDsnUrl) {
     Sentry.init({
+      environment: config.get('environment'),
       dsn: sentryDsnUrl,
       tracesSampleRate: 1.0,
     });
