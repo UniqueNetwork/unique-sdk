@@ -24,11 +24,14 @@ async function bootstrap() {
     app.setGlobalPrefix(prefix);
   }
 
-  Sentry.init({
-    dsn: config.get('sentryDsnUrl'),
-    tracesSampleRate: 1.0,
-  });
-  app.useGlobalInterceptors(new SentryInterceptor());
+  const sentryDsnUrl = config.get('sentryDsnUrl');
+  if (sentryDsnUrl) {
+    Sentry.init({
+      dsn: sentryDsnUrl,
+      tracesSampleRate: 1.0,
+    });
+    app.useGlobalInterceptors(new SentryInterceptor());
+  }
 
   // todo `npm start --with-swagger`? `npm run build:web:swagger`?
   addSwagger(app);

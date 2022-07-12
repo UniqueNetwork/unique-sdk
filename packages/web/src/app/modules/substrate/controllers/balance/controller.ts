@@ -36,7 +36,6 @@ export class BalanceController {
 
   @Get()
   async getBalance(@Query() args: AddressQuery): Promise<AllBalancesResponse> {
-    throw new Error('test error');
     return this.sdk.balance.get(args);
   }
 
