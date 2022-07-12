@@ -1,27 +1,26 @@
 import * as fs from 'fs';
 import { join, resolve } from 'path';
 
-//
 const DOCS_OUTPUT_DIR = 'dist/docs';
-//
+
 const MAIN_README_INPUT = '.github/README.md';
 const MAIN_README_OUTPUT = 'dist/docs/sdk_main.md';
-//
+
 const WEB_README_INPUT = 'packages/web/README.md';
 const WEB_README_OUTPUT = 'dist/docs/web.md';
-//
+
 const SDK_README_INPUT = 'packages/sdk/README.md';
 const SDK_README_OUTPUT = 'dist/docs/sdk.md';
-//
+
 const ACCOUNTS_README_INPUT = 'packages/accounts/README.md';
 const ACCOUNTS_README_OUPUT = 'dist/docs/accounts.md';
-//
+
 const RECIPES_README_INPUT = 'recipes/README.md';
 const RECIPES_README_OUPUT = 'dist/docs/recipes.md';
-//
+
 const SDK_TOKENS_DIR = 'packages/sdk/tokens/methods';
 const SDK_METHODS_README_OUTPUT = 'dist/docs/sdk_methods.md';
-//
+
 const GITHUB_URL = 'https://github.com/UniqueNetwork/unique-sdk/tree/master';
 
 const LINK_REGEX = /\[(.*?)\]\((.*?)\)/g;
@@ -29,7 +28,7 @@ const PARAGRAPH_1_REGEX = /^\#{1} .+/gm;
 const PARAGRAPH_2_REGEX = /^\#{2} .+/gm;
 
 function deleteHeader(content: string) {
-  const regex = /<div align="center">[\W\w]*<\/div>[\n]*/g;
+  const regex = /<div align="center">[\W\w]*?<\/div>/;
 
   return content.replace(regex, '');
 }
