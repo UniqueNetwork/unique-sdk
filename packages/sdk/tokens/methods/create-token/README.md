@@ -1,4 +1,4 @@
-# Create token
+# Create token (new)
 
 ## Arguments
 

@@ -1,4 +1,4 @@
-# Get collection by Id
+# Get collection by Id (new)
 
 Returns collection info (with Unique schema)
 

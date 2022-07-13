@@ -1,4 +1,4 @@
-# Get collection by ID
+# Get collection by Id
 
 Returns collection info in human format.
 
