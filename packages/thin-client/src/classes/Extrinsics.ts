@@ -1,12 +1,22 @@
 import { Section } from './Section';
-import { SignTxResultResponse, UnsignedTxPayloadBody } from '../types/Api';
+import {
+  SignTxResultResponse,
+  UnsignedTxPayloadBody,
+  SubmitTxBody,
+  SubmitResultResponse,
+  ExtrinsicResultResponse,
+  FeeResponse,
+  TxBuildBody,
+} from '../types/Api';
 
 export class Extrinsics extends Section {
   public readonly path = `${this.client.options.url}/extrinsic`;
 
   // private readonly url = `${this.url}/extrinsic`;
 
-  async getFee(args: any) {
+  async getFee(
+    args: TxBuildBody | UnsignedTxPayloadBody | SubmitTxBody,
+  ): Promise<FeeResponse> {
     const response = await this.client.instance({
       method: 'POST',
       url: `${this.path}/calculate-fee`,
@@ -32,7 +42,7 @@ export class Extrinsics extends Section {
     // return response.data;
   }
 
-  async submit(args: any) {
+  async submit(args: SubmitTxBody): Promise<SubmitResultResponse> {
     const response = await this.client.instance({
       method: 'POST',
       url: `${this.path}/submit`,
@@ -41,7 +51,7 @@ export class Extrinsics extends Section {
     return response.data;
   }
 
-  async status(hash: string) {
+  async status(hash: string): Promise<ExtrinsicResultResponse> {
     const response = await this.client.instance({
       method: 'GET',
       url: `${this.path}/status?hash=${hash}`,

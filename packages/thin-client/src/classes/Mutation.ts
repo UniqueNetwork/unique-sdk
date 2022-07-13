@@ -78,23 +78,23 @@ export class Mutation<A, R> {
     return this.section.client.extrinsics.submit(submitTxArguments);
   }
 
-  async submitWatch(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
-    // todo здесь мы будем периодически пинговать GET extrinsics/status
-    const { hash } = await this.submit(args);
-    let checkStatusResult;
-    let i = 0;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      i += 1;
-      // eslint-disable-next-line no-await-in-loop
-      checkStatusResult = await this.section.client.extrinsics.status(hash);
-      if (checkStatusResult.ok && checkStatusResult.parsed)
-        return checkStatusResult;
-      if (i > 100 || !checkStatusResult.ok) {
-        return { ok: false };
-      }
-    }
-  }
+  // async submitWatch(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
+  //   // todo здесь мы будем периодически пинговать GET extrinsics/status
+  //   const { hash } = await this.submit(args);
+  //   let checkStatusResult;
+  //   let i = 0;
+  //   // eslint-disable-next-line no-constant-condition
+  //   while (true) {
+  //     i += 1;
+  //     // eslint-disable-next-line no-await-in-loop
+  //     checkStatusResult = await this.section.client.extrinsics.status(hash);
+  //     if (checkStatusResult.ok && checkStatusResult.parsed)
+  //       return checkStatusResult;
+  //     if (i > 100 || !checkStatusResult.ok) {
+  //       return { ok: false };
+  //     }
+  //   }
+  // }
 
   async submitWaitResult(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
