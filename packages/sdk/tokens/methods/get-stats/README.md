@@ -19,5 +19,5 @@ Blockchain collection stats:
 ```typescript
 import { GetStatsResult } from '@unique-nft/sdk/types';
 
-const stats: GetStatsResult = await sdk.collections.getStats();
+const stats: GetStatsResult | null = await sdk.collections.getStats();
 ```
