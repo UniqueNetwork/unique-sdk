@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "nx build",
-    "build:sdk": "rollup -c packages/sdk/rollup.config.js",
-    "build:accounts": "rollup -c packages/accounts/rollup.config.js",
+    "build:sdk": "nx build sdk",
+    "build:accounts": "nx build accounts",
     "build:web": "nx build web",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
@@ -14,13 +14,14 @@
     "test:accounts": "nx test accounts",
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "eslint ./packages/** --fix",
-    "start": "node ./dist/packages/web/main.js",
+    "start": "node -r source-map-support/register ./dist/packages/web/main.js",
     "legacy-postinstall": "npm run fix:unique:nft:types && npm run fix:quartz:nft:types && npm run fix:opal:nft:types && npm run husky:install",
     "fix:unique:nft:types": "find ./node_modules/@unique-nft/unique-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
-    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js"
+    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js",
+    "tools:generate:docs": "ts-node tools/generate-docs.ts"
   },
   "private": true,
   "dependencies": {
@@ -30,9 +31,14 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.1",
     "@polkadot/api": "^8.6.2",
-    "@unique-nft/unique-mainnet-types": "0.6.2",
-    "@unique-nft/quartz-mainnet-types": "0.6.0",
+    "@polkadot/extension-dapp": "^0.44.1",
+    "@sentry/node": "^7.6.0",
+    "@sentry/tracing": "^7.6.0",
+    "@types/express": "^4.17.13",
+    "@unique-nft/api": "^0.1.5",
     "@unique-nft/opal-testnet-types": "0.5.2",
+    "@unique-nft/quartz-mainnet-types": "0.6.0",
+    "@unique-nft/unique-mainnet-types": "0.6.2",
     "cache-manager": "^4.0.1",
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",
@@ -42,10 +48,10 @@
     "protobufjs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
+    "source-map-support": "^0.5.21",
     "swagger-ui-express": "^4.3.0",
     "tslib": "^2.0.0",
-    "yauzl": "^2.10.0",
-    "@polkadot/extension-dapp": "^0.44.1"
+    "yauzl": "^2.10.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",

@@ -6,7 +6,6 @@ import {
 } from '@unique-nft/sdk/utils';
 
 import type {
-  UpDataStructsCollectionLimits,
   UpDataStructsCollectionPermissions,
   UpDataStructsProperty,
   UpDataStructsRpcCollection,
@@ -27,6 +26,7 @@ import {
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
+  CollectionInfoWithProperties,
 } from '../methods/create-collection-ex/types';
 import {
   decodeCollectionLimits,
@@ -101,6 +101,19 @@ const decodeTokenPropertyPermissions = (
   tokenOwner: property.permission.tokenOwner.toHuman(),
 });
 
+export const decodeCollectionBase = (
+  collection: UpDataStructsRpcCollection,
+): CollectionInfoBase => ({
+  mode: collection.mode.type,
+  name: utf16ToString(collection.name),
+  description: utf16ToString(collection.description),
+  tokenPrefix: bytesToString(collection.tokenPrefix),
+  sponsorship: decodeCollectionSponsorship(collection.sponsorship),
+  limits: decodeCollectionLimits(collection.limits),
+
+  permissions: decodeCollectionPermissions(collection.permissions),
+});
+
 const decodeTokenPropertiesPermissions = (
   tokenPropertiesPermissions: UpDataStructsPropertyKeyPermission[],
 ): TokenPropertiesPermissions => {
@@ -115,15 +128,8 @@ const decodeTokenPropertiesPermissions = (
 
 export const decodeCollection = (
   collection: UpDataStructsRpcCollection,
-): CollectionInfoBase => ({
-  mode: collection.mode.type,
-  name: utf16ToString(collection.name),
-  description: utf16ToString(collection.description),
-  tokenPrefix: bytesToString(collection.tokenPrefix),
-  sponsorship: decodeCollectionSponsorship(collection.sponsorship),
-  limits: decodeCollectionLimits(collection.limits),
-
-  permissions: decodeCollectionPermissions(collection.permissions),
+): CollectionInfoWithProperties => ({
+  ...decodeCollectionBase(collection),
   properties: decodeCollectionProperties(collection.properties),
   tokenPropertyPermissions: decodeTokenPropertiesPermissions(
     collection.tokenPropertyPermissions,
