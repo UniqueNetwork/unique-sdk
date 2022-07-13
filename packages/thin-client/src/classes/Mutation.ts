@@ -51,15 +51,16 @@ export class Mutation<A, R> {
   ): Promise<SubmitTxBody> {
     // todo тут сами должны подписать (сбилдить если еще нет, смотри MutationMethodBase или как то так
 
-    if (!this.section.client.signer) throw new Error();
+    if (!this.section.client.signer) throw new Error('not signer');
 
     const unsigned = isUnsignedTxPayloadResponse(args)
       ? args
       : await this.build(args);
 
     const { signerPayloadJSON } = unsigned;
-    const { signature } = await this.section.client.signer.sign(
+    const { signature } = await this.section.client.extrinsics.sign(
       signerPayloadJSON,
+      this.section.client.signer,
     );
     return { signature, signerPayloadJSON };
   }

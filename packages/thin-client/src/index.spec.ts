@@ -1,8 +1,6 @@
 import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
 
 import { ThinClient } from './index';
-import { SignerPayloadJSONDto } from './types/Api';
-import { objectToCamel } from 'ipfs-http-client/types/src/lib/object-to-camel';
 
 const baseUrl = 'http://localhost:3000';
 
@@ -57,17 +55,30 @@ it('check balance changes', async () => {
   );
 }, 60_000);
 
-it('sign', async () => {
-  const signer: SdkSigner = await createSigner({ seed: '//Bob' });
-  const client = new ThinClient({ url: baseUrl }, signer);
-  const response = await client.balance.transfer.sign({
-    address: bobAddress,
-    destination: aliceAddress,
-    amount: 0.00001,
+describe('sign', () => {
+  it('success', async () => {
+    const signer: SdkSigner = await createSigner({ seed: '//Bob' });
+    const client = new ThinClient({ url: baseUrl }, signer);
+    const response = await client.balance.transfer.sign({
+      address: bobAddress,
+      destination: aliceAddress,
+      amount: 0.00001,
+    });
+    expect(response).toEqual(expect.any(Object));
+    expect(response).toMatchObject({
+      signerPayloadJSON: expect.any(Object),
+      signature: expect.any(String),
+    });
+  }, 60_000);
+
+  it('error', async () => {
+    const client = new ThinClient({ url: baseUrl }, null);
+    expect(
+      client.balance.transfer.sign({
+        address: bobAddress,
+        destination: aliceAddress,
+        amount: 0.00001,
+      }),
+    ).rejects.toThrowError();
   });
-  expect(response).toEqual(expect.any(Object));
-  expect(response).toMatchObject({
-    signerPayloadJSON: expect.any(Object),
-    signature: expect.any(String),
-  });
-}, 60_000);
+});
