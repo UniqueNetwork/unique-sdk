@@ -11,9 +11,8 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
-import { CollectionIdQuery } from '../../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../../validation';
 import {
   MutationMethod,
@@ -23,6 +22,7 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionResponse,
+  CollectionIdQuery,
 } from './types';
 import { BaseCollectionController } from './base-controller';
 
@@ -36,6 +36,7 @@ export class NewCollectionController extends BaseCollectionController {
   }
 
   @Get()
+  @ApiResponse({ type: CollectionInfoWithSchemaResponse })
   async getCollection(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionInfoWithSchemaResponse> {

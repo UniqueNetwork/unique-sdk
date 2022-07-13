@@ -63,6 +63,22 @@ const localizedStringDictionarySchema = {
   },
 };
 
+export const SchemaNameApiProperty = ApiProperty({
+  example: COLLECTION_SCHEMA_NAME.unique,
+  enum: COLLECTION_SCHEMA_NAME,
+});
+
+export const SchemaVersionApiProperty = ApiProperty({
+  example: '1.0.0',
+  type: 'string',
+});
+
+export const AttributesSchemaVersionApiProperty = SchemaVersionApiProperty;
+
+export const StringOrLocalizedString = ApiProperty({
+  oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
+});
+
 export class AttributeSchemaDto implements AttributeSchema {
   @ApiProperty({
     type: 'object',
@@ -89,6 +105,47 @@ export class AttributeSchemaDto implements AttributeSchema {
 
   @ApiProperty({ enum: AttributeType })
   type: AttributeType;
+}
+
+export class DecodedAttributeDto {
+  @StringOrLocalizedString
+  name: string | LocalizedStringDictionary;
+
+  @ApiProperty({
+    oneOf: [
+      {
+        oneOf: [
+          { type: 'string' },
+          { type: 'number' },
+          localizedStringDictionarySchema,
+        ],
+      },
+      {
+        type: 'array',
+        items: {
+          oneOf: [
+            { type: 'string' },
+            { type: 'number' },
+            localizedStringDictionarySchema,
+          ],
+        },
+      },
+    ],
+  })
+  value:
+    | string
+    | number
+    | LocalizedStringDictionary
+    | Array<string | number | LocalizedStringDictionary>;
+
+  @ApiProperty({ enum: AttributeType })
+  type: AttributeType;
+
+  @ApiProperty({ enum: AttributeKind })
+  kind: AttributeKind;
+
+  @ApiProperty()
+  isArray: boolean;
 }
 
 export class OldPropertiesDto {
@@ -130,18 +187,6 @@ export const AttributesSchemaApiProperty = ApiProperty({
   },
 });
 
-export const SchemaNameApiProperty = ApiProperty({
-  example: COLLECTION_SCHEMA_NAME.unique,
-  enum: COLLECTION_SCHEMA_NAME,
-});
-
-export const SchemaVersionApiProperty = ApiProperty({
-  example: '1.0.0',
-  type: 'string',
-});
-
-export const AttributesSchemaVersionApiProperty = SchemaVersionApiProperty;
-
 export class ImageDto {
   @ApiProperty({
     type: 'string',
@@ -171,7 +216,3 @@ export class AudioDto extends SpatialObjectDto {
   @ApiProperty()
   isLossless?: boolean;
 }
-
-export const StringOrLocalizedString = ApiProperty({
-  oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
-});

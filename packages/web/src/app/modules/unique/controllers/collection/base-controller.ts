@@ -11,14 +11,14 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
+import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
+import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {
-  BurnCollectionBody,
   CollectionIdQuery,
+  BurnCollectionBody,
   SetCollectionLimitsBody,
   TransferCollectionBody,
-  UnsignedTxPayloadResponse,
-} from '../../../../types/sdk-methods';
-import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
+} from './types';
 
 export class BaseCollectionController {
   constructor(
