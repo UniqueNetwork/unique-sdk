@@ -1,5 +1,6 @@
 import {
   FeeResponse,
+  SubmitResultResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
 } from '../types/Api';
@@ -59,14 +60,16 @@ export class Mutation<A, R> {
 
     const { signerPayloadJSON } = unsigned;
     const { signature } = await this.section.client.extrinsics.sign(
-      signerPayloadJSON,
+      unsigned,
       this.section.client.signer,
     );
     return { signature, signerPayloadJSON };
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async submit(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
+  async submit(
+    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  ): Promise<SubmitResultResponse> {
     // todo здесь дергаем this.section.client.extrinsics.submit(); и получаем хеш
     const submitTxArguments = isSubmitTxBody(args)
       ? args

@@ -1,5 +1,5 @@
 import { Section } from './Section';
-import { SignTxResultResponse } from '../types/Api';
+import { SignTxResultResponse, UnsignedTxPayloadBody } from '../types/Api';
 
 export class Extrinsics extends Section {
   public readonly path = `${this.client.options.url}/extrinsic`;
@@ -16,19 +16,26 @@ export class Extrinsics extends Section {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async sign(args: any, signer: any): Promise<SignTxResultResponse> {
+  async sign(
+    args: UnsignedTxPayloadBody,
+    signer: any,
+  ): Promise<SignTxResultResponse> {
     if (!signer) throw new Error(`No signer provided`);
 
     return signer.sign(args);
+    // const response = await this.client.instance({
+    //   method: 'POST',
+    //   url: `${this.path}/sign`,
+    //   headers: { Authorization: `Seed //Bob` },
+    //   data: args,
+    // });
+    // return response.data;
   }
 
   async submit(args: any) {
     const response = await this.client.instance({
       method: 'POST',
       url: `${this.path}/submit`,
-      headers: {
-        Authorization: 'Seed //Bob',
-      },
       data: args,
     });
     return response.data;

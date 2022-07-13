@@ -1,3 +1,7 @@
+import { Keyring } from '@polkadot/keyring';
+import { KeyringPair } from '@polkadot/keyring/types';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+
 import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
 
 import { ThinClient } from './index';
@@ -64,7 +68,6 @@ describe('sign', () => {
       destination: aliceAddress,
       amount: 0.00001,
     });
-    expect(response).toEqual(expect.any(Object));
     expect(response).toMatchObject({
       signerPayloadJSON: expect.any(Object),
       signature: expect.any(String),
@@ -81,4 +84,31 @@ describe('sign', () => {
       }),
     ).rejects.toThrowError();
   });
+});
+
+describe('submit', () => {
+  let bob: KeyringPair;
+  let alice: KeyringPair;
+
+  beforeAll(async () => {
+    await cryptoWaitReady();
+
+    const keyring = new Keyring({ type: 'sr25519' });
+
+    bob = keyring.addFromUri('//Bob');
+    alice = keyring.addFromUri('//Alice');
+  });
+
+  it('success', async () => {
+    const signer: SdkSigner = await createSigner({ seed: '//Bob' });
+    const client = new ThinClient({ url: baseUrl }, signer);
+    const response = await client.balance.transfer.submit({
+      address: bob.address,
+      destination: alice.address,
+      amount: 0.00001,
+    });
+    expect(response).toMatchObject({
+      hash: expect.any(String),
+    });
+  }, 60_000);
 });
