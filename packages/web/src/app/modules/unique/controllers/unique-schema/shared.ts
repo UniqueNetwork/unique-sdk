@@ -90,7 +90,7 @@ export class AttributeSchemaDto implements AttributeSchema {
       ],
     },
   })
-  enumValues: { [p: number]: number | string | LocalizedStringDictionary };
+  enumValues?: { [p: number]: number | string | LocalizedStringDictionary };
 
   @ApiProperty({
     oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
@@ -166,7 +166,7 @@ export const AttributesSchemaApiProperty = ApiProperty({
   type: 'object',
   additionalProperties: { $ref: getSchemaPath(AttributeSchemaDto) },
   example: {
-    '0': {
+    0: {
       name: { en: 'gender' },
       type: AttributeType.localizedStringDictionary,
       kind: AttributeKind.enum,
@@ -175,7 +175,7 @@ export const AttributesSchemaApiProperty = ApiProperty({
         1: { en: 'Female' },
       },
     },
-    '1': {
+    1: {
       name: { en: 'traits' },
       type: AttributeType.localizedStringDictionary,
       kind: AttributeKind.enumMultiple,

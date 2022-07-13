@@ -1,7 +1,6 @@
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import {
   CollectionSchemaName,
-  CollectionAttributesSchema,
   CollectionId,
   DecodedInfixOrUrlOrCidAndHash,
   UniqueCollectionSchemaDecoded,
@@ -26,7 +25,7 @@ export class UniqueCollectionSchemaDecodedDto
   implements UniqueCollectionSchemaDecoded
 {
   @AttributesSchemaApiProperty
-  attributesSchema: CollectionAttributesSchema;
+  attributesSchema: Record<number, AttributeSchemaDto>;
 
   @AttributesSchemaVersionApiProperty
   attributesSchemaVersion: string;
