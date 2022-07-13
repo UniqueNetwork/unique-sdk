@@ -5,10 +5,10 @@ import {
   AttributeKind,
   AttributeSchema,
   AttributeType,
-  COLLECTION_SCHEMA_NAME,
+  CollectionSchemaName,
   LocalizedStringDictionary,
   UrlTemplateString,
-} from '@unique-nft/api';
+} from '@unique-nft/sdk/tokens';
 
 const infixOrUrlOrCidAndHashSchema: SchemaObjectMetadata = {
   oneOf: [
@@ -64,8 +64,8 @@ const localizedStringDictionarySchema = {
 };
 
 export const SchemaNameApiProperty = ApiProperty({
-  example: COLLECTION_SCHEMA_NAME.unique,
-  enum: COLLECTION_SCHEMA_NAME,
+  example: CollectionSchemaName.unique,
+  enum: CollectionSchemaName,
 });
 
 export const SchemaVersionApiProperty = ApiProperty({

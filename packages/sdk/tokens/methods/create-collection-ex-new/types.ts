@@ -8,6 +8,18 @@ export {
   COLLECTION_SCHEMA_NAME as CollectionSchemaName,
   CollectionAttributesSchema,
   InfixOrUrlOrCidAndHash,
+  UniqueTokenDecoded,
+  AttributeSchema,
+  CollectionId,
+  UrlTemplateString,
+  DecodedInfixOrUrlOrCidAndHash,
+  TokenId,
+  SubOrEthAddressObj,
+  DecodedAttributes,
+  LocalizedStringDictionary,
+  UniqueTokenToCreate,
+  EncodedTokenAttributes,
+  UniqueCollectionSchemaDecoded,
 } from '@unique-nft/api';
 
 export { UniqueCollectionSchemaToCreate } from '@unique-nft/api';

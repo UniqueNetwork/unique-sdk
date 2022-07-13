@@ -4,6 +4,7 @@ export * from '../methods/create-collection-ex/types';
 export * from '../methods/create-collection-ex-new/types';
 export * from '../methods/collection-by-id/types';
 export * from '../methods/collection-by-id-new/types';
+export * from '../methods/create-token/types';
 export * from '../methods/nest-token/types';
 export * from '../methods/unnest-token/types';
 export * from '../methods/token-children/types';
