@@ -18,4 +18,6 @@ module.exports = {
   coverageDirectory: '../../coverage/packages/web',
   testPathIgnorePatterns: ['./utils.test.ts'],
   resolver: './tests/resolver.ts',
+  verbose: false,
+  setupFilesAfterEnv: ['<rootDir>/../../jest.setup.js'],
 };
