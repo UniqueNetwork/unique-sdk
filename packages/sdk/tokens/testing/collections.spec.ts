@@ -70,6 +70,7 @@ describe('create-collection-ex', () => {
     const afterCreationStats =
       (await sdk.collections.getStats()) as GetStatsResult;
 
+    // todo: Should also check 'destroyed' and 'alive' fields when collection deletion will be added.
     expect(afterCreationStats.created).toBe(initialStats.created + 1);
   }, 30_000);
 });
