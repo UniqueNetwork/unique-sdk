@@ -13,7 +13,7 @@ import { createSigner, SignerOptions, SdkSigner } from '@unique-nft/accounts/sig
 const signerOptions: SignerOptions = {
   seed: '//Alice'
 }
-const signer: SdkSigner = signerOptions(signerOptions);
+const signer: SdkSigner = createSigner(signerOptions);
 ```
 
 ## Sign with keyfile
@@ -24,7 +24,7 @@ import { createSigner, SignerOptions, SdkSigner } from '@unique-nft/accounts/sig
 const signerOptions: SignerOptions = {
   keyfile: <your json keyfile>
 }
-const signer: SdkSigner = signerOptions(signerOptions);
+const signer: SdkSigner = createSigner(signerOptions);
 ```
 
 ## Sign with Polkadot extension

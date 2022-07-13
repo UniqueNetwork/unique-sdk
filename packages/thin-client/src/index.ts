@@ -10,14 +10,18 @@ export class ThinClient {
 
   public readonly balance = new Balance(this);
 
+  public signer: any;
+
   constructor(
     public readonly options: {
       url: string;
     },
+    signer: any,
   ) {
     this.instance = Axios.create({
       baseURL: this.options.url,
       headers: { 'Access-Control-Allow-Origin': '*' },
     });
+    this.signer = signer;
   }
 }
