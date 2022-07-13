@@ -114,6 +114,7 @@ const encodeTokenPropertyPermissions = (
 export const encodeCollectionBase = (
   registry: Registry,
   collectionInfo: Partial<CollectionInfoBase>,
+  extra?: Record<string, object>,
 ): UpDataStructsCreateCollectionData => {
   const permissions = collectionInfo.permissions
     ? encodeCollectionPermissions(registry, collectionInfo.permissions)
@@ -132,6 +133,7 @@ export const encodeCollectionBase = (
   };
 
   const createData = {
+    ...extra,
     mode: collectionInfo.mode || CollectionMode.Nft,
     name: collectionInfo.name ? stringToUTF16(collectionInfo.name) : undefined,
     description: collectionInfo.description
@@ -162,11 +164,13 @@ export const encodeCollection = (
     collectionInfo.tokenPropertyPermissions,
   );
 
-  const base = encodeCollectionBase(registry, collectionInfo);
+  const base = encodeCollectionBase(registry, collectionInfo, {
+    properties,
+    tokenPropertyPermissions,
+  });
 
   return registry.createType<UpDataStructsCreateCollectionData>(
     'UpDataStructsCreateCollectionData',
     base,
-    { properties, tokenPropertyPermissions },
   );
 };

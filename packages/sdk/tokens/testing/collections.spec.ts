@@ -1,31 +1,30 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
-import '@unique-nft/sdk/tokens';
 import { Sdk } from '@unique-nft/sdk';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
-import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
-
-import { CreateCollectionExMutation } from '../methods/create-collection-ex/method';
-import { CreateCollectionArguments } from '../methods/create-collection-ex/types';
+import {
+  CreateCollectionArguments,
+  CreateCollectionExMutation,
+} from '@unique-nft/sdk/tokens';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/tests';
 
 describe('create-collection-ex', () => {
   let sdk: Sdk;
 
-  let account: KeyringPair;
+  let account: TestAccount;
 
   let creation: CreateCollectionExMutation;
 
   let createArgs: CreateCollectionArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Alice',
-    });
+    sdk = await createSdk(true);
 
-    const testAccounts = await getKeyringPairs();
-
-    account = testAccounts.eve;
+    account = createRichAccount();
 
     creation = new CreateCollectionExMutation(sdk);
 

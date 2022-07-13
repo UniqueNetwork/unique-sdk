@@ -1,4 +1,3 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
@@ -6,34 +5,37 @@ import '@unique-nft/sdk/balance';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SubmitTxArguments } from '@unique-nft/sdk/types';
 import {
-  getDefaultSdkOptions,
-  getKeyringPairs,
+  createPoorAccount,
+  createRichAccount,
+  createSdk,
   signWithAccount,
+  TestAccount,
 } from './testing-utils';
 import { Sdk } from '../src/lib/sdk';
 
 describe('watch TX', () => {
   let sdk: Sdk;
-  let eve: KeyringPair;
-  let ferdie: KeyringPair;
+  let richAccount: TestAccount;
+  let poorAccount: TestAccount;
 
   beforeAll(async () => {
-    ({ eve, ferdie } = await getKeyringPairs());
+    sdk = await createSdk(false);
 
-    sdk = await Sdk.create(getDefaultSdkOptions());
+    richAccount = createRichAccount();
+    poorAccount = createPoorAccount();
   });
 
   const getSignedTransfer = async (
     amount: string | number,
   ): Promise<SubmitTxArguments> => {
     const { signerPayloadJSON, signerPayloadHex } = await sdk.extrinsics.build({
-      address: eve.address,
+      address: richAccount.address,
       section: 'balances',
       method: 'transfer',
-      args: [ferdie.address, amount],
+      args: [poorAccount.address, amount],
     });
 
-    const signature = signWithAccount(sdk, eve, signerPayloadHex);
+    const signature = signWithAccount(sdk, richAccount, signerPayloadHex);
 
     return { signerPayloadJSON, signature };
   };
@@ -48,7 +50,7 @@ describe('watch TX', () => {
   }, 60_000);
 
   it('watch extrinsic failed', async () => {
-    const balance = await sdk.balance.get({ address: eve.address });
+    const balance = await sdk.balance.get({ address: richAccount.address });
 
     const signedTransfer = await getSignedTransfer(
       balance.availableBalance.raw,

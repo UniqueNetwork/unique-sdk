@@ -1,5 +1,8 @@
 import { KeyringPair } from '@polkadot/keyring/types';
-import { signWithAccount } from '@unique-nft/sdk/tests/testing-utils';
+import {
+  signWithAccount,
+  TestAccount,
+} from '@unique-nft/sdk/tests/testing-utils';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '@unique-nft/sdk';
 import { TokenInfo } from '@unique-nft/sdk/types';
@@ -7,8 +10,8 @@ import { TokenInfo } from '@unique-nft/sdk/types';
 export async function createToken(
   sdk: Sdk,
   collectionId: number,
-  authorAccount: KeyringPair,
-  ownerAccount?: KeyringPair,
+  authorAccount: TestAccount,
+  ownerAccount?: TestAccount,
 ): Promise<TokenInfo> {
   const constData = {
     name: `token_${Math.floor(Math.random() * 1000)}`,

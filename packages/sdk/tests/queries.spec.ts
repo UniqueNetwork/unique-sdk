@@ -1,19 +1,18 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
 import { BuildQueryError } from '@unique-nft/sdk/errors';
 import '@unique-nft/sdk/state-queries';
 
-import { getDefaultSdkOptions, getKeyringPairs } from './testing-utils';
+import { createRichAccount, createSdk, TestAccount } from './testing-utils';
 
 describe('Sdk Queries', () => {
   let sdk: Sdk;
-  let alice: KeyringPair;
+
+  let richAccount: TestAccount;
 
   beforeAll(async () => {
-    sdk = await Sdk.create(getDefaultSdkOptions());
+    sdk = await createSdk(false);
 
-    const testAccounts = await getKeyringPairs();
-    alice = testAccounts.alice;
+    richAccount = createRichAccount();
   });
 
   it('derive.balances.all', async () => {
@@ -21,7 +20,7 @@ describe('Sdk Queries', () => {
       endpoint: 'derive',
       module: 'balances',
       method: 'all',
-      args: [alice.address],
+      args: [richAccount.address],
     });
     expect(result).toMatchObject({
       availableBalance: expect.any(Object),
@@ -33,7 +32,7 @@ describe('Sdk Queries', () => {
       endpoint: 'derive',
       module: 'accounts',
       method: 'accountId',
-      args: [alice.address],
+      args: [richAccount.address],
     });
     expect(result).toMatchObject({
       rawType: 'AccountId',
@@ -60,7 +59,7 @@ describe('Sdk Queries', () => {
           endpoint,
           module,
           method,
-          args: [alice.address],
+          args: [richAccount.address],
         });
       }).rejects.toThrowError(new BuildQueryError(errorMessage));
     },

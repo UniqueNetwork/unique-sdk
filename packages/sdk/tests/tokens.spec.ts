@@ -1,34 +1,40 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 
 import { Sdk } from '../src/lib/sdk';
-import { createSdk, getKeyringPairs, TestAccounts } from './testing-utils';
+import {
+  createPoorAccount,
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from './testing-utils';
 import { createCollection } from './utils/collection-create.test';
 import { createToken } from './utils/token-create.test';
 
 describe('Sdk Tokens', () => {
   let sdk: Sdk;
-  let testAccounts: TestAccounts;
-  let alice: KeyringPair;
-  let bob: KeyringPair;
+  let richAccount: TestAccount;
+  let poorAccount: TestAccount;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Bob',
-    });
-    testAccounts = await getKeyringPairs();
-    alice = testAccounts.alice;
-    bob = testAccounts.bob;
+    sdk = await createSdk(true);
+
+    richAccount = createRichAccount();
+    poorAccount = createPoorAccount();
   });
 
   it('transfer', async () => {
-    const collection = await createCollection(sdk, bob);
-    const token = await createToken(sdk, collection.id, bob, alice);
+    const collection = await createCollection(sdk, richAccount);
+    const token = await createToken(
+      sdk,
+      collection.id,
+      richAccount,
+      poorAccount,
+    );
     const unsignedPayload = await sdk.tokens.transfer({
-      from: bob.address,
-      to: alice.address,
+      from: richAccount.address,
+      to: poorAccount.address,
       collectionId: collection.id,
       tokenId: token.id,
     });

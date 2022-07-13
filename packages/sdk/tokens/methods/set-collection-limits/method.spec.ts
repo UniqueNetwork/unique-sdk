@@ -1,6 +1,9 @@
 import { Sdk } from '@unique-nft/sdk';
-import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
-import { KeyringPair } from '@polkadot/keyring/types';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/tests';
 import { SetCollectionLimitsMutation } from './method';
 import { SetCollectionLimitsArguments } from './types';
 import { CreateCollectionExMutation } from '../create-collection-ex/method';
@@ -8,24 +11,20 @@ import { CreateCollectionExMutation } from '../create-collection-ex/method';
 describe('set-collection-limits', () => {
   let sdk: Sdk;
 
-  let account: KeyringPair;
+  let richAccount: TestAccount;
 
   let limits: SetCollectionLimitsMutation;
 
   let limitsArgs: SetCollectionLimitsArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Alice',
-    });
+    sdk = await createSdk(true);
 
-    const testAccounts = await getKeyringPairs();
-
-    account = testAccounts.alice;
+    richAccount = createRichAccount();
     limits = new SetCollectionLimitsMutation(sdk);
 
     limitsArgs = {
-      address: account.address,
+      address: richAccount.address,
       collectionId: 1,
       limits: {
         accountTokenOwnershipLimit: 1000,
@@ -54,7 +53,7 @@ describe('set-collection-limits', () => {
 
   it('set collection limits', async () => {
     const createArgs = {
-      address: account.address,
+      address: richAccount.address,
       name: `foo_${Math.floor(Math.random() * 1000)}`,
       description: 'bar',
       tokenPrefix: 'BAZ',

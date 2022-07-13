@@ -1,6 +1,9 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import { Sdk } from '@unique-nft/sdk';
-import { createSdk } from '@unique-nft/sdk/tests';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/tests';
 import { getNestingTokenAddress } from '@unique-nft/sdk/tokens';
 import {
   NestTokenArguments,
@@ -15,16 +18,17 @@ import {
   TokenChildrenResult,
 } from '@unique-nft/sdk/tokens/types';
 import { Keyring } from '@polkadot/api';
+import { normalizeAddress } from '@unique-nft/sdk/utils';
+import { Address } from '@unique-nft/sdk/types';
 
 describe('Tokens', () => {
   let sdk: Sdk;
-  let account: KeyringPair;
+  let richAccount: TestAccount;
   let collectionId: number;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Alice',
-    });
+    sdk = await createSdk(true);
+    richAccount = createRichAccount();
 
     const chainProperties = sdk.api.registry.getChainProperties();
 
@@ -35,10 +39,8 @@ describe('Tokens', () => {
 
     keyring.setSS58Format(ss58Format);
 
-    account = keyring.addFromUri('//Alice');
-
     const result = await sdk.collections.creation.submitWaitResult({
-      address: account.address,
+      address: richAccount.address,
       description: 'Testing collection',
       name: 'Test',
       tokenPrefix: 'TEST',
@@ -57,10 +59,10 @@ describe('Tokens', () => {
       const tokens = [{ NFT: {} }, { NFT: {} }, { NFT: {} }];
       const tx = sdk.api.tx.unique.createMultipleItems(
         collectionId,
-        { Substrate: account.address },
+        { Substrate: richAccount.address },
         tokens,
       );
-      tx.signAndSend(account, ({ status }) => {
+      tx.signAndSend(richAccount.keyringPair, ({ status }) => {
         if (status.isInBlock) {
           resolve({});
         }
@@ -76,7 +78,7 @@ describe('Tokens', () => {
 
   it('nestToken', async () => {
     const args: NestTokenArguments = {
-      address: account.address,
+      address: richAccount.address,
       parent: {
         collectionId,
         tokenId: 1,
@@ -140,14 +142,16 @@ describe('Tokens', () => {
 
     const result = await sdk.tokens.topmostOwner(args);
 
-    const expected: TopmostTokenOwnerResult = account.address;
+    const expected: TopmostTokenOwnerResult = richAccount.address;
 
-    expect(result).toStrictEqual(expected);
+    expect(normalizeAddress(result as Address)).toStrictEqual(
+      normalizeAddress(expected as Address),
+    );
   }, 60_000);
 
   it('unnestToken', async () => {
     const args: UnnestTokenArguments = {
-      address: account.address,
+      address: richAccount.address,
       parent: {
         collectionId,
         tokenId: 1,

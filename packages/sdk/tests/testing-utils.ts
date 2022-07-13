@@ -1,82 +1,59 @@
-import { cryptoWaitReady } from '@polkadot/util-crypto';
+/* eslint-disable @typescript-eslint/dot-notation */
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring } from '@polkadot/keyring';
 import { HexString } from '@polkadot/util/types';
 import { SdkOptions } from '@unique-nft/sdk/types';
 import { Sdk } from '@unique-nft/sdk';
-import {
-  createSigner,
-  SignerOptions,
-  SdkSigner,
-} from '@unique-nft/accounts/sign';
+import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
+import * as process from 'process';
 
-export const getDefaultSdkOptions = (): SdkOptions => ({
-  chainWsUrl: 'wss://ws-rc.unique.network',
-});
+const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob';
+const TEST_POOR_ACCOUNT = process.env['TEST_POOR_ACCOUNT'] || '//Alice';
+const TEST_ANOTHER_ACCOUNT = process.env['TEST_ANOTHER_ACCOUNT'] || '//Eve';
+const TEST_CHAIN_WS_URL =
+  process.env['TEST_CHAIN_WS_URL'] || 'wss://ws-rc.unique.network';
 
-export async function createSdk(signerOptions?: SignerOptions): Promise<Sdk> {
-  const defOptions = getDefaultSdkOptions();
-
-  const signer: SdkSigner | undefined = signerOptions
-    ? await createSigner(signerOptions)
+export async function createSdk(withSign: boolean): Promise<Sdk> {
+  const signer: SdkSigner | undefined = withSign
+    ? await createSigner({
+        seed: TEST_RICH_ACCOUNT,
+      })
     : undefined;
 
   const options: SdkOptions = {
-    chainWsUrl: defOptions.chainWsUrl,
+    chainWsUrl: TEST_CHAIN_WS_URL,
     signer,
   };
 
   return Sdk.create(options);
 }
 
-export type TestAccounts = {
-  alice: KeyringPair;
-  bob: KeyringPair;
-  charlie: KeyringPair;
-  dave: KeyringPair;
-  eve: KeyringPair;
-  ferdie: KeyringPair;
+export type TestAccount = {
+  keyringPair: KeyringPair;
+  seed: string;
+  address: string;
 };
 
-export const getKeyringPairs = async (): Promise<TestAccounts> => {
-  await cryptoWaitReady();
+function createAccount(seed: string): TestAccount {
   const keyring = new Keyring({ type: 'sr25519' });
-
+  const keyringPair = keyring.addFromMnemonic(seed);
   return {
-    alice: keyring.addFromUri('//Alice'),
-    bob: keyring.addFromUri('//Bob'),
-    charlie: keyring.addFromUri('//Charlie'),
-    dave: keyring.addFromUri('//Dave'),
-    eve: keyring.addFromUri('//Eve'),
-    ferdie: keyring.addFromUri('//Ferdie'),
+    keyringPair,
+    seed,
+    address: keyringPair.address,
   };
-};
-
-export const getLastCollectionId = (sdk: Sdk): Promise<number> =>
-  sdk.api.rpc.unique
-    .collectionStats()
-    .then(({ created }) => created.toNumber());
-
-export const getLastTokenId = (
-  sdk: Sdk,
-  collectionId: number,
-): Promise<number> =>
-  sdk.api.rpc.unique
-    .lastTokenId(collectionId)
-    .then((tokenId) => tokenId.toNumber());
-
-export const delay = (ms = 1000) =>
-  new Promise<void>((resolve) => {
-    setTimeout(resolve, ms);
-  });
+}
+export const createRichAccount = () => createAccount(TEST_RICH_ACCOUNT);
+export const createPoorAccount = () => createAccount(TEST_POOR_ACCOUNT);
+export const createAnotherAccount = () => createAccount(TEST_ANOTHER_ACCOUNT);
 
 export function signWithAccount(
   sdk: Sdk,
-  account: KeyringPair,
+  account: TestAccount,
   signerPayloadHex: HexString,
 ): HexString {
   return sdk.extrinsics.packSignatureType(
-    account.sign(signerPayloadHex),
-    account.type,
+    account.keyringPair.sign(signerPayloadHex),
+    account.keyringPair.type,
   );
 }

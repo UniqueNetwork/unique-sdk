@@ -12,9 +12,7 @@ describe('create-collection-ex', () => {
   let createArgs: CreateCollectionArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Alice',
-    });
+    sdk = await createSdk(true);
 
     creation = new CreateCollectionExMutation(sdk);
 
