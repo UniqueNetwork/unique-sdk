@@ -37,4 +37,12 @@ export class Extrinsics extends Section {
     });
     return response.data;
   }
+
+  async status(hash: string) {
+    const response = await this.client.instance({
+      method: 'GET',
+      url: `${this.path}/status?hash=${hash}`,
+    });
+    return response.data;
+  }
 }

@@ -5,10 +5,15 @@ import {
 } from '../types/Api';
 import { Section } from './Section';
 import { isUnsignedTxPayloadResponse, isSubmitTxBody } from '../utils';
-import { isSubmitTxArguments } from '@unique-nft/sdk/extrinsics';
 
 export interface MutationOptions {
   signer?: any;
+}
+
+export interface SubmittableResultCompleted<T> {
+  submittableResult?: any;
+  isCompleted: true;
+  parsed: T;
 }
 
 export class Mutation<A, R> {
@@ -63,19 +68,39 @@ export class Mutation<A, R> {
     return this.section.client.extrinsics.submit(submitTxArguments);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async submitWatch(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
     // todo здесь мы будем периодически пинговать GET extrinsics/status
+    const { hash } = await this.submit(args);
+    let checkStatusResult;
+    let i = 0;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      i += 1;
+      // eslint-disable-next-line no-await-in-loop
+      checkStatusResult = await this.section.client.extrinsics.status(hash);
+      if (checkStatusResult.ok && checkStatusResult.parsed)
+        return checkStatusResult;
+      if (i > 100 || !checkStatusResult.ok) {
+        return { ok: false };
+      }
+    }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async submitWaitResult(args: any) {
+  async submitWaitResult(
+    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  ): Promise<SubmittableResultCompleted<R>> {
     // todo здесь мы будем дергать submitWatch и возвращать красивые данные
     const response = await this.section.client.instance({
       method: this.method,
       url: `${this.url}?use=Result`,
+      headers: {
+        Authorization: 'Seed //Bob',
+      },
       data: args,
     });
-    return response.data;
+    return {
+      isCompleted: true,
+      parsed: response.data,
+    };
   }
 }

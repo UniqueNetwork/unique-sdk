@@ -557,6 +557,29 @@ export interface ExtrinsicResultResponse {
   events: ExtrinsicResultEvent;
 }
 
+export interface BalanceResponse {
+  /** @example 92485000000000000 */
+  raw: string;
+
+  /** @example 0.092485000000000000 */
+  amount: string;
+
+  /** @example 92.4850 m */
+  formatted: string;
+
+  /** @example UNQ */
+  unit: string;
+
+  /** @example 18 */
+  decimals: number;
+}
+
+export interface AllBalancesResponse {
+  availableBalance: BalanceResponse;
+  lockedBalance: BalanceResponse;
+  freeBalance: BalanceResponse;
+}
+
 export interface BalanceTransferBody {
   /**
    * The ss-58 encoded address
