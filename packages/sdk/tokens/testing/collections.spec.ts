@@ -8,7 +8,7 @@ import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
 
 import { CreateCollectionExMutation } from '../methods/create-collection-ex/method';
 import { CreateCollectionArguments } from '../methods/create-collection-ex/types';
-import { CollectionStatsResult } from '../methods/collection-stats/types';
+import { GetStatsResult } from '../methods/get-stats/types';
 
 describe('create-collection-ex', () => {
   let sdk: Sdk;
@@ -19,7 +19,7 @@ describe('create-collection-ex', () => {
 
   let createArgs: CreateCollectionArguments;
 
-  let beforeCollectionStats: CollectionStatsResult;
+  let initialStats: GetStatsResult;
 
   beforeAll(async () => {
     sdk = await createSdk({
@@ -40,8 +40,7 @@ describe('create-collection-ex', () => {
       properties: {},
     };
 
-    beforeCollectionStats =
-      (await sdk.collections.collectionStats()) as CollectionStatsResult;
+    initialStats = (await sdk.collections.getStats()) as GetStatsResult;
   });
 
   it('create and get', async () => {
@@ -68,11 +67,9 @@ describe('create-collection-ex', () => {
       tokenPrefix: createArgs.tokenPrefix,
     });
 
-    const afterCollectionStats =
-      (await sdk.collections.collectionStats()) as CollectionStatsResult;
+    const afterCreationStats =
+      (await sdk.collections.getStats()) as GetStatsResult;
 
-    expect(afterCollectionStats.created).toBe(
-      beforeCollectionStats.created + 1,
-    );
+    expect(afterCreationStats.created).toBe(initialStats.created + 1);
   }, 30_000);
 });

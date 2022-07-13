@@ -17,8 +17,7 @@ Blockchain collection stats:
 ## Examples
 
 ```typescript
-import { CollectionStatsResult } from '@unique-nft/sdk/types';
+import { GetStatsResult } from '@unique-nft/sdk/types';
 
-const collectionStats: CollectionStatsResult =
-  await sdk.collections.collectionStats();
+const stats: GetStatsResult = await sdk.collections.getStats();
 ```
