@@ -2,15 +2,14 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 import { TxBuildArguments, Balance } from '@unique-nft/sdk/types';
-
-import { Sdk } from '../src/lib/sdk';
+import { Sdk } from '@unique-nft/sdk';
 import {
   signWithAccount,
   createSdk,
   createRichAccount,
   createPoorAccount,
   TestAccount,
-} from './testing-utils';
+} from '@unique-nft/sdk/tests';
 
 describe(Sdk.name, () => {
   let sdk: Sdk;

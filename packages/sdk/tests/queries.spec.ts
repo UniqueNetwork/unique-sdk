@@ -1,8 +1,11 @@
 import { Sdk } from '@unique-nft/sdk';
 import { BuildQueryError } from '@unique-nft/sdk/errors';
 import '@unique-nft/sdk/state-queries';
-
-import { createRichAccount, createSdk, TestAccount } from './testing-utils';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/tests';
 
 describe('Sdk Queries', () => {
   let sdk: Sdk;

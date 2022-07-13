@@ -57,3 +57,6 @@ export function signWithAccount(
     account.keyringPair.type,
   );
 }
+
+export * from './collection-create.test';
+export * from './token-create.test';

@@ -1,14 +1,14 @@
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
-
 import {
   createPoorAccount,
   createRichAccount,
   createSdk,
   signWithAccount,
   TestAccount,
-} from './testing-utils';
+} from '@unique-nft/sdk/tests';
+
 import { Sdk } from '../src/lib/sdk';
 
 describe('multiple TXs', () => {

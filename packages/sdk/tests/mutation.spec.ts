@@ -3,7 +3,7 @@ import {
   createPoorAccount,
   createRichAccount,
   createSdk,
-} from '@unique-nft/sdk/tests/testing-utils';
+} from '@unique-nft/sdk/tests';
 import { SeedSigner } from '@unique-nft/accounts/sign';
 
 describe(AnyMutation.name, () => {

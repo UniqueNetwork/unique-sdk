@@ -10,7 +10,7 @@ import {
   createSdk,
   signWithAccount,
   TestAccount,
-} from './testing-utils';
+} from '@unique-nft/sdk/tests';
 import { Sdk } from '../src/lib/sdk';
 
 describe('watch TX', () => {

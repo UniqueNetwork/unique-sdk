@@ -1,8 +1,4 @@
-import { KeyringPair } from '@polkadot/keyring/types';
-import {
-  signWithAccount,
-  TestAccount,
-} from '@unique-nft/sdk/tests/testing-utils';
+import { signWithAccount, TestAccount } from '@unique-nft/sdk/tests';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '@unique-nft/sdk';
 import { TokenInfo } from '@unique-nft/sdk/types';

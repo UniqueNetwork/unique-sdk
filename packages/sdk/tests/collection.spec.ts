@@ -1,16 +1,15 @@
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
-
-import { Sdk } from '../src/lib/sdk';
+import { Sdk } from '@unique-nft/sdk';
 import {
   createPoorAccount,
   createRichAccount,
   createSdk,
   TestAccount,
-} from './testing-utils';
-import { createCollection } from './utils/collection-create.test';
-import { createToken } from './utils/token-create.test';
+} from '@unique-nft/sdk/tests';
+
+import { createCollection, createToken } from '@unique-nft/sdk/tests/utils';
 
 describe('Collections and tokens', () => {
   let sdk: Sdk;
