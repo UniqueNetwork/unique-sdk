@@ -10,6 +10,7 @@ export * from '../methods/token-children/types';
 export * from '../methods/token-parent/types';
 export * from '../methods/topmost-token-owner/types';
 export * from '../methods/set-collection-limits/types';
+export * from '../methods/get-stats/types';
 
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
