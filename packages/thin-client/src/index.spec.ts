@@ -12,18 +12,33 @@ const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
 const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
 
 describe('balance', () => {
+  let bob: KeyringPair;
+  let alice: KeyringPair;
+  let signer: SdkSigner;
+  let client: ThinClient;
+
+  beforeAll(async () => {
+    await cryptoWaitReady();
+
+    const keyring = new Keyring({ type: 'sr25519' });
+
+    bob = keyring.addFromUri('//Bob');
+    alice = keyring.addFromUri('//Alice');
+
+    signer = await createSigner({ seed: '//Bob' });
+    client = new ThinClient({ url: baseUrl }, signer);
+  });
+
   it('transfer', async () => {
-    const client = new ThinClient({ url: baseUrl }, 1);
     const response: object = await client.balance.transfer.build({
-      address: bobAddress,
-      destination: aliceAddress,
+      address: bob.address,
+      destination: alice.address,
       amount: 0.00001,
     });
     expect(response).toEqual(expect.any(Object));
   }, 60_000);
 
   it('sign', async () => {
-    const client = new ThinClient({ url: baseUrl }, 1);
     const response: object = await client.balance.transfer.sign({
       address: bobAddress,
       destination: aliceAddress,
@@ -32,8 +47,7 @@ describe('balance', () => {
     expect(response).toEqual(expect.any(Object));
   }, 60_000);
 
-  it('submitWaitResult', async () => {
-    const client = new ThinClient({ url: baseUrl }, 1);
+  it('submitWatch', async () => {
     const response: object = await client.balance.transfer.submitWaitResult({
       address: bobAddress,
       destination: aliceAddress,
@@ -44,7 +58,8 @@ describe('balance', () => {
 });
 
 it('check balance changes', async () => {
-  const client = new ThinClient({ url: baseUrl }, 1);
+  const signer = await createSigner({ seed: '//Bob' });
+  const client = new ThinClient({ url: baseUrl }, signer);
   const initBalanceResponse = await client.balance.get({ address: bobAddress });
   const transferResponse = await client.balance.transfer.submitWaitResult({
     address: bobAddress,

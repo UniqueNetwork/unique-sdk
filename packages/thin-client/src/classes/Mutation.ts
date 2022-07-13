@@ -1,11 +1,12 @@
 import {
+  ExtrinsicResultResponse,
   FeeResponse,
   SubmitResultResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
 } from '../types/Api';
 import { Section } from './Section';
-import { isUnsignedTxPayloadResponse, isSubmitTxBody } from '../utils';
+import { isUnsignedTxPayloadResponse, isSubmitTxBody, sleep } from '../utils';
 
 export interface MutationOptions {
   signer?: any;
@@ -78,39 +79,43 @@ export class Mutation<A, R> {
     return this.section.client.extrinsics.submit(submitTxArguments);
   }
 
-  // async submitWatch(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
-  //   // todo здесь мы будем периодически пинговать GET extrinsics/status
-  //   const { hash } = await this.submit(args);
-  //   let checkStatusResult;
-  //   let i = 0;
-  //   // eslint-disable-next-line no-constant-condition
-  //   while (true) {
-  //     i += 1;
-  //     // eslint-disable-next-line no-await-in-loop
-  //     checkStatusResult = await this.section.client.extrinsics.status(hash);
-  //     if (checkStatusResult.ok && checkStatusResult.parsed)
-  //       return checkStatusResult;
-  //     if (i > 100 || !checkStatusResult.ok) {
-  //       return { ok: false };
-  //     }
-  //   }
-  // }
-
-  async submitWaitResult(
+  async submitWatch(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<SubmittableResultCompleted<R>> {
+  ): Promise<ExtrinsicResultResponse> {
+    // todo здесь мы будем периодически пинговать GET extrinsics/status
+    const { hash } = await this.submit(args);
+    let checkStatusResult;
+    let i = 0;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      i += 1;
+      // eslint-disable-next-line no-await-in-loop
+      await sleep(20_000);
+      // eslint-disable-next-line no-await-in-loop
+      checkStatusResult = await this.section.client.extrinsics.status(hash);
+      if (checkStatusResult.isCompleted && !checkStatusResult.isError)
+        return checkStatusResult;
+      if (i > 100 || checkStatusResult.isError) {
+        throw new Error();
+      }
+    }
+  }
+
+  async submitWaitResult(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
+    // : Promise<SubmittableResultCompleted<R>>
     // todo здесь мы будем дергать submitWatch и возвращать красивые данные
-    const response = await this.section.client.instance({
-      method: this.method,
-      url: `${this.url}?use=Result`,
-      headers: {
-        Authorization: 'Seed //Bob',
-      },
-      data: args,
-    });
-    return {
-      isCompleted: true,
-      parsed: response.data,
-    };
+    // const response = await this.section.client.instance({
+    //   method: this.method,
+    //   url: `${this.url}?use=Result`,
+    //   headers: {
+    //     Authorization: 'Seed //Bob',
+    //   },
+    //   data: args,
+    // });
+    // return {
+    //   isCompleted: true,
+    //   parsed: response.data,
+    // };
+    return await this.submitWatch(args);
   }
 }
