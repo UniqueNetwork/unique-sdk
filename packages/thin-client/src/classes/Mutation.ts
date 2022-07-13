@@ -1,5 +1,15 @@
-import { UnsignedTxPayloadResponse } from '../types/Api';
+import {
+  FeeResponse,
+  SubmitTxBody,
+  UnsignedTxPayloadResponse,
+} from '../types/Api';
 import { Section } from './Section';
+import { isUnsignedTxPayloadResponse, isSubmitTxBody } from '../utils';
+import { isSubmitTxArguments } from '@unique-nft/sdk/extrinsics';
+
+export interface MutationOptions {
+  signer?: any;
+}
 
 export class Mutation<A, R> {
   private readonly url = `${this.section.path}/${this.path}`;
@@ -19,31 +29,42 @@ export class Mutation<A, R> {
     return response.data;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async getFee(args: A) {
-    const payload = await this.build(args);
+  async getFee(
+    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  ): Promise<FeeResponse> {
+    const payload =
+      isUnsignedTxPayloadResponse(args) || isSubmitTxBody(args)
+        ? args
+        : await this.build(args);
+
     return this.section.client.extrinsics.getFee(payload);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async sign(args: A) {
+  async sign(args: A | UnsignedTxPayloadResponse, options?: MutationOptions) {
     // todo тут сами должны подписать (сбилдить если еще нет, смотри MutationMethodBase или как то так
-    const response = await this.build(args);
-    const result = await this.section.client.extrinsics.sign(response);
-    return result;
+
+    const unsigned = isUnsignedTxPayloadResponse(args)
+      ? args
+      : await this.build(args);
+
+    const { signerPayloadJSON } = unsigned;
+    const { signature } = await this.section.client.extrinsics.sign(unsigned);
+
+    return { signature, signerPayloadJSON };
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async submit(args: any) {
+  async submit(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
     // todo здесь дергаем this.section.client.extrinsics.submit(); и получаем хеш
-    const buildResponse = await this.build(args);
-    const result = await this.section.client.extrinsics.sign(buildResponse);
-    const response = await this.section.client.extrinsics.submit(result);
-    return response.data;
+    const submitTxArguments = isSubmitTxBody(args)
+      ? args
+      : await this.sign(args);
+
+    return this.section.client.extrinsics.submit(submitTxArguments);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async submitWatch() {
+  async submitWatch(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
     // todo здесь мы будем периодически пинговать GET extrinsics/status
   }
 

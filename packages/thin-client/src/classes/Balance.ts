@@ -1,23 +1,12 @@
 import { Mutation } from './Mutation';
 import { Section } from './Section';
-
-interface BalanceTransferRequest {
-  address: string;
-  destination: string;
-  amount: number;
-}
-
-interface BalanceTransferResponse {
-  address: string;
-  destination: string;
-  amount: number;
-}
+import { BalanceTransferBody, BalanceTransferParsed } from '../types/Api';
 
 export class Balance extends Section {
   public readonly path = `${this.client.options.url}/balance`;
 
   public readonly transfer = new Mutation<
-    BalanceTransferRequest,
-    BalanceTransferResponse
+    BalanceTransferBody,
+    BalanceTransferParsed
   >(this, 'POST', 'transfer');
 }
