@@ -28,6 +28,21 @@ import { getStats } from './methods/get-stats/method';
 import { CollectionInfoWithSchema } from './methods/collection-by-id-new/types';
 import { CreateCollectionExNewMutation } from './methods/create-collection-ex-new/method';
 import { CreateCollectionNewArguments } from './methods/create-collection-ex-new/types';
+import {
+  SetTokenPropertyPermissionsMutation,
+  SetTokenPropertyPermissionsArguments,
+  SetTokenPropertyPermissionsResult,
+} from './methods/set-token-property-permissions';
+import {
+  SetCollectionPropertiesArguments,
+  SetCollectionPropertiesResult,
+  SetCollectionPropertiesMutation,
+} from './methods/set-collection-properties';
+import {
+  DeleteCollectionPropertiesArguments,
+  DeleteCollectionPropertiesResult,
+  DeleteCollectionPropertiesMutation,
+} from './methods/delete-collection-properties';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
@@ -38,6 +53,11 @@ export class SdkCollections {
     this.creation_new = new CreateCollectionExNewMutation(this.sdk);
     this.setLimits = new SetCollectionLimitsMutation(this.sdk);
     this.getStats = getStats.bind(this.sdk);
+    this.setProperties = new SetCollectionPropertiesMutation(this.sdk);
+    this.deleteProperties = new DeleteCollectionPropertiesMutation(this.sdk);
+    this.setTokenPropertyPermissions = new SetTokenPropertyPermissionsMutation(
+      this.sdk,
+    );
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -62,6 +82,21 @@ export class SdkCollections {
   >;
 
   getStats: QueryMethod<void, GetStatsResult>;
+
+  setProperties: MutationMethodWrap<
+    SetCollectionPropertiesArguments,
+    SetCollectionPropertiesResult
+  >;
+
+  deleteProperties: MutationMethodWrap<
+    DeleteCollectionPropertiesArguments,
+    DeleteCollectionPropertiesResult
+  >;
+
+  setTokenPropertyPermissions: MutationMethodWrap<
+    SetTokenPropertyPermissionsArguments,
+    SetTokenPropertyPermissionsResult
+  >;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({

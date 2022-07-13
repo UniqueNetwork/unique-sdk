@@ -19,6 +19,16 @@ import { tokenParentQuery } from './methods/token-parent';
 import { topmostTokenOwnerQuery } from './methods/topmost-token-owner';
 import { tokenById } from './methods/token-by-id/method';
 import {
+  DeleteTokenPropertiesMutation,
+  DeleteTokenPropertiesArguments,
+  DeleteTokenPropertiesResult,
+} from './methods/delete-token-properties';
+import {
+  SetTokenPropertiesMutation,
+  SetTokenPropertiesArguments,
+  SetTokenPropertiesResult,
+} from './methods/set-token-properties';
+import {
   BurnTokenArguments,
   NestTokenArguments,
   NestTokenResult,
@@ -47,6 +57,8 @@ export class SdkTokens {
     this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
     this.get_new = tokenById.bind(this.sdk);
     this.create_new = new CreateTokenNewMutation(this.sdk);
+    this.setProperties = new SetTokenPropertiesMutation(this.sdk);
+    this.deleteProperties = new DeleteTokenPropertiesMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -64,6 +76,16 @@ export class SdkTokens {
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
     TopmostTokenOwnerResult
+  >;
+
+  setProperties: MutationMethodWrap<
+    SetTokenPropertiesArguments,
+    SetTokenPropertiesResult
+  >;
+
+  deleteProperties: MutationMethodWrap<
+    DeleteTokenPropertiesArguments,
+    DeleteTokenPropertiesResult
   >;
 
   async get({

@@ -11,6 +11,11 @@ export * from '../methods/token-parent/types';
 export * from '../methods/topmost-token-owner/types';
 export * from '../methods/set-collection-limits/types';
 export * from '../methods/get-stats/types';
+export * from '../methods/set-collection-properties';
+export * from '../methods/delete-collection-properties';
+export * from '../methods/set-token-properties';
+export * from '../methods/delete-token-properties';
+export * from '../methods/set-token-property-permissions';
 
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
