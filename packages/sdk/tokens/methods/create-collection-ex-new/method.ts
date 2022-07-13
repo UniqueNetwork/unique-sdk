@@ -7,6 +7,7 @@ import { SchemaTools } from '@unique-nft/api';
 import { CollectionIdArguments } from '../collection-by-id/types';
 import { CreateCollectionNewArguments } from './types';
 import { encodeCollectionBase } from '../../utils/encode-collection';
+import { AttributesTransformer } from './utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -21,10 +22,14 @@ export class CreateCollectionExNewMutation extends MutationMethodBase<
 
     const encodedBase = encodeCollectionBase(this.sdk.api.registry, rest);
 
-    const properties = SchemaTools.encodeUnique.collectionSchema(schema);
+    const properties = SchemaTools.encodeUnique.collectionSchema(
+      AttributesTransformer.toOriginal(schema),
+    );
 
     const tokenPropertyPermissions =
-      SchemaTools.encodeUnique.collectionTokenPropertyPermissions(schema);
+      SchemaTools.encodeUnique.collectionTokenPropertyPermissions(
+        AttributesTransformer.toOriginal(schema),
+      );
 
     const encodedCollection = {
       ...encodedBase,

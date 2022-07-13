@@ -3,8 +3,10 @@ import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { SchemaObjectMetadata } from '@nestjs/swagger/dist/interfaces/schema-object-metadata.interface';
 import {
   AttributeKind,
+  AttributeKindName,
   AttributeSchema,
   AttributeType,
+  AttributeTypeName,
   CollectionSchemaName,
   LocalizedStringDictionary,
   UrlTemplateString,
@@ -101,10 +103,10 @@ export class AttributeSchemaDto implements AttributeSchema {
   optional?: boolean;
 
   @ApiProperty({ enum: AttributeKind })
-  kind: AttributeKind;
+  kind: AttributeKindName;
 
   @ApiProperty({ enum: AttributeType })
-  type: AttributeType;
+  type: AttributeTypeName;
 }
 
 export class DecodedAttributeDto {
@@ -139,10 +141,10 @@ export class DecodedAttributeDto {
     | Array<string | number | LocalizedStringDictionary>;
 
   @ApiProperty({ enum: AttributeType })
-  type: AttributeType;
+  type: AttributeTypeName;
 
   @ApiProperty({ enum: AttributeKind })
-  kind: AttributeKind;
+  kind: AttributeKindName;
 
   @ApiProperty()
   isArray: boolean;
@@ -168,8 +170,8 @@ export const AttributesSchemaApiProperty = ApiProperty({
   example: {
     0: {
       name: { en: 'gender' },
-      type: AttributeType.localizedStringDictionary,
-      kind: AttributeKind.enum,
+      type: 'localizedStringDictionary',
+      kind: 'enum',
       enumValues: {
         0: { en: 'Male' },
         1: { en: 'Female' },
@@ -177,8 +179,8 @@ export const AttributesSchemaApiProperty = ApiProperty({
     },
     1: {
       name: { en: 'traits' },
-      type: AttributeType.localizedStringDictionary,
-      kind: AttributeKind.enumMultiple,
+      type: 'localizedStringDictionary',
+      kind: 'enumMultiple',
       enumValues: {
         0: { en: 'Black Lipstick' },
         1: { en: 'Red Lipstick' },
