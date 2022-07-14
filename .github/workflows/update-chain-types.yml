@@ -1,0 +1,23 @@
+on:
+  schedule:
+    - cron: 0 */24 * * *
+
+name: Update types
+jobs:
+  package-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: set remote url
+        run: git remote set-url --push origin https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+      - name: package-update
+        uses: taichi/actions-package-update@master
+        env:
+          AUTHOR_EMAIL: ashkucc@gmail.com
+          AUTHOR_NAME: ashkuc
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOG_LEVEL: debug
+          EXECUTE: "true"
+          UPDATE_COMMAND: npm
+        with:
+          args: install --save --save-exact @unique-nft/opal-testnet-types@latest @unique-nft/quartz-mainnet-types@latest @unique-nft/unique-mainnet-types@latest
