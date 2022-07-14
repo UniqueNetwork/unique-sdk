@@ -1,35 +1,50 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
+  createPoorAccount,
+  createRichAccount,
   createSdk,
-  getKeyringPairs,
-  TestAccounts,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 
 import { BalanceTransferMutation } from './method';
 import { BalanceTransferArguments } from './types';
 
 describe('balance-transfer', () => {
+  it('ok', async () => {
+    const sdk: Sdk = await createSdk(true);
+    const richAccount = createRichAccount();
+    const poorAccount = createPoorAccount();
+    const { isCompleted, parsed } = await sdk.balance.transfer.submitWaitResult(
+      {
+        address: richAccount.address,
+        destination: poorAccount.address,
+        amount: 0.01,
+      },
+    );
+
+    expect(isCompleted).toBe(true);
+    expect(parsed.success).toBe(true);
+  }, 30_000);
+});
+
+describe('balance-transfer', () => {
   let sdk: Sdk;
-  let testAccounts: TestAccounts;
 
   let transfer: BalanceTransferMutation;
 
   let createArgs: BalanceTransferArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Bob',
-    });
+    sdk = await createSdk(true);
 
-    testAccounts = await getKeyringPairs();
+    const richAccount = createRichAccount();
+
+    const poorAccount = createPoorAccount();
 
     transfer = new BalanceTransferMutation(sdk);
 
-    // 5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty
-    // 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
     createArgs = {
-      address: testAccounts.bob.address,
-      destination: testAccounts.alice.address,
+      address: richAccount.address,
+      destination: poorAccount.address,
       amount: 0.00023,
     };
   });

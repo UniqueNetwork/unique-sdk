@@ -11,7 +11,7 @@ async function tokenChildren(
     args.tokenId,
   );
 
-  const children = tokenChildrenOption.toHuman() as Array<{
+  const children = tokenChildrenOption.toJSON() as Array<{
     token: string;
     collection: string;
   }>;

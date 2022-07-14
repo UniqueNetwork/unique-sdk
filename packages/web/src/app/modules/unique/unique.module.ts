@@ -1,16 +1,18 @@
 import { Module } from '@nestjs/common';
-import { TokenController } from './controllers/token.controller';
 import {
   OldCollectionController,
   NewCollectionController,
 } from './controllers/collection';
+import { OldTokenController, NewTokenController } from './controllers/token';
+
 import { SubstrateModule } from '../substrate/substrate.module';
 import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
 
 @Module({
   imports: [SdkProviderModule, SubstrateModule.forPrimary()],
   controllers: [
-    TokenController,
+    OldTokenController,
+    NewTokenController,
     OldCollectionController,
     NewCollectionController,
   ],

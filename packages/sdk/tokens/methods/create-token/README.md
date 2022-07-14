@@ -1,4 +1,4 @@
-# Create collection
+# Create token (new)
 
 ## Arguments
 
