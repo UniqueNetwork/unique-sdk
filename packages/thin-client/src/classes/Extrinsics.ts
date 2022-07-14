@@ -10,12 +10,9 @@ import {
 } from '../types/Api';
 
 export class Extrinsics extends Section {
-  public readonly path = `${this.client.options.url}/extrinsic`;
+  public readonly path = 'extrinsic';
 
-  // todo path = 'extrinsics'
-  // todo baseUrl = this.client.options.baseUrl + '/' + this.path;
-
-  // private readonly url = `${this.url}/extrinsic`;
+  public readonly baseUrl = `${this.client.options.baseUrl}/${this.path}`;
 
   // todo create метод эксринсика
 
@@ -24,7 +21,7 @@ export class Extrinsics extends Section {
   ): Promise<FeeResponse> {
     const response = await this.client.instance({
       method: 'POST',
-      url: `${this.path}/calculate-fee`,
+      url: `${this.baseUrl}/calculate-fee`,
       data: args,
       // todo baseUrl = this.baseUrl
       // todo url: 'calculate-fee'
@@ -35,7 +32,7 @@ export class Extrinsics extends Section {
   // eslint-disable-next-line class-methods-use-this
   async sign(
     args: UnsignedTxPayloadBody,
-    signer: any, // todo signer = this.client.options.signer
+    signer: any = this.client.options.signer,
   ): Promise<SignTxResultResponse> {
     if (!signer) throw new Error(`No signer provided`);
 
@@ -52,7 +49,7 @@ export class Extrinsics extends Section {
   async submit(args: SubmitTxBody): Promise<SubmitResultResponse> {
     const response = await this.client.instance({
       method: 'POST',
-      url: `${this.path}/submit`,
+      url: `${this.baseUrl}/submit`,
       data: args,
     });
     return response.data;
@@ -61,8 +58,8 @@ export class Extrinsics extends Section {
   async status(hash: string): Promise<ExtrinsicResultResponse> {
     const response = await this.client.instance({
       method: 'GET',
-      url: `${this.path}/status?hash=${hash}`,
-      // todo params: { hash },
+      url: `${this.baseUrl}/status`,
+      params: { hash },
     });
     return response.data;
   }

@@ -32,7 +32,7 @@ describe('balance', () => {
     alice = keyring.addFromUri('//Alice');
 
     signer = await createSigner({ seed: '//Bob' });
-    client = new ThinClient({ url: baseUrl }, signer);
+    client = new ThinClient({ baseUrl, signer });
   });
 
   it('fee for BalanceTransferBody', async () => {
@@ -44,7 +44,7 @@ describe('balance', () => {
     expect(response).toEqual(expect.any(Object));
   }, 60_000);
 
-  it('transfer; fee for UnsignedTxPayloadResponse', async () => {
+  it('build; fee for UnsignedTxPayloadResponse', async () => {
     const response: UnsignedTxPayloadResponse =
       await client.balance.transfer.build({
         address: bob.address,
@@ -99,7 +99,7 @@ describe('balance', () => {
 
 it('check balance changes', async () => {
   const signer = await createSigner({ seed: '//Bob' });
-  const client = new ThinClient({ url: baseUrl }, signer);
+  const client = new ThinClient({ baseUrl, signer });
   const initBalanceResponse = await client.balance.get({ address: bobAddress });
   const transferResponse = await client.balance.transfer.submitWaitResult({
     address: bobAddress,
@@ -117,7 +117,7 @@ it('check balance changes', async () => {
 describe('sign', () => {
   it('success', async () => {
     const signer: SdkSigner = await createSigner({ seed: '//Bob' });
-    const client = new ThinClient({ url: baseUrl }, signer);
+    const client = new ThinClient({ baseUrl, signer });
     const response = await client.balance.transfer.sign({
       address: bobAddress,
       destination: aliceAddress,
@@ -130,7 +130,7 @@ describe('sign', () => {
   }, 60_000);
 
   it('error', async () => {
-    const client = new ThinClient({ url: baseUrl }, null);
+    const client = new ThinClient({ baseUrl, signer: null });
     expect(
       client.balance.transfer.sign({
         address: bobAddress,
@@ -156,7 +156,7 @@ describe('submit', () => {
 
   it('success', async () => {
     const signer: SdkSigner = await createSigner({ seed: '//Bob' });
-    const client = new ThinClient({ url: baseUrl }, signer);
+    const client = new ThinClient({ baseUrl, signer });
     const response = await client.balance.transfer.submit({
       address: bob.address,
       destination: alice.address,
