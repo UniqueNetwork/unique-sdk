@@ -1,4 +1,3 @@
-import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { SdkSigner, SignerOptions } from './types';
 import { SeedSigner } from './seed-signer';
 import { KeyfileSigner } from './keyfile-signer';
@@ -16,12 +15,4 @@ export function createSignerSync(signerOptions: SignerOptions): SdkSigner {
   }
 
   throw new Error('Not known options');
-}
-
-export async function createSigner(
-  signerOptions: SignerOptions,
-): Promise<SdkSigner> {
-  await cryptoWaitReady();
-
-  return createSignerSync(signerOptions);
 }

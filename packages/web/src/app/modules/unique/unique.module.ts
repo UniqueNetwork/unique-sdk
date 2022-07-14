@@ -7,6 +7,7 @@ import { OldTokenController, NewTokenController } from './controllers/token';
 
 import { SubstrateModule } from '../substrate/substrate.module';
 import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
+import { SignerNestModule } from '../../utils/signer.module';
 
 @Module({
   imports: [SdkProviderModule, SubstrateModule.forPrimary()],
@@ -17,4 +18,4 @@ import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
     NewCollectionController,
   ],
 })
-export class UniqueModule {}
+export class UniqueModule extends SignerNestModule {}

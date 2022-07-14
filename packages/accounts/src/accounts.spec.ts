@@ -1,66 +1,25 @@
-import { Keyring } from '@polkadot/keyring';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-
-import { generateAccount, getAccountFromMnemonic } from './accounts';
+import { Accounts, KeyringProvider } from './accounts';
 
 describe('Accounts', () => {
   beforeAll(async () => {
     await cryptoWaitReady();
   });
 
-  it.each([undefined, '', 'pass1'])('generate ok - %s', async (password) => {
-    await expect(async () => {
-      const newAccount = await generateAccount({ password });
+  it('create provider', async () => {
+    const accounts = new Accounts();
 
-      const account = new Keyring({ type: 'sr25519' }).addFromJson(
-        newAccount.keyfile as KeyringPair$Json,
-      );
-      account.unlock(password);
-    }).not.toThrowError();
-  });
+    const provider = new KeyringProvider();
 
-  it('get from mnemonic ok', async () => {
-    const account1 = await generateAccount({ password: 'pass1' });
+    accounts.addKeyringProvider(provider);
 
-    const account2 = await getAccountFromMnemonic({
-      mnemonic: account1.mnemonic,
-      password: 'pass1',
-    });
-
-    expect(account1.seed).toEqual(account2.seed);
-    expect(account1.keyfile.address).toEqual(account2.keyfile.address);
-  });
-
-  it('different seeds', async () => {
-    const account1 = await generateAccount({ password: 'pass1' });
-
-    const account2 = await getAccountFromMnemonic({
-      mnemonic: account1.mnemonic,
-      password: 'pass2',
-    });
-
-    expect(account1.seed).not.toEqual(account2.seed);
-    expect(account1.keyfile.address).not.toEqual(account2.keyfile.address);
-  });
-
-  it('invalid pass fail', async () => {
-    const newAccount = await generateAccount({ password: 'pass1' });
-
-    const keypair = new Keyring({ type: 'sr25519' }).addFromJson(
-      newAccount.keyfile as KeyringPair$Json,
+    const account = provider.addSeed(
+      'bus ahead nation nice damp recall place dance guide media clap language',
     );
-
-    expect(() => keypair.unlock('pass2')).toThrowError();
-  });
-
-  it('invalid mnemonic fail', async () => {
-    const mnemonic = 'invalid mnemonic';
-    await expect(async () => {
-      await getAccountFromMnemonic({
-        mnemonic,
-        password: 'pass1',
-      });
-    }).rejects.toThrowError(new Error('Invalid bip39 mnemonic specified'));
+    console.log(
+      'account',
+      account.instance.address,
+      '5HNUuEAYMWEo4cuBW7tuL9mLHR9zSA8H7SdNKsNnYRB9M5TX',
+    );
   });
 });

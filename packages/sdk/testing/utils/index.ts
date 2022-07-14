@@ -4,7 +4,7 @@ import { Keyring } from '@polkadot/keyring';
 import { HexString } from '@polkadot/util/types';
 import { SdkOptions } from '@unique-nft/sdk/types';
 import { Sdk } from '@unique-nft/sdk';
-import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
+import { KeyringProvider, SignatureType } from '@unique-nft/accounts';
 import * as process from 'process';
 
 const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob';
@@ -13,16 +13,20 @@ const TEST_ANOTHER_ACCOUNT = process.env['TEST_ANOTHER_ACCOUNT'] || '//Eve';
 const TEST_CHAIN_WS_URL =
   process.env['TEST_CHAIN_WS_URL'] || 'wss://ws-rc.unique.network';
 
-export async function createSdk(withSign: boolean): Promise<Sdk> {
-  const signer: SdkSigner | undefined = withSign
-    ? await createSigner({
-        seed: TEST_RICH_ACCOUNT,
-      })
-    : undefined;
+async function createSigner() {
+  const accountsProvider = new KeyringProvider({
+    type: SignatureType.Sr25519,
+  });
 
+  await accountsProvider.init();
+
+  return accountsProvider.addSeed(TEST_RICH_ACCOUNT).getSigner();
+}
+
+export async function createSdk(withSign: boolean): Promise<Sdk> {
   const options: SdkOptions = {
     chainWsUrl: TEST_CHAIN_WS_URL,
-    signer,
+    signer: withSign ? await createSigner() : undefined,
   };
 
   return Sdk.create(options);

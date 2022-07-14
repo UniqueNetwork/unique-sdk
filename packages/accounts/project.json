@@ -8,9 +8,7 @@
         "packageName": "accounts",
         "distDir": "./dist/packages/accounts",
         "entryPoints": [
-          "./index.ts",
-          "./sign/index.ts",
-          "./sign/polkadot/index.ts"
+          "./index.ts"
         ]
       }
     },

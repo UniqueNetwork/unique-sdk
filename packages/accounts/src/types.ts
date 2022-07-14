@@ -2,6 +2,17 @@
 import 'reflect-metadata';
 import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+
+export interface UnsignedTxPayload {
+  signerPayloadJSON: SignerPayloadJSON;
+  signerPayloadRaw: SignerPayloadRaw;
+  signerPayloadHex: HexString;
+}
+
+export interface Signer {
+  sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult>;
+}
 
 export enum SignatureType {
   Sr25519 = 'sr25519',
@@ -15,15 +26,15 @@ export interface SignResult {
   signature: HexString;
 }
 
-export interface GenerateAccountArguments {
+export interface GenerateAccountDataArguments {
   pairType?: SignatureType;
   meta?: KeyringPair$Meta;
 }
-export interface GetAccountArguments extends GenerateAccountArguments {
+export interface GetAccountDataArguments extends GenerateAccountDataArguments {
   mnemonic: string;
 }
 
-export interface Account {
+export interface AccountData {
   mnemonic: string;
 
   seed: HexString;
@@ -31,4 +42,17 @@ export interface Account {
   publicKey: HexString;
 
   keyfile: KeyringPair$Json;
+}
+
+export abstract class Account<T = unknown> {
+  abstract getSigner(): Signer;
+  protected constructor(public instance: T) {}
+}
+
+export abstract class Provider<I = unknown, A = unknown> extends Object {
+  abstract instance: I;
+
+  abstract init(): Promise<void>;
+
+  abstract getAccounts(): Account<A>[];
 }
