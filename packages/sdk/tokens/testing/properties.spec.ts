@@ -5,6 +5,14 @@ import {
   TestAccount,
 } from '@unique-nft/sdk/testing';
 import {
+  CollectionPropertiesArguments,
+  CollectionPropertiesResult,
+} from '../methods/collection-properties/types';
+import {
+  TokenPropertiesArguments,
+  TokenPropertiesResult,
+} from '../methods/token-properties/types';
+import {
   DeleteTokenPropertiesResult,
   DeleteTokenPropertiesArguments,
 } from '../methods/delete-token-properties';
@@ -99,6 +107,27 @@ describe('Properties', () => {
 
     expect(result.parsed).toStrictEqual(expected);
   }, 60_000);
+
+  it('collection-properties', async () => {
+    const args: CollectionPropertiesArguments = {
+      collectionId,
+    };
+
+    const result = await sdk.collections.properties(args);
+
+    const expected: CollectionPropertiesResult = [
+      {
+        key: 'foo',
+        value: 'FOO',
+      },
+      {
+        key: 'bar',
+        value: 'BAR',
+      },
+    ];
+
+    expect(result).toStrictEqual(expected);
+  }, 15_000);
 
   it('delete-collection-properties', async () => {
     const propertyKeys = ['foo', 'bar'];
@@ -205,6 +234,28 @@ describe('Properties', () => {
 
     expect(result.parsed).toStrictEqual(expected);
   }, 60_000);
+
+  it('token-properties', async () => {
+    const args: TokenPropertiesArguments = {
+      collectionId,
+      tokenId,
+    };
+
+    const result = await sdk.tokens.properties(args);
+
+    const expected: TokenPropertiesResult = [
+      {
+        key: 'foo',
+        value: 'FOO',
+      },
+      {
+        key: 'bar',
+        value: 'BAR',
+      },
+    ];
+
+    expect(result).toStrictEqual(expected);
+  }, 15_000);
 
   it('delete-token-properties', async () => {
     const propertyKeys = ['foo', 'bar'];

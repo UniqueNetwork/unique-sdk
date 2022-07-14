@@ -63,6 +63,11 @@ export class BaseCollectionController {
     return this.sdk.collections.transfer(args);
   }
 
+  @Get('properties')
+  async collectionProperties(@Query() args: CollectionIdQuery) {
+    return this.sdk.collections.properties(args);
+  }
+
   @Post('properties')
   @HttpCode(HttpStatus.OK)
   async setCollectionProperties(

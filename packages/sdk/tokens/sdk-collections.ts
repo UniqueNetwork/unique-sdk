@@ -43,6 +43,11 @@ import {
   DeleteCollectionPropertiesResult,
   DeleteCollectionPropertiesMutation,
 } from './methods/delete-collection-properties';
+import {
+  collectionPropertiesQuery,
+  CollectionPropertiesArguments,
+  CollectionPropertiesResult,
+} from './methods/collection-properties';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
@@ -58,6 +63,7 @@ export class SdkCollections {
     this.setTokenPropertyPermissions = new SetTokenPropertyPermissionsMutation(
       this.sdk,
     );
+    this.properties = collectionPropertiesQuery.bind(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -96,6 +102,11 @@ export class SdkCollections {
   setTokenPropertyPermissions: MutationMethodWrap<
     SetTokenPropertyPermissionsArguments,
     SetTokenPropertyPermissionsResult
+  >;
+
+  properties: QueryMethod<
+    CollectionPropertiesArguments,
+    CollectionPropertiesResult
   >;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {

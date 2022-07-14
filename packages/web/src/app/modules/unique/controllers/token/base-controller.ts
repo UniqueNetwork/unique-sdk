@@ -92,6 +92,11 @@ export class BaseTokenController {
     }
   }
 
+  @Get('properties')
+  async tokenProperties(@Query() args: TokenIdQuery) {
+    return this.sdk.tokens.properties(args);
+  }
+
   @Post('properties')
   @HttpCode(HttpStatus.OK)
   async setCollectionProperties(

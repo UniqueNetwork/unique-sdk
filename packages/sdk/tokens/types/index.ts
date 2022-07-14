@@ -17,6 +17,8 @@ export * from '../methods/delete-collection-properties';
 export * from '../methods/set-token-properties';
 export * from '../methods/delete-token-properties';
 export * from '../methods/set-token-property-permissions';
+export * from '../methods/collection-properties';
+export * from '../methods/token-properties';
 
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
@@ -29,3 +31,13 @@ export interface TransferTokenArguments extends TokenIdArguments {
   from: string;
   to: string;
 }
+
+export type CollectionProperty = {
+  key: string;
+  value: string;
+};
+
+export type TokenProperty = {
+  key: string;
+  value: string;
+};

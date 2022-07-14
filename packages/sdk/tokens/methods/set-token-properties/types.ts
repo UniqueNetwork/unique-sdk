@@ -1,9 +1,5 @@
 import { Address } from '@unique-nft/sdk/types';
-
-export type TokenProperty = {
-  key: string;
-  value: string;
-};
+import { TokenProperty } from '@unique-nft/sdk/tokens/types';
 
 export type SetTokenPropertiesArguments = {
   address: Address;
