@@ -1,35 +1,36 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
-
 import {
-  getDefaultSdkOptions,
-  getKeyringPairs,
+  createPoorAccount,
+  createRichAccount,
+  createSdk,
   signWithAccount,
-} from './testing-utils';
+  TestAccount,
+} from '@unique-nft/sdk/testing';
+
 import { Sdk } from '../src/lib/sdk';
 
 describe('multiple TXs', () => {
   let sdk: Sdk;
-  let eve: KeyringPair;
-  let ferdie: KeyringPair;
+  let richAccount: TestAccount;
+  let poorAccount: TestAccount;
 
   beforeAll(async () => {
-    ({ eve, ferdie } = await getKeyringPairs());
-
-    sdk = await Sdk.create(getDefaultSdkOptions());
+    sdk = await createSdk(false);
+    richAccount = createRichAccount();
+    poorAccount = createPoorAccount();
   });
 
   const makeTransfer = async (amount: number): Promise<void> => {
     const { signerPayloadJSON, signerPayloadHex } =
       await sdk.balance.transfer.build({
-        address: eve.address,
-        destination: ferdie.address,
+        address: richAccount.address,
+        destination: poorAccount.address,
         amount,
       });
 
-    const signature = signWithAccount(sdk, eve, signerPayloadHex);
+    const signature = signWithAccount(sdk, richAccount, signerPayloadHex);
 
     await sdk.extrinsics.submit({
       signerPayloadJSON,

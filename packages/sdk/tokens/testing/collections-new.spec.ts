@@ -1,16 +1,13 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
-import '@unique-nft/sdk/tokens';
 import { Sdk } from '@unique-nft/sdk';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import {
   UniqueCollectionSchemaToCreate,
-  COLLECTION_SCHEMA_NAME,
+  CollectionSchemaName,
   AttributeType,
   AttributeKind,
-} from '@unique-nft/api';
-import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/tokens';
 
 import {
   CreateCollectionExNewMutation,
@@ -20,6 +17,11 @@ import {
   CreateTokenNewMutation,
   CreateTokenNewArguments,
 } from '@unique-nft/sdk/tokens/methods/create-token';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/testing';
 
 const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   attributesSchema: {
@@ -27,8 +29,8 @@ const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
       name: {
         en: 'gender',
       },
-      type: AttributeType.localizedStringDictionary,
-      kind: AttributeKind.enum,
+      type: 'localizedStringDictionary',
+      kind: 'enum',
       enumValues: {
         '0': {
           en: 'Male',
@@ -42,8 +44,8 @@ const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
       name: {
         en: 'traits',
       },
-      type: AttributeType.localizedStringDictionary,
-      kind: AttributeKind.enumMultiple,
+      type: 'localizedStringDictionary',
+      kind: 'enumMultiple',
       enumValues: {
         '0': {
           en: 'Black Lipstick',
@@ -55,8 +57,8 @@ const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
     },
     '2': {
       name: 'just_string_value',
-      type: AttributeType.string,
-      kind: AttributeKind.freeValue,
+      type: 'string',
+      kind: 'freeValue',
     },
   },
   attributesSchemaVersion: '1.0.0',
@@ -67,7 +69,7 @@ const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   image: {
     urlTemplate: 'https://ipfs.unique.network/ipfs/{infix}.ext',
   },
-  schemaName: COLLECTION_SCHEMA_NAME.unique,
+  schemaName: CollectionSchemaName.unique,
   schemaVersion: '1.0.0',
   coverPicturePreview: {
     urlInfix: 'string',
@@ -93,7 +95,7 @@ const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
 describe('unique schema collection and token', () => {
   let sdk: Sdk;
 
-  let account: KeyringPair;
+  let richAccount: TestAccount;
 
   let collectionCreation: CreateCollectionExNewMutation;
   let createCollectionArgs: CreateCollectionNewArguments;
@@ -102,12 +104,9 @@ describe('unique schema collection and token', () => {
   let createTokenArgs: CreateTokenNewArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Eve',
-    });
+    sdk = await createSdk(true);
 
-    const testAccounts = await getKeyringPairs();
-    account = testAccounts.eve;
+    richAccount = createRichAccount();
 
     collectionCreation = new CreateCollectionExNewMutation(sdk);
 
@@ -136,13 +135,13 @@ describe('unique schema collection and token', () => {
           collectionAdmin: true,
         },
       },
-      address: account.address,
+      address: richAccount.address,
       schema: collectionSchemaToCreate,
     };
 
     tokenCreation = new CreateTokenNewMutation(sdk);
     createTokenArgs = {
-      address: account.address,
+      address: richAccount.address,
       collectionId: -1,
       data: {
         encodedAttributes: {

@@ -16,15 +16,15 @@ import {
 export async function getAccountFromMnemonic(
   args: GetAccountArguments,
 ): Promise<Account> {
-  const { mnemonic, password, pairType, meta } = args;
-  const seed = mnemonicToMiniSecret(mnemonic, password);
+  const { mnemonic, pairType, meta } = args;
+  const seed = mnemonicToMiniSecret(mnemonic);
   const { publicKey } = naclBoxPairFromSecret(seed);
   const account = new Keyring({ type: pairType }).addFromSeed(
     seed,
     { ...meta },
     pairType,
   );
-  const keyfile: KeyringPair$Json = account.toJson(password);
+  const keyfile: KeyringPair$Json = account.toJson();
   return {
     mnemonic,
     seed: u8aToHex(seed),

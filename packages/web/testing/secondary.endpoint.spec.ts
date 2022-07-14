@@ -7,11 +7,10 @@ import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
-import { BalanceController } from '../src/app/modules/substrate/controllers/balance/controller';
 import { createApp } from './utils.test';
 import { Config } from '../src/app/config/config.module';
 
-describe(BalanceController.name, () => {
+describe('Secondary endpoint', () => {
   let app: INestApplication;
   let alice: KeyringPair;
   let secondaryChainWsUrl: string;
@@ -28,6 +27,8 @@ describe(BalanceController.name, () => {
 
   describe('check secondary chainWsUrl', () => {
     it('success request to secondary chainWsUrl', async () => {
+      if (!(secondaryChainWsUrl && name)) return;
+
       const { ok } = await request(app.getHttpServer())
         .get(`/api/${name}/balance`)
         .query({ address: alice.address });
@@ -36,6 +37,7 @@ describe(BalanceController.name, () => {
 
     it('comparison GET balance on chainWsUrl and secondary', async () => {
       if (!(secondaryChainWsUrl && name)) return;
+
       const {
         body: {
           availableBalance: { unit },

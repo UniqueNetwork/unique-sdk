@@ -10,9 +10,9 @@ import {
   UniqueTokenToCreate,
   EncodedTokenAttributes,
   InfixOrUrlOrCidAndHash,
-} from '@unique-nft/api';
+  CreateTokenNewArguments,
+} from '@unique-nft/sdk/tokens';
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { CreateTokenNewArguments } from '@unique-nft/sdk/tokens/methods/create-token';
 import { Address } from '@unique-nft/sdk/types';
 import {
   DecodedAttributeDto,

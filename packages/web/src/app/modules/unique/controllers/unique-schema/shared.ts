@@ -3,12 +3,14 @@ import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { SchemaObjectMetadata } from '@nestjs/swagger/dist/interfaces/schema-object-metadata.interface';
 import {
   AttributeKind,
+  AttributeKindName,
   AttributeSchema,
   AttributeType,
-  COLLECTION_SCHEMA_NAME,
+  AttributeTypeName,
+  CollectionSchemaName,
   LocalizedStringDictionary,
   UrlTemplateString,
-} from '@unique-nft/api';
+} from '@unique-nft/sdk/tokens';
 
 const infixOrUrlOrCidAndHashSchema: SchemaObjectMetadata = {
   oneOf: [
@@ -64,8 +66,8 @@ const localizedStringDictionarySchema = {
 };
 
 export const SchemaNameApiProperty = ApiProperty({
-  example: COLLECTION_SCHEMA_NAME.unique,
-  enum: COLLECTION_SCHEMA_NAME,
+  example: CollectionSchemaName.unique,
+  enum: CollectionSchemaName,
 });
 
 export const SchemaVersionApiProperty = ApiProperty({
@@ -90,7 +92,7 @@ export class AttributeSchemaDto implements AttributeSchema {
       ],
     },
   })
-  enumValues: { [p: number]: number | string | LocalizedStringDictionary };
+  enumValues?: { [p: number]: number | string | LocalizedStringDictionary };
 
   @ApiProperty({
     oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
@@ -101,10 +103,10 @@ export class AttributeSchemaDto implements AttributeSchema {
   optional?: boolean;
 
   @ApiProperty({ enum: AttributeKind })
-  kind: AttributeKind;
+  kind: AttributeKindName;
 
   @ApiProperty({ enum: AttributeType })
-  type: AttributeType;
+  type: AttributeTypeName;
 }
 
 export class DecodedAttributeDto {
@@ -139,10 +141,10 @@ export class DecodedAttributeDto {
     | Array<string | number | LocalizedStringDictionary>;
 
   @ApiProperty({ enum: AttributeType })
-  type: AttributeType;
+  type: AttributeTypeName;
 
   @ApiProperty({ enum: AttributeKind })
-  kind: AttributeKind;
+  kind: AttributeKindName;
 
   @ApiProperty()
   isArray: boolean;
@@ -166,19 +168,19 @@ export const AttributesSchemaApiProperty = ApiProperty({
   type: 'object',
   additionalProperties: { $ref: getSchemaPath(AttributeSchemaDto) },
   example: {
-    '0': {
+    0: {
       name: { en: 'gender' },
-      type: AttributeType.localizedStringDictionary,
-      kind: AttributeKind.enum,
+      type: 'localizedStringDictionary',
+      kind: 'enum',
       enumValues: {
         0: { en: 'Male' },
         1: { en: 'Female' },
       },
     },
-    '1': {
+    1: {
       name: { en: 'traits' },
-      type: AttributeType.localizedStringDictionary,
-      kind: AttributeKind.enumMultiple,
+      type: 'localizedStringDictionary',
+      kind: 'enumMultiple',
       enumValues: {
         0: { en: 'Black Lipstick' },
         1: { en: 'Red Lipstick' },
