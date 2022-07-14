@@ -3,10 +3,9 @@ import request from 'supertest';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 
 import { createApp } from './utils.test';
+import { OldCollectionController } from '../src/app/modules/unique/controllers/collection';
 
-import { CollectionController } from '../src/app/modules/unique/controllers/collection.controller';
-
-describe(CollectionController.name, () => {
+describe(OldCollectionController.name, () => {
   let app: INestApplication;
 
   beforeAll(async () => {

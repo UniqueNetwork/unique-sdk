@@ -20,14 +20,6 @@ import { ValidMnemonic } from '../validation';
 export class GenerateAccountBody implements GenerateAccountArguments {
   @ApiProperty({
     description:
-      "The password will be used to encrypt the account's information. But if someone knows your seed phrase they still have control over your account",
-    required: false,
-  })
-  @IsOptional()
-  password?: string;
-
-  @ApiProperty({
-    description:
       'Signature: ed25519, sr25519 implementation using Schnorr signatures. ECDSA signatures on the secp256k1 curve',
     enum: SignatureType,
     required: false,
