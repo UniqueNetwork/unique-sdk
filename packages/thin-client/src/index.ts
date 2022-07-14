@@ -16,7 +16,7 @@ export class ThinClient {
     public readonly options: {
       url: string;
     },
-    signer: any,
+    signer: any, // todo в options наверно надо, подумой
   ) {
     this.instance = Axios.create({
       baseURL: this.options.url,
