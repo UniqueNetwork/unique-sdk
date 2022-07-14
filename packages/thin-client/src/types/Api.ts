@@ -496,6 +496,8 @@ export interface CreateCollectionNewRequest {
   schema: UniqueCollectionSchemaToCreateDto;
 }
 
+type arrayNumberRecordStringAny = string;
+
 export interface TxBuildBody {
   /**
    * The ss-58 encoded address

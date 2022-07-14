@@ -1,26 +1,30 @@
 {
-  "root": "packages/accounts",
-  "sourceRoot": "packages/accounts/src",
+  "root": "packages/thin-client",
+  "sourceRoot": "packages/thin-client/src",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:package",
+      "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "project": "packages/accounts/ng-package.json",
-        "tsConfig": "packages/accounts/tsconfig.lib.json"
+        "packageName": "thin-client",
+        "distDir": "./dist/packages/thin-client",
+        "entryPoints": [
+          "./index.ts",
+          "./src/index.ts"
+        ]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/accounts/**/*.ts"]
+        "lintFilePatterns": ["packages/thin-client/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/accounts"],
+      "outputs": ["coverage/packages/thin-client"],
       "options": {
-        "jestConfig": "packages/accounts/jest.config.js",
+        "jestConfig": "packages/thin-client/jest.config.js",
         "passWithNoTests": true
       }
     }

@@ -8,6 +8,7 @@
     "build:sdk": "nx build sdk",
     "build:accounts": "nx build accounts",
     "build:web": "nx build web",
+    "build:thin-client": "nx build thin-client",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
     "test:web": "nx test web",
