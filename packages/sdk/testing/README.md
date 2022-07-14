@@ -1,6 +1,6 @@
 
 # envs
- * `TEST_CHAIN_WS_URL` - ссылка на чейн, в котором будет проходить тесты
+ * `TEST_CHAIN_WS_URL` - ссылка на чейн, в котором будут проходить тесты
  * `TEST_RICH_ACCOUNT` - seed аккаунта с деньгами
  * `TEST_POOR_ACCOUNT` - seed аккаунта без денег
  * `TEST_ANOTHER_ACCOUNT` - seed еще одного аккаунта
