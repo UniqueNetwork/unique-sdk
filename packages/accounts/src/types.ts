@@ -16,7 +16,6 @@ export interface SignResult {
 }
 
 export interface GenerateAccountArguments {
-  password?: string;
   pairType?: SignatureType;
   meta?: KeyringPair$Meta;
 }
