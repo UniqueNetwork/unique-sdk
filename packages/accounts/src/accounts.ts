@@ -1,15 +1,12 @@
 import { Account, Provider } from './types';
-import { KeyringProvider } from './keyring';
-
-export * from './keyring/index';
 
 type ProviderClass = { new (o: object): Provider };
 
 export class Accounts {
   private providers = new Map<ProviderClass, Provider>();
 
-  addKeyringProvider(provider: KeyringProvider) {
-    this.providers.set(KeyringProvider, provider);
+  addProvider(classLink: ProviderClass, provider: Provider) {
+    this.providers.set(classLink, provider);
   }
 
   getProvider(ProviderClass: ProviderClass): Provider | undefined {

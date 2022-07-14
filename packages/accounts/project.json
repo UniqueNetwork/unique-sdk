@@ -8,7 +8,8 @@
         "packageName": "accounts",
         "distDir": "./dist/packages/accounts",
         "entryPoints": [
-          "./index.ts"
+          "./index.ts",
+          "./keyring/index.ts"
         ]
       }
     },

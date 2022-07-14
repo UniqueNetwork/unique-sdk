@@ -6,7 +6,7 @@ import {
   Signer,
   SignResult,
   UnsignedTxPayload,
-} from '../types';
+} from '../src/types';
 
 function createSigner(keyringPair: KeyringPair): Signer {
   return {

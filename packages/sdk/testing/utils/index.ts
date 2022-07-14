@@ -4,7 +4,8 @@ import { Keyring } from '@polkadot/keyring';
 import { HexString } from '@polkadot/util/types';
 import { SdkOptions } from '@unique-nft/sdk/types';
 import { Sdk } from '@unique-nft/sdk';
-import { KeyringProvider, SignatureType } from '@unique-nft/accounts';
+import { SignatureType } from '@unique-nft/accounts';
+import { KeyringProvider } from '@unique-nft/accounts/keyring';
 import * as process from 'process';
 
 const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob';
@@ -14,13 +15,13 @@ const TEST_CHAIN_WS_URL =
   process.env['TEST_CHAIN_WS_URL'] || 'wss://ws-rc.unique.network';
 
 async function createSigner() {
-  const accountsProvider = new KeyringProvider({
+  const keyringProvider = new KeyringProvider({
     type: SignatureType.Sr25519,
   });
 
-  await accountsProvider.init();
+  await keyringProvider.init();
 
-  return accountsProvider.addSeed(TEST_RICH_ACCOUNT).getSigner();
+  return keyringProvider.addSeed(TEST_RICH_ACCOUNT).getSigner();
 }
 
 export async function createSdk(withSign: boolean): Promise<Sdk> {

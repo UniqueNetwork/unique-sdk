@@ -1,6 +1,7 @@
-import { KeyringProvider, SignatureType } from '@unique-nft/accounts';
+import { SignatureType } from '@unique-nft/accounts';
 import { addFeature } from '@unique-nft/sdk';
 import { SdkSigner } from '@unique-nft/sdk/types';
+import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 export class AccountsModule {
   #provider: KeyringProvider;

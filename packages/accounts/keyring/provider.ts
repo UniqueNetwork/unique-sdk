@@ -5,7 +5,7 @@ import {
   KeyringPair,
   KeyringPair$Json,
 } from '@polkadot/keyring/types';
-import { Provider, Account } from '../types';
+import { Provider, Account } from '../src/types';
 import { KeyringAccount } from './account';
 
 export class KeyringProvider extends Provider<Keyring, KeyringPair> {

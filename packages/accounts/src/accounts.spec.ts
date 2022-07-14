@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { Accounts, KeyringProvider } from './accounts';
+import { KeyringProvider } from '../keyring';
+import { Accounts } from './accounts';
 
 describe('Accounts', () => {
   beforeAll(async () => {
@@ -11,7 +12,7 @@ describe('Accounts', () => {
 
     const provider = new KeyringProvider();
 
-    accounts.addKeyringProvider(provider);
+    accounts.addProvider(KeyringProvider, provider);
 
     const account = provider.addSeed(
       'bus ahead nation nice damp recall place dance guide media clap language',

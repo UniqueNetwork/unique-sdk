@@ -1,5 +1,6 @@
 import { Sdk } from '@unique-nft/sdk';
-import { KeyringProvider, SignatureType } from '@unique-nft/accounts';
+import { SignatureType } from '@unique-nft/accounts';
+import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 import { Config } from '../../config/config.module';
 import './accounts';
