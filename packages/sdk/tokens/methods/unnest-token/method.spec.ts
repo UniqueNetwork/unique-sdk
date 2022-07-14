@@ -1,5 +1,9 @@
 import { Sdk } from '@unique-nft/sdk';
-import { createSdk } from '@unique-nft/sdk/tests';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/testing';
 import { getNestingTokenAddress } from '@unique-nft/sdk/tokens';
 import { UnnestTokenMutation } from './method';
 import { UnnestTokenArguments } from './types';
@@ -7,21 +11,23 @@ import { UnnestTokenArguments } from './types';
 describe('unnestToken', () => {
   let sdk: Sdk;
 
+  let account: TestAccount;
+
   let unnestToken: UnnestTokenMutation;
 
   let args: UnnestTokenArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Alice',
-    });
+    sdk = await createSdk(true);
+
+    account = createRichAccount();
 
     unnestToken = new UnnestTokenMutation(sdk);
   });
 
   it('transformArgs', async () => {
     args = {
-      address: '5HNid8gyLiwocM9PyGVQetbWoBY76SrixnmjTRtewgaicKRX',
+      address: account.address,
       parent: {
         collectionId: 1,
         tokenId: 1,

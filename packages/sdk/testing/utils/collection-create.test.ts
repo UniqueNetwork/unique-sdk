@@ -1,5 +1,4 @@
 import { INamespace } from 'protobufjs';
-import { KeyringPair } from '@polkadot/keyring/types';
 import { CollectionFields, CollectionFieldTypes } from '@unique-nft/sdk/types';
 import {
   CollectionInfo,
@@ -9,7 +8,7 @@ import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import { Sdk } from '@unique-nft/sdk';
-import { signWithAccount } from '../testing-utils';
+import { signWithAccount, TestAccount } from '@unique-nft/sdk/testing';
 
 export const constOnChainSchema: INamespace = {
   nested: {
@@ -73,7 +72,7 @@ const defaultCollectionInitial: TestCollectionInitial = {
 
 export async function createCollection(
   sdk: Sdk,
-  account: KeyringPair,
+  account: TestAccount,
   collectionInitial?: TestCollectionInitial,
 ): Promise<CollectionInfo> {
   const collectionData = collectionInitial || defaultCollectionInitial;

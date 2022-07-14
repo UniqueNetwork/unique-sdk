@@ -1,4 +1,4 @@
-import { UniqueCollectionSchemaDecoded } from '@unique-nft/api';
+import { UniqueCollectionSchemaDecoded } from '../create-collection-ex-new/types';
 import { CollectionInfoBase } from '../create-collection-ex/types';
 
 export interface CollectionInfoWithSchema extends CollectionInfoBase {

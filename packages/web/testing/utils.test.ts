@@ -1,8 +1,19 @@
+/* eslint-disable class-methods-use-this */
+
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, LoggerService } from '@nestjs/common';
 import { waitReady } from '@polkadot/wasm-crypto';
 import { mnemonicValidate } from '@polkadot/util-crypto';
+import * as process from 'process';
 import { AppModule } from '../src/app/app.module';
+
+class EmptyLogger implements LoggerService {
+  log(): any {}
+
+  error(): any {}
+
+  warn(): any {}
+}
 
 export async function createApp(): Promise<INestApplication> {
   const testingModule = await Test.createTestingModule({
@@ -13,6 +24,11 @@ export async function createApp(): Promise<INestApplication> {
 
   const app = testingModule.createNestApplication();
   app.setGlobalPrefix('/api');
+
+  if (process.env.TEST_SHOW_LOG !== 'true') {
+    app.useLogger(new EmptyLogger());
+  }
+
   await app.init();
   return app;
 }
