@@ -5,6 +5,12 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
 
 import { ThinClient } from './index';
+import {
+  BalanceTransferBody,
+  FeeResponse,
+  SubmitTxBody,
+  UnsignedTxPayloadResponse,
+} from './types/Api';
 
 const baseUrl = 'http://localhost:3000';
 
@@ -29,8 +35,8 @@ describe('balance', () => {
     client = new ThinClient({ url: baseUrl }, signer);
   });
 
-  it('transfer', async () => {
-    const response: object = await client.balance.transfer.build({
+  it('fee for BalanceTransferBody', async () => {
+    const response: FeeResponse = await client.balance.transfer.getFee({
       address: bob.address,
       destination: alice.address,
       amount: 0.00001,
@@ -38,13 +44,47 @@ describe('balance', () => {
     expect(response).toEqual(expect.any(Object));
   }, 60_000);
 
-  it('sign', async () => {
-    const response: object = await client.balance.transfer.sign({
+  it('transfer; fee for UnsignedTxPayloadResponse', async () => {
+    const response: UnsignedTxPayloadResponse =
+      await client.balance.transfer.build({
+        address: bob.address,
+        destination: alice.address,
+        amount: 0.00001,
+      });
+    expect(response).toEqual(expect.any(Object));
+    const feeResponse: FeeResponse = await client.balance.transfer.getFee(
+      response,
+    );
+    expect(feeResponse).toEqual(expect.any(Object));
+  }, 60_000);
+
+  it('error getFee', async () => {
+    const response: UnsignedTxPayloadResponse =
+      await client.balance.transfer.build({
+        address: bob.address,
+        destination: alice.address,
+        amount: 0.00001,
+      });
+    expect(response).toEqual(expect.any(Object));
+    expect(
+      client.balance.transfer.getFee({
+        ...response,
+        signerPayloadHex: '1',
+      }),
+    ).rejects.toThrowError();
+  }, 60_000);
+
+  it('sign; fee for SubmitTxBody', async () => {
+    const response: SubmitTxBody = await client.balance.transfer.sign({
       address: bobAddress,
       destination: aliceAddress,
       amount: 0.00001,
     });
     expect(response).toEqual(expect.any(Object));
+    const feeResponse: FeeResponse = await client.balance.transfer.getFee(
+      response,
+    );
+    expect(feeResponse).toEqual(expect.any(Object));
   }, 60_000);
 
   it('submitWatch', async () => {

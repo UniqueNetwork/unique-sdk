@@ -101,7 +101,9 @@ export class Mutation<A, R> {
     }
   }
 
-  async submitWaitResult(args: A | UnsignedTxPayloadResponse | SubmitTxBody) {
+  async submitWaitResult(
+    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  ): Promise<ExtrinsicResultResponse> {
     // : Promise<SubmittableResultCompleted<R>>
     // todo здесь мы будем дергать submitWatch и возвращать красивые данные
     // const response = await this.section.client.instance({
@@ -116,6 +118,6 @@ export class Mutation<A, R> {
     //   isCompleted: true,
     //   parsed: response.data,
     // };
-    return await this.submitWatch(args);
+    return this.submitWatch(args);
   }
 }
