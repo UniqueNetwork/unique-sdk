@@ -15,7 +15,7 @@ jobs:
         env:
           AUTHOR_EMAIL: ashkucc@gmail.com
           AUTHOR_NAME: ashkuc
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.UNIQUENETWORKBOT_ACCESS_TOKEN }}
           LOG_LEVEL: debug
           EXECUTE: "true"
           UPDATE_COMMAND: npm
