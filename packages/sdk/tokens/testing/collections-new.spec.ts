@@ -1,4 +1,3 @@
-import { KeyringPair } from '@polkadot/keyring/types';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import { Sdk } from '@unique-nft/sdk';
@@ -9,7 +8,6 @@ import {
   AttributeType,
   AttributeKind,
 } from '@unique-nft/sdk/tokens';
-import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
 
 import {
   CreateCollectionExNewMutation,
@@ -19,6 +17,11 @@ import {
   CreateTokenNewMutation,
   CreateTokenNewArguments,
 } from '@unique-nft/sdk/tokens/methods/create-token';
+import {
+  createRichAccount,
+  createSdk,
+  TestAccount,
+} from '@unique-nft/sdk/testing';
 
 const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   attributesSchema: {
@@ -92,7 +95,7 @@ const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
 describe('unique schema collection and token', () => {
   let sdk: Sdk;
 
-  let account: KeyringPair;
+  let richAccount: TestAccount;
 
   let collectionCreation: CreateCollectionExNewMutation;
   let createCollectionArgs: CreateCollectionNewArguments;
@@ -101,12 +104,9 @@ describe('unique schema collection and token', () => {
   let createTokenArgs: CreateTokenNewArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Eve',
-    });
+    sdk = await createSdk(true);
 
-    const testAccounts = await getKeyringPairs();
-    account = testAccounts.eve;
+    richAccount = createRichAccount();
 
     collectionCreation = new CreateCollectionExNewMutation(sdk);
 
@@ -135,13 +135,13 @@ describe('unique schema collection and token', () => {
           collectionAdmin: true,
         },
       },
-      address: account.address,
+      address: richAccount.address,
       schema: collectionSchemaToCreate,
     };
 
     tokenCreation = new CreateTokenNewMutation(sdk);
     createTokenArgs = {
-      address: account.address,
+      address: richAccount.address,
       collectionId: -1,
       data: {
         encodedAttributes: {
