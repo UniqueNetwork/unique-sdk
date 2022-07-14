@@ -4,6 +4,7 @@ import { SchemaTools, UniqueTokenDecoded } from '@unique-nft/api';
 import { SdkError } from '@unique-nft/sdk/errors';
 
 import { TokenIdArguments } from '../../types';
+import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 async function tokenByIdFn(
   this: Sdk,
@@ -24,7 +25,7 @@ async function tokenByIdFn(
     collectionId,
     tokenId,
     tokenData,
-    uniqueCollection.schema,
+    AttributesTransformer.toOriginal(uniqueCollection.schema),
   );
 
   if (!tokenDecodingResult.isValid)

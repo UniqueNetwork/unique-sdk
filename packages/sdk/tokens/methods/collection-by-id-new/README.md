@@ -1,10 +1,10 @@
-# Get collection by Id
+# Get collection by Id (new)
 
-Returns collection info in human format.
+Returns collection info (with Unique schema)
 
 ## Arguments
 
-- **collectionId** - ID of collection
+- **collectionId** - Id of collection
 
 ## Returns
 
@@ -19,14 +19,13 @@ Method return collection info:
 - **sponsorship** - This field tells if sponsorship is enabled and what address is the current collection sponsor.
 - **limits** - [Collection limits](../set-collection-limits#arguments)
 - **metaUpdatePermission** - [Permission](#todo) for update meta (ItemOwner, Admin, None)
-- **properties** - [Collection properties](#todo)
 - **permissions** - [Collection permissions](#todo)
-- **tokenPropertyPermissions** - [Collection tokens permissions](#todo)
+- **schema** - [Collection schema](#todo)
 
 ## Examples
 
 ```typescript
-import { CollectionIdArguments, CollectionInfo } from '@unique-nft/sdk/types';
-const getCollectionArgs: CollectionIdArguments = { collectionId: 123 };
-const collection: CollectionInfo = await sdk.collections.get(getCollectionArgs);
+const collection = await sdk.collections.get_new({ collectionId: 2 });
+
+const { id, owner, name, description, mode, tokenPrefix, schema } = collection;
 ```

@@ -11,6 +11,7 @@ import {
 import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
 import { CreateCollectionArguments } from './methods/create-collection-ex/types';
 import { GetCollectionLimitsResult } from './methods/effective-collection-limits/types';
+import { GetStatsResult } from './methods/get-stats/types';
 import { collectionById } from './methods/collection-by-id/method';
 import { collectionByIdNew } from './methods/collection-by-id-new/method';
 import { effectiveCollectionLimits } from './methods/effective-collection-limits/method';
@@ -23,6 +24,7 @@ import {
   SetCollectionLimitsResult,
 } from './types';
 import { SetCollectionLimitsMutation } from './methods/set-collection-limits/method';
+import { getStats } from './methods/get-stats/method';
 import { CollectionInfoWithSchema } from './methods/collection-by-id-new/types';
 import { CreateCollectionExNewMutation } from './methods/create-collection-ex-new/method';
 import { CreateCollectionNewArguments } from './methods/create-collection-ex-new/types';
@@ -35,6 +37,7 @@ export class SdkCollections {
     this.creation = new CreateCollectionExMutation(this.sdk);
     this.creation_new = new CreateCollectionExNewMutation(this.sdk);
     this.setLimits = new SetCollectionLimitsMutation(this.sdk);
+    this.getStats = getStats.bind(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -57,6 +60,8 @@ export class SdkCollections {
     SetCollectionLimitsArguments,
     SetCollectionLimitsResult
   >;
+
+  getStats: QueryMethod<void, GetStatsResult>;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {
     return this.sdk.extrinsics.build({

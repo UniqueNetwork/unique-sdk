@@ -8,6 +8,7 @@ import { createSdk, getKeyringPairs } from '@unique-nft/sdk/tests';
 
 import { CreateCollectionExMutation } from '../methods/create-collection-ex/method';
 import { CreateCollectionArguments } from '../methods/create-collection-ex/types';
+import { GetStatsResult } from '../methods/get-stats/types';
 
 describe('create-collection-ex', () => {
   let sdk: Sdk;
@@ -17,6 +18,8 @@ describe('create-collection-ex', () => {
   let creation: CreateCollectionExMutation;
 
   let createArgs: CreateCollectionArguments;
+
+  let initialStats: GetStatsResult;
 
   beforeAll(async () => {
     sdk = await createSdk({
@@ -36,6 +39,8 @@ describe('create-collection-ex', () => {
       tokenPrefix: 'BAZ',
       properties: {},
     };
+
+    initialStats = (await sdk.collections.getStats()) as GetStatsResult;
   });
 
   it('create and get', async () => {
@@ -61,5 +66,11 @@ describe('create-collection-ex', () => {
       description: createArgs.description,
       tokenPrefix: createArgs.tokenPrefix,
     });
+
+    const afterCreationStats =
+      (await sdk.collections.getStats()) as GetStatsResult;
+
+    // todo: Should also check 'destroyed' and 'alive' fields when collection deletion will be added.
+    expect(afterCreationStats.created).toBe(initialStats.created + 1);
   }, 30_000);
 });

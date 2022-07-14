@@ -11,16 +11,19 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
-import { CollectionIdQuery } from '../../../../types/sdk-methods';
 import { SdkValidationPipe } from '../../../../validation';
 import {
   MutationMethod,
   MutationMethodOptions,
 } from '../../../../decorators/mutation-method';
-import { CollectionInfoResponse } from '../../../../types/unique-types';
-import { CreateCollectionBody, CreateCollectionResponse } from './types';
+import { CollectionInfoWithPropertiesDto } from '../../../../types/unique-types';
+import {
+  CreateCollectionBody,
+  CreateCollectionResponse,
+  CollectionIdQuery,
+} from './types';
 import { BaseCollectionController } from './base-controller';
 
 @UsePipes(SdkValidationPipe)
@@ -33,9 +36,10 @@ export class OldCollectionController extends BaseCollectionController {
   }
 
   @Get()
+  @ApiResponse({ type: CollectionInfoWithPropertiesDto })
   async getCollection(
     @Query() args: CollectionIdQuery,
-  ): Promise<CollectionInfoResponse> {
+  ): Promise<CollectionInfoWithPropertiesDto> {
     const collection = await this.sdk.collections.get(args);
 
     if (collection) return collection;
