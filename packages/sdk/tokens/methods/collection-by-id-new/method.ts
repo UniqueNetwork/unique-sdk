@@ -7,6 +7,7 @@ import { SdkError } from '@unique-nft/sdk/errors';
 import { CollectionIdArguments } from '../collection-by-id/types';
 import { CollectionInfoWithSchema } from './types';
 import { decodeCollectionBase } from '../../utils/decode-collection';
+import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 async function collectionByIdNewFn(
   this: Sdk,
@@ -39,7 +40,7 @@ async function collectionByIdNewFn(
     ...decodeCollectionBase(collection),
     id: collectionId,
     owner: collection.owner.toString(),
-    schema: decodingResult.decoded,
+    schema: AttributesTransformer.toHuman(decodingResult.decoded),
   };
 }
 
