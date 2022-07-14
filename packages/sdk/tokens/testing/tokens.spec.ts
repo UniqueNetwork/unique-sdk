@@ -3,7 +3,7 @@ import {
   createRichAccount,
   createSdk,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 import { getNestingTokenAddress } from '@unique-nft/sdk/tokens';
 import {
   NestTokenArguments,

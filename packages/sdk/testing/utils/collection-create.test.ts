@@ -8,7 +8,7 @@ import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import { Sdk } from '@unique-nft/sdk';
-import { signWithAccount, TestAccount } from '@unique-nft/sdk/tests';
+import { signWithAccount, TestAccount } from '@unique-nft/sdk/testing';
 
 export const constOnChainSchema: INamespace = {
   nested: {

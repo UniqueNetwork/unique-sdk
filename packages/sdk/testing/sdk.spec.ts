@@ -9,7 +9,7 @@ import {
   createRichAccount,
   createPoorAccount,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 
 describe(Sdk.name, () => {
   let sdk: Sdk;

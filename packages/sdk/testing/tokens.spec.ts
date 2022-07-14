@@ -8,7 +8,7 @@ import {
   createRichAccount,
   createSdk,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 import { createCollection } from './utils/collection-create.test';
 import { createToken } from './utils/token-create.test';
 

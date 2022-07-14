@@ -13,7 +13,7 @@ import {
   createRichAccount,
   createSdk,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 import {
   CreateCollectionExNewMutation,
   CreateCollectionNewArguments,

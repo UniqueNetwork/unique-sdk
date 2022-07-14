@@ -1,4 +1,4 @@
-import { signWithAccount, TestAccount } from '@unique-nft/sdk/tests';
+import { signWithAccount, TestAccount } from '@unique-nft/sdk/testing';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import { Sdk } from '@unique-nft/sdk';
 import { TokenInfo } from '@unique-nft/sdk/types';

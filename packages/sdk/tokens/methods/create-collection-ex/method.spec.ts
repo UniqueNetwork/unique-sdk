@@ -1,5 +1,5 @@
 import { Sdk } from '@unique-nft/sdk';
-import { createSdk } from '@unique-nft/sdk/tests';
+import { createSdk } from '@unique-nft/sdk/testing';
 
 import { CreateCollectionExMutation } from './method';
 import { CreateCollectionArguments } from './types';

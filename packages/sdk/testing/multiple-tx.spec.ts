@@ -7,7 +7,7 @@ import {
   createSdk,
   signWithAccount,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 
 import { Sdk } from '../src/lib/sdk';
 

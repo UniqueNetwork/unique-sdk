@@ -2,9 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { ErrorCodes } from '@unique-nft/sdk/errors';
 import { Sdk } from '@unique-nft/sdk';
-import { createCollection } from '@unique-nft/sdk/tests/utils/collection-create.test';
-import { createRichAccount, TestAccount } from '@unique-nft/sdk/tests';
-import { createToken } from '@unique-nft/sdk/tests/utils/token-create.test';
+import { createCollection } from '@unique-nft/sdk/testing/utils/collection-create.test';
+import { createRichAccount, TestAccount } from '@unique-nft/sdk/testing';
+import { createToken } from '@unique-nft/sdk/testing/utils/token-create.test';
 
 import { createApp } from './utils.test';
 

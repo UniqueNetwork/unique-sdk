@@ -3,10 +3,28 @@ import {
   createPoorAccount,
   createRichAccount,
   createSdk,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 
 import { BalanceTransferMutation } from './method';
 import { BalanceTransferArguments } from './types';
+
+describe('balance-transfer', () => {
+  it('ok', async () => {
+    const sdk: Sdk = await createSdk(true);
+    const richAccount = createRichAccount();
+    const poorAccount = createPoorAccount();
+    const { isCompleted, parsed } = await sdk.balance.transfer.submitWaitResult(
+      {
+        address: richAccount.address,
+        destination: poorAccount.address,
+        amount: 0.01,
+      },
+    );
+
+    expect(isCompleted).toBe(true);
+    expect(parsed.success).toBe(true);
+  }, 30_000);
+});
 
 describe('balance-transfer', () => {
   let sdk: Sdk;

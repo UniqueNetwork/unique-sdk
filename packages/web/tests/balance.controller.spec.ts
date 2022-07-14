@@ -10,7 +10,7 @@ import {
   createPoorAccount,
   createRichAccount,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 
 import { BalanceController } from '../src/app/modules/substrate/controllers/balance';
 import { createApp } from './utils.test';

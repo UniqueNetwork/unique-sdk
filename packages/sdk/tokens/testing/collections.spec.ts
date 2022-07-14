@@ -10,7 +10,7 @@ import {
   createRichAccount,
   createSdk,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 import { GetStatsResult } from '@unique-nft/sdk/tokens/types';
 
 describe('create-collection-ex', () => {

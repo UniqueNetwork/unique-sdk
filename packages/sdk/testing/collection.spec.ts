@@ -7,9 +7,9 @@ import {
   createRichAccount,
   createSdk,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 
-import { createCollection, createToken } from '@unique-nft/sdk/tests/utils';
+import { createCollection, createToken } from '@unique-nft/sdk/testing/utils';
 
 describe('Collections and tokens', () => {
   let sdk: Sdk;

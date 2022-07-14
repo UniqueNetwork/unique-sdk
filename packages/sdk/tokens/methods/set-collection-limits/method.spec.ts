@@ -3,7 +3,7 @@ import {
   createRichAccount,
   createSdk,
   TestAccount,
-} from '@unique-nft/sdk/tests';
+} from '@unique-nft/sdk/testing';
 import { SetCollectionLimitsMutation } from './method';
 import { SetCollectionLimitsArguments } from './types';
 import { CreateCollectionExMutation } from '../create-collection-ex/method';
