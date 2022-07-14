@@ -6,6 +6,7 @@ import { SdkError } from '@unique-nft/sdk/errors';
 import { SchemaTools } from '@unique-nft/api';
 import { CreateTokenNewArguments } from './types';
 import { TokenIdArguments } from '../../types';
+import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -21,7 +22,10 @@ export class CreateTokenNewMutation extends MutationMethodBase<
     const collection = await this.sdk.collections.get_new({ collectionId });
     if (!collection) throw new SdkError(`no collection ${collectionId}`);
 
-    const properties = SchemaTools.encodeUnique.token(data, collection.schema);
+    const properties = SchemaTools.encodeUnique.token(
+      data,
+      AttributesTransformer.toOriginal(collection.schema),
+    );
 
     const tokenData: TokenPayload = {
       NFT: { properties },
