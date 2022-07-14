@@ -12,7 +12,12 @@ import {
 export class Extrinsics extends Section {
   public readonly path = `${this.client.options.url}/extrinsic`;
 
+  // todo path = 'extrinsics'
+  // todo baseUrl = this.client.options.baseUrl + '/' + this.path;
+
   // private readonly url = `${this.url}/extrinsic`;
+
+  // todo create метод эксринсика
 
   async getFee(
     args: TxBuildBody | UnsignedTxPayloadBody | SubmitTxBody,
@@ -21,6 +26,8 @@ export class Extrinsics extends Section {
       method: 'POST',
       url: `${this.path}/calculate-fee`,
       data: args,
+      // todo baseUrl = this.baseUrl
+      // todo url: 'calculate-fee'
     });
     return response.data;
   }
@@ -28,7 +35,7 @@ export class Extrinsics extends Section {
   // eslint-disable-next-line class-methods-use-this
   async sign(
     args: UnsignedTxPayloadBody,
-    signer: any,
+    signer: any, // todo signer = this.client.options.signer
   ): Promise<SignTxResultResponse> {
     if (!signer) throw new Error(`No signer provided`);
 
@@ -55,6 +62,7 @@ export class Extrinsics extends Section {
     const response = await this.client.instance({
       method: 'GET',
       url: `${this.path}/status?hash=${hash}`,
+      // todo params: { hash },
     });
     return response.data;
   }

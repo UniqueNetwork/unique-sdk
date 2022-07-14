@@ -18,6 +18,7 @@ export interface SubmittableResultCompleted<T> {
   parsed: T;
 }
 
+// todo вот надо balance, extrinsics положить в ./sections, а эти вспомогательные штуки оставить в classes да
 export class Mutation<A, R> {
   private readonly url = `${this.section.path}/${this.path}`;
 
@@ -87,15 +88,15 @@ export class Mutation<A, R> {
     let checkStatusResult;
     let i = 0;
     // eslint-disable-next-line no-constant-condition
-    while (true) {
+    while (true) { // todo while !checkStatusResult.isCompleted
       i += 1;
       // eslint-disable-next-line no-await-in-loop
-      await sleep(20_000);
+      await sleep(20_000); // todo это должен быть настраиваем параметр, лучше секунды 3-5
       // eslint-disable-next-line no-await-in-loop
       checkStatusResult = await this.section.client.extrinsics.status(hash);
       if (checkStatusResult.isCompleted && !checkStatusResult.isError)
         return checkStatusResult;
-      if (i > 100 || checkStatusResult.isError) {
+      if (i > 100 || checkStatusResult.isError) { // todo 100 в константы, и лучше может 5-10
         throw new Error();
       }
     }
