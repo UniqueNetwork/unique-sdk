@@ -8,6 +8,8 @@ import {
   Query,
   Inject,
   CACHE_MANAGER,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
@@ -18,6 +20,9 @@ import {
   BurnCollectionBody,
   SetCollectionLimitsBody,
   TransferCollectionBody,
+  SetCollectionPropertiesBody,
+  DeleteCollectionPropertiesBody,
+  SetTokenPropertyPermissionsBody,
 } from './types';
 
 export class BaseCollectionController {
@@ -56,5 +61,28 @@ export class BaseCollectionController {
     @Body() args: TransferCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.collections.transfer(args);
+  }
+
+  @Post('properties')
+  @HttpCode(HttpStatus.OK)
+  async setCollectionProperties(
+    @Body() args: SetCollectionPropertiesBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    return this.sdk.collections.setProperties.build(args);
+  }
+
+  @Delete('properties')
+  async deleteCollectionProperties(
+    @Body() args: DeleteCollectionPropertiesBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    return this.sdk.collections.deleteProperties.build(args);
+  }
+
+  @Post('token-property-permissions')
+  @HttpCode(HttpStatus.OK)
+  async setTokenPropertyPermissions(
+    @Body() args: SetTokenPropertyPermissionsBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    return this.sdk.collections.setTokenPropertyPermissions.build(args);
   }
 }

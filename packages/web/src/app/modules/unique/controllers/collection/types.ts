@@ -7,6 +7,12 @@ import {
   CreateCollectionArguments,
   CreateCollectionNewArguments,
   SetCollectionLimitsArguments,
+  SetCollectionPropertiesArguments,
+  CollectionProperty,
+  DeleteCollectionPropertiesArguments,
+  SetTokenPropertyPermissionsArguments,
+  PropertyKeyPermission,
+  PropertyPermission,
 } from '@unique-nft/sdk/tokens';
 import { IsInt, IsPositive } from 'class-validator';
 import {
@@ -122,4 +128,79 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   @ValidAddress()
   @AddressApiProperty
   to: string;
+}
+
+export class CollectionPropertyDto implements CollectionProperty {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty({ example: 'example' })
+  value: string;
+}
+
+export class SetCollectionPropertiesBody
+  implements SetCollectionPropertiesArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ type: [CollectionPropertyDto] })
+  properties;
+}
+
+export class DeleteCollectionPropertiesBody
+  implements DeleteCollectionPropertiesArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ type: [String], example: ['example'] })
+  propertyKeys: string[];
+}
+
+export class PropertyPermissionDto implements PropertyPermission {
+  @ApiProperty({ default: true })
+  mutable: boolean;
+
+  @ApiProperty({ default: true })
+  collectionAdmin: boolean;
+
+  @ApiProperty({ default: true })
+  tokenOwner: boolean;
+}
+
+export class PropertyKeyPermissionDto implements PropertyKeyPermission {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty()
+  permission: PropertyPermissionDto;
+}
+
+export class SetTokenPropertyPermissionsBody
+  implements SetTokenPropertyPermissionsArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ type: [PropertyKeyPermissionDto] })
+  propertyPermissions;
 }

@@ -1,10 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import {
   BurnTokenArguments,
+  DeleteTokenPropertiesArguments,
   NestTokenArguments,
+  SetTokenPropertiesArguments,
   TokenChildrenResult,
   TokenIdArguments,
   TokenParentResult,
+  TokenProperty,
   TopmostTokenOwnerResult,
   TransferTokenArguments,
   UnnestTokenArguments,
@@ -117,4 +120,52 @@ export class TokenParentResponse extends TokenId implements TokenParentResult {
 export class TopmostTokenOwnerResponse {
   @ApiProperty({ example: 'unjq56sK9skTMR1MyPLsDFXkQdRNNrD1gzE4wRJSYm2k6GjJn' })
   topmostOwner: TopmostTokenOwnerResult;
+}
+
+export class TokenPropertyDto implements TokenProperty {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty({ example: 'example' })
+  value: string;
+}
+
+export class SetTokenPropertiesBody implements SetTokenPropertiesArguments {
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ type: [TokenPropertyDto] })
+  properties;
+}
+
+export class DeleteTokenPropertiesBody
+  implements DeleteTokenPropertiesArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ type: [String], example: ['example'] })
+  propertyKeys: string[];
 }

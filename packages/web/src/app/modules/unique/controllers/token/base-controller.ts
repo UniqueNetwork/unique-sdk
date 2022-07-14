@@ -12,7 +12,9 @@ import {
 } from '@nestjs/common';
 import {
   BurnTokenBody,
+  DeleteTokenPropertiesBody,
   NestTokenBody,
+  SetTokenPropertiesBody,
   TokenChildrenResponse,
   TokenIdQuery,
   TokenParentResponse,
@@ -88,5 +90,20 @@ export class BaseTokenController {
         `no topmost owner for token with id ${args.collectionId} - ${args.tokenId}`,
       );
     }
+  }
+
+  @Post('properties')
+  @HttpCode(HttpStatus.OK)
+  async setCollectionProperties(
+    @Body() args: SetTokenPropertiesBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    return this.sdk.tokens.setProperties.build(args);
+  }
+
+  @Delete('properties')
+  async deleteCollectionProperties(
+    @Body() args: DeleteTokenPropertiesBody,
+  ): Promise<UnsignedTxPayloadResponse> {
+    return this.sdk.tokens.deleteProperties.build(args);
   }
 }
