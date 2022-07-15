@@ -13,14 +13,12 @@ describe('Accounts', () => {
     const provider = new KeyringProvider();
 
     accounts.addProvider(KeyringProvider, provider);
+    expect(accounts.getProvider(KeyringProvider)).toStrictEqual(provider);
 
-    const account = provider.addSeed(
-      'bus ahead nation nice damp recall place dance guide media clap language',
-    );
-    console.log(
-      'account',
-      account.instance.address,
-      '5HNUuEAYMWEo4cuBW7tuL9mLHR9zSA8H7SdNKsNnYRB9M5TX',
-    );
+    const alice = provider.addSeed('//Alice');
+    const bob = provider.addSeed('//Bob');
+    expect(accounts.getAccounts()).toStrictEqual([alice, bob]);
+
+    expect(accounts.first()).toStrictEqual(alice);
   });
 });

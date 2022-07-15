@@ -3,12 +3,12 @@ import { u8aToHex } from '@polkadot/util';
 import {
   Account,
   SignatureType,
-  Signer,
+  SdkSigner,
   SignResult,
   UnsignedTxPayload,
 } from '../src/types';
 
-function createSigner(keyringPair: KeyringPair): Signer {
+function createSigner(keyringPair: KeyringPair): SdkSigner {
   return {
     sign: async (unsignedTxPayload: UnsignedTxPayload): Promise<SignResult> => {
       const signature = await keyringPair.sign(
@@ -26,13 +26,13 @@ function createSigner(keyringPair: KeyringPair): Signer {
 }
 
 export class KeyringAccount extends Account<KeyringPair> {
-  #signer: Signer;
+  #signer: SdkSigner;
 
   constructor(keyringPair: KeyringPair) {
     super(keyringPair);
   }
 
-  public override getSigner(): Signer {
+  public override getSigner(): SdkSigner {
     if (!this.#signer) {
       this.#signer = createSigner(this.instance);
     }

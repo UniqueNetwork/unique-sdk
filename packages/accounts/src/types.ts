@@ -10,7 +10,7 @@ export interface UnsignedTxPayload {
   signerPayloadHex: HexString;
 }
 
-export interface Signer {
+export interface SdkSigner {
   sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult>;
 }
 
@@ -45,7 +45,7 @@ export interface AccountData {
 }
 
 export abstract class Account<T = unknown> {
-  abstract getSigner(): Signer;
+  abstract getSigner(): SdkSigner;
   protected constructor(public instance: T) {}
 }
 
