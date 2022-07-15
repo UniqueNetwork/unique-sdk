@@ -9,6 +9,7 @@ import '@unique-nft/sdk/state-queries';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
+import '@unique-nft/sdk/fungible';
 
 async function sdkFactory(
   chainWsUrl: Config['chainWsUrl'] | Config['secondary']['chainWsUrl'],
