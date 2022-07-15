@@ -9,7 +9,8 @@
         "distDir": "./dist/packages/accounts",
         "entryPoints": [
           "./index.ts",
-          "./keyring/index.ts"
+          "./keyring/index.ts",
+          "./polkadot/index.ts"
         ]
       }
     },

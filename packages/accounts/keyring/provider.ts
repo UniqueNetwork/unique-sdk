@@ -25,18 +25,14 @@ export class KeyringProvider extends Provider<Keyring, KeyringPair> {
     await cryptoWaitReady();
   }
 
-  public override getAccounts(): Account<KeyringPair>[] {
+  public override async getAccounts(): Promise<Account<KeyringPair>[]> {
     return this.instance.pairs.map((p) => new KeyringAccount(p));
   }
 
   addSeed(seed: string): Account<KeyringPair> {
-    if (!this.#bySeed.has(seed)) {
-      const keyringPair: KeyringPair = this.instance.addFromMnemonic(seed);
+    const keyringPair: KeyringPair = this.instance.addFromMnemonic(seed);
 
-      this.#bySeed.set(seed, new KeyringAccount(keyringPair));
-    }
-
-    return this.#bySeed.get(seed) as Account<KeyringPair>;
+    return new KeyringAccount(keyringPair);
   }
 
   addKeyfile(

@@ -7,7 +7,7 @@ describe('Accounts', () => {
     await cryptoWaitReady();
   });
 
-  it('create provider', async () => {
+  it('ok', async () => {
     const accounts = new Accounts();
 
     const provider = new KeyringProvider();
@@ -17,8 +17,11 @@ describe('Accounts', () => {
 
     const alice = provider.addSeed('//Alice');
     const bob = provider.addSeed('//Bob');
-    expect(accounts.getAccounts()).toStrictEqual([alice, bob]);
 
-    expect(accounts.first()).toStrictEqual(alice);
+    const list = await accounts.getAccounts();
+    expect(list).toStrictEqual([alice, bob]);
+
+    const first = await accounts.first();
+    expect(first).toStrictEqual(alice);
   });
 });

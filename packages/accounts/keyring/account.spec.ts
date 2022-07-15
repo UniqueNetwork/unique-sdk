@@ -9,7 +9,7 @@ describe('keyring-account', () => {
     await cryptoWaitReady();
   });
 
-  it('create provider', async () => {
+  it('create account', async () => {
     const keyring = new Keyring({
       type: SignatureType.Sr25519,
     });

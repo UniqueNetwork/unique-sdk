@@ -13,17 +13,19 @@ export class Accounts {
     return this.providers.get(ProviderClass);
   }
 
-  getAccounts(): Account[] {
+  async getAccounts(): Promise<Account[]> {
     const accounts = [];
     const providers = this.providers.values();
     // eslint-disable-next-line no-restricted-syntax
     for (const provider of providers) {
-      accounts.push(...provider.getAccounts());
+      accounts.push(provider.getAccounts());
     }
-    return accounts;
+    const result: Account[][] = await Promise.all(accounts);
+    return Promise.resolve(result.flat(1));
   }
 
-  first(): Account | undefined {
-    return this.getAccounts().find((a) => !!a);
+  async first(): Promise<Account | undefined> {
+    const accounts = await this.getAccounts();
+    return accounts.find((a) => !!a);
   }
 }

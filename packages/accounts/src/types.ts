@@ -54,5 +54,5 @@ export abstract class Provider<I = unknown, A = unknown> extends Object {
 
   abstract init(): Promise<void>;
 
-  abstract getAccounts(): Account<A>[];
+  abstract getAccounts(): Promise<Account<A>[]>;
 }
