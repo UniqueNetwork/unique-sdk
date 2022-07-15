@@ -84,23 +84,26 @@ export class Mutation<A, R> {
   ): Promise<ExtrinsicResultResponse> {
     // todo здесь мы будем периодически пинговать GET extrinsics/status
     const { hash } = await this.submit(args);
-    let checkStatusResult;
+    let checkStatusResult: ExtrinsicResultResponse | undefined;
     let i = 0;
     // eslint-disable-next-line no-constant-condition
-    while (true) {
-      // todo while !checkStatusResult.isCompleted
+    while (
+      (!checkStatusResult || !checkStatusResult?.isCompleted) &&
+      i <= this.client.params.maximumNumberOfStatusRequests
+    ) {
       i += 1;
-      // eslint-disable-next-line no-await-in-loop
-      await sleep(20_000); // todo это должен быть настраиваем параметр, лучше секунды 3-5
       // eslint-disable-next-line no-await-in-loop
       checkStatusResult = await this.client.extrinsics.status(hash);
       if (checkStatusResult.isCompleted && !checkStatusResult.isError)
         return checkStatusResult;
-      if (i > 100 || checkStatusResult.isError) {
+      if (checkStatusResult.isError) {
         // todo 100 в константы, и лучше может 5-10
         throw new Error();
       }
+      // eslint-disable-next-line no-await-in-loop
+      await sleep(this.client.params.waitBetweenStatusRequestsInMs); // todo это должен быть настраиваем параметр, лучше секунды 3-5
     }
+    throw new Error();
   }
 
   async submitWaitResult(
