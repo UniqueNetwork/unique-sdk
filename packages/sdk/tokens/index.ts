@@ -5,16 +5,7 @@ import { SdkCollections } from './sdk-collections';
 import { SdkTokens } from './sdk-tokens';
 import './augment-sdk';
 
-export {
-  encodeToken,
-  decodeToken,
-  encodeCollection,
-  decodeCollection,
-  getNestingTokenAddress,
-  isNestingAddress,
-  getCollectionIdFromNestingAddress,
-  getTokenIdFromNestingAddress,
-} from './utils';
+export * from './utils';
 export { SdkCollections } from './sdk-collections';
 export { SdkTokens } from './sdk-tokens';
 export * from './types';

@@ -23,7 +23,7 @@ import {
   CollectionPropertiesKeys,
   CollectionInfoWithProperties,
   CollectionInfoBase,
-} from '../methods/create-collection-ex/types';
+} from '../methods/create-collection-ex';
 
 type CollectionProperty = {
   key: CollectionPropertiesKeys;
@@ -133,7 +133,6 @@ export const encodeCollectionBase = (
   };
 
   const createData = {
-    ...extra,
     mode: collectionInfo.mode || CollectionMode.Nft,
     name: collectionInfo.name ? stringToUTF16(collectionInfo.name) : undefined,
     description: collectionInfo.description
@@ -144,6 +143,7 @@ export const encodeCollectionBase = (
       : undefined,
     limits,
     permissions,
+    ...extra,
   };
 
   return registry.createType<UpDataStructsCreateCollectionData>(
