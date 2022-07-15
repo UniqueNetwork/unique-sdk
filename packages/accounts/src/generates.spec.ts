@@ -9,7 +9,7 @@ describe('Generates', () => {
     await cryptoWaitReady();
   });
 
-  it.each([undefined, '', 'pass1'])('generate ok - %s', async (password) => {
+  it.each([undefined, ''])('generate ok - %s', async (password) => {
     await expect(async () => {
       const newAccount = await generateAccount({});
 
