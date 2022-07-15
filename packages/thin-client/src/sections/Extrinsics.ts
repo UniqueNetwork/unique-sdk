@@ -21,10 +21,9 @@ export class Extrinsics extends Section {
   ): Promise<FeeResponse> {
     const response = await this.client.instance({
       method: 'POST',
-      url: `${this.baseUrl}/calculate-fee`,
+      baseURL: this.baseUrl,
+      url: 'calculate-fee',
       data: args,
-      // todo baseUrl = this.baseUrl
-      // todo url: 'calculate-fee'
     });
     return response.data;
   }
@@ -49,7 +48,8 @@ export class Extrinsics extends Section {
   async submit(args: SubmitTxBody): Promise<SubmitResultResponse> {
     const response = await this.client.instance({
       method: 'POST',
-      url: `${this.baseUrl}/submit`,
+      baseURL: this.baseUrl,
+      url: 'submit',
       data: args,
     });
     return response.data;
@@ -58,7 +58,8 @@ export class Extrinsics extends Section {
   async status(hash: string): Promise<ExtrinsicResultResponse> {
     const response = await this.client.instance({
       method: 'GET',
-      url: `${this.baseUrl}/status`,
+      baseURL: this.baseUrl,
+      url: 'status',
       params: { hash },
     });
     return response.data;

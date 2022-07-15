@@ -14,12 +14,13 @@ export class Balance extends Section {
   public readonly transfer = new Mutation<
     BalanceTransferBody,
     BalanceTransferParsed
-  >(this.client, 'POST', `${this.path}/transfer`); // todo сюда наверно первым параметром можно this.client передать
+  >(this.client, 'POST', `${this.path}/transfer`);
 
   async get(args: { address: string }): Promise<AllBalancesResponse> {
     const response = await this.client.instance({
       method: 'GET',
-      url: `${this.baseUrl}`,
+      baseURL: this.baseUrl,
+      url: '',
       params: { address: args.address },
     });
     return response.data;
