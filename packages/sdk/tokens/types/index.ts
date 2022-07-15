@@ -12,13 +12,14 @@ export * from '../methods/token-parent/types';
 export * from '../methods/topmost-token-owner/types';
 export * from '../methods/set-collection-limits/types';
 export * from '../methods/get-stats/types';
-export * from '../methods/set-collection-properties';
-export * from '../methods/delete-collection-properties';
-export * from '../methods/set-token-properties';
-export * from '../methods/delete-token-properties';
-export * from '../methods/set-token-property-permissions';
-export * from '../methods/collection-properties';
-export * from '../methods/token-properties';
+export * from '../methods/set-collection-properties/types';
+export * from '../methods/delete-collection-properties/types';
+export * from '../methods/set-token-properties/types';
+export * from '../methods/delete-token-properties/types';
+export * from '../methods/set-token-property-permissions/types';
+export * from '../methods/collection-properties/types';
+export * from '../methods/token-properties/types';
+export * from '../methods/property-permissions/types';
 
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
@@ -40,4 +41,15 @@ export type CollectionProperty = {
 export type TokenProperty = {
   key: string;
   value: string;
+};
+
+export type PropertyPermission = {
+  mutable: boolean;
+  collectionAdmin: boolean;
+  tokenOwner: boolean;
+};
+
+export type PropertyKeyPermission = {
+  key: string;
+  permission: PropertyPermission;
 };

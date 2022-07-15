@@ -1,15 +1,5 @@
 import { Address } from '@unique-nft/sdk/types';
-
-export type PropertyPermission = {
-  mutable: boolean;
-  collectionAdmin: boolean;
-  tokenOwner: boolean;
-};
-
-export type PropertyKeyPermission = {
-  key: string;
-  permission: PropertyPermission;
-};
+import { PropertyKeyPermission } from '@unique-nft/sdk/tokens/types';
 
 export type SetTokenPropertyPermissionsArguments = {
   address: Address;

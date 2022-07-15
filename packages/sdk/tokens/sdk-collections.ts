@@ -2,7 +2,6 @@ import '@unique-nft/unique-mainnet-types/augment-api';
 
 import { Sdk } from '@unique-nft/sdk';
 import { MutationMethodWrap, QueryMethod } from '@unique-nft/sdk/extrinsics';
-
 import {
   UnsignedTxPayload,
   BurnCollectionArguments,
@@ -48,6 +47,11 @@ import {
   CollectionPropertiesArguments,
   CollectionPropertiesResult,
 } from './methods/collection-properties';
+import {
+  PropertyPermissionsArguments,
+  propertyPermissionsQuery,
+  PropertyPermissionsResult,
+} from './methods/property-permissions';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
@@ -60,10 +64,11 @@ export class SdkCollections {
     this.getStats = getStats.bind(this.sdk);
     this.setProperties = new SetCollectionPropertiesMutation(this.sdk);
     this.deleteProperties = new DeleteCollectionPropertiesMutation(this.sdk);
-    this.setTokenPropertyPermissions = new SetTokenPropertyPermissionsMutation(
+    this.setPropertyPermissions = new SetTokenPropertyPermissionsMutation(
       this.sdk,
     );
     this.properties = collectionPropertiesQuery.bind(this.sdk);
+    this.propertyPermissions = propertyPermissionsQuery.bind(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -99,7 +104,7 @@ export class SdkCollections {
     DeleteCollectionPropertiesResult
   >;
 
-  setTokenPropertyPermissions: MutationMethodWrap<
+  setPropertyPermissions: MutationMethodWrap<
     SetTokenPropertyPermissionsArguments,
     SetTokenPropertyPermissionsResult
   >;
@@ -107,6 +112,11 @@ export class SdkCollections {
   properties: QueryMethod<
     CollectionPropertiesArguments,
     CollectionPropertiesResult
+  >;
+
+  propertyPermissions: QueryMethod<
+    PropertyPermissionsArguments,
+    PropertyPermissionsResult
   >;
 
   transfer(args: TransferCollectionArguments): Promise<UnsignedTxPayload> {

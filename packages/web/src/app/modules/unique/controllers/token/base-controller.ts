@@ -10,6 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { TokenPropertiesResult } from '@unique-nft/sdk/tokens';
 import {
   BurnTokenBody,
   DeleteTokenPropertiesBody,
@@ -93,7 +94,9 @@ export class BaseTokenController {
   }
 
   @Get('properties')
-  async tokenProperties(@Query() args: TokenIdQuery) {
+  async tokenProperties(
+    @Query() args: TokenIdQuery,
+  ): Promise<TokenPropertiesResult> {
     return this.sdk.tokens.properties(args);
   }
 

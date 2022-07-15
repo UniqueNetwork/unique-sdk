@@ -13,6 +13,10 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
+import {
+  CollectionPropertiesResult,
+  PropertyPermissionsResult,
+} from '@unique-nft/sdk/tokens';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {
@@ -64,7 +68,9 @@ export class BaseCollectionController {
   }
 
   @Get('properties')
-  async collectionProperties(@Query() args: CollectionIdQuery) {
+  async collectionProperties(
+    @Query() args: CollectionIdQuery,
+  ): Promise<CollectionPropertiesResult> {
     return this.sdk.collections.properties(args);
   }
 
@@ -83,11 +89,18 @@ export class BaseCollectionController {
     return this.sdk.collections.deleteProperties.build(args);
   }
 
-  @Post('token-property-permissions')
+  @Get('property-permissions')
+  async propertyPermissions(
+    @Query() args: CollectionIdQuery,
+  ): Promise<PropertyPermissionsResult> {
+    return this.sdk.collections.propertyPermissions(args);
+  }
+
+  @Post('property-permissions')
   @HttpCode(HttpStatus.OK)
   async setTokenPropertyPermissions(
     @Body() args: SetTokenPropertyPermissionsBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.setTokenPropertyPermissions.build(args);
+    return this.sdk.collections.setPropertyPermissions.build(args);
   }
 }

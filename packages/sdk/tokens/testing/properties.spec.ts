@@ -32,6 +32,10 @@ import {
   SetCollectionPropertiesArguments,
   SetCollectionPropertiesResult,
 } from '../methods/set-collection-properties';
+import {
+  PropertyPermissionsArguments,
+  PropertyPermissionsResult,
+} from '../methods/property-permissions';
 
 describe('Properties', () => {
   let sdk: Sdk;
@@ -182,7 +186,7 @@ describe('Properties', () => {
     };
 
     const result =
-      await sdk.collections.setTokenPropertyPermissions.submitWaitResult(args);
+      await sdk.collections.setPropertyPermissions.submitWaitResult(args);
 
     const expected: SetTokenPropertyPermissionsResult = [
       {
@@ -197,6 +201,35 @@ describe('Properties', () => {
 
     expect(result.parsed).toStrictEqual(expected);
   }, 60_000);
+
+  it('property-permissions', async () => {
+    const args: PropertyPermissionsArguments = {
+      collectionId,
+    };
+
+    const result = await sdk.collections.propertyPermissions(args);
+
+    const expected: PropertyPermissionsResult = [
+      {
+        key: 'foo',
+        permission: {
+          mutable: true,
+          collectionAdmin: true,
+          tokenOwner: true,
+        },
+      },
+      {
+        key: 'bar',
+        permission: {
+          mutable: true,
+          collectionAdmin: true,
+          tokenOwner: true,
+        },
+      },
+    ];
+
+    expect(result).toStrictEqual(expected);
+  }, 30_000);
 
   it('set-token-properties', async () => {
     const properties = [
@@ -255,7 +288,7 @@ describe('Properties', () => {
     ];
 
     expect(result).toStrictEqual(expected);
-  }, 15_000);
+  }, 30_000);
 
   it('delete-token-properties', async () => {
     const propertyKeys = ['foo', 'bar'];
