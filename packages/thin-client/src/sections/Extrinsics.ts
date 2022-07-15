@@ -1,4 +1,4 @@
-import { Section } from './Section';
+import { Section } from '../classes/Section';
 import {
   SignTxResultResponse,
   UnsignedTxPayloadBody,

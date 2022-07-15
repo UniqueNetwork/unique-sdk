@@ -12,21 +12,22 @@ export interface MutationOptions {
   signer?: any;
 }
 
-export interface SubmittableResultCompleted<T> {
-  submittableResult?: any;
-  isCompleted: true;
-  parsed: T;
-}
+// export interface SubmittableResultCompleted<T> {
+//   submittableResult?: any;
+//   isCompleted: true;
+//   parsed: T;
+// }
 
-// todo вот надо balance, extrinsics положить в ./sections, а эти вспомогательные штуки оставить в classes да
 export class Mutation<A, R> {
-  private readonly url = `${this.client.options.baseUrl}/${this.path}`;
+  private readonly url: string;
 
   constructor(
     private readonly client: ThinClient,
     private readonly method: 'POST' | 'PUT' | 'PATCH',
     private readonly path: string,
-  ) {}
+  ) {
+    this.url = `${this.client.options.baseUrl}/${this.path}`;
+  }
 
   async build(args: A): Promise<UnsignedTxPayloadResponse> {
     const response = await this.client.instance({

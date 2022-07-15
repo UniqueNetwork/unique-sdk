@@ -1,5 +1,5 @@
-import { Mutation } from './Mutation';
-import { Section } from './Section';
+import { Mutation } from '../classes/Mutation';
+import { Section } from '../classes/Section';
 import {
   BalanceTransferBody,
   BalanceTransferParsed,

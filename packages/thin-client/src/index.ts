@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import Axios, { AxiosInstance } from 'axios';
-import { Balance } from './classes/Balance';
-import { Extrinsics } from './classes/Extrinsics';
+import { Balance } from './sections/Balance';
+import { Extrinsics } from './sections/Extrinsics';
 
 export class ThinClient {
   public instance: AxiosInstance;
@@ -14,6 +14,7 @@ export class ThinClient {
     public readonly options: {
       baseUrl: string;
       signer: any;
+      defaults?: any;
     },
   ) {
     this.instance = Axios.create({
