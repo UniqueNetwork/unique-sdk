@@ -496,7 +496,7 @@ export interface CreateCollectionNewRequest {
   schema: UniqueCollectionSchemaToCreateDto;
 }
 
-type arrayNumberRecordStringAny = string;
+type arrayNumberRecordStringAny = string | number;
 
 export interface TxBuildBody {
   /**

@@ -17,6 +17,19 @@ const baseUrl = 'http://localhost:3000';
 const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
 const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
 
+describe('extrinsics', () => {
+  it('build', async () => {
+    const client = new ThinClient({ baseUrl, signer: null });
+    const response: UnsignedTxPayloadResponse = await client.extrinsics.build({
+      address: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+      section: 'balances',
+      method: 'transfer',
+      args: ['yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK', 100000000],
+    });
+    expect(response).toEqual(expect.any(Object));
+  });
+});
+
 describe('balance', () => {
   let bob: KeyringPair;
   let alice: KeyringPair;
