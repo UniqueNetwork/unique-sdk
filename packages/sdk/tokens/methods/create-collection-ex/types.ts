@@ -78,6 +78,6 @@ export interface CollectionInfoWithProperties extends CollectionInfoBase {
 }
 
 export interface CreateCollectionArguments
-  extends CollectionInfoWithProperties {
+  extends Omit<CollectionInfoWithProperties, 'mode'> {
   address: Address;
 }

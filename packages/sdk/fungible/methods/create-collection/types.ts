@@ -1,10 +1,9 @@
-import { Address } from '@unique-nft/sdk/types';
-import { CollectionInfoBase } from '@unique-nft/sdk/tokens';
+import { CreateCollectionArguments } from '@unique-nft/sdk/tokens';
 
-export interface FungibleCollection extends CollectionInfoBase {
+export interface CreateFungibleCollectionArguments
+  extends Omit<
+    CreateCollectionArguments,
+    'properties' | 'tokenPropertyPermissions'
+  > {
   decimals: number;
-}
-
-export interface CreateFungibleCollectionArguments extends FungibleCollection {
-  address: Address;
 }
