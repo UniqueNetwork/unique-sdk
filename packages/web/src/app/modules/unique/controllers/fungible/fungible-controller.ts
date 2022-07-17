@@ -1,9 +1,12 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CACHE_MANAGER,
   Controller,
+  Get,
   Inject,
+  NotFoundException,
   Post,
+  Query,
   UseFilters,
   UsePipes,
 } from '@nestjs/common';
@@ -15,8 +18,11 @@ import {
   MutationMethod,
   MutationMethodOptions,
 } from '../../../../decorators/mutation-method';
-import { CreateFungibleCollectionRequest } from './types';
-import { CreateCollectionResponse } from '../collection';
+import {
+  CreateFungibleCollectionRequest,
+  FungibleCollectionInfoDto,
+} from './types';
+import { CollectionIdQuery, CreateCollectionResponse } from '../collection';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -27,6 +33,18 @@ export class FungibleController {
     readonly sdk: Sdk,
     @Inject(CACHE_MANAGER) readonly cache: Cache,
   ) {}
+
+  @Get('collection')
+  @ApiResponse({ type: FungibleCollectionInfoDto })
+  async getCollection(
+    @Query() args: CollectionIdQuery,
+  ): Promise<FungibleCollectionInfoDto> {
+    const collection = await this.sdk.fungible.getCollection(args);
+
+    if (collection) return collection;
+
+    throw new NotFoundException(`no collection with id ${args.collectionId}`);
+  }
 
   @MutationMethod(
     Post('collection'),
