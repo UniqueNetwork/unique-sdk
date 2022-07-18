@@ -13,8 +13,6 @@ describe('Accounts', () => {
     await accounts.addProvider(KeyringProvider);
     await accounts.addProvider(KeyringLocalProvider, {});
 
-    const list = await accounts.getAccounts();
-
     const keyringProvider = accounts.getProvider(
       KeyringProvider,
     ) as KeyringProvider;
@@ -28,6 +26,8 @@ describe('Accounts', () => {
 
     keyringLocalProvider.addUri('//Eve');
     const eve = (await keyringLocalProvider.getAccounts())[0];
+
+    const list = await accounts.getAccounts();
 
     const first = await accounts.first();
 
