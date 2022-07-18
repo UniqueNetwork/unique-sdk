@@ -2,30 +2,26 @@
 import Axios, { AxiosInstance } from 'axios';
 import { Balance } from './sections/balance';
 import { Extrinsics } from './sections/extrinsics';
-
-export interface Options {
-  baseUrl: string;
-  signer: any;
-  maximumNumberOfStatusRequests?: number;
-  waitBetweenStatusRequestsInMs?: number;
-}
+import {
+  ClientParameters,
+  Options,
+  IExtrinsics,
+  IBalance,
+} from './types/interfaces';
 
 export class ThinClient {
   public instance: AxiosInstance;
 
-  public readonly extrinsics = new Extrinsics(this);
+  public readonly extrinsics: IExtrinsics = new Extrinsics(this);
 
-  public readonly balance = new Balance(this);
+  public readonly balance: IBalance = new Balance(this);
 
   public readonly defaults: Options = {
     baseUrl: '',
     signer: null,
   };
 
-  public readonly params: {
-    maximumNumberOfStatusRequests: number;
-    waitBetweenStatusRequestsInMs: number;
-  };
+  public readonly params: ClientParameters;
 
   constructor(public readonly options: Options) {
     this.params = {

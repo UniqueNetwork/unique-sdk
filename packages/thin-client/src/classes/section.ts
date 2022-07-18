@@ -1,9 +1,9 @@
-import { ThinClient } from '../index';
+import { IThinClient } from '../types/interfaces';
 
 export abstract class Section {
   abstract readonly path: string;
 
   abstract readonly baseUrl: string;
 
-  constructor(public readonly client: ThinClient) {}
+  constructor(public readonly client: IThinClient) {}
 }

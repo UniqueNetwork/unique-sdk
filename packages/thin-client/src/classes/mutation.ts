@@ -6,11 +6,7 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/api';
 import { isUnsignedTxPayloadResponse, isSubmitTxBody, sleep } from '../utils';
-import { ThinClient } from '../index';
-
-export interface MutationOptions {
-  signer?: any;
-}
+import { IThinClient, MutationOptions } from '../types/interfaces';
 
 // export interface SubmittableResultCompleted<T> {
 //   submittableResult?: any;
@@ -19,12 +15,12 @@ export interface MutationOptions {
 // }
 
 export class Mutation<A, R> {
-  private readonly url: string;
+  public readonly url: string;
 
   constructor(
-    private readonly client: ThinClient,
-    private readonly method: 'POST' | 'PUT' | 'PATCH',
-    private readonly path: string,
+    public readonly client: IThinClient,
+    public readonly method: 'POST' | 'PUT' | 'PATCH',
+    public readonly path: string,
   ) {
     this.url = `${this.client.options.baseUrl}/${this.path}`;
   }
@@ -63,7 +59,10 @@ export class Mutation<A, R> {
       : await this.build(args);
 
     const { signerPayloadJSON } = unsigned;
-    const { signature } = await this.client.extrinsics.sign(unsigned);
+    const { signature } = await this.client.extrinsics.sign(
+      unsigned,
+      undefined,
+    );
     return { signature, signerPayloadJSON };
   }
 
