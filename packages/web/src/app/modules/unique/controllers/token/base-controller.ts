@@ -1,21 +1,26 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
   Body,
+  CACHE_MANAGER,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   NotFoundException,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { TokenPropertiesResult } from '@unique-nft/sdk/tokens';
 import {
   BurnTokenBody,
   DeleteTokenPropertiesBody,
+  DeleteTokenPropertiesResponse,
   NestTokenBody,
   SetTokenPropertiesBody,
+  SetTokenPropertiesResponse,
   TokenChildrenResponse,
   TokenIdQuery,
   TokenParentResponse,
@@ -24,9 +29,16 @@ import {
   UnnestTokenBody,
 } from './types';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
+import {
+  MutationMethod,
+  MutationMethodOptions,
+} from '../../../../decorators/mutation-method';
 
 export class BaseTokenController {
-  constructor(readonly sdk: Sdk) {}
+  constructor(
+    readonly sdk: Sdk,
+    @Inject(CACHE_MANAGER) readonly cache: Cache,
+  ) {}
 
   @Delete()
   async burnToken(
@@ -100,18 +112,27 @@ export class BaseTokenController {
     return this.sdk.tokens.properties(args);
   }
 
-  @Post('properties')
-  @HttpCode(HttpStatus.OK)
-  async setCollectionProperties(
-    @Body() args: SetTokenPropertiesBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.setProperties.build(args);
+  @MutationMethod(
+    Post('properties'),
+    SetTokenPropertiesBody,
+    SetTokenPropertiesResponse,
+  )
+  setTokenProperties(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.setProperties,
+      cache: this.cache,
+    };
   }
 
-  @Delete('properties')
-  async deleteCollectionProperties(
-    @Body() args: DeleteTokenPropertiesBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.deleteProperties.build(args);
+  @MutationMethod(
+    Delete('properties'),
+    DeleteTokenPropertiesBody,
+    DeleteTokenPropertiesResponse,
+  )
+  deleteTokenProperties(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.deleteProperties,
+      cache: this.cache,
+    };
   }
 }

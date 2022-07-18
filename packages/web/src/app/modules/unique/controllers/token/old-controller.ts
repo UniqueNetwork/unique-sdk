@@ -1,7 +1,9 @@
 import {
   Body,
+  CACHE_MANAGER,
   Controller,
   Get,
+  Inject,
   NotFoundException,
   Post,
   Query,
@@ -10,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Sdk } from '@unique-nft/sdk';
+import { Cache } from 'cache-manager';
 import { SdkValidationPipe } from '../../../../validation';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
 import { CreateTokenBody, TokenIdQuery } from './types';
@@ -22,8 +25,8 @@ import { BaseTokenController } from './base-controller';
 @ApiTags('token')
 @Controller('token')
 export class OldTokenController extends BaseTokenController {
-  constructor(readonly sdk: Sdk) {
-    super(sdk);
+  constructor(readonly sdk: Sdk, @Inject(CACHE_MANAGER) readonly cache: Cache) {
+    super(sdk, cache);
   }
 
   @Get()

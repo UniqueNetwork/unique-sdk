@@ -8,8 +8,6 @@ import {
   Query,
   Inject,
   CACHE_MANAGER,
-  HttpCode,
-  HttpStatus,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
@@ -20,14 +18,21 @@ import {
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {
+  SetPropertyPermissionsResponse,
   CollectionIdQuery,
   BurnCollectionBody,
   SetCollectionLimitsBody,
   TransferCollectionBody,
   SetCollectionPropertiesBody,
   DeleteCollectionPropertiesBody,
-  SetTokenPropertyPermissionsBody,
+  SetPropertyPermissionsBody,
+  SetCollectionPropertiesResponse,
+  DeleteCollectionPropertiesResponse,
 } from './types';
+import {
+  MutationMethod,
+  MutationMethodOptions,
+} from '../../../../decorators/mutation-method';
 
 export class BaseCollectionController {
   constructor(
@@ -74,19 +79,28 @@ export class BaseCollectionController {
     return this.sdk.collections.properties(args);
   }
 
-  @Post('properties')
-  @HttpCode(HttpStatus.OK)
-  async setCollectionProperties(
-    @Body() args: SetCollectionPropertiesBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.setProperties.build(args);
+  @MutationMethod(
+    Post('properties'),
+    SetCollectionPropertiesBody,
+    SetCollectionPropertiesResponse,
+  )
+  setCollectionProperties(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.setProperties,
+      cache: this.cache,
+    };
   }
 
-  @Delete('properties')
-  async deleteCollectionProperties(
-    @Body() args: DeleteCollectionPropertiesBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.deleteProperties.build(args);
+  @MutationMethod(
+    Delete('properties'),
+    DeleteCollectionPropertiesBody,
+    DeleteCollectionPropertiesResponse,
+  )
+  deleteCollectionProperties(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.deleteProperties,
+      cache: this.cache,
+    };
   }
 
   @Get('property-permissions')
@@ -96,11 +110,15 @@ export class BaseCollectionController {
     return this.sdk.collections.propertyPermissions(args);
   }
 
-  @Post('property-permissions')
-  @HttpCode(HttpStatus.OK)
-  async setTokenPropertyPermissions(
-    @Body() args: SetTokenPropertyPermissionsBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.setPropertyPermissions.build(args);
+  @MutationMethod(
+    Post('property-permissions'),
+    SetPropertyPermissionsBody,
+    SetPropertyPermissionsResponse,
+  )
+  setPropertyPermissions(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.setPropertyPermissions,
+      cache: this.cache,
+    };
   }
 }

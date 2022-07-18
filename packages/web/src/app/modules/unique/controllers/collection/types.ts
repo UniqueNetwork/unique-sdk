@@ -15,6 +15,7 @@ import {
   PropertyPermission,
 } from '@unique-nft/sdk/tokens';
 import { IsInt, IsPositive } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   BurnCollectionArguments,
   TransferCollectionArguments,
@@ -151,8 +152,11 @@ export class SetCollectionPropertiesBody
   collectionId: number;
 
   @ApiProperty({ type: [CollectionPropertyDto] })
-  properties;
+  @Type(() => CollectionPropertyDto)
+  properties: CollectionProperty[];
 }
+
+export class SetCollectionPropertiesResponse extends MutationResponse {}
 
 export class DeleteCollectionPropertiesBody
   implements DeleteCollectionPropertiesArguments
@@ -169,6 +173,8 @@ export class DeleteCollectionPropertiesBody
   @ApiProperty({ type: [String], example: ['example'] })
   propertyKeys: string[];
 }
+
+export class DeleteCollectionPropertiesResponse extends MutationResponse {}
 
 export class PropertyPermissionDto implements PropertyPermission {
   @ApiProperty({ default: true })
@@ -189,7 +195,7 @@ export class PropertyKeyPermissionDto implements PropertyKeyPermission {
   permission: PropertyPermissionDto;
 }
 
-export class SetTokenPropertyPermissionsBody
+export class SetPropertyPermissionsBody
   implements SetTokenPropertyPermissionsArguments
 {
   @ValidAddress()
@@ -202,5 +208,8 @@ export class SetTokenPropertyPermissionsBody
   collectionId: number;
 
   @ApiProperty({ type: [PropertyKeyPermissionDto] })
-  propertyPermissions;
+  @Type(() => PropertyKeyPermissionDto)
+  propertyPermissions: PropertyKeyPermission[];
 }
+
+export class SetPropertyPermissionsResponse extends MutationResponse {}

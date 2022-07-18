@@ -19,8 +19,10 @@ import {
   CreateTokenArguments,
 } from '@unique-nft/sdk/types';
 import { IsInt, IsOptional, IsPositive, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ValidAddress } from '../../../../validation';
 import { CollectionId } from '../collection';
+import { MutationResponse } from '../../../../decorators/mutation-method/types';
 import {
   AddressApiProperty,
   AddressQuery,
@@ -146,8 +148,11 @@ export class SetTokenPropertiesBody implements SetTokenPropertiesArguments {
   tokenId: number;
 
   @ApiProperty({ type: [TokenPropertyDto] })
-  properties;
+  @Type(() => TokenPropertyDto)
+  properties: TokenProperty[];
 }
+
+export class SetTokenPropertiesResponse extends MutationResponse {}
 
 export class DeleteTokenPropertiesBody
   implements DeleteTokenPropertiesArguments
@@ -169,3 +174,5 @@ export class DeleteTokenPropertiesBody
   @ApiProperty({ type: [String], example: ['example'] })
   propertyKeys: string[];
 }
+
+export class DeleteTokenPropertiesResponse extends MutationResponse {}
