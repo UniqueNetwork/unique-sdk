@@ -81,12 +81,8 @@ describe('Properties', () => {
   it('set-collection-properties', async () => {
     const properties = [
       {
-        key: 'foo',
-        value: 'FOO',
-      },
-      {
-        key: 'bar',
-        value: 'BAR',
+        key: 'test',
+        value: 'test',
       },
     ];
 
@@ -101,11 +97,7 @@ describe('Properties', () => {
     const expected: SetCollectionPropertiesResult = [
       {
         collectionId,
-        property: 'foo',
-      },
-      {
-        collectionId,
-        property: 'bar',
+        property: 'test',
       },
     ];
 
@@ -121,20 +113,16 @@ describe('Properties', () => {
 
     const expected: CollectionPropertiesResult = [
       {
-        key: 'foo',
-        value: 'FOO',
-      },
-      {
-        key: 'bar',
-        value: 'BAR',
+        key: 'test',
+        value: 'test',
       },
     ];
 
-    expect(result).toStrictEqual(expected);
+    expect(result).toMatchObject(expected);
   }, 15_000);
 
   it('delete-collection-properties', async () => {
-    const propertyKeys = ['foo', 'bar'];
+    const propertyKeys = ['test'];
 
     const args: DeleteCollectionPropertiesArguments = {
       address: richAccount.address,
@@ -149,11 +137,7 @@ describe('Properties', () => {
     const expected: DeleteCollectionPropertiesResult = [
       {
         collectionId,
-        property: 'foo',
-      },
-      {
-        collectionId,
-        property: 'bar',
+        property: 'test',
       },
     ];
 
@@ -163,15 +147,7 @@ describe('Properties', () => {
   it('set-token-property-permissions', async () => {
     const propertyPermissions = [
       {
-        key: 'foo',
-        permission: {
-          mutable: true,
-          collectionAdmin: true,
-          tokenOwner: true,
-        },
-      },
-      {
-        key: 'bar',
+        key: 'test',
         permission: {
           mutable: true,
           collectionAdmin: true,
@@ -191,11 +167,7 @@ describe('Properties', () => {
     const expected: SetTokenPropertyPermissionsResult = [
       {
         collectionId,
-        property: 'foo',
-      },
-      {
-        collectionId,
-        property: 'bar',
+        property: 'test',
       },
     ];
 
@@ -211,15 +183,15 @@ describe('Properties', () => {
 
     const expected: PropertyPermissionsResult = [
       {
-        key: 'foo',
+        key: '_old_constData',
         permission: {
-          mutable: true,
           collectionAdmin: true,
+          mutable: false,
           tokenOwner: true,
         },
       },
       {
-        key: 'bar',
+        key: 'test',
         permission: {
           mutable: true,
           collectionAdmin: true,
@@ -228,18 +200,14 @@ describe('Properties', () => {
       },
     ];
 
-    expect(result).toStrictEqual(expected);
+    expect(result).toMatchObject(expected);
   }, 30_000);
 
   it('set-token-properties', async () => {
     const properties = [
       {
-        key: 'foo',
-        value: 'FOO',
-      },
-      {
-        key: 'bar',
-        value: 'BAR',
+        key: 'test',
+        value: 'test',
       },
     ];
 
@@ -256,16 +224,11 @@ describe('Properties', () => {
       {
         collectionId,
         tokenId,
-        property: 'foo',
-      },
-      {
-        collectionId,
-        tokenId,
-        property: 'bar',
+        property: 'test',
       },
     ];
 
-    expect(result.parsed).toStrictEqual(expected);
+    expect(result.parsed).toMatchObject(expected);
   }, 60_000);
 
   it('token-properties', async () => {
@@ -278,12 +241,8 @@ describe('Properties', () => {
 
     const expected: TokenPropertiesResult = [
       {
-        key: 'foo',
-        value: 'FOO',
-      },
-      {
-        key: 'bar',
-        value: 'BAR',
+        key: 'test',
+        value: 'test',
       },
     ];
 
@@ -291,7 +250,7 @@ describe('Properties', () => {
   }, 30_000);
 
   it('delete-token-properties', async () => {
-    const propertyKeys = ['foo', 'bar'];
+    const propertyKeys = ['test'];
 
     const args: DeleteTokenPropertiesArguments = {
       address: richAccount.address,
@@ -306,12 +265,7 @@ describe('Properties', () => {
       {
         collectionId,
         tokenId,
-        property: 'foo',
-      },
-      {
-        collectionId,
-        tokenId,
-        property: 'bar',
+        property: 'test',
       },
     ];
 
