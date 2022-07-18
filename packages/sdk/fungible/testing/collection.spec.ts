@@ -1,27 +1,67 @@
 import '../index';
-import { createRichAccount, createSdk } from '../../testing';
+import { createPoorAccount, createRichAccount, createSdk } from '../../testing';
 
 describe('FungibleCollection', () => {
   it('create and get', async () => {
     const sdk = await createSdk(true);
-    const account = createRichAccount();
+    const richAccount = createRichAccount();
+    const poorAccount = createPoorAccount();
 
     const collectionPartial = {
       name: 'Test fungible collection',
       description: 'just test',
       tokenPrefix: 'TEST',
-      decimals: 10,
+      decimals: 5,
     };
 
     const {
       parsed: { collectionId },
     } = await sdk.fungible.createCollection.submitWaitResult({
-      address: account.address,
+      address: richAccount.address,
       ...collectionPartial,
     });
 
     const collection = await sdk.fungible.getCollection({ collectionId });
 
     expect(collection).toMatchObject(collectionPartial);
-  }, 30_000);
+
+    await sdk.fungible.addTokens.submitWaitResult({
+      address: richAccount.address,
+      amount: 999999,
+      collectionId,
+    });
+
+    await sdk.fungible.transferTokens.submitWaitResult({
+      address: richAccount.address,
+      amount: 0.1,
+      collectionId,
+      recipient: poorAccount.address,
+    });
+
+    const richBalance = await sdk.fungible.getBalance({
+      collectionId,
+      address: richAccount.address,
+    });
+
+    const poorBalance = await sdk.fungible.getBalance({
+      collectionId,
+      address: poorAccount.address,
+    });
+
+    expect(richBalance).toEqual({
+      raw: '989999',
+      amount: '9.89999',
+      formatted: '9.8999',
+      decimals: 5,
+      unit: 'TEST',
+    });
+
+    expect(poorBalance).toEqual({
+      raw: '10000',
+      amount: '0.10000',
+      formatted: '100.0000 m',
+      decimals: 5,
+      unit: 'TEST',
+    });
+  }, 120_000);
 });
