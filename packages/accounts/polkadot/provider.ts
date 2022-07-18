@@ -22,7 +22,8 @@ export class PolkadotProvider extends Provider<InjectedAccountWithMeta> {
   // eslint-disable-next-line class-methods-use-this
   public override async init(): Promise<void> {
     if (!isWeb3Injected) {
-      throw new Error('Polkadot extension not installed');
+      // todo log error Polkadot extension not installed
+      return Promise.resolve();
     }
 
     return Promise.resolve();
@@ -34,7 +35,8 @@ export class PolkadotProvider extends Provider<InjectedAccountWithMeta> {
   > {
     const injectedAccounts = await web3Accounts();
     if (!injectedAccounts.length) {
-      throw new Error('Polkadot account not found');
+      // todo log error Polkadot account not found
+      return [];
     }
 
     return Promise.all(injectedAccounts.map((acc) => createAccount(acc)));

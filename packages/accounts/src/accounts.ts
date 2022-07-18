@@ -1,16 +1,20 @@
-import { Account, Provider } from './types';
-
-type ProviderClass = { new (o: object): Provider };
+import { Account, Provider, ProviderClass, ProviderClass2 } from './types';
 
 export class Accounts {
-  private providers = new Map<ProviderClass, Provider>();
+  private providers = new Map<ProviderClass2<Provider>, Provider>();
 
-  addProvider(classLink: ProviderClass, provider: Provider) {
-    this.providers.set(classLink, provider);
+  async addProvider<T extends ProviderClass2<Provider>, R extends Provider>(
+    ProviderClassLink: T,
+    options?: object,
+  ): Promise<Provider> {
+    const provider: Provider = new ProviderClassLink(options);
+    await provider.init();
+    this.providers.set(ProviderClassLink, provider);
+    return provider;
   }
 
-  getProvider(ProviderClass: ProviderClass): Provider | undefined {
-    return this.providers.get(ProviderClass);
+  getProvider(ProviderClassLink: ProviderClass): Provider | undefined {
+    return this.providers.get(ProviderClassLink);
   }
 
   async getAccounts(): Promise<Account[]> {

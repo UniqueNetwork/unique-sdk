@@ -56,3 +56,7 @@ export abstract class Provider<A = unknown, I = unknown> extends Object {
 
   abstract getAccounts(): Promise<Account<A>[]>;
 }
+
+export type ProviderClass = { new (o?: any): Provider };
+
+export type ProviderClass2<T extends Provider> = { new (o?: any): T };
