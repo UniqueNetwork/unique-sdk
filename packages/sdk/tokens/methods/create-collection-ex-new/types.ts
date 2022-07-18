@@ -8,7 +8,7 @@ import {
 } from '@unique-nft/api';
 import { CollectionInfoBase } from '../create-collection-ex/types';
 
-export {
+export type {
   AttributeType,
   AttributeKind,
   COLLECTION_SCHEMA_NAME as CollectionSchemaName,
