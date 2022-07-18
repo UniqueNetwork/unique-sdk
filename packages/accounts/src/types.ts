@@ -49,8 +49,8 @@ export abstract class Account<T = unknown> {
   protected constructor(public instance: T) {}
 }
 
-export abstract class Provider<I = unknown, A = unknown> extends Object {
-  abstract instance: I;
+export abstract class Provider<A = unknown, I = unknown> extends Object {
+  protected instance: I;
 
   abstract init(): Promise<void>;
 

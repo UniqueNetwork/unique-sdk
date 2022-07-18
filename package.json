@@ -43,6 +43,7 @@
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "ethers": "^5.6.9",
     "file-type": "16.5.3",
     "ipfs-http-client": "53.0.1",
     "protobufjs": "^6.11.2",

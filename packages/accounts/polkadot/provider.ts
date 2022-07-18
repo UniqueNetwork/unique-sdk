@@ -14,9 +14,7 @@ async function createAccount(
   return new PolkadotAccount(injectedAccount, injector);
 }
 
-export class PolkadotProvider extends Provider<null, InjectedAccountWithMeta> {
-  public readonly instance: null;
-
+export class PolkadotProvider extends Provider<InjectedAccountWithMeta> {
   constructor() {
     super();
   }

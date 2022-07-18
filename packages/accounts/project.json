@@ -10,7 +10,8 @@
         "entryPoints": [
           "./index.ts",
           "./keyring/index.ts",
-          "./polkadot/index.ts"
+          "./polkadot/index.ts",
+          "./metamask/index.ts"
         ]
       }
     },

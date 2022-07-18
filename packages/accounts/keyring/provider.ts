@@ -8,9 +8,7 @@ import {
 import { Provider, Account } from '../src/types';
 import { KeyringAccount } from './account';
 
-export class KeyringProvider extends Provider<Keyring, KeyringPair> {
-  public readonly instance: Keyring;
-
+export class KeyringProvider extends Provider<KeyringPair, Keyring> {
   readonly #bySeed: Map<string, KeyringAccount>;
 
   constructor(private options?: KeyringOptions) {
