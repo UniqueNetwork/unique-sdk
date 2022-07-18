@@ -1,5 +1,5 @@
-import '../../index';
-import { createRichAccount, createSdk } from '../../../testing';
+import '../index';
+import { createRichAccount, createSdk } from '../../testing';
 
 describe('FungibleCollection', () => {
   it('create and get', async () => {
