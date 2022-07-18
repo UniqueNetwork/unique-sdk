@@ -19,10 +19,16 @@ import {
   MutationMethodOptions,
 } from '../../../../decorators/mutation-method';
 import {
+  AddTokensArgsDto,
+  AddTokensResultDto,
   CreateFungibleCollectionRequest,
   FungibleCollectionInfoDto,
+  GetFungibleBalanceArgsRequest,
+  TransferTokensArgsDto,
+  TransferTokensResultDto,
 } from './types';
 import { CollectionIdQuery, CreateCollectionResponse } from '../collection';
+import { BalanceResponse } from '../../../../types/sdk-methods';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -46,6 +52,14 @@ export class FungibleController {
     throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
+  @Get('balance')
+  @ApiResponse({ type: BalanceResponse })
+  async getBalance(
+    @Query() args: GetFungibleBalanceArgsRequest,
+  ): Promise<BalanceResponse> {
+    return this.sdk.fungible.getBalance(args);
+  }
+
   @MutationMethod(
     Post('collection'),
     CreateFungibleCollectionRequest,
@@ -57,6 +71,32 @@ export class FungibleController {
   createCollectionMutation(): MutationMethodOptions {
     return {
       mutationMethod: this.sdk.fungible.createCollection,
+      cache: this.cache,
+    };
+  }
+
+  @MutationMethod(Post('tokens'), AddTokensArgsDto, AddTokensResultDto)
+  @ApiOperation({
+    description: 'Add tokens to fungible collection',
+  })
+  addTokensMutation(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.fungible.addTokens,
+      cache: this.cache,
+    };
+  }
+
+  @MutationMethod(
+    Post('tokens/transfer'),
+    TransferTokensArgsDto,
+    TransferTokensResultDto,
+  )
+  @ApiOperation({
+    description: 'Transfer tokens of fungible collection',
+  })
+  transferTokensMutation(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.fungible.transferTokens,
       cache: this.cache,
     };
   }

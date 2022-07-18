@@ -14,7 +14,6 @@ import {
 
 export class SdkFungible {
   readonly createCollection: CreateCollectionMutation;
-  // readonly createCollection: CreateCollectionExNewMutation;
 
   readonly addTokens: AddTokensMutation;
 

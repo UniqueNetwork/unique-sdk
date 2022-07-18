@@ -7,6 +7,11 @@ import { CollectionMode } from '@unique-nft/sdk/tokens';
 import {
   CreateFungibleCollectionArguments,
   FungibleCollection,
+  AddTokensArgs,
+  AddTokensResult,
+  TransferTokensArgs,
+  TransferTokensResult,
+  GetFungibleBalanceArgs,
 } from '@unique-nft/sdk/fungible';
 import { AddressApiProperty } from '../../../../types/sdk-methods';
 import { CollectionInfoBaseDto } from '../../../../types/unique-types';
@@ -45,4 +50,65 @@ export class FungibleCollectionInfoDto
     example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
   })
   owner: string;
+}
+
+export class AddTokensArgsDto implements AddTokensArgs {
+  @AddressApiProperty
+  address: Address;
+
+  @ApiProperty({ required: false })
+  recipient?: Address;
+
+  @ApiProperty()
+  collectionId: number;
+
+  @ApiProperty()
+  amount: number;
+}
+
+export class AddTokensResultDto implements AddTokensResult {
+  @ApiProperty()
+  recipient: Address;
+
+  @ApiProperty()
+  collectionId: number;
+
+  @ApiProperty()
+  amount: number;
+}
+
+export class TransferTokensArgsDto implements TransferTokensArgs {
+  @AddressApiProperty
+  address: Address;
+
+  @AddressApiProperty
+  recipient: Address;
+
+  @ApiProperty()
+  amount: number;
+
+  @ApiProperty()
+  collectionId: number;
+}
+
+export class TransferTokensResultDto implements TransferTokensResult {
+  @AddressApiProperty
+  recipient: Address;
+
+  @AddressApiProperty
+  sender: Address;
+
+  @ApiProperty()
+  amount: number;
+
+  @ApiProperty()
+  collectionId: number;
+}
+
+export class GetFungibleBalanceArgsRequest implements GetFungibleBalanceArgs {
+  @AddressApiProperty
+  address: Address;
+
+  @ApiProperty()
+  collectionId: number;
 }
