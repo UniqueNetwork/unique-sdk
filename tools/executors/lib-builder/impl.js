@@ -55,16 +55,16 @@ async function runRollup(configsList, distDir) {
 
     const bundle = await rollup(config);
 
-    const writeResult = await bundle.write({
-      dir: distDir,
+    const generateResult = await bundle.generate({
+      format: config.output.format,
     });
 
     allBundles.push({
       file: config.output.file,
-      imports: writeResult.output[0].imports,
+      imports: generateResult.output[0].imports,
     });
 
-    writeResult.output.forEach((output) => {
+    generateResult.output.forEach((output) => {
       fs.writeFileSync(config.output.file, output.code);
     });
   }

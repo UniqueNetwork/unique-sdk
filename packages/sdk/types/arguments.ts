@@ -39,12 +39,17 @@ export interface TxBuildArguments {
   isImmortal?: boolean;
 }
 
-export interface ApiQueryArguments {
+export interface ApiRequestArguments {
   endpoint: string;
   module: string;
   method: string;
+}
+
+export interface ApiMethodArguments extends ApiRequestArguments {
   args: Array<string | number | BigInt | Record<string, any>>;
 }
+
+export type ApiGetterArguments = ApiRequestArguments;
 
 export interface SubmittableResultInProcess<T> {
   submittableResult: ISubmittableResult;
