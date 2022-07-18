@@ -1,9 +1,6 @@
 name: Push docs
 description: Push docs to another repo
 inputs:
-  access_token:
-    description: Github access token
-    required: true
   dst_owner:
     description: The name of the owner of the destination repository
     required: true
@@ -20,13 +17,16 @@ inputs:
   src_path:
     description: The source path to the file(s) or folder(s) to copy from
     required: true
+  pr_branch:
+    description: The name of the branch of pull request
+    required: true
 runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.access_token }}
     - ${{ inputs.dst_owner }}
     - ${{ inputs.dst_repo }}
     - ${{ inputs.dst_branch }}
     - ${{ inputs.dst_path }}
     - ${{ inputs.src_path }}
+    - ${{ inputs.pr_branch }}
