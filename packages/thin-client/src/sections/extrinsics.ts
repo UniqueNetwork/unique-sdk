@@ -14,7 +14,6 @@ export class Extrinsics extends Section {
 
   public readonly baseUrl = `${this.client.options.baseUrl}/${this.path}`;
 
-  // todo create метод эксринсика
   async build(args: TxBuildBody): Promise<UnsignedTxPayloadBody> {
     const response = await this.client.instance({
       method: 'POST',
