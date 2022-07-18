@@ -10,7 +10,7 @@ import {
   FeeResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
-} from './types/Api';
+} from './types/api';
 
 const baseUrl = 'http://localhost:3000';
 

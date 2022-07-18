@@ -1,4 +1,4 @@
-import { UnsignedTxPayloadResponse, SubmitTxBody } from './types/Api';
+import { UnsignedTxPayloadResponse, SubmitTxBody } from './types/api';
 
 export const isUnsignedTxPayloadResponse = (
   args: unknown,
@@ -10,7 +10,6 @@ export const isSubmitTxBody = (args: unknown): args is SubmitTxBody =>
 
 export function sleep(ms: number) {
   return new Promise((resolve) => {
-    // @ts-ignore
     setTimeout(resolve, ms);
   });
 }

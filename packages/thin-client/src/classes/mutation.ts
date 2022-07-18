@@ -4,7 +4,7 @@ import {
   SubmitResultResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
-} from '../types/Api';
+} from '../types/api';
 import { isUnsignedTxPayloadResponse, isSubmitTxBody, sleep } from '../utils';
 import { ThinClient } from '../index';
 

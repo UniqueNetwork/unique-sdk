@@ -1,10 +1,10 @@
-import { Mutation } from '../classes/Mutation';
-import { Section } from '../classes/Section';
+import { Mutation } from '../classes/mutation';
+import { Section } from '../classes/section';
 import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
-} from '../types/Api';
+} from '../types/api';
 
 export class Balance extends Section {
   public readonly path = 'balance';

@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import Axios, { AxiosInstance } from 'axios';
-import { Balance } from './sections/Balance';
-import { Extrinsics } from './sections/Extrinsics';
+import { Balance } from './sections/balance';
+import { Extrinsics } from './sections/extrinsics';
 
 export interface Options {
   baseUrl: string;

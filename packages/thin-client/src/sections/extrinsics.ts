@@ -1,4 +1,4 @@
-import { Section } from '../classes/Section';
+import { Section } from '../classes/section';
 import {
   SignTxResultResponse,
   UnsignedTxPayloadBody,
@@ -7,7 +7,7 @@ import {
   ExtrinsicResultResponse,
   FeeResponse,
   TxBuildBody,
-} from '../types/Api';
+} from '../types/api';
 
 export class Extrinsics extends Section {
   public readonly path = 'extrinsic';
