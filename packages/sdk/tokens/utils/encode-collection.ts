@@ -23,7 +23,7 @@ import {
   CollectionPropertiesKeys,
   CollectionInfoWithProperties,
   CollectionInfoBase,
-} from '../methods/create-collection-ex';
+} from '../methods/create-collection-ex/types';
 
 type CollectionProperty = {
   key: CollectionPropertiesKeys;
