@@ -13,6 +13,7 @@
           "./balance/index.ts",
           "./state-queries/index.ts",
           "./tokens/index.ts",
+          "./fungible/index.ts",
           "./utils/index.ts",
           "./types/index.ts",
           "./errors/index.ts"
