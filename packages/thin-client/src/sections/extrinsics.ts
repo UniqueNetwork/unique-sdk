@@ -36,7 +36,6 @@ export class Extrinsics extends Section {
     return response.data;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async sign(
     args: UnsignedTxPayloadBody,
     signer: any = this.client.options.signer,
@@ -44,13 +43,6 @@ export class Extrinsics extends Section {
     if (!signer) throw new Error(`No signer provided`);
 
     return signer.sign(args);
-    // const response = await this.client.instance({
-    //   method: 'POST',
-    //   url: `${this.path}/sign`,
-    //   headers: { Authorization: `Seed //Bob` },
-    //   data: args,
-    // });
-    // return response.data;
   }
 
   async submit(args: SubmitTxBody): Promise<SubmitResultResponse> {

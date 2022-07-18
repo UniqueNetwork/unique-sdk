@@ -6,7 +6,6 @@ import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
 
 import { ThinClient } from './index';
 import {
-  BalanceTransferBody,
   FeeResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,

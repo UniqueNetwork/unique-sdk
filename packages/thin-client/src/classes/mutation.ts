@@ -8,12 +8,6 @@ import {
 import { isUnsignedTxPayloadResponse, isSubmitTxBody, sleep } from '../utils';
 import { IThinClient, MutationOptions } from '../types/interfaces';
 
-// export interface SubmittableResultCompleted<T> {
-//   submittableResult?: any;
-//   isCompleted: true;
-//   parsed: T;
-// }
-
 export class Mutation<A, R> {
   public readonly url: string;
 
@@ -50,8 +44,6 @@ export class Mutation<A, R> {
     args: A | UnsignedTxPayloadResponse,
     options?: MutationOptions,
   ): Promise<SubmitTxBody> {
-    // todo тут сами должны подписать (сбилдить если еще нет, смотри MutationMethodBase или как то так
-
     if (!this.client.options.signer) throw new Error('not signer');
 
     const unsigned = isUnsignedTxPayloadResponse(args)
@@ -66,11 +58,9 @@ export class Mutation<A, R> {
     return { signature, signerPayloadJSON };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async submit(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
   ): Promise<SubmitResultResponse> {
-    // todo здесь дергаем this.section.client.extrinsics.submit(); и получаем хеш
     const submitTxArguments = isSubmitTxBody(args)
       ? args
       : await this.sign(args);
@@ -85,7 +75,6 @@ export class Mutation<A, R> {
     const { hash } = await this.submit(args);
     let checkStatusResult: ExtrinsicResultResponse | undefined;
     let i = 0;
-    // eslint-disable-next-line no-constant-condition
     while (
       (!checkStatusResult || !checkStatusResult?.isCompleted) &&
       i <= this.client.params.maximumNumberOfStatusRequests
@@ -96,11 +85,10 @@ export class Mutation<A, R> {
       if (checkStatusResult.isCompleted && !checkStatusResult.isError)
         return checkStatusResult;
       if (checkStatusResult.isError) {
-        // todo 100 в константы, и лучше может 5-10
         throw new Error();
       }
       // eslint-disable-next-line no-await-in-loop
-      await sleep(this.client.params.waitBetweenStatusRequestsInMs); // todo это должен быть настраиваем параметр, лучше секунды 3-5
+      await sleep(this.client.params.waitBetweenStatusRequestsInMs);
     }
     throw new Error();
   }
@@ -110,18 +98,6 @@ export class Mutation<A, R> {
   ): Promise<ExtrinsicResultResponse> {
     // : Promise<SubmittableResultCompleted<R>>
     // todo здесь мы будем дергать submitWatch и возвращать красивые данные
-    // const response = await this.section.client.instance({
-    //   method: this.method,
-    //   url: `${this.url}?use=Result`,
-    //   headers: {
-    //     Authorization: 'Seed //Bob',
-    //   },
-    //   data: args,
-    // });
-    // return {
-    //   isCompleted: true,
-    //   parsed: response.data,
-    // };
     return this.submitWatch(args);
   }
 }
