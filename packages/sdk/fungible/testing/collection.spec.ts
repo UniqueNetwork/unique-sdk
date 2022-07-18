@@ -1,5 +1,6 @@
 import '../index';
 import { createPoorAccount, createRichAccount, createSdk } from '../../testing';
+import { CollectionSchemaName } from '../../tokens';
 
 describe('FungibleCollection', () => {
   it('create and get', async () => {
@@ -19,6 +20,19 @@ describe('FungibleCollection', () => {
     } = await sdk.fungible.createCollection.submitWaitResult({
       address: richAccount.address,
       ...collectionPartial,
+      schema: {
+        attributesSchema: {},
+        attributesSchemaVersion: '1.0.0',
+        coverPicture: {
+          urlInfix: 'string',
+          hash: 'string',
+        },
+        image: {
+          urlTemplate: 'https://ipfs.unique.network/ipfs/{infix}.ext',
+        },
+        schemaName: CollectionSchemaName.unique,
+        schemaVersion: '1.0.0',
+      },
     });
 
     const collection = await sdk.fungible.getCollection({ collectionId });

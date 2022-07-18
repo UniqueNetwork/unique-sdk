@@ -10,9 +10,10 @@ import {
 } from '@unique-nft/sdk/fungible';
 import { AddressApiProperty } from '../../../../types/sdk-methods';
 import { CollectionInfoBaseDto } from '../../../../types/unique-types';
+import { CreateCollectionNewRequest } from '../collection';
 
 export class CreateFungibleCollectionRequest
-  extends CollectionInfoBaseDto
+  extends CreateCollectionNewRequest
   implements CreateFungibleCollectionArguments
 {
   @Equals(CollectionMode.Fungible)
