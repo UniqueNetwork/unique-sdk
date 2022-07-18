@@ -4,6 +4,7 @@ on:
     inputs:
       version:
         required: true
+        description: "vX.X.X"
 jobs:
   build-and-publish:
     name: Build and publish
@@ -21,8 +22,17 @@ jobs:
         run: |
           npm ci
           npm run rollup:build:sdk
-      - name: NPM Publish
+
+      - name: NPM Publish SDK
         working-directory: ./dist/packages/sdk
+        shell: bash
+        run: |
+          npm version ${{ github.event.inputs.version }}
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+          npm publish --access public
+
+      - name: NPM Publish Accounts
+        working-directory: ./dist/packages/accounts
         shell: bash
         run: |
           npm version ${{ github.event.inputs.version }}
