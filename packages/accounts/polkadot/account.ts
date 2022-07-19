@@ -18,7 +18,9 @@ function createSigner(
     sign: async (unsignedTxPayload: UnsignedTxPayload): Promise<SignResult> => {
       const signPayload = injector?.signer?.signPayload;
       if (!signPayload) {
-        throw new Error('Fail sign message');
+        throw new Error(
+          'Failed to sign message; signPayload() method is missing',
+        );
       }
 
       const { signature } = await signPayload(
