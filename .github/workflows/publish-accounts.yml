@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
           npm ci
-          nx build accounts
+          npm run build:accounts
 
       - name: NPM Publish Accounts
         working-directory: ./dist/packages/accounts
