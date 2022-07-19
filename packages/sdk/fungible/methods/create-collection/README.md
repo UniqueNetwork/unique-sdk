@@ -9,7 +9,7 @@
 - **decimals** - decimal part for tokens in collection
 - **tokenPrefix** - Token prefix (text, up to 4 characters)
 - **sponsorship** - This field tells if sponsorship is enabled and what address is the current collection sponsor.
-- **limits** - [Collection limits](../set-collection-limits#arguments)
+- **limits** - [Collection limits](../../tokens/methods/set-collection-limits#arguments)
 - **metaUpdatePermission** - [Permission](#todo) for update meta (ItemOwner, Admin, None)
 - **permissions** - [Collection permissions](#todo)
 
