@@ -32,7 +32,6 @@ export class ThinClient {
     };
     this.instance = Axios.create({
       baseURL: this.options.baseUrl,
-      headers: { 'Access-Control-Allow-Origin': '*' },
     });
   }
 }
