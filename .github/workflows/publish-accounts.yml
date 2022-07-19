@@ -1,4 +1,4 @@
-name: Publish SDK
+name: Publish Accounts
 on:
   workflow_dispatch:
     inputs:
@@ -21,10 +21,10 @@ jobs:
         shell: bash
         run: |
           npm ci
-          nx build sdk
+          nx build accounts
 
-      - name: NPM Publish SDK
-        working-directory: ./dist/packages/sdk
+      - name: NPM Publish Accounts
+        working-directory: ./dist/packages/accounts
         shell: bash
         run: |
           npm version ${{ github.event.inputs.version }}

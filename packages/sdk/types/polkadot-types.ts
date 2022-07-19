@@ -12,6 +12,6 @@ export interface SignResult {
   signature: HexString;
 }
 
-export { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-export { AnyJson, ISubmittableResult } from '@polkadot/types/types';
-export { HexString } from '@polkadot/util/types';
+export type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+export type { AnyJson, ISubmittableResult } from '@polkadot/types/types';
+export type { HexString } from '@polkadot/util/types';

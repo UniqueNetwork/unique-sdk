@@ -1,31 +1,14 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Sdk } from '@unique-nft/sdk';
-import { createSigner, SeedSignerOptions } from '@unique-nft/accounts/sign';
 import { FactoryProvider } from '@nestjs/common/interfaces/modules/provider.interface';
-import { Config } from '../../config/config.module';
-
+import { Sdk } from '@unique-nft/sdk';
 import '@unique-nft/sdk/state-queries';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 
-async function sdkFactory(
-  chainWsUrl: Config['chainWsUrl'] | Config['secondary']['chainWsUrl'],
-  signerOptions: Config['signer'] | Config['secondary']['signer'],
-): Promise<Sdk> {
-  const signer = signerOptions?.seed
-    ? await createSigner(signerOptions as SeedSignerOptions)
-    : null;
-  const sdk = new Sdk({
-    signer,
-    chainWsUrl,
-  });
-
-  await sdk.connect();
-
-  return sdk;
-}
+import { Config } from '../../config/config.module';
+import { sdkFactory } from './factory';
 
 @Module({
   providers: [SdkProviderModule.primaryProvider()],

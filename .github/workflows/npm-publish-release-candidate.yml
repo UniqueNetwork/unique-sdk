@@ -42,10 +42,11 @@ jobs:
         run: |
           npm ci
           npm run build:sdk
-      - name: NPM Publish
+
+      - name: NPM Publish SDK
         working-directory: ./dist/packages/sdk
         shell: bash
         run: |
           npm version ${{ steps.version.outputs.version }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
-          npm publish
+          npm publish --access public
