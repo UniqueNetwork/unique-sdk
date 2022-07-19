@@ -1,6 +1,7 @@
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
+import * as process from 'process';
 
 import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
 
@@ -11,7 +12,8 @@ import {
   UnsignedTxPayloadResponse,
 } from './types/api';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl =
+  process.env['URL_FOR_TEST_THIN_CLIENT'] || 'http://localhost:3000';
 
 const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
 const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
