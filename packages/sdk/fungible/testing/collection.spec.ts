@@ -1,6 +1,6 @@
-import '../index';
+import { CollectionSchemaName } from '@unique-nft/sdk/tokens';
 import { createPoorAccount, createRichAccount, createSdk } from '../../testing';
-import { CollectionSchemaName } from '../../tokens';
+import '../index';
 
 describe('FungibleCollection', () => {
   it('create and get', async () => {
