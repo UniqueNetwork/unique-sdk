@@ -7,35 +7,21 @@ import {
 import {
   CollectionPropertiesArguments,
   CollectionPropertiesResult,
-} from '../methods/collection-properties/types';
-import {
   TokenPropertiesArguments,
   TokenPropertiesResult,
-} from '../methods/token-properties/types';
-import {
   DeleteTokenPropertiesResult,
   DeleteTokenPropertiesArguments,
-} from '../methods/delete-token-properties';
-import {
   SetTokenPropertiesArguments,
   SetTokenPropertiesResult,
-} from '../methods/set-token-properties';
-import {
   SetTokenPropertyPermissionsResult,
   SetTokenPropertyPermissionsArguments,
-} from '../methods/set-token-property-permissions';
-import {
   DeleteCollectionPropertiesArguments,
   DeleteCollectionPropertiesResult,
-} from '../methods/delete-collection-properties';
-import {
   SetCollectionPropertiesArguments,
   SetCollectionPropertiesResult,
-} from '../methods/set-collection-properties';
-import {
   PropertyPermissionsArguments,
   PropertyPermissionsResult,
-} from '../methods/property-permissions';
+} from '@unique-nft/sdk/tokens';
 
 describe('Properties', () => {
   let sdk: Sdk;
