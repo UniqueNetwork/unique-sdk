@@ -13,6 +13,7 @@
     "test:sdk": "nx test sdk",
     "test:web": "nx test web",
     "test:accounts": "nx test accounts",
+    "test:thin-client": "nx test thin-client",
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "eslint ./packages/** --fix",
     "start": "node -r source-map-support/register ./dist/packages/web/main.js",
