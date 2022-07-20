@@ -55,8 +55,11 @@ export abstract class Provider<A = unknown, I = unknown> extends Object {
   abstract init(): Promise<void>;
 
   abstract getAccounts(): Promise<Account<A>[]>;
+
+  public async first(): Promise<Account | undefined> {
+    const accounts = await this.getAccounts();
+    return accounts.length ? accounts[0] : undefined;
+  }
 }
 
-export type ProviderClass = { new (o?: any): Provider };
-
-export type ProviderClass2<T extends Provider> = { new (o?: any): T };
+export type ProviderClass<T extends Provider> = { new (o?: any): T };

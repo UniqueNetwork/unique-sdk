@@ -9,7 +9,7 @@ import { KeyringLocalOptions } from './types';
 import { KeyringLocalAccount } from './account';
 
 export class KeyringLocalProvider extends Provider<KeyringPair, Keyring> {
-  constructor(private readonly options: KeyringLocalOptions) {
+  constructor(private readonly options: KeyringLocalOptions = {}) {
     super();
   }
 
@@ -17,7 +17,7 @@ export class KeyringLocalProvider extends Provider<KeyringPair, Keyring> {
     await cryptoWaitReady();
 
     keyring.loadAll({
-      ss58Format: this.options.SS58Prefix,
+      ss58Format: this.options.ss58Format,
       genesisHash: this.options.genesisHash,
       type: this.options.type,
     });
