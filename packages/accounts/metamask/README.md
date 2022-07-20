@@ -1,5 +1,5 @@
 # Metamask provider
-Провайдер [Metamask расширение](https://metamask.io/download/) для браузера. 
+Провайдер использует [Metamask расширение](https://metamask.io/download/) для браузера. 
 
 ## Пример
 ```typescript

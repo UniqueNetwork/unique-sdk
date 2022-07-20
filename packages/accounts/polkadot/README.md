@@ -1,5 +1,5 @@
 # Polkadot provider
-Провайдер [Polkadot расширение](https://polkadot.js.org/extension/) для браузера. 
+Провайдер использует [Polkadot расширение](https://polkadot.js.org/extension/) для браузера. 
 
 ## Пример
 ```typescript
