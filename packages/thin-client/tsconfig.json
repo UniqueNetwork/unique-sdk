@@ -1,15 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true
+    "paths": {
+      "@unique-nft/sdk/*": ["packages/sdk/*"],
+      "@unique-nft/sdk": ["packages/sdk/index.ts"],
+      "@unique-nft/accounts/*": ["packages/accounts/*"],
+      "@unique-nft/accounts": ["packages/accounts/index.ts"],
+      "@unique-nft/web/*": ["packages/web/*"],
+      "@unique-nft/web": ["packages/web/index.ts"]
+    }
   },
   "files": [],
   "include": [],

@@ -5,6 +5,7 @@ import {
   BalanceTransferParsed,
   AllBalancesResponse,
 } from '../types/api';
+import adapter from 'axios/lib/adapters/http';
 
 export class Balance extends Section {
   public readonly path = 'balance';
@@ -22,6 +23,7 @@ export class Balance extends Section {
       baseURL: this.baseUrl,
       url: '',
       params: { address: args.address },
+      adapter,
     });
     return response.data;
   }

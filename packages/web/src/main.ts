@@ -13,9 +13,13 @@ import { AppModule } from './app/app.module';
 import { addSwagger } from './app/utils/swagger';
 import { Config } from './app/config/config.module';
 import { initSentry } from './app/interceptors/sentry.interceptor';
+import process from 'process';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+export async function bootstrap() {
+  console.log('process.env.ENVIRONMENT');
+  console.log(process.env.ENVIRONMENT);
+
+  const app = await NestFactory.create(AppModule, { cors: true });
   const config: ConfigService<Config> = app.get(ConfigService);
 
   const prefix = config.get('prefix');
@@ -35,4 +39,4 @@ async function bootstrap() {
   );
 }
 
-bootstrap();
+// bootstrap();
