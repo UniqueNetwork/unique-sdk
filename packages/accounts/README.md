@@ -1,6 +1,7 @@
+- [Аккаунты](#Аккаунты)
+- [Провайдеры](#Провайдеры)
 - [Generate new account](#generate-new-account)
 - [Get account from mnemonic](#get-account-from-mnemonic)
-- [Sign](./sign)
 
 ## Аккаунты
 Пакет необходим для подключения разных аккаунтов и создания подписей к ним.
@@ -40,10 +41,10 @@ const signer = account?.getSigner();
 ```
 
 Поддерживаются следующие провайдеры:
- * [Keyring](/keyring)
- * [KeyringLocal](/keyring-local)
- * [Polkadot extension](/polkadot)
- * [Metamask extension](/metamask)
+ * [Keyring](./keyring)
+ * [KeyringLocal](./keyring-local)
+ * [Polkadot extension](./polkadot)
+ * [Metamask extension](./metamask)
 
 ## Generate new account
 
