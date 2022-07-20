@@ -9,7 +9,7 @@ export type SetCollectionPropertiesArguments = {
 
 export type CollectionPropertySetEvent = {
   collectionId: number;
-  property: string;
+  propertyKey: string;
 };
 
 export type SetCollectionPropertiesResult = CollectionPropertySetEvent[];

@@ -29,22 +29,15 @@ export class SetTokenPropertyPermissionsMutation extends MutationMethodBase<
   async transformResult(
     result: ISubmittableResult,
   ): Promise<SetTokenPropertyPermissionsResult> {
-    return result.events
-      .filter(
-        ({ event }) =>
-          event.section === 'common' &&
-          event.method === 'PropertyPermissionSet',
-      )
-      .map(({ event }) => {
-        const [collectionId, propertyKey] = event.data as unknown as [
-          u32,
-          Bytes,
-        ];
+    const records = result.filterRecords('common', 'PropertyPermissionSet');
 
-        return {
-          collectionId: collectionId.toNumber(),
-          property: bytesToString(propertyKey),
-        };
-      });
+    return records.map(({ event }) => {
+      const [collectionId, propertyKey] = event.data as unknown as [u32, Bytes];
+
+      return {
+        collectionId: collectionId.toNumber(),
+        propertyKey: bytesToString(propertyKey),
+      };
+    });
   }
 }

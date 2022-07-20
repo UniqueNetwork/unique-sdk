@@ -83,7 +83,7 @@ describe('Properties', () => {
     const expected: SetCollectionPropertiesResult = [
       {
         collectionId,
-        property: 'test',
+        propertyKey: 'test',
       },
     ];
 
@@ -123,7 +123,7 @@ describe('Properties', () => {
     const expected: DeleteCollectionPropertiesResult = [
       {
         collectionId,
-        property: 'test',
+        propertyKey: 'test',
       },
     ];
 
@@ -153,7 +153,7 @@ describe('Properties', () => {
     const expected: SetTokenPropertyPermissionsResult = [
       {
         collectionId,
-        property: 'test',
+        propertyKey: 'test',
       },
     ];
 
@@ -210,7 +210,7 @@ describe('Properties', () => {
       {
         collectionId,
         tokenId,
-        property: 'test',
+        propertyKey: 'test',
       },
     ];
 
@@ -251,7 +251,7 @@ describe('Properties', () => {
       {
         collectionId,
         tokenId,
-        property: 'test',
+        propertyKey: 'test',
       },
     ];
 

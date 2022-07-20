@@ -26,23 +26,20 @@ export class SetTokenPropertiesMutation extends MutationMethodBase<
   async transformResult(
     result: ISubmittableResult,
   ): Promise<SetTokenPropertiesResult> {
-    return result.events
-      .filter(
-        ({ event }) =>
-          event.section === 'common' && event.method === 'TokenPropertySet',
-      )
-      .map(({ event }) => {
-        const [collectionId, tokenId, propertyKey] = event.data as unknown as [
-          u32,
-          u32,
-          Bytes,
-        ];
+    const records = result.filterRecords('common', 'TokenPropertySet');
 
-        return {
-          collectionId: collectionId.toNumber(),
-          tokenId: tokenId.toNumber(),
-          property: bytesToString(propertyKey),
-        };
-      });
+    return records.map(({ event }) => {
+      const [collectionId, tokenId, propertyKey] = event.data as unknown as [
+        u32,
+        u32,
+        Bytes,
+      ];
+
+      return {
+        collectionId: collectionId.toNumber(),
+        tokenId: tokenId.toNumber(),
+        propertyKey: bytesToString(propertyKey),
+      };
+    });
   }
 }

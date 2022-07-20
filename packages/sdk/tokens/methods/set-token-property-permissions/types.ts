@@ -9,7 +9,7 @@ export type SetTokenPropertyPermissionsArguments = {
 
 export type PropertyPermissionSetEvent = {
   collectionId: number;
-  property: string;
+  propertyKey: string;
 };
 
 export type SetTokenPropertyPermissionsResult = PropertyPermissionSetEvent[];

@@ -29,23 +29,19 @@ export class DeleteTokenPropertiesMutation extends MutationMethodBase<
   async transformResult(
     result: ISubmittableResult,
   ): Promise<DeleteTokenPropertiesResult> {
-    return result.events
-      .filter(
-        ({ event }) =>
-          event.section === 'common' && event.method === 'TokenPropertyDeleted',
-      )
-      .map(({ event }) => {
-        const [collectionId, tokenId, propertyKey] = event.data as unknown as [
-          u32,
-          u32,
-          Bytes,
-        ];
+    const records = result.filterRecords('common', 'TokenPropertyDeleted');
+    return records.map(({ event }) => {
+      const [collectionId, tokenId, propertyKey] = event.data as unknown as [
+        u32,
+        u32,
+        Bytes,
+      ];
 
-        return {
-          collectionId: collectionId.toNumber(),
-          tokenId: tokenId.toNumber(),
-          property: bytesToString(propertyKey),
-        };
-      });
+      return {
+        collectionId: collectionId.toNumber(),
+        tokenId: tokenId.toNumber(),
+        propertyKey: bytesToString(propertyKey),
+      };
+    });
   }
 }

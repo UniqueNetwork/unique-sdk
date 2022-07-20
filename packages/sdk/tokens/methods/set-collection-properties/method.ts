@@ -29,22 +29,15 @@ export class SetCollectionPropertiesMutation extends MutationMethodBase<
   async transformResult(
     result: ISubmittableResult,
   ): Promise<SetCollectionPropertiesResult> {
-    return result.events
-      .filter(
-        ({ event }) =>
-          event.section === 'common' &&
-          event.method === 'CollectionPropertySet',
-      )
-      .map(({ event }) => {
-        const [collectionId, propertyKey] = event.data as unknown as [
-          u32,
-          Bytes,
-        ];
+    const records = result.filterRecords('common', 'CollectionPropertySet');
 
-        return {
-          collectionId: collectionId.toNumber(),
-          property: bytesToString(propertyKey),
-        };
-      });
+    return records.map(({ event }) => {
+      const [collectionId, propertyKey] = event.data as unknown as [u32, Bytes];
+
+      return {
+        collectionId: collectionId.toNumber(),
+        propertyKey: bytesToString(propertyKey),
+      };
+    });
   }
 }

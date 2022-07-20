@@ -8,7 +8,7 @@ export type DeleteCollectionPropertiesArguments = {
 
 export type CollectionPropertyDeletedEvent = {
   collectionId: number;
-  property: string;
+  propertyKey: string;
 };
 
 export type DeleteCollectionPropertiesResult = CollectionPropertyDeletedEvent[];

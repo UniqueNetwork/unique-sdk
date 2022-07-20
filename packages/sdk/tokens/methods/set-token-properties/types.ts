@@ -11,7 +11,7 @@ export type SetTokenPropertiesArguments = {
 export type TokenPropertySetEvent = {
   collectionId: number;
   tokenId: number;
-  property: string;
+  propertyKey: string;
 };
 
 export type SetTokenPropertiesResult = TokenPropertySetEvent[];

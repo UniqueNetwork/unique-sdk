@@ -29,22 +29,15 @@ export class DeleteCollectionPropertiesMutation extends MutationMethodBase<
   async transformResult(
     result: ISubmittableResult,
   ): Promise<DeleteCollectionPropertiesResult> {
-    return result.events
-      .filter(
-        ({ event }) =>
-          event.section === 'common' &&
-          event.method === 'CollectionPropertyDeleted',
-      )
-      .map(({ event }) => {
-        const [collectionId, propertyKey] = event.data as unknown as [
-          u32,
-          Bytes,
-        ];
+    const records = result.filterRecords('common', 'CollectionPropertyDeleted');
 
-        return {
-          collectionId: collectionId.toNumber(),
-          property: bytesToString(propertyKey),
-        };
-      });
+    return records.map(({ event }) => {
+      const [collectionId, propertyKey] = event.data as unknown as [u32, Bytes];
+
+      return {
+        collectionId: collectionId.toNumber(),
+        propertyKey: bytesToString(propertyKey),
+      };
+    });
   }
 }

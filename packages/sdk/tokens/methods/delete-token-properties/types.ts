@@ -10,7 +10,7 @@ export type DeleteTokenPropertiesArguments = {
 export type TokenPropertyDeletedEvent = {
   collectionId: number;
   tokenId: number;
-  property: string;
+  propertyKey: string;
 };
 
 export type DeleteTokenPropertiesResult = TokenPropertyDeletedEvent[];
