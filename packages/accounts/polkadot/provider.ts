@@ -2,6 +2,7 @@ import {
   isWeb3Injected,
   web3Accounts,
   web3FromSource,
+  web3Enable,
 } from '@polkadot/extension-dapp';
 import {
   InjectedAccountWithMeta,
@@ -24,6 +25,12 @@ export class PolkadotProvider extends Provider<InjectedAccountWithMeta> {
 
   // eslint-disable-next-line class-methods-use-this
   public override async init(): Promise<void> {
+    const extensions = await web3Enable('@unique-nft/accounts');
+    if (!extensions.length) {
+      // todo log error Polkadot extension not found
+      return Promise.resolve();
+    }
+
     if (!isWeb3Injected) {
       // todo log error Polkadot extension not installed
       return Promise.resolve();
