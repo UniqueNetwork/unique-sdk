@@ -5,11 +5,14 @@ import { hexToU8a, isHex } from '@polkadot/util';
 export function ValidAddress(validationOptions?: ValidationOptions) {
   return (object: object, propertyName: string) => {
     registerDecorator({
-      name: 'Address',
+      name: 'AddressValidator',
       target: object.constructor,
       propertyName,
       constraints: [],
-      options: validationOptions,
+      options: {
+        ...validationOptions,
+        message: (args) => `Invalid address: ${args.value}`,
+      },
       validator: {
         /* eslint-disable  @typescript-eslint/no-explicit-any */
         validate: (value: any) => {
