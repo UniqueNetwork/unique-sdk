@@ -1,10 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import {
   BurnTokenArguments,
+  DeleteTokenPropertiesArguments,
   NestTokenArguments,
+  SetTokenPropertiesArguments,
   TokenChildrenResult,
   TokenIdArguments,
   TokenParentResult,
+  TokenProperty,
   TopmostTokenOwnerResult,
   TransferTokenArguments,
   UnnestTokenArguments,
@@ -16,8 +19,10 @@ import {
   CreateTokenArguments,
 } from '@unique-nft/sdk/types';
 import { IsInt, IsOptional, IsPositive, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ValidAddress } from '../../../../validation';
 import { CollectionId } from '../collection';
+import { MutationResponse } from '../../../../decorators/mutation-method/types';
 import {
   AddressApiProperty,
   AddressQuery,
@@ -118,3 +123,56 @@ export class TopmostTokenOwnerResponse {
   @ApiProperty({ example: 'unjq56sK9skTMR1MyPLsDFXkQdRNNrD1gzE4wRJSYm2k6GjJn' })
   topmostOwner: TopmostTokenOwnerResult;
 }
+
+export class TokenPropertyDto implements TokenProperty {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty({ example: 'example' })
+  value: string;
+}
+
+export class SetTokenPropertiesBody implements SetTokenPropertiesArguments {
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ type: [TokenPropertyDto] })
+  @Type(() => TokenPropertyDto)
+  properties: TokenProperty[];
+}
+
+export class SetTokenPropertiesResponse extends MutationResponse {}
+
+export class DeleteTokenPropertiesBody
+  implements DeleteTokenPropertiesArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ type: [String], example: ['example'] })
+  propertyKeys: string[];
+}
+
+export class DeleteTokenPropertiesResponse extends MutationResponse {}
