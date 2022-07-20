@@ -21,9 +21,11 @@
 - [Getting started](#sdk-deployment---getting-started-guide)
   - [Install](#install)
   - [Environment Variables](#environment-variables)
+  - [Secondary endpoints](#secondary-endpoints)
 - [Swagger](#swagger)
 - [Mutation methods](#mutation-methods)
 - [IPFS](#using-ipfs-for-uploading-files)
+
 
 ## Intro
 
@@ -46,6 +48,7 @@ Once an extrinsic has been generated, it must be signed in order for the chain t
 
 - [How to install](#install)
 - [How to configure – environment variables](#environment-variables)
+- [How to configure – secondary environment variables](#secondary-environment-variables)
 - [Where to try - Swagger](#swagger)
 
 ### Install
@@ -54,7 +57,7 @@ Choose install approach: [Docker](#docker), [Source code](#git) or [Public endpo
 #### Docker
 
 ```bash
-docker run -p 3000:3000 -e CHAIN_WS_URL=wss://quartz.unique.network uniquenetwork/web:latest
+docker run -p 3000:3000 -e CHAIN_WS_URL=wss://ws-opal.unique.network uniquenetwork/web:latest
 ```
 
 <a href="https://hub.docker.com/r/uniquenetwork/web" target="_blank">See hub.docker.com page</a>
@@ -83,14 +86,32 @@ https://web-opal.unique.network
 https://web-quartz.unique.network
 ```
 
-### Environment Variables
-
-#### Required
-```bash
-CHAIN_WS_URL=wss://quartz.unique.network
+#### Unique
+```
+https://web-unique.unique.network/
 ```
 
+
+### Environment Variables
+
 <a href="https://docs.unique.network/unique-and-quartz-wiki/build/get-started/testnet-and-mainnet" target="_blank">See official Unique Network documentation</a>
+
+#### Required
+
+#### Opal
+```bash
+CHAIN_WS_URL=wss://ws-opal.unique.network
+```
+
+#### Quartz
+```bash
+CHAIN_WS_URL=wss://ws-quartz.unique.network
+```
+
+#### Unique
+```bash
+CHAIN_WS_URL=wss://ws.unique.network
+```
 
 #### Optional
 
@@ -110,8 +131,15 @@ PORT=3000
 IPFS_GATEWAY_URL=https://ipfs.unique.network/ipfs/
 ```
 
+##### IPFS upload URL
+
+IPFS_UPLOAD_URL allows you to specify a setting for uploading files via IPFS.
+```bash
+IPFS_UPLOAD_URL=http://192.168.100.183:5001/api/v0
+```
+
 ##### Cache manager
-Extrinsics cache time:
+Extrinsics results cache time:
 ```bash
 CACHE_TTL=600
 ```
@@ -123,34 +151,51 @@ REDIS_PORT=6379
 REDIS_DB=0
 ```
 
-##### Secondary endpoints
+##### Prefix
 
-You can also use a secondary connection for the kusama network or polkadot, which allows you to use secondary endpoints.
+PREFIX allows you to add a global prefix to API.
+By default, prefix is empty.
 
-KSM endpoints
+### Secondary endpoints
+
+You can also use a secondary connection for substrate, which allows you to use secondary endpoints.
+
+Substrate endpoints
 ```
-https://web.uniquenetwork.dev/swagger/ksm/
+https://web-unique.unique.network/swagger/dot/
+https://web-quartz.unique.network/swagger/ksm/
 ```
-Polkadot endpoints
+
+#### Secondary environment variables
+
+```bash
+SECONDARY_CHAIN_WS_URL=wss://kusama-rpc.polkadot.io
 ```
-https://web-quartz.unique.network/swagger
+or
+
+```bash
+SECONDARY_CHAIN_WS_URL=wss://rpc.polkadot.io
 ```
 
 
 ## Swagger
 
 ```
-https://web-quartz.unique.network/swagger
+https://web-unique.unique.network/swagger/
 ```
 
 ## Mutation methods
 
-Unique SDK allows using mutation methods for updating the state of the blockchain. It supports the entire sequence of actions:
+Unique SDK allows using mutation methods for updating the state of the blockchain. By default, they return an unsigned extension. To apply this change in the blockchain state, you must sign it and send the extrinsic and the signature in the blockchain.
+By doing that you can complete the entire sequence of actions for extrinsic:
   - Building an extrinsic
   - Signing an extrinsic
   - Signing verification
   - Submitting an extrinsic
-  - Checking extrinsic status
+
+After that you can use extrinsic hash received as a response for checking the extrinsic status.
+
+For more convenience, we have implemented a complex method: if you initialize the SDK with a signer, you can sign and send extrinsics seamlessly, without separate actions.
 
 Read more about mutation methods in <a href="../packages/sdk#mutation-and-query-methods">SDK documentation</a>.
 

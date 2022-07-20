@@ -25,48 +25,17 @@
 ### TX methods
 | Method                      | Description                                                                                                                           | Status | Folder                         |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------|--------|--------------------------------|
-| addToAllowList              |                                                                                                                                       |        |                                |
-| approve                     |                                                                                                                                       |        |                                |
-| burnFrom                    |                                                                                                                                       |        |                                |
-| burnItem                    |                                                                                                                                       |        |                                |
-| confirmSponsorship          |                                                                                                                                       |        |                                |
-| createItem                  |                                                                                                                                       |        |                                |
-| createMultipleItems         |                                                                                                                                       |        |                                |
-| createMultipleItemsEx       |                                                                                                                                       |        |                                |
-| deleteTokenProperties       |                                                                                                                                       |        |                                |
+| createToken                 | TBD                                                                                                                                   | Ready  | [Link](./methods/create-token) |
 | nestToken                   | Nesting is a process of forming a structural relationship between two NFTs that form a parent-child relationship in a tree structure. | Ready  | [Link](./methods/nest-token)   |
-| removeFromAllowList         |                                                                                                                                       |        |                                |
-| repartition                 |                                                                                                                                       |        |                                |
-| setTokenProperties          |                                                                                                                                       |        |                                |
-| setTokenPropertyPermissions |                                                                                                                                       |        |                                |
-| setTransfersEnabledFlag     |                                                                                                                                       |        |                                |
-| transfer                    |                                                                                                                                       |        |                                |
-| transferFrom                |                                                                                                                                       |        |                                |
 | unnestToken                 | Nesting is a process of forming a structural relationship between two NFTs that form a parent-child relationship in a tree structure. | Ready  | [Link](./methods/unnest-token) |
 
 ### RPC methods
 | Method              | Description                                      | Status | Folder                                |
 |---------------------|--------------------------------------------------|--------|---------------------------------------|
-| accountBalance      |                                                  |        |                                       |
-| accountTokens       |                                                  |        |                                       |
-| adminlist           |                                                  |        |                                       |
-| allowance           |                                                  |        |                                       |
-| allowed             |                                                  |        |                                       |
-| allowlist           |                                                  |        |                                       |
-| balance             |                                                  |        |                                       |
-| constMetadata       |                                                  |        |                                       |
-| lastTokenId         |                                                  |        |                                       |
-| nextSponsored       |                                                  |        |                                       |
-| propertyPermissions |                                                  |        |                                       |
+| tokenByID           | Returns token info and attributes                | Ready  | [Link](./methods/token-by-id)         | 
 | tokenChildren       | Gets array of nested tokens                      | Ready  | [Link](./methods/token-children)      | 
-| tokenData           |                                                  |        |                                       |
-| tokenExists         |                                                  |        |                                       |
-| tokenOwner          |                                                  |        |                                       |
 | tokenParent         | Returns info about token parent                  | Ready  | [Link](./methods/token-parent)        |
-| tokenProperties     |                                                  |        |                                       |
 | topmostTokenOwner   | Returns substrate address of topmost token owner | Ready  | [Link](./methods/topmost-token-owner) |
-| totalSupply         |                                                  |        |                                       |
-| variableMetadata    |                                                  |        |                                       |
 
 ---
 
@@ -74,27 +43,18 @@
 
 ### TX methods
 
-| Method                      | Description | Status | Folder                                                      |
-|-----------------------------|-------------|--------|-------------------------------------------------------------|
-| addCollectionAdmin          |             |        |                                                             |
-| changeCollectionOwner       |             |        |                                                             |
-| createCollection            |             |        |                                                             |
-| createCollectionEx          | TBD         | Ready  | [Link](./methods/create-collection-ex)  |
-| deleteCollectionProperties  |             |        |                                                             |
-| destroyCollection           |             |        |                                                             |
-| removeCollectionAdmin       |             |        |                                                             |
-| removeCollectionSponsor     |             |        |                                                             |
-| setCollectionLimits         | TBD         | Ready  | [Link](./methods/set-collection-limits) |
-| setCollectionPermissions    |             |        |                                                             |
-| setCollectionProperties     |             |        |                                                             |
-| setCollectionSponsor        |             |        |                                                             |
+| Method                     | Description | Status             | Folder                                     |
+|----------------------------|-------------|--------------------|--------------------------------------------|
+| createCollectionExNew      | TBD         | Ready              | [Link](./methods/create-collection-ex-new) |
+| createCollectionEx         | TBD         | Ready (deprecated) | [Link](./methods/create-collection-ex)     |
+| setCollectionLimits        | TBD         | Ready              | [Link](./methods/set-collection-limits)    |
+
 
 ### RPC methods
-| Method                    | Description                                                                                                                                            | Status | Folder                                        |
-|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|--------|-----------------------------------------------|
-| collectionById            | Returns collection info in human-readable format                                                                                                       | Ready  | [Link](./methods/collection-by-id)            |
-| collectionProperties      |                                                                                                                                                        |        |                                               |
-| collectionStats           |                                                                                                                                                        |        |                                               |
-| collectionTokens          |                                                                                                                                                        |        |                                               |
-| effectiveCollectionLimits | The values of the limits actually applied to the collection (default and user-set) can be obtained using Get effective limits by collection ID method. | Ready  | [Link](./methods/effective-collection-limits) |
+| Method                    | Description                                                                                                                                            | Status             | Folder                                        |
+|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|-----------------------------------------------|
+| collectionByIdNew         | Returns collection info in human-readable format (with Unique schema)                                                                                  | Ready              | [Link](./methods/collection-by-id-new)        |
+| collectionById            | Returns collection info in human-readable format                                                                                                       | Ready (deprecated) | [Link](./methods/collection-by-id)            |
+| getStats                  | Returns blockchain collection statistics                                                                                                               | Ready              | [Link](./methods/get-stats)                   |
+| effectiveCollectionLimits | The values of the limits actually applied to the collection (default and user-set) can be obtained using Get effective limits by collection ID method. | Ready              | [Link](./methods/effective-collection-limits) |
 
