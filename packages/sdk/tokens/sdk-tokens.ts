@@ -32,11 +32,14 @@ import {
   TokenParentResult,
   TopmostTokenOwnerArguments,
   TopmostTokenOwnerResult,
+  ApproveArguments,
+  ApproveResult,
 } from './types';
 import {
   CreateTokenNewArguments,
   CreateTokenNewMutation,
 } from './methods/create-token';
+import { Approve } from './methods/approve/method';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -47,6 +50,7 @@ export class SdkTokens {
     this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
     this.get_new = tokenById.bind(this.sdk);
     this.create_new = new CreateTokenNewMutation(this.sdk);
+    this.approve = new Approve(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -60,6 +64,8 @@ export class SdkTokens {
   get_new: QueryMethod<TokenIdArguments, UniqueTokenDecoded>;
 
   create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
+
+  approve: MutationMethodWrap<ApproveArguments, ApproveResult>;
 
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,

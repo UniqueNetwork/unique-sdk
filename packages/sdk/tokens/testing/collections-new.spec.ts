@@ -23,7 +23,7 @@ import {
   TestAccount,
 } from '@unique-nft/sdk/testing';
 
-const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
+export const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   attributesSchema: {
     '0': {
       name: {
