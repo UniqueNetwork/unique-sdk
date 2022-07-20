@@ -9,8 +9,9 @@
         "distDir": "./dist/packages/accounts",
         "entryPoints": [
           "./index.ts",
-          "./sign/index.ts",
-          "./sign/polkadot/index.ts"
+          "./keyring/index.ts",
+          "./polkadot/index.ts",
+          "./metamask/index.ts"
         ]
       }
     },

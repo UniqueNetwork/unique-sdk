@@ -8,6 +8,7 @@ import { QueryController } from './controllers/query.controller';
 import { AccountController } from './controllers/account.controller';
 import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
 import { SubstratePrimaryModule } from './substrate.primary.module';
+import { SignerNestModule } from '../../utils/signer.module';
 
 const controllers = [
   ExtrinsicsController,
@@ -19,7 +20,7 @@ const controllers = [
 ];
 
 @Module({})
-export class SubstrateModule {
+export class SubstrateModule extends SignerNestModule {
   static forSecondary(): DynamicModule {
     const { SECONDARY_CHAIN_WS_URL, SECONDARY_CHAIN_NAME } = process.env;
 

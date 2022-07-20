@@ -12,6 +12,9 @@ export {
   AttributeType,
   AttributeKind,
   COLLECTION_SCHEMA_NAME as CollectionSchemaName,
+} from '@unique-nft/api';
+
+export type {
   InfixOrUrlOrCidAndHash,
   UniqueTokenDecoded,
   CollectionId,

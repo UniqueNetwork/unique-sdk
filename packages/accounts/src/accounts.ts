@@ -1,44 +1,35 @@
-import { Keyring } from '@polkadot/keyring';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
-import {
-  mnemonicGenerate,
-  mnemonicToMiniSecret,
-  naclBoxPairFromSecret,
-} from '@polkadot/util-crypto';
-import { u8aToHex } from '@polkadot/util';
+import { Account, Provider, ProviderClass, ProviderClass2 } from './types';
 
-import {
-  Account,
-  GenerateAccountArguments,
-  GetAccountArguments,
-} from './types';
+export class Accounts {
+  private providers = new Map<ProviderClass2<Provider>, Provider>();
 
-export async function getAccountFromMnemonic(
-  args: GetAccountArguments,
-): Promise<Account> {
-  const { mnemonic, pairType, meta } = args;
-  const seed = mnemonicToMiniSecret(mnemonic);
-  const { publicKey } = naclBoxPairFromSecret(seed);
-  const account = new Keyring({ type: pairType }).addFromSeed(
-    seed,
-    { ...meta },
-    pairType,
-  );
-  const keyfile: KeyringPair$Json = account.toJson();
-  return {
-    mnemonic,
-    seed: u8aToHex(seed),
-    publicKey: u8aToHex(publicKey),
-    keyfile,
-  };
-}
+  async addProvider<T extends ProviderClass2<Provider>, R extends Provider>(
+    ProviderClassLink: T,
+    options?: object,
+  ): Promise<Provider> {
+    const provider: Provider = new ProviderClassLink(options);
+    await provider.init();
+    this.providers.set(ProviderClassLink, provider);
+    return provider;
+  }
 
-export async function generateAccount(
-  args: GenerateAccountArguments,
-): Promise<Account> {
-  const mnemonic = mnemonicGenerate();
-  return getAccountFromMnemonic({
-    ...args,
-    mnemonic,
-  });
+  getProvider(ProviderClassLink: ProviderClass): Provider | undefined {
+    return this.providers.get(ProviderClassLink);
+  }
+
+  async getAccounts(): Promise<Account[]> {
+    const accounts = [];
+    const providers = this.providers.values();
+    // eslint-disable-next-line no-restricted-syntax
+    for (const provider of providers) {
+      accounts.push(provider.getAccounts());
+    }
+    const result: Account[][] = await Promise.all(accounts);
+    return Promise.resolve(result.flat(1));
+  }
+
+  async first(): Promise<Account | undefined> {
+    const accounts = await this.getAccounts();
+    return accounts.find((a) => !!a);
+  }
 }

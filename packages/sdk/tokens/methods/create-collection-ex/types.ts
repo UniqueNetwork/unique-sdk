@@ -62,6 +62,7 @@ export interface TokenPropertiesPermissions {
 
 export interface CollectionInfoBase {
   mode?: CollectionMode | `${CollectionMode}`;
+  decimals?: number;
   name: string;
   description: string;
   tokenPrefix: string;
@@ -78,6 +79,6 @@ export interface CollectionInfoWithProperties extends CollectionInfoBase {
 }
 
 export interface CreateCollectionArguments
-  extends CollectionInfoWithProperties {
+  extends Omit<CollectionInfoWithProperties, 'mode'> {
   address: Address;
 }

@@ -4,6 +4,7 @@ on:
     inputs:
       version:
         required: true
+        description: "vX.X.X"
 jobs:
   build-and-publish:
     name: Build and publish
@@ -20,8 +21,9 @@ jobs:
         shell: bash
         run: |
           npm ci
-          npm run rollup:build:sdk
-      - name: NPM Publish
+          npm run build:sdk
+
+      - name: NPM Publish SDK
         working-directory: ./dist/packages/sdk
         shell: bash
         run: |
