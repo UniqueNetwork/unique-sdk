@@ -15,7 +15,7 @@ The method returns a `parsed` object that contains the `collectionId: number, to
 
 ## Examples
 
-  ```typescript
+```typescript
 import { ApproveArguments } from '@unique-nft/sdk/tokens/methods/approve';
 
 import {

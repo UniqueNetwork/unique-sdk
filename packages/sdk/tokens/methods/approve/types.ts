@@ -2,7 +2,7 @@ export interface ApproveArguments {
   spender: string,
   collectionId: number,
   tokenId: number,
-  amount: boolean
+  isApprove: boolean
 }
 
 

@@ -9,7 +9,7 @@ import { ApproveArguments, ApproveResult } from './types';
 
 export class Approve extends MutationMethodBase<ApproveArguments, ApproveResult> {
   async transformArgs(args: ApproveArguments): Promise<TxBuildArguments> {
-    const { spender, collectionId, tokenId, amount } = args;
+    const { spender, collectionId, tokenId, isApprove } = args;
 
     const collection = await this.sdk.collections.get_new({ collectionId });
     if (!collection) throw new SdkError(`no collection ${collectionId}`);
@@ -21,12 +21,11 @@ export class Approve extends MutationMethodBase<ApproveArguments, ApproveResult>
       address: spender,
       section: 'unique',
       method: 'approve',
-      args: [{ substrate: spender }, collectionId, tokenId, amount ? 1 : 0],
+      args: [{ substrate: spender }, collectionId, tokenId, isApprove ? 1 : 0],
     };
   }
 
   async transformResult(result: ISubmittableResult): Promise<ApproveResult | undefined> {
-    console.log('result', result);
     const record = result.findRecord('common', 'Approved');
 
     if (!record) return undefined;
