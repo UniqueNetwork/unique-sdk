@@ -22,7 +22,7 @@
 
 ## Token methods
 
-### TX methods
+### Mutation methods
 | Method                      | Description                                                                                                                           | Status | Folder                         |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------|--------|--------------------------------|
 | createToken                 | TBD                                                                                                                                   | Ready  | [Link](./methods/create-token) |
@@ -41,7 +41,7 @@
 
 ## Collection methods
 
-### TX methods
+### Mutation methods
 
 | Method                     | Description | Status             | Folder                                     |
 |----------------------------|-------------|--------------------|--------------------------------------------|
