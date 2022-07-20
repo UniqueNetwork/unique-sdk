@@ -3,7 +3,10 @@ import {
   web3Accounts,
   web3FromSource,
 } from '@polkadot/extension-dapp';
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import {
+  InjectedAccountWithMeta,
+  Web3AccountsOptions,
+} from '@polkadot/extension-inject/types';
 import { Account, Provider } from '../src/types';
 import { PolkadotAccount } from './account';
 
@@ -15,7 +18,7 @@ async function createAccount(
 }
 
 export class PolkadotProvider extends Provider<InjectedAccountWithMeta> {
-  constructor() {
+  constructor(private readonly options: Web3AccountsOptions = {}) {
     super();
   }
 
@@ -29,11 +32,10 @@ export class PolkadotProvider extends Provider<InjectedAccountWithMeta> {
     return Promise.resolve();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public override async getAccounts(): Promise<
     Account<InjectedAccountWithMeta>[]
   > {
-    const injectedAccounts = await web3Accounts();
+    const injectedAccounts = await web3Accounts(this.options);
     if (!injectedAccounts.length) {
       // todo log error Polkadot account not found
       return [];

@@ -11,11 +11,11 @@ import { PasswordCallback } from './types';
 
 function createSigner(
   keyringPair: KeyringPair,
-  passwordCallback: PasswordCallback,
+  passwordCallback?: PasswordCallback,
 ): SdkSigner {
   return {
     sign: async (unsignedTxPayload: UnsignedTxPayload): Promise<SignResult> => {
-      if (keyringPair.isLocked) {
+      if (keyringPair.isLocked && passwordCallback) {
         const password = await passwordCallback(keyringPair);
         keyringPair.unlock(password);
       }
@@ -40,7 +40,7 @@ export class KeyringLocalAccount extends Account<KeyringPair> {
 
   constructor(
     keyringPair: KeyringPair,
-    private readonly passwordCallback: PasswordCallback,
+    private readonly passwordCallback?: PasswordCallback,
   ) {
     super(keyringPair);
   }
