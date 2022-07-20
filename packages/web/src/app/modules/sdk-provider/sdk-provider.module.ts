@@ -6,6 +6,7 @@ import '@unique-nft/sdk/state-queries';
 import '@unique-nft/sdk/extrinsics';
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
+import '@unique-nft/sdk/fungible';
 
 import { Config } from '../../config/config.module';
 import { sdkFactory } from './factory';

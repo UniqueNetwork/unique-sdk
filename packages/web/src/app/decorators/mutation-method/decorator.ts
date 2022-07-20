@@ -1,5 +1,4 @@
 import * as process from 'process';
-import * as uuid from 'uuid';
 import { applyDecorators, Body, Query } from '@nestjs/common';
 import {
   ApiBody,
@@ -8,6 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
   ApiExtraModels,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { MutationOptions as SdkMutationOptions } from '@unique-nft/sdk/extrinsics';
 import {
@@ -150,10 +150,11 @@ const applyMutationDecorator = (
   propertyKey,
   descriptor,
 ) => {
-  applyDecorators(
+  const decorators: MethodDecorator[] = [
     ApiBody({ type: bodyArgsClass }),
     ApiQuery({ type: MutationMethodQuery }),
     ApiBearerAuth('SeedAuth'),
+    ApiOperation({ operationId: propertyKey }),
     httpMethodDecorator,
     ApiResponse({
       schema: {
@@ -172,7 +173,13 @@ const applyMutationDecorator = (
       bodyArgsClass,
       resultClass,
     ),
-  )(target, propertyKey, descriptor);
+  ];
+
+  if (!descriptor.value.name) {
+    decorators.push(ApiOperation({ operationId: propertyKey }));
+  }
+
+  applyDecorators(...decorators)(target, propertyKey, descriptor);
 };
 
 const createMutationCallback = (target, propertyKey) => {

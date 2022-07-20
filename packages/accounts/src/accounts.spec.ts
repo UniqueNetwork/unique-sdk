@@ -11,7 +11,7 @@ describe('Accounts', () => {
   it('ok', async () => {
     const accounts = new Accounts();
     await accounts.addProvider(KeyringProvider);
-    await accounts.addProvider(KeyringLocalProvider, {});
+    await accounts.addProvider(KeyringLocalProvider);
 
     const keyringProvider = accounts.getProvider(
       KeyringProvider,
