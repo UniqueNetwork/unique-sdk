@@ -50,11 +50,3 @@ jobs:
           npm version ${{ steps.version.outputs.version }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
           npm publish --access public
-
-      - name: NPM Publish Accounts
-        working-directory: ./dist/packages/accounts
-        shell: bash
-        run: |
-          npm version ${{ steps.version.outputs.version }}
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
-          npm publish --access public

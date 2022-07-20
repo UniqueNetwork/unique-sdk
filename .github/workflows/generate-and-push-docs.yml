@@ -21,9 +21,11 @@ jobs:
       - name: Push docs
         uses: ./.github/actions/push-docs
         with:
-          access_token: ${{ secrets.UNIQUENETWORKBOT_ACCESS_TOKEN }}
           dst_owner: UniqueNetwork
           dst_repo: unique_docs
           dst_branch: master
           dst_path: docs/reference/sdk
           src_path: dist/docs
+          pr_branch: sdk-generated
+        env:
+          GITHUB_TOKEN: ${{ secrets.UNIQUENETWORKBOT_ACCESS_TOKEN }}
