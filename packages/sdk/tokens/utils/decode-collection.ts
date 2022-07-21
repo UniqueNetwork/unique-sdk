@@ -119,7 +119,7 @@ export const decodeCollectionBase = (
   tokenPrefix: bytesToString(collection.tokenPrefix),
   sponsorship: decodeCollectionSponsorship(collection.sponsorship),
   limits: decodeCollectionLimits(collection.limits),
-
+  readOnly: collection.readOnly?.toHuman() || false,
   permissions: decodeCollectionPermissions(collection.permissions),
 });
 

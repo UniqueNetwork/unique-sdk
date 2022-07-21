@@ -250,6 +250,9 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
     required: false,
   })
   permissions?: CollectionPermissionsDto;
+
+  @ApiProperty()
+  readOnly?: boolean;
 }
 
 export class CollectionInfoWithOldPropertiesDto

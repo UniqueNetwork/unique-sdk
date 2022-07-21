@@ -150,6 +150,7 @@ export const encodeCollectionBase = (
       : undefined,
     limits,
     permissions,
+    readOnly: collectionInfo.readOnly,
     ...extra,
   };
 

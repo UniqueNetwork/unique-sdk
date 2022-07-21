@@ -69,7 +69,7 @@ export interface CollectionInfoBase {
   sponsorship?: CollectionSponsorship | null;
   limits?: CollectionLimits;
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
-
+  readOnly?: boolean;
   permissions?: CollectionPermissions;
 }
 
