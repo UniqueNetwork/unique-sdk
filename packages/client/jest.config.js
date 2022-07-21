@@ -1,4 +1,4 @@
-const esModules = ['@polkadot/', '@unique-nft/unique-mainnet-types'].join('|');
+const esModules = ['@polkadot/', '@unique-nft/'].join('|');
 
 module.exports = {
   displayName: 'client',
@@ -16,4 +16,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/accounts',
   testPathIgnorePatterns: ['./utils/*'],
+  setupFilesAfterEnv: ['<rootDir>/../../jest.setup.js'],
 };

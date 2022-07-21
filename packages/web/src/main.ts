@@ -13,8 +13,9 @@ import { AppModule } from './app/app.module';
 import { addSwagger } from './app/utils/swagger';
 import { Config } from './app/config/config.module';
 import { initSentry } from './app/interceptors/sentry.interceptor';
+import process from 'process';
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config: ConfigService<Config> = app.get(ConfigService);
 
