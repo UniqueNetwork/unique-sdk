@@ -70,12 +70,23 @@ export class CreateCollectionNewRequest
   schema?: UniqueCollectionSchemaToCreateDto;
 }
 
+export class CollectionPropertyDto implements CollectionProperty {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty({ example: 'example' })
+  value: string;
+}
+
 export class CollectionInfoWithSchemaResponse
   extends CollectionInfoResponse
   implements CollectionInfoWithSchema
 {
   @ApiProperty({ type: UniqueCollectionSchemaDecodedDto, required: false })
   schema?: UniqueCollectionSchemaDecodedDto;
+
+  @ApiProperty({ type: CollectionPropertyDto, isArray: true })
+  properties: CollectionPropertyDto[];
 }
 
 export class CollectionIdQuery
@@ -129,14 +140,6 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   @ValidAddress()
   @AddressApiProperty
   to: string;
-}
-
-export class CollectionPropertyDto implements CollectionProperty {
-  @ApiProperty({ example: 'example' })
-  key: string;
-
-  @ApiProperty({ example: 'example' })
-  value: string;
 }
 
 export class SetCollectionPropertiesBody

@@ -1,11 +1,13 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
 import { SchemaTools } from '@unique-nft/api';
-import { bytesToString } from '@unique-nft/sdk/utils';
 
-import { CollectionIdArguments } from '../collection-by-id/types';
+import { CollectionIdArguments } from '../../types/shared';
 import { CollectionInfoWithSchema } from './types';
-import { decodeCollectionBase } from '../../utils/decode-collection';
+import {
+  decodeCollectionBase,
+  decodeCollectionProperties,
+} from '../../utils/decode-collection';
 import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 async function collectionByIdNewFn(
@@ -20,10 +22,7 @@ async function collectionByIdNewFn(
 
   if (!collection) return null;
 
-  const properties = collection.properties.map(({ key, value }) => ({
-    key: bytesToString(key),
-    value: bytesToString(value),
-  }));
+  const properties = decodeCollectionProperties(collection.properties);
 
   const decodingResult = await SchemaTools.decode.collectionSchema(
     collectionId,
@@ -39,6 +38,7 @@ async function collectionByIdNewFn(
     id: collectionId,
     owner: collection.owner.toString(),
     schema,
+    properties,
   };
 }
 

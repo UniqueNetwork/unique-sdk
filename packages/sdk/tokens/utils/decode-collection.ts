@@ -32,6 +32,7 @@ import {
   decodeCollectionLimits,
   toBoolean,
 } from '../methods/set-collection-limits/utils';
+import { CollectionProperty } from '../types/shared';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
@@ -57,6 +58,14 @@ export const decodeCollectionPermissions = (
     },
   };
 };
+
+export const decodeCollectionProperties = (
+  properties: UpDataStructsProperty[] = [],
+): CollectionProperty[] =>
+  properties.map(({ key, value }) => ({
+    key: bytesToString(key),
+    value: bytesToString(value),
+  }));
 
 export const decodeCollectionOldProperties = (
   properties?: UpDataStructsProperty[],

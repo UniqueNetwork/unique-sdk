@@ -4,7 +4,7 @@ import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { SchemaTools } from '@unique-nft/api';
 
-import { CollectionIdArguments } from '../collection-by-id/types';
+import { CollectionIdArguments } from '../../types/shared';
 import { CreateCollectionNewArguments } from './types';
 import { encodeCollectionBase } from '../../utils/encode-collection';
 import { AttributesTransformer } from './utils';
