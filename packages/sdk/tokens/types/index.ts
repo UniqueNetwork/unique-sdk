@@ -18,6 +18,6 @@ export * from '../methods/set-token-property-permissions/types';
 export * from '../methods/collection-properties/types';
 export * from '../methods/token-properties/types';
 export * from '../methods/property-permissions/types';
-export * from '../methods/token-by-id/types';
+export * from '../methods/approve/types';
 
 export * from './shared';

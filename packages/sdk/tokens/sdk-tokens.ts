@@ -19,6 +19,7 @@ import { tokenById, TokenDecoded } from './methods/token-by-id';
 import { tokenPropertiesQuery } from './methods/token-properties';
 import { DeleteTokenPropertiesMutation } from './methods/delete-token-properties';
 import { SetTokenPropertiesMutation } from './methods/set-token-properties';
+import { Approve } from './methods/approve/method';
 import {
   BurnTokenArguments,
   NestTokenArguments,
@@ -39,6 +40,8 @@ import {
   DeleteTokenPropertiesResult,
   SetTokenPropertiesArguments,
   SetTokenPropertiesResult,
+  ApproveArguments,
+  ApproveResult,
 } from './types';
 import {
   CreateTokenNewArguments,
@@ -57,6 +60,7 @@ export class SdkTokens {
     this.setProperties = new SetTokenPropertiesMutation(this.sdk);
     this.deleteProperties = new DeleteTokenPropertiesMutation(this.sdk);
     this.properties = tokenPropertiesQuery.bind(this.sdk);
+    this.approve = new Approve(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -70,6 +74,8 @@ export class SdkTokens {
   get_new: QueryMethod<TokenIdArguments, TokenDecoded>;
 
   create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
+
+  approve: MutationMethodWrap<ApproveArguments, ApproveResult>;
 
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
