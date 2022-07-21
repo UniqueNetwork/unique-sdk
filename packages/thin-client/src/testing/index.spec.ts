@@ -1,56 +1,58 @@
-import { TextEncoder, TextDecoder } from 'util';
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-
+/**
+ * @jest-environment node
+ */
 import { Keyring } from '@polkadot/keyring';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import * as process from 'process';
+import { INestApplication } from '@nestjs/common';
 
 import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
 
-import { INestApplication } from '@nestjs/common';
-import { bootstrap } from '@unique-nft/web/src/main';
-import { ThinClient } from './index';
+import '@unique-nft/sdk/tokens';
+import '@unique-nft/sdk/balance';
+import '@unique-nft/sdk/state-queries';
+import '@unique-nft/sdk/extrinsics';
+
+import { ThinClient } from '../index';
 import {
   FeeResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
-} from './types/api';
-import '@unique-nft/sdk/tokens';
-import {sleep} from "./utils";
+} from '../types/api';
+import { sleep } from '../utils';
+import { createWeb } from './utils.test';
 
-const baseUrl = process.env.URL_FOR_TEST_THIN_CLIENT || 'http://localhost:3000';
+const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
 
 const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
 const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
 
 describe('thin-client tests', () => {
-  let app1: INestApplication;
-
+  let app: INestApplication;
   beforeAll(async () => {
-    await bootstrap();
+    if (!app) {
+      app = await createWeb();
+    }
   }, 200_000);
+
+  afterAll(() => {
+    app.close();
+  });
 
   describe('extrinsics', () => {
     it('build', async () => {
-      try {
-        const client = new ThinClient({ baseUrl, signer: null });
-        const response: UnsignedTxPayloadResponse =
-          await client.extrinsics.build({
-            address: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
-            section: 'balances',
-            method: 'transfer',
-            args: [
-              'yGEYS1E6fu9YtECXbMFRf1faXRakk3XDLuD1wPzYb4oRWwRJK',
-              100000000,
-            ],
-          });
-        console.log(response);
-        expect(response).toEqual(expect.any(Object));
-      } catch (e) {
-        console.log(e);
-      }
+      const client = new ThinClient({ baseUrl, signer: null });
+      const response: UnsignedTxPayloadResponse = await client.extrinsics.build(
+        {
+          address: bobAddress,
+          section: 'balances',
+          method: 'transfer',
+          args: [aliceAddress, 0.01],
+        },
+      );
+      console.log(response);
+      expect(response).toEqual(expect.any(Object));
     }, 100_000);
   });
 
@@ -67,6 +69,7 @@ describe('thin-client tests', () => {
 
       bob = keyring.addFromUri('//Bob');
       alice = keyring.addFromUri('//Alice');
+      console.log('address', bob.address, alice.address);
 
       signer = await createSigner({ seed: '//Bob' });
       client = new ThinClient({ baseUrl, signer });
