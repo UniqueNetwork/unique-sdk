@@ -8,8 +8,6 @@ import type {
 } from '@unique-nft/sdk/types';
 import { UpDataStructsTokenData } from '@unique-nft/unique-mainnet-types';
 import { Sdk } from '@unique-nft/sdk';
-import { UniqueTokenDecoded } from '@unique-nft/api';
-
 import { decodeToken } from './utils/decode-token';
 import { encodeToken } from './utils/encode-token';
 import { NestTokenMutation } from './methods/nest-token';
@@ -17,7 +15,11 @@ import { UnnestTokenMutation } from './methods/unnest-token';
 import { tokenChildrenQuery } from './methods/token-children';
 import { tokenParentQuery } from './methods/token-parent';
 import { topmostTokenOwnerQuery } from './methods/topmost-token-owner';
-import { tokenById } from './methods/token-by-id/method';
+import { tokenById, TokenDecoded } from './methods/token-by-id';
+import { tokenPropertiesQuery } from './methods/token-properties';
+import { DeleteTokenPropertiesMutation } from './methods/delete-token-properties';
+import { SetTokenPropertiesMutation } from './methods/set-token-properties';
+import { Approve } from './methods/approve/method';
 import {
   BurnTokenArguments,
   NestTokenArguments,
@@ -32,6 +34,14 @@ import {
   TokenParentResult,
   TopmostTokenOwnerArguments,
   TopmostTokenOwnerResult,
+  TokenPropertiesArguments,
+  TokenPropertiesResult,
+  DeleteTokenPropertiesArguments,
+  DeleteTokenPropertiesResult,
+  SetTokenPropertiesArguments,
+  SetTokenPropertiesResult,
+  ApproveArguments,
+  ApproveResult,
 } from './types';
 import {
   CreateTokenNewArguments,
@@ -47,6 +57,10 @@ export class SdkTokens {
     this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
     this.get_new = tokenById.bind(this.sdk);
     this.create_new = new CreateTokenNewMutation(this.sdk);
+    this.setProperties = new SetTokenPropertiesMutation(this.sdk);
+    this.deleteProperties = new DeleteTokenPropertiesMutation(this.sdk);
+    this.properties = tokenPropertiesQuery.bind(this.sdk);
+    this.approve = new Approve(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -57,14 +71,28 @@ export class SdkTokens {
 
   parent: QueryMethod<TokenParentArguments, TokenParentResult>;
 
-  get_new: QueryMethod<TokenIdArguments, UniqueTokenDecoded>;
+  get_new: QueryMethod<TokenIdArguments, TokenDecoded>;
 
   create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
+
+  approve: MutationMethodWrap<ApproveArguments, ApproveResult>;
 
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
     TopmostTokenOwnerResult
   >;
+
+  setProperties: MutationMethodWrap<
+    SetTokenPropertiesArguments,
+    SetTokenPropertiesResult
+  >;
+
+  deleteProperties: MutationMethodWrap<
+    DeleteTokenPropertiesArguments,
+    DeleteTokenPropertiesResult
+  >;
+
+  properties: QueryMethod<TokenPropertiesArguments, TokenPropertiesResult>;
 
   async get({
     collectionId,

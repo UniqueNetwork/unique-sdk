@@ -1,31 +1,38 @@
 /* eslint-disable max-classes-per-file */
 import {
-  UniqueTokenDecoded,
+  TokenDecoded,
   CollectionId,
   DecodedInfixOrUrlOrCidAndHash,
   TokenId,
-  SubOrEthAddressObj,
   DecodedAttributes,
   LocalizedStringDictionary,
   UniqueTokenToCreate,
   EncodedTokenAttributes,
   InfixOrUrlOrCidAndHash,
   CreateTokenNewArguments,
+  OwnerAddress,
 } from '@unique-nft/sdk/tokens';
-import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiProperty,
+  getSchemaPath,
+  refs,
+} from '@nestjs/swagger';
 import { Address } from '@unique-nft/sdk/types';
 import {
   DecodedAttributeDto,
   DecodedInfixOrUrlOrCidAndHashSchemaApiProperty,
+  EthereumAddress,
   InfixOrUrlOrCidAndHashSchemaApiProperty,
   StringOrLocalizedString,
+  SubstrateAddress,
 } from './shared';
 
 export { UniqueCollectionSchemaToCreateDto } from './collection-schema-to-create';
 export { UniqueCollectionSchemaDecodedDto } from './collection-schema-decoded';
 
-@ApiExtraModels(DecodedAttributeDto)
-export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
+@ApiExtraModels(DecodedAttributeDto, SubstrateAddress, EthereumAddress)
+export class TokenDecodedResponse implements TokenDecoded {
   @ApiProperty({
     type: 'array',
     items: { $ref: getSchemaPath(DecodedAttributeDto) },
@@ -33,16 +40,16 @@ export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   attributes: DecodedAttributes;
 
   @ApiProperty()
-  collectionId: CollectionId;
+  collectionId: number;
 
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   image: DecodedInfixOrUrlOrCidAndHash;
 
-  @ApiProperty()
-  owner: SubOrEthAddressObj;
+  @ApiProperty({ oneOf: refs(SubstrateAddress, EthereumAddress) })
+  owner: OwnerAddress;
 
   @ApiProperty()
-  tokenId: TokenId;
+  tokenId: number;
 
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   audio?: DecodedInfixOrUrlOrCidAndHash;
@@ -77,10 +84,8 @@ class UniqueTokenDataToCreateDto implements UniqueTokenToCreate {
   @ApiProperty({
     type: 'object',
     example: {
-      0: 'sample',
-      1: 1,
-      2: [1, 2, 3],
-      3: { en: 'sample' },
+      0: 0,
+      1: [1],
     },
   })
   encodedAttributes: EncodedTokenAttributes;

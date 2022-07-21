@@ -15,22 +15,19 @@ import {
   encodeSponsoredDataRateLimit,
 } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
+import { CollectionProperty } from '../types';
 import {
   CollectionInfoBase,
-  CollectionInfoWithProperties,
+  CollectionInfoWithOldProperties,
   CollectionMode,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   CollectionPropertiesKeys,
   TokenPropertiesPermissions,
 } from '../methods/create-collection-ex/types';
 
-type CollectionProperty = {
-  key: CollectionPropertiesKeys;
-  value: string;
-};
 const encodeCollectionProperties = (
-  properties: CollectionProperties,
+  properties: CollectionOldProperties,
 ): CollectionProperty[] => {
   const encodedProperties: CollectionProperty[] = [];
   if (properties.schemaVersion) {
@@ -153,6 +150,7 @@ export const encodeCollectionBase = (
       : undefined,
     limits,
     permissions,
+    readOnly: collectionInfo.readOnly,
     ...extra,
   };
 
@@ -164,7 +162,7 @@ export const encodeCollectionBase = (
 
 export const encodeCollection = (
   registry: Registry,
-  collectionInfo: Partial<CollectionInfoWithProperties>,
+  collectionInfo: Partial<CollectionInfoWithOldProperties>,
 ): UpDataStructsCreateCollectionData => {
   const properties = collectionInfo.properties
     ? encodeCollectionProperties(collectionInfo.properties)

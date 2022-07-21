@@ -18,7 +18,7 @@ import {
   MutationMethod,
   MutationMethodOptions,
 } from '../../../../decorators/mutation-method';
-import { CollectionInfoWithPropertiesDto } from '../../../../types/unique-types';
+import { CollectionInfoWithOldPropertiesDto } from '../../../../types/unique-types';
 import {
   CreateCollectionBody,
   CreateCollectionResponse,
@@ -36,10 +36,10 @@ export class OldCollectionController extends BaseCollectionController {
   }
 
   @Get()
-  @ApiResponse({ type: CollectionInfoWithPropertiesDto })
+  @ApiResponse({ type: CollectionInfoWithOldPropertiesDto })
   async getCollection(
     @Query() args: CollectionIdQuery,
-  ): Promise<CollectionInfoWithPropertiesDto> {
+  ): Promise<CollectionInfoWithOldPropertiesDto> {
     const collection = await this.sdk.collections.get(args);
 
     if (collection) return collection;

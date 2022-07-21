@@ -11,14 +11,28 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
+import {
+  CollectionPropertiesResult,
+  PropertyPermissionsResult,
+} from '@unique-nft/sdk/tokens';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {
+  SetPropertyPermissionsResponse,
   CollectionIdQuery,
   BurnCollectionBody,
   SetCollectionLimitsBody,
   TransferCollectionBody,
+  SetCollectionPropertiesBody,
+  DeleteCollectionPropertiesBody,
+  SetPropertyPermissionsBody,
+  SetCollectionPropertiesResponse,
+  DeleteCollectionPropertiesResponse,
 } from './types';
+import {
+  MutationMethod,
+  MutationMethodOptions,
+} from '../../../../decorators/mutation-method';
 
 export class BaseCollectionController {
   constructor(
@@ -56,5 +70,55 @@ export class BaseCollectionController {
     @Body() args: TransferCollectionBody,
   ): Promise<UnsignedTxPayloadResponse> {
     return this.sdk.collections.transfer(args);
+  }
+
+  @Get('properties')
+  async collectionProperties(
+    @Query() args: CollectionIdQuery,
+  ): Promise<CollectionPropertiesResult> {
+    return this.sdk.collections.properties(args);
+  }
+
+  @MutationMethod(
+    Post('properties'),
+    SetCollectionPropertiesBody,
+    SetCollectionPropertiesResponse,
+  )
+  setCollectionProperties(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.setProperties,
+      cache: this.cache,
+    };
+  }
+
+  @MutationMethod(
+    Delete('properties'),
+    DeleteCollectionPropertiesBody,
+    DeleteCollectionPropertiesResponse,
+  )
+  deleteCollectionProperties(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.deleteProperties,
+      cache: this.cache,
+    };
+  }
+
+  @Get('property-permissions')
+  async propertyPermissions(
+    @Query() args: CollectionIdQuery,
+  ): Promise<PropertyPermissionsResult> {
+    return this.sdk.collections.propertyPermissions(args);
+  }
+
+  @MutationMethod(
+    Post('property-permissions'),
+    SetPropertyPermissionsBody,
+    SetPropertyPermissionsResponse,
+  )
+  setPropertyPermissions(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.setPropertyPermissions,
+      cache: this.cache,
+    };
   }
 }
