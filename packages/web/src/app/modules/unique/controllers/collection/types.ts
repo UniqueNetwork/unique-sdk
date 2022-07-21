@@ -66,16 +66,16 @@ export class CreateCollectionNewRequest
   @AddressApiProperty
   address: string;
 
-  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto })
-  schema: UniqueCollectionSchemaToCreateDto;
+  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto, required: false })
+  schema?: UniqueCollectionSchemaToCreateDto;
 }
 
 export class CollectionInfoWithSchemaResponse
   extends CollectionInfoResponse
   implements CollectionInfoWithSchema
 {
-  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto })
-  schema: UniqueCollectionSchemaDecodedDto;
+  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto, required: false })
+  schema?: UniqueCollectionSchemaDecodedDto;
 }
 
 export class CollectionIdQuery

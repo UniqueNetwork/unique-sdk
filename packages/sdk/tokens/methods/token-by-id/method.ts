@@ -1,15 +1,15 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
-import { SchemaTools, UniqueTokenDecoded } from '@unique-nft/api';
-import { SdkError } from '@unique-nft/sdk/errors';
+import { SchemaTools } from '@unique-nft/api';
 
 import { TokenIdArguments } from '../../types';
 import { AttributesTransformer } from '../create-collection-ex-new/utils';
+import { TokenDecoded } from './types';
 
 async function tokenByIdFn(
   this: Sdk,
   args: TokenIdArguments,
-): Promise<UniqueTokenDecoded | null> {
+): Promise<TokenDecoded | null> {
   const { collectionId, tokenId } = args;
 
   const uniqueCollection = await this.collections.get_new({ collectionId });
@@ -21,20 +21,24 @@ async function tokenByIdFn(
   const tokenData = await this.api.rpc.unique.tokenData(collectionId, tokenId);
   if (!tokenData) return null;
 
-  const tokenDecodingResult = await SchemaTools.decode.token(
-    collectionId,
+  if (uniqueCollection.schema) {
+    const tokenDecodingResult = await SchemaTools.decode.token(
+      collectionId,
+      tokenId,
+      tokenData,
+      AttributesTransformer.toOriginal(uniqueCollection.schema),
+    );
+
+    if (tokenDecodingResult.isValid) return tokenDecodingResult.decoded;
+  }
+
+  return {
     tokenId,
-    tokenData,
-    AttributesTransformer.toOriginal(uniqueCollection.schema),
-  );
-
-  if (!tokenDecodingResult.isValid)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    throw SdkError.wrapError(tokenDecodingResult.validationError);
-
-  return tokenDecodingResult.decoded;
+    collectionId,
+    owner: tokenData.owner.toHuman() as any,
+    attributes: {},
+  };
 }
 
-export const tokenById: QueryMethod<TokenIdArguments, UniqueTokenDecoded> =
+export const tokenById: QueryMethod<TokenIdArguments, TokenDecoded> =
   tokenByIdFn;

@@ -22,6 +22,15 @@ export class CreateCollectionExNewMutation extends MutationMethodBase<
 
     const encodedBase = encodeCollectionBase(this.sdk.api.registry, rest);
 
+    if (!schema) {
+      return {
+        address,
+        section: 'unique',
+        method: 'createCollectionEx',
+        args: [encodedBase],
+      };
+    }
+
     const properties = SchemaTools.encodeUnique.collectionSchema(
       AttributesTransformer.toOriginal(schema),
     );

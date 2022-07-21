@@ -54,5 +54,5 @@ export type UniqueCollectionSchemaDecoded = Omit<
 
 export interface CreateCollectionNewArguments extends CollectionInfoBase {
   address: Address;
-  schema: UniqueCollectionSchemaToCreate;
+  schema?: UniqueCollectionSchemaToCreate;
 }
