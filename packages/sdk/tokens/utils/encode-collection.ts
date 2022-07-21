@@ -15,6 +15,7 @@ import {
   encodeSponsoredDataRateLimit,
 } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
+import { CollectionProperty } from '../types';
 import {
   CollectionInfoBase,
   CollectionInfoWithOldProperties,
@@ -25,10 +26,6 @@ import {
   TokenPropertiesPermissions,
 } from '../methods/create-collection-ex/types';
 
-type CollectionProperty = {
-  key: CollectionPropertiesKeys;
-  value: string;
-};
 const encodeCollectionProperties = (
   properties: CollectionOldProperties,
 ): CollectionProperty[] => {
