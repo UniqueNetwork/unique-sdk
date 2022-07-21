@@ -203,7 +203,7 @@ describe('unique schema collection and token', () => {
       tokenPrefix: createCollectionArgs.tokenPrefix,
     });
 
-    expect(collection?.schema.attributesSchema).toEqual(
+    expect(collection?.schema?.attributesSchema).toEqual(
       collectionSchemaToCreate.attributesSchema,
     );
 
