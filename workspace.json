@@ -4,6 +4,6 @@
     "sdk": "packages/sdk",
     "web": "packages/web",
     "accounts": "packages/accounts",
-    "thin-client": "packages/thin-client"
+    "client": "packages/client"
   }
 }

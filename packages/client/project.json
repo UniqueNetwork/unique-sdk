@@ -1,12 +1,12 @@
 {
-  "root": "packages/thin-client",
-  "sourceRoot": "packages/thin-client/src",
+  "root": "packages/client",
+  "sourceRoot": "packages/client/src",
   "targets": {
     "build": {
       "executor": "./tools/executors/lib-builder:run-build",
       "options": {
-        "packageName": "thin-client",
-        "distDir": "./dist/packages/thin-client",
+        "packageName": "client",
+        "distDir": "./dist/packages/client",
         "entryPoints": [
           "./index.ts",
           "./src/index.ts"
@@ -17,14 +17,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/thin-client/**/*.ts"]
+        "lintFilePatterns": ["packages/client/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/thin-client"],
+      "outputs": ["coverage/packages/client"],
       "options": {
-        "jestConfig": "packages/thin-client/jest.config.js",
+        "jestConfig": "packages/client/jest.config.js",
         "passWithNoTests": true
       }
     }

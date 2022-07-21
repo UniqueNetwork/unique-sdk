@@ -9,7 +9,7 @@ import {
   IBalance,
 } from './types/interfaces';
 
-export class ThinClient {
+export class Client {
   public instance: AxiosInstance;
 
   public readonly extrinsics: IExtrinsics = new Extrinsics(this);

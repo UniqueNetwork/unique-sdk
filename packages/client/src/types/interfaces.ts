@@ -28,7 +28,7 @@ export interface IExtrinsics extends ISection {
 export interface ISection {
   path: string;
   baseUrl: string;
-  client: IThinClient;
+  client: IClient;
 }
 
 export interface MutationOptions {
@@ -37,7 +37,7 @@ export interface MutationOptions {
 
 export interface IMutation<A, R> {
   url: string;
-  client: IThinClient;
+  client: IClient;
   method: 'POST' | 'PUT' | 'PATCH';
   path: string;
   build(args: A): Promise<UnsignedTxPayloadResponse>;
@@ -78,7 +78,7 @@ export interface Options {
   waitBetweenStatusRequestsInMs?: number;
 }
 
-export interface IThinClient {
+export interface IClient {
   instance: AxiosInstance;
   extrinsics: IExtrinsics;
   balance: IBalance;

@@ -6,13 +6,13 @@ import {
   UnsignedTxPayloadResponse,
 } from '../types/api';
 import { isUnsignedTxPayloadResponse, isSubmitTxBody, sleep } from '../utils';
-import { IThinClient, MutationOptions } from '../types/interfaces';
+import { IClient, MutationOptions } from '../types/interfaces';
 
 export class Mutation<A, R> {
   public readonly url: string;
 
   constructor(
-    public readonly client: IThinClient,
+    public readonly client: IClient,
     public readonly method: 'POST' | 'PUT' | 'PATCH',
     public readonly path: string,
   ) {

@@ -1,10 +1,10 @@
 ## Thin client
 
 ### install
-npm i @unique-nft/thin-client
+npm i @unique-nft/client
 
 ### Initialization in Node.js
-import { Client } from '@unique-nft/thin-client';
+import { Client } from '@unique-nft/client';
 
 const client = new Client('http://localhost:3000/', '//Alice');
 

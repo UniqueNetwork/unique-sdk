@@ -1,7 +1,7 @@
 const esModules = ['@polkadot/', '@unique-nft/unique-mainnet-types'].join('|');
 
 module.exports = {
-  displayName: 'thin-client',
+  displayName: 'client',
   preset: '../../jest.preset.js',
   maxWorkers: 1,
   globals: {
