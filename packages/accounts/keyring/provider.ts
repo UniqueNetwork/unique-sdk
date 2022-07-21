@@ -11,7 +11,7 @@ import { KeyringAccount } from './account';
 export class KeyringProvider extends Provider<KeyringPair, Keyring> {
   readonly #bySeed: Map<string, KeyringAccount>;
 
-  constructor(private options?: KeyringOptions) {
+  constructor(private options: KeyringOptions = {}) {
     super();
     this.instance = new Keyring(options);
 

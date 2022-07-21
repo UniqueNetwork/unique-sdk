@@ -1,9 +1,9 @@
-import { Account, Provider, ProviderClass, ProviderClass2 } from './types';
+import { Account, Provider, ProviderClass } from './types';
 
 export class Accounts {
-  private providers = new Map<ProviderClass2<Provider>, Provider>();
+  private providers = new Map<ProviderClass<Provider>, Provider>();
 
-  async addProvider<T extends ProviderClass2<Provider>, R extends Provider>(
+  async addProvider<T extends ProviderClass<Provider>>(
     ProviderClassLink: T,
     options?: object,
   ): Promise<Provider> {
@@ -13,7 +13,9 @@ export class Accounts {
     return provider;
   }
 
-  getProvider(ProviderClassLink: ProviderClass): Provider | undefined {
+  getProvider(
+    ProviderClassLink: ProviderClass<Provider>,
+  ): Provider | undefined {
     return this.providers.get(ProviderClassLink);
   }
 
