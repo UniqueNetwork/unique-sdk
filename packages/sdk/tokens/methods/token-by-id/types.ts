@@ -1,8 +1,14 @@
-import { DecodedAttributes } from '@unique-nft/api';
+import { DecodedAttributes, UniqueTokenDecoded } from '@unique-nft/api';
+import { TokenParentResult } from '../token-parent';
 
-export interface TokenDecoded {
+// todo - replace with Address
+export type OwnerAddress = { Substrate: string } | { Ethereum: string };
+
+export interface TokenDecoded
+  extends Omit<UniqueTokenDecoded, 'tokenId' | 'collectionId' | 'owner'> {
   tokenId: number;
   collectionId: number;
-  owner: { Substrate: string } | { Ethereum: string };
+  owner: OwnerAddress;
+  parent?: TokenParentResult;
   attributes: DecodedAttributes;
 }

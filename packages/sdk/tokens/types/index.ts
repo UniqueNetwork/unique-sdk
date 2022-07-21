@@ -20,6 +20,7 @@ export * from '../methods/set-token-property-permissions/types';
 export * from '../methods/collection-properties/types';
 export * from '../methods/token-properties/types';
 export * from '../methods/property-permissions/types';
+export * from '../methods/token-by-id/types';
 
 export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
