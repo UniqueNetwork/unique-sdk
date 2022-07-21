@@ -4,7 +4,7 @@ import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { SchemaTools } from '@unique-nft/api';
 
-import { CollectionIdArguments } from '../collection-by-id/types';
+import { CollectionIdArguments } from '../../types/shared';
 import { CreateCollectionNewArguments } from './types';
 import { encodeCollectionBase } from '../../utils/encode-collection';
 import { AttributesTransformer } from './utils';
@@ -21,6 +21,15 @@ export class CreateCollectionExNewMutation extends MutationMethodBase<
     const { address, schema, ...rest } = args;
 
     const encodedBase = encodeCollectionBase(this.sdk.api.registry, rest);
+
+    if (!schema) {
+      return {
+        address,
+        section: 'unique',
+        method: 'createCollectionEx',
+        args: [encodedBase],
+      };
+    }
 
     const properties = SchemaTools.encodeUnique.collectionSchema(
       AttributesTransformer.toOriginal(schema),

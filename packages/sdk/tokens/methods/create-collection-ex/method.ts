@@ -4,7 +4,7 @@ import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { encodeCollection } from '../../utils';
 import { CreateCollectionArguments } from './types';
-import { CollectionIdArguments } from '../collection-by-id/types';
+import { CollectionIdArguments } from '../../types/shared';
 
 /* eslint-disable class-methods-use-this */
 

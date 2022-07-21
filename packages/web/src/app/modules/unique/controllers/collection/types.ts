@@ -23,7 +23,7 @@ import {
 import {
   CollectionInfoBaseDto,
   CollectionInfoResponse,
-  CollectionInfoWithPropertiesDto,
+  CollectionInfoWithOldPropertiesDto,
   CollectionLimitsDto,
 } from '../../../../types/unique-types';
 import { AddressApiProperty } from '../../../../types/sdk-methods';
@@ -42,7 +42,7 @@ export class CollectionId {
 }
 
 export class CreateCollectionBody
-  extends CollectionInfoWithPropertiesDto
+  extends CollectionInfoWithOldPropertiesDto
   implements CreateCollectionArguments
 {
   @AddressApiProperty
@@ -66,16 +66,27 @@ export class CreateCollectionNewRequest
   @AddressApiProperty
   address: string;
 
-  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto })
-  schema: UniqueCollectionSchemaToCreateDto;
+  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto, required: false })
+  schema?: UniqueCollectionSchemaToCreateDto;
+}
+
+export class CollectionPropertyDto implements CollectionProperty {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty({ example: 'example' })
+  value: string;
 }
 
 export class CollectionInfoWithSchemaResponse
   extends CollectionInfoResponse
   implements CollectionInfoWithSchema
 {
-  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto })
-  schema: UniqueCollectionSchemaDecodedDto;
+  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto, required: false })
+  schema?: UniqueCollectionSchemaDecodedDto;
+
+  @ApiProperty({ type: CollectionPropertyDto, isArray: true })
+  properties: CollectionPropertyDto[];
 }
 
 export class CollectionIdQuery
@@ -129,14 +140,6 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   @ValidAddress()
   @AddressApiProperty
   to: string;
-}
-
-export class CollectionPropertyDto implements CollectionProperty {
-  @ApiProperty({ example: 'example' })
-  key: string;
-
-  @ApiProperty({ example: 'example' })
-  value: string;
 }
 
 export class SetCollectionPropertiesBody

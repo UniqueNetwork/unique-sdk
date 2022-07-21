@@ -1,12 +1,13 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
 import { SchemaTools } from '@unique-nft/api';
-import { bytesToString } from '@unique-nft/sdk/utils';
-import { SdkError } from '@unique-nft/sdk/errors';
 
-import { CollectionIdArguments } from '../collection-by-id/types';
+import { CollectionIdArguments } from '../../types/shared';
 import { CollectionInfoWithSchema } from './types';
-import { decodeCollectionBase } from '../../utils/decode-collection';
+import {
+  decodeCollectionBase,
+  decodeCollectionProperties,
+} from '../../utils/decode-collection';
 import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 async function collectionByIdNewFn(
@@ -21,26 +22,23 @@ async function collectionByIdNewFn(
 
   if (!collection) return null;
 
-  const properties = collection.properties.map(({ key, value }) => ({
-    key: bytesToString(key),
-    value: bytesToString(value),
-  }));
+  const properties = decodeCollectionProperties(collection.properties);
 
   const decodingResult = await SchemaTools.decode.collectionSchema(
     collectionId,
     properties,
   );
 
-  if (!decodingResult.isValid)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    throw SdkError.wrapError(decodingResult.validationError);
+  const schema = decodingResult.isValid
+    ? AttributesTransformer.toHuman(decodingResult.decoded)
+    : undefined;
 
   return {
     ...decodeCollectionBase(collection),
     id: collectionId,
     owner: collection.owner.toString(),
-    schema: AttributesTransformer.toHuman(decodingResult.decoded),
+    schema,
+    properties,
   };
 }
 
