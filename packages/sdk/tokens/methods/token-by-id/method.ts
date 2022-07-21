@@ -4,7 +4,7 @@ import { SchemaTools } from '@unique-nft/api';
 import { Option } from '@polkadot/types-codec';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
 
-import { TokenIdArguments } from '../../types';
+import { TokenIdArguments } from '../../types/shared';
 import { AttributesTransformer } from '../create-collection-ex-new/utils';
 import { TokenDecoded, OwnerAddress } from './types';
 import { tryParseParent } from '../token-parent/method';
