@@ -84,10 +84,8 @@ class UniqueTokenDataToCreateDto implements UniqueTokenToCreate {
   @ApiProperty({
     type: 'object',
     example: {
-      0: 'sample',
-      1: 1,
-      2: [1, 2, 3],
-      3: { en: 'sample' },
+      0: 0,
+      1: [1],
     },
   })
   encodedAttributes: EncodedTokenAttributes;
