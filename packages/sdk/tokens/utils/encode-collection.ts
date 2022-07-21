@@ -17,10 +17,10 @@ import {
 import { validateOnChainSchema } from './validator';
 import {
   CollectionInfoBase,
-  CollectionInfoWithProperties,
+  CollectionInfoWithOldProperties,
   CollectionMode,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   CollectionPropertiesKeys,
   TokenPropertiesPermissions,
 } from '../methods/create-collection-ex/types';
@@ -30,7 +30,7 @@ type CollectionProperty = {
   value: string;
 };
 const encodeCollectionProperties = (
-  properties: CollectionProperties,
+  properties: CollectionOldProperties,
 ): CollectionProperty[] => {
   const encodedProperties: CollectionProperty[] = [];
   if (properties.schemaVersion) {
@@ -164,7 +164,7 @@ export const encodeCollectionBase = (
 
 export const encodeCollection = (
   registry: Registry,
-  collectionInfo: Partial<CollectionInfoWithProperties>,
+  collectionInfo: Partial<CollectionInfoWithOldProperties>,
 ): UpDataStructsCreateCollectionData => {
   const properties = collectionInfo.properties
     ? encodeCollectionProperties(collectionInfo.properties)

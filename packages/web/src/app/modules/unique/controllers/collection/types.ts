@@ -23,7 +23,7 @@ import {
 import {
   CollectionInfoBaseDto,
   CollectionInfoResponse,
-  CollectionInfoWithPropertiesDto,
+  CollectionInfoWithOldPropertiesDto,
   CollectionLimitsDto,
 } from '../../../../types/unique-types';
 import { AddressApiProperty } from '../../../../types/sdk-methods';
@@ -42,7 +42,7 @@ export class CollectionId {
 }
 
 export class CreateCollectionBody
-  extends CollectionInfoWithPropertiesDto
+  extends CollectionInfoWithOldPropertiesDto
   implements CreateCollectionArguments
 {
   @AddressApiProperty

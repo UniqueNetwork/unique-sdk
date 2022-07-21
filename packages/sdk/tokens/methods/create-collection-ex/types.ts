@@ -36,7 +36,7 @@ export interface CollectionPermissions {
   nesting?: CollectionNestingPermissions;
 }
 
-export interface CollectionProperties {
+export interface CollectionOldProperties {
   offchainSchema?: string;
   schemaVersion?: CollectionSchemaVersion | `${CollectionSchemaVersion}`;
   variableOnChainSchema?: string | null;
@@ -73,12 +73,12 @@ export interface CollectionInfoBase {
   permissions?: CollectionPermissions;
 }
 
-export interface CollectionInfoWithProperties extends CollectionInfoBase {
-  properties: CollectionProperties;
+export interface CollectionInfoWithOldProperties extends CollectionInfoBase {
+  properties: CollectionOldProperties;
   tokenPropertyPermissions?: TokenPropertiesPermissions;
 }
 
 export interface CreateCollectionArguments
-  extends Omit<CollectionInfoWithProperties, 'mode'> {
+  extends Omit<CollectionInfoWithOldProperties, 'mode'> {
   address: Address;
 }

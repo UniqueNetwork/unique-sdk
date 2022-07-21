@@ -22,11 +22,11 @@ import { decodeCollectionFields } from './decode-collection-fields';
 import {
   CollectionInfoBase,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
-  CollectionInfoWithProperties,
+  CollectionInfoWithOldProperties,
 } from '../methods/create-collection-ex/types';
 import {
   decodeCollectionLimits,
@@ -58,10 +58,10 @@ export const decodeCollectionPermissions = (
   };
 };
 
-export const decodeCollectionProperties = (
+export const decodeCollectionOldProperties = (
   properties?: UpDataStructsProperty[],
-): CollectionProperties => {
-  const collectionProperties: CollectionProperties = {};
+): CollectionOldProperties => {
+  const collectionProperties: CollectionOldProperties = {};
   let constOnChainSchema: INamespace | undefined;
 
   properties?.forEach((property) => {
@@ -128,9 +128,9 @@ const decodeTokenPropertiesPermissions = (
 
 export const decodeCollection = (
   collection: UpDataStructsRpcCollection,
-): CollectionInfoWithProperties => ({
+): CollectionInfoWithOldProperties => ({
   ...decodeCollectionBase(collection),
-  properties: decodeCollectionProperties(collection.properties),
+  properties: decodeCollectionOldProperties(collection.properties),
   tokenPropertyPermissions: decodeTokenPropertiesPermissions(
     collection.tokenPropertyPermissions,
   ),
