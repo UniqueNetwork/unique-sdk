@@ -8,8 +8,7 @@
         "packageName": "client",
         "distDir": "./dist/packages/client",
         "entryPoints": [
-          "./index.ts",
-          "./src/index.ts"
+          "./index.ts"
         ]
       }
     },
