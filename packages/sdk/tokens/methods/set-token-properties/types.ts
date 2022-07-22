@@ -1,4 +1,4 @@
-import { Address } from '@unique-nft/sdk/types';
+import { Address, TxBuildArguments } from '@unique-nft/sdk/types';
 import { TokenProperty } from '@unique-nft/sdk/tokens/types';
 
 export type SetTokenPropertiesArguments = {
@@ -6,6 +6,10 @@ export type SetTokenPropertiesArguments = {
   collectionId: number;
   tokenId: number;
   properties: TokenProperty[];
+};
+
+export type SetTokenPropertiesBuildArguments = TxBuildArguments & {
+  args: [number, number, TokenProperty[]];
 };
 
 export type TokenPropertySetEvent = {

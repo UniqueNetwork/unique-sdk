@@ -1,10 +1,11 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { TokenPayload, TxBuildArguments } from '@unique-nft/sdk/types';
+import { TokenPayload } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { SdkError } from '@unique-nft/sdk/errors';
 import { SchemaTools } from '@unique-nft/api';
-import { CreateTokenNewArguments } from './types';
+import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
+import { CreateTokenNewArguments, CreateTokenNewBuildArguments } from './types';
 import { TokenIdArguments } from '../../types';
 import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
@@ -16,7 +17,7 @@ export class CreateTokenNewMutation extends MutationMethodBase<
 > {
   async transformArgs(
     args: CreateTokenNewArguments,
-  ): Promise<TxBuildArguments> {
+  ): Promise<CreateTokenNewBuildArguments> {
     const { collectionId, address, owner, data } = args;
 
     const collection = await this.sdk.collections.get_new({ collectionId });
@@ -35,7 +36,11 @@ export class CreateTokenNewMutation extends MutationMethodBase<
       address,
       section: 'unique',
       method: 'createItem',
-      args: [collectionId, { substrate: owner || address }, tokenData],
+      args: [
+        collectionId,
+        addressToCrossAccountId(owner || address),
+        tokenData,
+      ],
     };
   }
 

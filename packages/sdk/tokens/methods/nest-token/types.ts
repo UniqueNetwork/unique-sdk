@@ -1,19 +1,18 @@
-import { Address } from '@unique-nft/sdk/types';
-
-export type NestTokenParentArguments = {
-  collectionId: number;
-  tokenId: number;
-};
-
-export type NestTokenNestedArguments = {
-  collectionId: number;
-  tokenId: number;
-};
+import {
+  Address,
+  TxBuildArguments,
+  CrossAccountId,
+} from '@unique-nft/sdk/types';
+import { TokenIdArguments } from '@unique-nft/sdk/tokens';
 
 export type NestTokenArguments = {
-  parent: NestTokenParentArguments;
-  nested: NestTokenNestedArguments;
+  parent: TokenIdArguments;
+  nested: TokenIdArguments;
   address: Address;
+};
+
+export type NestTokenBuildArguments = TxBuildArguments & {
+  args: [CrossAccountId, CrossAccountId, number, number, number];
 };
 
 export type NestTokenResult = {

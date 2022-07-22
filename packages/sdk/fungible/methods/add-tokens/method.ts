@@ -1,16 +1,22 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { TxBuildArguments } from '@unique-nft/sdk/types';
 import { u128, u32 } from '@polkadot/types-codec';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
-import { AddTokensArgs, AddTokensResult } from './types';
+import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
+import {
+  AddTokensArguments,
+  AddTokenBuildArguments,
+  AddTokensResult,
+} from './types';
 
 export class AddTokensMutation extends MutationMethodBase<
-  AddTokensArgs,
+  AddTokensArguments,
   AddTokensResult
 > {
   // eslint-disable-next-line class-methods-use-this
-  async transformArgs(args: AddTokensArgs): Promise<TxBuildArguments> {
+  async transformArgs(
+    args: AddTokensArguments,
+  ): Promise<AddTokenBuildArguments> {
     const { address, amount, recipient, collectionId } = args;
 
     return {
@@ -19,7 +25,7 @@ export class AddTokensMutation extends MutationMethodBase<
       method: 'createItem',
       args: [
         collectionId,
-        { substrate: recipient || address },
+        addressToCrossAccountId(recipient || address),
         { fungible: { value: amount } },
       ],
     };

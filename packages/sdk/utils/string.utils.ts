@@ -5,7 +5,7 @@ import {
   decodeAddress,
   encodeAddress,
 } from '@polkadot/util-crypto';
-import { Address } from '@unique-nft/sdk/types';
+import { Address, CrossAccountId } from '@unique-nft/sdk/types';
 
 export const utf16ToString = (input: Array<{ toNumber(): number }>): string =>
   String.fromCharCode(
@@ -40,4 +40,16 @@ export async function normalizeAddressAsync(
   await cryptoWaitReady();
 
   return normalizeAddress(address, ss58Format);
+}
+
+export function isEthereumAddress(address: Address) {
+  const regex = /^0x[a-fA-F0-9]{40}$/;
+
+  return regex.test(address);
+}
+
+export function addressToCrossAccountId(address: Address): CrossAccountId {
+  if (isEthereumAddress(address)) return { Ethereum: address };
+
+  return { Substrate: address };
 }
