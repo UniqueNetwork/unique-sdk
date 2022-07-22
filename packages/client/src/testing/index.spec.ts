@@ -7,7 +7,8 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import * as process from 'process';
 import { INestApplication } from '@nestjs/common';
 
-import { createSigner, SdkSigner } from '@unique-nft/accounts/sign';
+import { Account, Accounts, SdkSigner } from '@unique-nft/accounts';
+import { KeyringAccount, KeyringProvider } from '@unique-nft/accounts/keyring';
 
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
@@ -25,16 +26,28 @@ import { createWeb } from './utils.test';
 
 const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
 
-const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
-const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
-
 describe('client tests', () => {
   let app: INestApplication;
+  let bobAddress: string;
+  let aliceAddress: string;
+  let signer: SdkSigner;
+
   beforeAll(async () => {
     if (!app) {
       app = await createWeb();
     }
-  }, 200_000);
+
+    const accounts = new Accounts();
+    await accounts.addProvider(KeyringProvider);
+    const keyringProvider = accounts.getProvider(
+      KeyringProvider,
+    ) as KeyringProvider;
+    const bob = keyringProvider.addSeed('//Bob');
+    bobAddress = bob.instance.address;
+    const alice = keyringProvider.addSeed('//Alice');
+    aliceAddress = alice.instance.address;
+    signer = bob.getSigner();
+  }, 100_000);
 
   afterAll(() => {
     app.close();
@@ -48,38 +61,25 @@ describe('client tests', () => {
           address: bobAddress,
           section: 'balances',
           method: 'transfer',
-          args: [aliceAddress, 0.01],
+          args: [aliceAddress, 100000000],
         },
       );
-      console.log(response);
       expect(response).toEqual(expect.any(Object));
     }, 100_000);
   });
 
   describe('balance', () => {
-    let bob: KeyringPair;
-    let alice: KeyringPair;
-    let signer: SdkSigner;
     let client: Client;
 
     beforeAll(async () => {
-      await cryptoWaitReady();
-
-      const keyring = new Keyring({ type: 'sr25519' });
-
-      bob = keyring.addFromUri('//Bob');
-      alice = keyring.addFromUri('//Alice');
-      console.log('address', bob.address, alice.address);
-
-      signer = await createSigner({ seed: '//Bob' });
       client = new Client({ baseUrl, signer });
     });
 
     it('fee for BalanceTransferBody', async () => {
       const response: FeeResponse = await client.balance.transfer.getFee({
-        address: bob.address,
-        destination: alice.address,
-        amount: 0.00001,
+        address: bobAddress,
+        destination: aliceAddress,
+        amount: 100000000,
       });
       expect(response).toEqual(expect.any(Object));
     }, 60_000);
@@ -87,9 +87,9 @@ describe('client tests', () => {
     it('build; fee for UnsignedTxPayloadResponse', async () => {
       const response: UnsignedTxPayloadResponse =
         await client.balance.transfer.build({
-          address: bob.address,
-          destination: alice.address,
-          amount: 0.00001,
+          address: bobAddress,
+          destination: aliceAddress,
+          amount: 100000000,
         });
       expect(response).toEqual(expect.any(Object));
       const feeResponse: FeeResponse = await client.balance.transfer.getFee(
@@ -101,9 +101,9 @@ describe('client tests', () => {
     it('error getFee', async () => {
       const response: UnsignedTxPayloadResponse =
         await client.balance.transfer.build({
-          address: bob.address,
-          destination: alice.address,
-          amount: 0.00001,
+          address: bobAddress,
+          destination: aliceAddress,
+          amount: 100000000,
         });
       expect(response).toEqual(expect.any(Object));
       expect(
@@ -118,7 +118,7 @@ describe('client tests', () => {
       const response: SubmitTxBody = await client.balance.transfer.sign({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 0.00001,
+        amount: 100000000,
       });
       expect(response).toEqual(expect.any(Object));
       const feeResponse: FeeResponse = await client.balance.transfer.getFee(
@@ -131,47 +131,39 @@ describe('client tests', () => {
       const response: object = await client.balance.transfer.submitWaitResult({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 0.00001,
+        amount: 100000000,
       });
       expect(response).toEqual(expect.any(Object));
     }, 60_000);
   });
 
   it('check balance changes', async () => {
-    try {
-      const signer = await createSigner({ seed: '//Bob' });
-      const client = new Client({ baseUrl, signer });
-      await sleep(30_000);
-      const initBalanceResponse = await client.balance.get({
-        address: bobAddress,
-      });
-      console.log('initBalanceResponse');
-      console.log(initBalanceResponse);
-      await sleep(30_000);
-      const transferResponse = await client.balance.transfer.submitWaitResult({
-        address: bobAddress,
-        destination: aliceAddress,
-        amount: 0.00001,
-      });
-      const currentBalanceResponse = await client.balance.get({
-        address: bobAddress,
-      });
-      expect(initBalanceResponse.availableBalance.raw).not.toBe(
-        currentBalanceResponse.availableBalance.raw,
-      );
-    } catch (e) {
-      console.log(e);
-    }
+    const client = new Client({ baseUrl, signer });
+    await sleep(30_000);
+    const initBalanceResponse = await client.balance.get({
+      address: bobAddress,
+    });
+    await sleep(30_000);
+    const transferResponse = await client.balance.transfer.submitWaitResult({
+      address: bobAddress,
+      destination: aliceAddress,
+      amount: 0.00001,
+    });
+    const currentBalanceResponse = await client.balance.get({
+      address: bobAddress,
+    });
+    expect(initBalanceResponse.availableBalance.raw).not.toBe(
+      currentBalanceResponse.availableBalance.raw,
+    );
   }, 60_000);
 
   describe('sign', () => {
     it('success', async () => {
-      const signer: SdkSigner = await createSigner({ seed: '//Bob' });
       const client = new Client({ baseUrl, signer });
       const response = await client.balance.transfer.sign({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 0.00001,
+        amount: 100000000,
       });
       expect(response).toMatchObject({
         signerPayloadJSON: expect.any(Object),
@@ -185,32 +177,19 @@ describe('client tests', () => {
         client.balance.transfer.sign({
           address: bobAddress,
           destination: aliceAddress,
-          amount: 0.00001,
+          amount: 100000000,
         }),
       ).rejects.toThrowError();
     });
   });
 
   describe('submit', () => {
-    let bob: KeyringPair;
-    let alice: KeyringPair;
-
-    beforeAll(async () => {
-      await cryptoWaitReady();
-
-      const keyring = new Keyring({ type: 'sr25519' });
-
-      bob = keyring.addFromUri('//Bob');
-      alice = keyring.addFromUri('//Alice');
-    });
-
     it('success', async () => {
-      const signer: SdkSigner = await createSigner({ seed: '//Bob' });
       const client = new Client({ baseUrl, signer });
       const response = await client.balance.transfer.submit({
-        address: bob.address,
-        destination: alice.address,
-        amount: 0.00001,
+        address: bobAddress,
+        destination: aliceAddress,
+        amount: 100000000,
       });
       expect(response).toMatchObject({
         hash: expect.any(String),
