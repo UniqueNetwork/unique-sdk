@@ -22,16 +22,17 @@ import { decodeCollectionFields } from './decode-collection-fields';
 import {
   CollectionInfoBase,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
-  CollectionInfoWithProperties,
+  CollectionInfoWithOldProperties,
 } from '../methods/create-collection-ex/types';
 import {
   decodeCollectionLimits,
   toBoolean,
 } from '../methods/set-collection-limits/utils';
+import { CollectionProperty } from '../types/shared';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
@@ -59,9 +60,17 @@ export const decodeCollectionPermissions = (
 };
 
 export const decodeCollectionProperties = (
+  properties: UpDataStructsProperty[] = [],
+): CollectionProperty[] =>
+  properties.map(({ key, value }) => ({
+    key: bytesToString(key),
+    value: bytesToString(value),
+  }));
+
+export const decodeCollectionOldProperties = (
   properties?: UpDataStructsProperty[],
-): CollectionProperties => {
-  const collectionProperties: CollectionProperties = {};
+): CollectionOldProperties => {
+  const collectionProperties: CollectionOldProperties = {};
   let constOnChainSchema: INamespace | undefined;
 
   properties?.forEach((property) => {
@@ -110,7 +119,7 @@ export const decodeCollectionBase = (
   tokenPrefix: bytesToString(collection.tokenPrefix),
   sponsorship: decodeCollectionSponsorship(collection.sponsorship),
   limits: decodeCollectionLimits(collection.limits),
-
+  readOnly: collection.readOnly?.toHuman() || false,
   permissions: decodeCollectionPermissions(collection.permissions),
 });
 
@@ -128,9 +137,9 @@ const decodeTokenPropertiesPermissions = (
 
 export const decodeCollection = (
   collection: UpDataStructsRpcCollection,
-): CollectionInfoWithProperties => ({
+): CollectionInfoWithOldProperties => ({
   ...decodeCollectionBase(collection),
-  properties: decodeCollectionProperties(collection.properties),
+  properties: decodeCollectionOldProperties(collection.properties),
   tokenPropertyPermissions: decodeTokenPropertiesPermissions(
     collection.tokenPropertyPermissions,
   ),

@@ -15,12 +15,14 @@ Method return collection info:
 - **name** - Collection name (text, up to 64 characters)
 - **description** - Collection description (text, up to 256 characters)
 - **mode** - The collection type (`Nft`, `Fungible`, or `ReFungible`)
+- **readOnly** - collection is read only
 - **tokenPrefix** - Token prefix (text, up to 4 characters)
 - **sponsorship** - This field tells if sponsorship is enabled and what address is the current collection sponsor.
 - **limits** - [Collection limits](../set-collection-limits#arguments)
 - **metaUpdatePermission** - [Permission](#todo) for update meta (ItemOwner, Admin, None)
 - **permissions** - [Collection permissions](#todo)
 - **schema** - [Collection schema](#todo)
+- **properties** - [Collection properties](#todo)
 
 ## Examples
 

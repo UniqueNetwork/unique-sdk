@@ -16,23 +16,13 @@ jobs:
         with:
           node-version: '16'
       - name: Install project dependencies
-        run: npm install
+        run: npm ci
       - name: NPM Build
         shell: bash
-        run: |
-          npm ci
-          npm run rollup:build:sdk
+        run: npm run build:sdk
 
       - name: NPM Publish SDK
         working-directory: ./dist/packages/sdk
-        shell: bash
-        run: |
-          npm version ${{ github.event.inputs.version }}
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
-          npm publish --access public
-
-      - name: NPM Publish Accounts
-        working-directory: ./dist/packages/accounts
         shell: bash
         run: |
           npm version ${{ github.event.inputs.version }}

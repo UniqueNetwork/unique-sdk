@@ -1,0 +1,30 @@
+name: Publish Accounts
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        description: "vX.X.X"
+jobs:
+  build-and-publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install project dependencies
+        run: npm ci
+      - name: NPM Build
+        shell: bash
+        run: npm run build:accounts
+
+      - name: NPM Publish Accounts
+        working-directory: ./dist/packages/accounts
+        shell: bash
+        run: |
+          npm version ${{ github.event.inputs.version }}
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+          npm publish --access public

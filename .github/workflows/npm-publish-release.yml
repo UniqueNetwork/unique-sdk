@@ -24,7 +24,7 @@ jobs:
       - name: Initialize git user
         run: git init&& git config user.name "Unique" && git config user.email "sdk@unique.network"
       - name: Install project dependencies
-        run: npm install
+        run: npm ci
       - name: Extract version
         shell: bash
         id: version
@@ -32,20 +32,10 @@ jobs:
           echo "##[set-output name=version;]${GITHUB_REF#refs/*/v}"
       - name: NPM Build
         shell: bash
-        run: |
-          npm ci
-          npm run build:sdk
+        run: npm run build:sdk
 
       - name: NPM Publish SDK
         working-directory: ./dist/packages/sdk
-        shell: bash
-        run: |
-          npm version ${{ steps.version.outputs.version }}
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
-          npm publish --access public
-
-      - name: NPM Publish Accounts
-        working-directory: ./dist/packages/accounts
         shell: bash
         run: |
           npm version ${{ steps.version.outputs.version }}

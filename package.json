@@ -22,7 +22,6 @@
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
-    "rollup:build:sdk": "rollup -c packages/sdk/rollup.config.js",
     "tools:generate:docs": "ts-node tools/generate-docs.ts"
   },
   "private": true,
@@ -34,6 +33,7 @@
     "@nestjs/swagger": "^5.2.1",
     "@polkadot/api": "^8.6.2",
     "@polkadot/extension-dapp": "^0.44.1",
+    "@polkadot/ui-keyring": "^2.8.2",
     "@sentry/node": "^7.6.0",
     "@sentry/tracing": "^7.6.0",
     "@types/express": "^4.17.13",
@@ -45,6 +45,7 @@
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "ethers": "^5.6.9",
     "file-type": "16.5.3",
     "ipfs-http-client": "53.0.1",
     "protobufjs": "^6.11.2",

@@ -4,33 +4,30 @@ import {
   TokenPropertyPermissions,
 } from '@unique-nft/sdk/types';
 import type {
-  UpDataStructsCreateCollectionData,
-  UpDataStructsCollectionPermissions,
   UpDataStructsAccessMode,
+  UpDataStructsCollectionPermissions,
+  UpDataStructsCreateCollectionData,
   UpDataStructsNestingPermissions,
 } from '@unique-nft/unique-mainnet-types/default';
 import { stringToUTF16 } from '@unique-nft/sdk/utils';
 import {
-  encodeSponsoredDataRateLimit,
   encodeCollectionFields,
+  encodeSponsoredDataRateLimit,
 } from './encode-collection-fields';
 import { validateOnChainSchema } from './validator';
+import { CollectionProperty } from '../types';
 import {
-  CollectionMode,
-  CollectionProperties,
-  TokenPropertiesPermissions,
-  CollectionPermissions,
-  CollectionPropertiesKeys,
-  CollectionInfoWithProperties,
   CollectionInfoBase,
+  CollectionInfoWithOldProperties,
+  CollectionMode,
+  CollectionPermissions,
+  CollectionOldProperties,
+  CollectionPropertiesKeys,
+  TokenPropertiesPermissions,
 } from '../methods/create-collection-ex/types';
 
-type CollectionProperty = {
-  key: CollectionPropertiesKeys;
-  value: string;
-};
 const encodeCollectionProperties = (
-  properties: CollectionProperties,
+  properties: CollectionOldProperties,
 ): CollectionProperty[] => {
   const encodedProperties: CollectionProperty[] = [];
   if (properties.schemaVersion) {
@@ -111,6 +108,16 @@ const encodeTokenPropertyPermissions = (
   return encodedPermissions;
 };
 
+const encodeCollectionMode = (collectionInfo: Partial<CollectionInfoBase>) => {
+  const { mode, decimals } = collectionInfo;
+
+  if (mode === CollectionMode.Fungible) {
+    return { [CollectionMode.Fungible]: decimals || 0 };
+  }
+
+  return mode || CollectionMode.Nft;
+};
+
 export const encodeCollectionBase = (
   registry: Registry,
   collectionInfo: Partial<CollectionInfoBase>,
@@ -133,8 +140,7 @@ export const encodeCollectionBase = (
   };
 
   const createData = {
-    ...extra,
-    mode: collectionInfo.mode || CollectionMode.Nft,
+    mode: encodeCollectionMode(collectionInfo),
     name: collectionInfo.name ? stringToUTF16(collectionInfo.name) : undefined,
     description: collectionInfo.description
       ? stringToUTF16(collectionInfo.description)
@@ -144,6 +150,8 @@ export const encodeCollectionBase = (
       : undefined,
     limits,
     permissions,
+    readOnly: collectionInfo.readOnly,
+    ...extra,
   };
 
   return registry.createType<UpDataStructsCreateCollectionData>(
@@ -154,7 +162,7 @@ export const encodeCollectionBase = (
 
 export const encodeCollection = (
   registry: Registry,
-  collectionInfo: Partial<CollectionInfoWithProperties>,
+  collectionInfo: Partial<CollectionInfoWithOldProperties>,
 ): UpDataStructsCreateCollectionData => {
   const properties = collectionInfo.properties
     ? encodeCollectionProperties(collectionInfo.properties)

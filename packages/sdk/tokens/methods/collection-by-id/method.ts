@@ -1,8 +1,9 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
 
-import { CollectionIdArguments, CollectionInfo } from './types';
+import { CollectionInfo } from './types';
 import { decodeCollection } from '../../utils';
+import { CollectionIdArguments } from '../../types/shared';
 
 async function collectionByIdFn(
   this: Sdk,

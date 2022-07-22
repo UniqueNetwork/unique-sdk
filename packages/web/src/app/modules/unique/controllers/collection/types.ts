@@ -7,8 +7,15 @@ import {
   CreateCollectionArguments,
   CreateCollectionNewArguments,
   SetCollectionLimitsArguments,
+  SetCollectionPropertiesArguments,
+  CollectionProperty,
+  DeleteCollectionPropertiesArguments,
+  SetTokenPropertyPermissionsArguments,
+  PropertyKeyPermission,
+  PropertyPermission,
 } from '@unique-nft/sdk/tokens';
 import { IsInt, IsPositive } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   BurnCollectionArguments,
   TransferCollectionArguments,
@@ -16,7 +23,7 @@ import {
 import {
   CollectionInfoBaseDto,
   CollectionInfoResponse,
-  CollectionInfoWithPropertiesDto,
+  CollectionInfoWithOldPropertiesDto,
   CollectionLimitsDto,
 } from '../../../../types/unique-types';
 import { AddressApiProperty } from '../../../../types/sdk-methods';
@@ -35,7 +42,7 @@ export class CollectionId {
 }
 
 export class CreateCollectionBody
-  extends CollectionInfoWithPropertiesDto
+  extends CollectionInfoWithOldPropertiesDto
   implements CreateCollectionArguments
 {
   @AddressApiProperty
@@ -59,16 +66,27 @@ export class CreateCollectionNewRequest
   @AddressApiProperty
   address: string;
 
-  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto })
-  schema: UniqueCollectionSchemaToCreateDto;
+  @ApiProperty({ type: UniqueCollectionSchemaToCreateDto, required: false })
+  schema?: UniqueCollectionSchemaToCreateDto;
+}
+
+export class CollectionPropertyDto implements CollectionProperty {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty({ example: 'example' })
+  value: string;
 }
 
 export class CollectionInfoWithSchemaResponse
   extends CollectionInfoResponse
   implements CollectionInfoWithSchema
 {
-  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto })
-  schema: UniqueCollectionSchemaDecodedDto;
+  @ApiProperty({ type: UniqueCollectionSchemaDecodedDto, required: false })
+  schema?: UniqueCollectionSchemaDecodedDto;
+
+  @ApiProperty({ type: CollectionPropertyDto, isArray: true })
+  properties: CollectionPropertyDto[];
 }
 
 export class CollectionIdQuery
@@ -123,3 +141,78 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   @AddressApiProperty
   to: string;
 }
+
+export class SetCollectionPropertiesBody
+  implements SetCollectionPropertiesArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ type: [CollectionPropertyDto] })
+  @Type(() => CollectionPropertyDto)
+  properties: CollectionProperty[];
+}
+
+export class SetCollectionPropertiesResponse extends MutationResponse {}
+
+export class DeleteCollectionPropertiesBody
+  implements DeleteCollectionPropertiesArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ type: [String], example: ['example'] })
+  propertyKeys: string[];
+}
+
+export class DeleteCollectionPropertiesResponse extends MutationResponse {}
+
+export class PropertyPermissionDto implements PropertyPermission {
+  @ApiProperty({ default: true })
+  mutable: boolean;
+
+  @ApiProperty({ default: true })
+  collectionAdmin: boolean;
+
+  @ApiProperty({ default: true })
+  tokenOwner: boolean;
+}
+
+export class PropertyKeyPermissionDto implements PropertyKeyPermission {
+  @ApiProperty({ example: 'example' })
+  key: string;
+
+  @ApiProperty()
+  permission: PropertyPermissionDto;
+}
+
+export class SetPropertyPermissionsBody
+  implements SetTokenPropertyPermissionsArguments
+{
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ type: [PropertyKeyPermissionDto] })
+  @Type(() => PropertyKeyPermissionDto)
+  propertyPermissions: PropertyKeyPermission[];
+}
+
+export class SetPropertyPermissionsResponse extends MutationResponse {}
