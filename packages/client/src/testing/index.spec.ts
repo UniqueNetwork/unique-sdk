@@ -61,7 +61,7 @@ describe('client tests', () => {
           address: bobAddress,
           section: 'balances',
           method: 'transfer',
-          args: [aliceAddress, 100000000],
+          args: [aliceAddress, 1000],
         },
       );
       expect(response).toEqual(expect.any(Object));
@@ -79,7 +79,7 @@ describe('client tests', () => {
       const response: FeeResponse = await client.balance.transfer.getFee({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 100000000,
+        amount: 1000,
       });
       expect(response).toEqual(expect.any(Object));
     }, 60_000);
@@ -89,7 +89,7 @@ describe('client tests', () => {
         await client.balance.transfer.build({
           address: bobAddress,
           destination: aliceAddress,
-          amount: 100000000,
+          amount: 1000,
         });
       expect(response).toEqual(expect.any(Object));
       const feeResponse: FeeResponse = await client.balance.transfer.getFee(
@@ -98,12 +98,12 @@ describe('client tests', () => {
       expect(feeResponse).toEqual(expect.any(Object));
     }, 60_000);
 
-    it('error getFee', async () => {
+    it.skip('error getFee', async () => {
       const response: UnsignedTxPayloadResponse =
         await client.balance.transfer.build({
           address: bobAddress,
           destination: aliceAddress,
-          amount: 100000000,
+          amount: 1000,
         });
       expect(response).toEqual(expect.any(Object));
       expect(
@@ -118,7 +118,7 @@ describe('client tests', () => {
       const response: SubmitTxBody = await client.balance.transfer.sign({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 100000000,
+        amount: 1000,
       });
       expect(response).toEqual(expect.any(Object));
       const feeResponse: FeeResponse = await client.balance.transfer.getFee(
@@ -131,7 +131,7 @@ describe('client tests', () => {
       const response: object = await client.balance.transfer.submitWaitResult({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 100000000,
+        amount: 0.001,
       });
       expect(response).toEqual(expect.any(Object));
     }, 60_000);
@@ -139,15 +139,13 @@ describe('client tests', () => {
 
   it('check balance changes', async () => {
     const client = new Client({ baseUrl, signer });
-    await sleep(30_000);
     const initBalanceResponse = await client.balance.get({
       address: bobAddress,
     });
-    await sleep(30_000);
     const transferResponse = await client.balance.transfer.submitWaitResult({
       address: bobAddress,
       destination: aliceAddress,
-      amount: 0.00001,
+      amount: 0.001,
     });
     const currentBalanceResponse = await client.balance.get({
       address: bobAddress,
@@ -163,7 +161,7 @@ describe('client tests', () => {
       const response = await client.balance.transfer.sign({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 100000000,
+        amount: 1000,
       });
       expect(response).toMatchObject({
         signerPayloadJSON: expect.any(Object),
@@ -177,7 +175,7 @@ describe('client tests', () => {
         client.balance.transfer.sign({
           address: bobAddress,
           destination: aliceAddress,
-          amount: 100000000,
+          amount: 1000,
         }),
       ).rejects.toThrowError();
     });
@@ -189,7 +187,7 @@ describe('client tests', () => {
       const response = await client.balance.transfer.submit({
         address: bobAddress,
         destination: aliceAddress,
-        amount: 100000000,
+        amount: 1000,
       });
       expect(response).toMatchObject({
         hash: expect.any(String),

@@ -1,4 +1,4 @@
-## Thin client
+## Client
 
 ### install
 npm i @unique-nft/client
