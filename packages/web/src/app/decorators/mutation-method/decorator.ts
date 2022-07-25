@@ -25,8 +25,13 @@ import {
   MutationUse,
   SignResponse,
   SubmitResponse,
-  SubmitWatchCache,
 } from './types';
+import { ExtrinsicResultResponse } from '../../types/extrinsic-result-response';
+import {
+  getPendingResult,
+  getSucceedResult,
+  getErrorResult,
+} from '../../utils/cache';
 
 const useSign = async (
   methodOptions: MutationMethodOptions,
@@ -64,7 +69,7 @@ const useSubmitWatch = async (
   mutationOptions: SdkMutationOptions,
   fee?: Balance,
 ) => {
-  const { mutationMethod, cache } = methodOptions;
+  const { sdk, mutationMethod, cache } = methodOptions;
 
   const { hash, result$ } = await mutationMethod.submitWatch(
     buildResult,
@@ -75,30 +80,18 @@ const useSubmitWatch = async (
     next: SubmittableResultInProcess<any> | Error,
   ): Promise<void> => {
     if (next instanceof Error) {
-      await cache.set<SubmitWatchCache<any>>(hash, {
-        isCompleted: true,
-        isError: true,
-        parsed: undefined,
-        fee,
-      });
+      await cache.set<ExtrinsicResultResponse>(hash, getErrorResult(next, fee));
 
       return;
     }
 
-    await cache.set<SubmitWatchCache<any>>(hash, {
-      isCompleted: next.submittableResult.isCompleted,
-      isError: false,
-      parsed: next.submittableResult.isCompleted ? next.parsed : undefined,
-      fee,
-    });
+    await cache.set<ExtrinsicResultResponse>(
+      hash,
+      getSucceedResult(sdk.api, next.submittableResult, next.parsed, fee),
+    );
   };
 
-  await cache.set<SubmitWatchCache<any>>(hash, {
-    isCompleted: false,
-    isError: false,
-    parsed: undefined,
-    fee,
-  });
+  await cache.set<ExtrinsicResultResponse>(hash, getPendingResult(fee));
 
   result$.subscribe({
     next: updateCache,

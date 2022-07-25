@@ -72,6 +72,7 @@ export class FungibleController {
     return {
       mutationMethod: this.sdk.fungible.createCollection,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 
@@ -83,6 +84,7 @@ export class FungibleController {
     return {
       mutationMethod: this.sdk.fungible.addTokens,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 
@@ -98,6 +100,7 @@ export class FungibleController {
     return {
       mutationMethod: this.sdk.fungible.transferTokens,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 }

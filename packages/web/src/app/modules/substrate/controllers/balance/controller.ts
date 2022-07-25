@@ -51,6 +51,7 @@ export class BalanceController {
     return {
       mutationMethod: this.sdk.balance.transfer,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 }
