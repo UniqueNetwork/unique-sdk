@@ -4,7 +4,7 @@ import { Balance } from '@unique-nft/sdk/types';
 import { serializeResult } from './submittable-result-transformer';
 import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
 
-export const cachePendingResult = (fee?: Balance): ExtrinsicResultResponse => ({
+export const getPendingResult = (fee?: Balance): ExtrinsicResultResponse => ({
   events: [],
   isCompleted: false,
   isError: false,
@@ -12,7 +12,7 @@ export const cachePendingResult = (fee?: Balance): ExtrinsicResultResponse => ({
   fee,
 });
 
-export const cacheErrorResult = (
+export const getErrorResult = (
   error: Error,
   fee?: Balance,
 ): ExtrinsicResultResponse => ({
@@ -24,10 +24,10 @@ export const cacheErrorResult = (
   fee,
 });
 
-export const cacheSerializeResult = (
+export const getSucceedResult = (
   api: ApiPromise,
   submittableResult: ISubmittableResult,
-  parsed?: any,
+  parsed?: unknown,
   fee?: Balance,
 ): ExtrinsicResultResponse => {
   const serialized = serializeResult(api, submittableResult);

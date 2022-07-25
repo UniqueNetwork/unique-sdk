@@ -13,7 +13,7 @@ export class ExtrinsicResultEvent {
   data: any;
 }
 
-export class ExtrinsicResultResponse<T extends object = undefined> {
+export class ExtrinsicResultResponse {
   @ApiProperty()
   status: string;
 
@@ -35,8 +35,8 @@ export class ExtrinsicResultResponse<T extends object = undefined> {
   @ApiProperty({ type: ExtrinsicResultEvent })
   events: ExtrinsicResultEvent[];
 
-  @ApiProperty()
-  parsed?: T;
+  @ApiProperty({ required: false })
+  parsed?: unknown;
 
   @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;

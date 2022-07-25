@@ -35,9 +35,9 @@ import {
 import { ExtrinsicResultResponse } from '../../../types/extrinsic-result-response';
 import { CalculateFeeDocs } from '../docs';
 import {
-  cacheErrorResult,
-  cachePendingResult,
-  cacheSerializeResult,
+  getPendingResult,
+  getSucceedResult,
+  getErrorResult,
 } from '../../../utils/cache';
 
 @UsePipes(SdkValidationPipe)
@@ -96,13 +96,13 @@ export class ExtrinsicsController {
       if (next instanceof Error) {
         await this.cache.set<ExtrinsicResultResponse>(
           hash,
-          cacheErrorResult(next),
+          getErrorResult(next),
         );
 
         return;
       }
 
-      await this.cache.set(hash, cacheSerializeResult(this.sdk.api, next));
+      await this.cache.set(hash, getSucceedResult(this.sdk.api, next));
     };
 
     result$.subscribe({
@@ -110,7 +110,7 @@ export class ExtrinsicsController {
       error: updateCache,
     });
 
-    await this.cache.set<ExtrinsicResultResponse>(hash, cachePendingResult());
+    await this.cache.set<ExtrinsicResultResponse>(hash, getPendingResult());
 
     return { hash };
   }

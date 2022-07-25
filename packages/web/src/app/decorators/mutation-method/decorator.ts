@@ -28,9 +28,9 @@ import {
 } from './types';
 import { ExtrinsicResultResponse } from '../../types/extrinsic-result-response';
 import {
-  cacheErrorResult,
-  cachePendingResult,
-  cacheSerializeResult,
+  getPendingResult,
+  getSucceedResult,
+  getErrorResult,
 } from '../../utils/cache';
 
 const useSign = async (
@@ -80,21 +80,18 @@ const useSubmitWatch = async (
     next: SubmittableResultInProcess<any> | Error,
   ): Promise<void> => {
     if (next instanceof Error) {
-      await cache.set<ExtrinsicResultResponse<any>>(
-        hash,
-        cacheErrorResult(next, fee),
-      );
+      await cache.set<ExtrinsicResultResponse>(hash, getErrorResult(next, fee));
 
       return;
     }
 
     await cache.set<ExtrinsicResultResponse>(
       hash,
-      cacheSerializeResult(sdk.api, next.submittableResult, next.parsed, fee),
+      getSucceedResult(sdk.api, next.submittableResult, next.parsed, fee),
     );
   };
 
-  await cache.set<ExtrinsicResultResponse>(hash, cachePendingResult(fee));
+  await cache.set<ExtrinsicResultResponse>(hash, getPendingResult(fee));
 
   result$.subscribe({
     next: updateCache,

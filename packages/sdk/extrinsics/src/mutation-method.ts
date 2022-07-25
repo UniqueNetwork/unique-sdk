@@ -115,10 +115,9 @@ export abstract class MutationMethodBase<A, R>
     );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
-      let parsed: any;
-      if (!submittableResult.isError) {
-        parsed = await this.transformResult(submittableResult);
-      }
+      const parsed = submittableResult.isError
+        ? undefined
+        : await this.transformResult(submittableResult);
 
       return { submittableResult, parsed };
     };
