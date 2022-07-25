@@ -88,6 +88,7 @@ export class BaseCollectionController {
     return {
       mutationMethod: this.sdk.collections.setProperties,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 
@@ -100,6 +101,7 @@ export class BaseCollectionController {
     return {
       mutationMethod: this.sdk.collections.deleteProperties,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 
@@ -119,6 +121,7 @@ export class BaseCollectionController {
     return {
       mutationMethod: this.sdk.collections.setPropertyPermissions,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 }
