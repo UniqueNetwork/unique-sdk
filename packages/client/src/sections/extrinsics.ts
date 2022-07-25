@@ -8,6 +8,7 @@ import {
   FeeResponse,
   TxBuildBody,
 } from '../types/api';
+import { Signer } from '../types/interfaces';
 
 export class Extrinsics extends Section {
   public readonly path = 'extrinsic';
@@ -38,7 +39,7 @@ export class Extrinsics extends Section {
 
   async sign(
     args: UnsignedTxPayloadBody,
-    signer: any = this.client.options.signer,
+    signer: Signer = this.client.options.signer,
   ): Promise<SignTxResultResponse> {
     if (!signer) throw new Error(`No signer provided`);
 

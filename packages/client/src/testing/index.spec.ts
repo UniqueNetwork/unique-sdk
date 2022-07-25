@@ -1,14 +1,11 @@
 /**
  * @jest-environment node
  */
-import { Keyring } from '@polkadot/keyring';
-import { KeyringPair } from '@polkadot/keyring/types';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
 import * as process from 'process';
 import { INestApplication } from '@nestjs/common';
 
-import { Account, Accounts, SdkSigner } from '@unique-nft/accounts';
-import { KeyringAccount, KeyringProvider } from '@unique-nft/accounts/keyring';
+import { Accounts, SdkSigner } from '@unique-nft/accounts';
+import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
@@ -21,7 +18,6 @@ import {
   SubmitTxBody,
   UnsignedTxPayloadResponse,
 } from '../types/api';
-import { sleep } from '../utils';
 import { createWeb } from './utils.test';
 
 const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';

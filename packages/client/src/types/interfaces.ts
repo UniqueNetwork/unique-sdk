@@ -20,7 +20,10 @@ export interface IExtrinsics extends ISection {
   getFee(
     args: TxBuildBody | UnsignedTxPayloadBody | SubmitTxBody,
   ): Promise<FeeResponse>;
-  sign(args: UnsignedTxPayloadBody, signer: any): Promise<SignTxResultResponse>;
+  sign(
+    args: UnsignedTxPayloadBody,
+    signer: Signer,
+  ): Promise<SignTxResultResponse>;
   submit(args: SubmitTxBody): Promise<SubmitResultResponse>;
   status(hash: string): Promise<ExtrinsicResultResponse>;
 }
@@ -32,7 +35,7 @@ export interface ISection {
 }
 
 export interface MutationOptions {
-  signer?: any;
+  signer?: Signer;
 }
 
 export interface IMutation<A, R> {
@@ -73,7 +76,7 @@ export interface ClientParameters {
 
 export interface Options {
   baseUrl: string;
-  signer: any;
+  signer: Signer | null;
   maximumNumberOfStatusRequests?: number;
   waitBetweenStatusRequestsInMs?: number;
 }
@@ -84,4 +87,8 @@ export interface IClient {
   balance: IBalance;
   options: Options;
   params: ClientParameters;
+}
+
+export interface Signer {
+  sign: any;
 }
