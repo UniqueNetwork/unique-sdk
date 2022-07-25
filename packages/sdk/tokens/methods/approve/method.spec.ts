@@ -46,7 +46,12 @@ describe('approve-token', () => {
       address: approveArgs.spender,
       section: 'unique',
       method: 'approve',
-      args: [{ substrate: approveArgs.spender }, approveArgs.collectionId, approveArgs.tokenId, 1],
+      args: [
+        { Substrate: approveArgs.spender },
+        approveArgs.collectionId,
+        approveArgs.tokenId,
+        1,
+      ],
     });
   });
 
@@ -59,7 +64,8 @@ describe('approve-token', () => {
     };
 
     const approveResult = await approve.submitWaitResult(approveArgs);
-    const { tokenId: resultTokenId, collectionId: resultCollectionId } = approveResult.parsed;
+    const { tokenId: resultTokenId, collectionId: resultCollectionId } =
+      approveResult.parsed;
 
     expect(tokenId).toEqual(resultTokenId);
     expect(collectionId).toEqual(resultCollectionId);

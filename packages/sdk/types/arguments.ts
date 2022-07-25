@@ -63,3 +63,5 @@ export interface SubmittableResultCompleted<T> {
 }
 
 export type Address = string;
+
+export type CrossAccountId = { Substrate: string } | { Ethereum: string };

@@ -1,9 +1,13 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
 import { Balance } from '@unique-nft/sdk/types';
-import { bytesToString, formatBalance } from '@unique-nft/sdk/utils';
+import {
+  addressToCrossAccountId,
+  bytesToString,
+  formatBalance,
+} from '@unique-nft/sdk/utils';
+import { SdkError } from '@unique-nft/sdk/errors';
 import { GetFungibleBalanceArgs } from './types';
-import { SdkError } from '../../../errors';
 
 async function getFungibleBalanceFn(
   this: Sdk,
@@ -34,7 +38,7 @@ async function getFungibleBalanceFn(
 
   const rawBalance = await this.api.rpc.unique.balance(
     collectionId,
-    { Substrate: address },
+    addressToCrossAccountId(address),
     0,
   );
 
