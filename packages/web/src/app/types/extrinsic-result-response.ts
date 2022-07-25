@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
+import { FeeResponse } from './sdk-methods';
 
 export class ExtrinsicResultEvent {
   @ApiProperty()
@@ -12,7 +13,7 @@ export class ExtrinsicResultEvent {
   data: any;
 }
 
-export class ExtrinsicResultResponse {
+export class ExtrinsicResultResponse<T extends object = undefined> {
   @ApiProperty()
   status: string;
 
@@ -33,4 +34,10 @@ export class ExtrinsicResultResponse {
 
   @ApiProperty({ type: ExtrinsicResultEvent })
   events: ExtrinsicResultEvent[];
+
+  @ApiProperty()
+  parsed?: T;
+
+  @ApiProperty({ type: FeeResponse, required: false })
+  fee?: FeeResponse;
 }

@@ -6,6 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { HexString } from '@polkadot/util/types';
 import { SubmitResult } from '@unique-nft/sdk/types';
 import { Cache } from 'cache-manager';
+import { Sdk } from '@unique-nft/sdk';
 import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
 import { FeeResponse } from '../../types/sdk-methods';
 import { SubmitTxBody } from '../../types/arguments';
@@ -19,6 +20,7 @@ const AnyToBoolean = Transform(({ obj = {}, key }) => {
 export interface MutationMethodOptions {
   mutationMethod: MutationMethodWrap<any, any>;
   cache: Cache;
+  sdk: Sdk;
 }
 
 export enum MutationUse {
@@ -58,20 +60,6 @@ export class SignResponse extends SubmitTxBody {
 export class SubmitResponse implements Omit<SubmitResult, 'result$'> {
   @ApiProperty({ type: String, required: true })
   hash: HexString;
-
-  @ApiProperty({ type: FeeResponse, required: false })
-  fee?: FeeResponse;
-}
-
-export class SubmitWatchCache<T extends object> {
-  @ApiProperty({ type: Boolean })
-  isCompleted: boolean;
-
-  @ApiProperty({ type: Boolean })
-  isError: boolean;
-
-  @ApiProperty({ type: Boolean })
-  parsed: T;
 
   @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;

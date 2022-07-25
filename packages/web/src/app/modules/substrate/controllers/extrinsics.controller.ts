@@ -33,8 +33,12 @@ import {
   TxBuildBody,
 } from '../../../types/arguments';
 import { ExtrinsicResultResponse } from '../../../types/extrinsic-result-response';
-import { serializeResult } from '../../../utils/submittable-result-transformer';
 import { CalculateFeeDocs } from '../docs';
+import {
+  cacheErrorResult,
+  cachePendingResult,
+  cacheSerializeResult,
+} from '../../../utils/cache';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -90,18 +94,15 @@ export class ExtrinsicsController {
       next: ISubmittableResult | Error,
     ): Promise<void> => {
       if (next instanceof Error) {
-        await this.cache.set<ExtrinsicResultResponse>(hash, {
-          events: [],
-          isCompleted: true,
-          isError: true,
-          status: 'Error',
-          errorMessage: next.message || next.name,
-        });
+        await this.cache.set<ExtrinsicResultResponse>(
+          hash,
+          cacheErrorResult(next),
+        );
 
         return;
       }
 
-      await this.cache.set(hash, serializeResult(this.sdk.api, next));
+      await this.cache.set(hash, cacheSerializeResult(this.sdk.api, next));
     };
 
     result$.subscribe({
@@ -109,12 +110,7 @@ export class ExtrinsicsController {
       error: updateCache,
     });
 
-    await this.cache.set<ExtrinsicResultResponse>(hash, {
-      events: [],
-      isCompleted: false,
-      isError: false,
-      status: 'pending',
-    });
+    await this.cache.set<ExtrinsicResultResponse>(hash, cachePendingResult());
 
     return { hash };
   }
