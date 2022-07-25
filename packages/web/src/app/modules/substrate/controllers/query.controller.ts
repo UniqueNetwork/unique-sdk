@@ -1,6 +1,7 @@
 import {
   Param,
   Body,
+  Get,
   Controller,
   Post,
   UseFilters,
@@ -10,7 +11,11 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { Sdk } from '@unique-nft/sdk';
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
-import { ApiRequestParams, ApiRequestBody } from '../../../types/arguments';
+import {
+  ApiGetterParams,
+  ApiRequestBody,
+  ApiRequestParams,
+} from '../../../types/arguments';
 import { SdkValidationPipe } from '../../../validation';
 
 @UsePipes(SdkValidationPipe)
@@ -19,6 +24,16 @@ import { SdkValidationPipe } from '../../../validation';
 @Controller('query')
 export class QueryController {
   constructor(private readonly sdk: Sdk) {}
+
+  @Get('/:endpoint/:module/:method')
+  @ApiOperation({
+    summary: 'Direct get to any Polkadot getter',
+    description: `For read Polkadot <a href="https://polkadot.js.org/docs/substrate/constants">constants</a>
+select the appropriate value from the interface <code>api.&lt;endpoint&gt;.&lt;module&gt;.&lt;method&gt;</code>.`,
+  })
+  async get(@Param() params: ApiGetterParams): Promise<any> {
+    return this.sdk.stateQueries.get({ ...params });
+  }
 
   @Post('/:endpoint/:module/:method')
   @ApiOperation({

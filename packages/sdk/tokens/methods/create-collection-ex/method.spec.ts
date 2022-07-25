@@ -1,5 +1,5 @@
 import { Sdk } from '@unique-nft/sdk';
-import { createSdk } from '@unique-nft/sdk/tests';
+import { createSdk } from '@unique-nft/sdk/testing';
 
 import { CreateCollectionExMutation } from './method';
 import { CreateCollectionArguments } from './types';
@@ -12,9 +12,7 @@ describe('create-collection-ex', () => {
   let createArgs: CreateCollectionArguments;
 
   beforeAll(async () => {
-    sdk = await createSdk({
-      seed: '//Alice',
-    });
+    sdk = await createSdk(true);
 
     creation = new CreateCollectionExMutation(sdk);
 

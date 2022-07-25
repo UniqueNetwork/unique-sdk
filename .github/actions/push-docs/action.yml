@@ -1,0 +1,32 @@
+name: Push docs
+description: Push docs to another repo
+inputs:
+  dst_owner:
+    description: The name of the owner of the destination repository
+    required: true
+  dst_repo:
+    description: The name of the destination repository
+    required: true
+  dst_branch:
+    description: The name of the branch of the destination repository
+    required: false
+    default: 'master'
+  dst_path:
+    description: The destination path to copy the file(s) or folder(s) to
+    required: true
+  src_path:
+    description: The source path to the file(s) or folder(s) to copy from
+    required: true
+  pr_branch:
+    description: The name of the branch of pull request
+    required: true
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.dst_owner }}
+    - ${{ inputs.dst_repo }}
+    - ${{ inputs.dst_branch }}
+    - ${{ inputs.dst_path }}
+    - ${{ inputs.src_path }}
+    - ${{ inputs.pr_branch }}

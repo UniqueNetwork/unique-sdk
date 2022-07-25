@@ -15,6 +15,11 @@ import { UnnestTokenMutation } from './methods/unnest-token';
 import { tokenChildrenQuery } from './methods/token-children';
 import { tokenParentQuery } from './methods/token-parent';
 import { topmostTokenOwnerQuery } from './methods/topmost-token-owner';
+import { tokenById, TokenDecoded } from './methods/token-by-id';
+import { tokenPropertiesQuery } from './methods/token-properties';
+import { DeleteTokenPropertiesMutation } from './methods/delete-token-properties';
+import { SetTokenPropertiesMutation } from './methods/set-token-properties';
+import { Approve } from './methods/approve/method';
 import {
   BurnTokenArguments,
   NestTokenArguments,
@@ -29,7 +34,19 @@ import {
   TokenParentResult,
   TopmostTokenOwnerArguments,
   TopmostTokenOwnerResult,
+  TokenPropertiesArguments,
+  TokenPropertiesResult,
+  DeleteTokenPropertiesArguments,
+  DeleteTokenPropertiesResult,
+  SetTokenPropertiesArguments,
+  SetTokenPropertiesResult,
+  ApproveArguments,
+  ApproveResult,
 } from './types';
+import {
+  CreateTokenNewArguments,
+  CreateTokenNewMutation,
+} from './methods/create-token';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -38,6 +55,12 @@ export class SdkTokens {
     this.children = tokenChildrenQuery.bind(this.sdk);
     this.parent = tokenParentQuery.bind(this.sdk);
     this.topmostOwner = topmostTokenOwnerQuery.bind(this.sdk);
+    this.get_new = tokenById.bind(this.sdk);
+    this.create_new = new CreateTokenNewMutation(this.sdk);
+    this.setProperties = new SetTokenPropertiesMutation(this.sdk);
+    this.deleteProperties = new DeleteTokenPropertiesMutation(this.sdk);
+    this.properties = tokenPropertiesQuery.bind(this.sdk);
+    this.approve = new Approve(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -48,21 +71,41 @@ export class SdkTokens {
 
   parent: QueryMethod<TokenParentArguments, TokenParentResult>;
 
+  get_new: QueryMethod<TokenIdArguments, TokenDecoded>;
+
+  create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
+
+  approve: MutationMethodWrap<ApproveArguments, ApproveResult>;
+
   topmostOwner: QueryMethod<
     TopmostTokenOwnerArguments,
     TopmostTokenOwnerResult
   >;
 
+  setProperties: MutationMethodWrap<
+    SetTokenPropertiesArguments,
+    SetTokenPropertiesResult
+  >;
+
+  deleteProperties: MutationMethodWrap<
+    DeleteTokenPropertiesArguments,
+    DeleteTokenPropertiesResult
+  >;
+
+  properties: QueryMethod<TokenPropertiesArguments, TokenPropertiesResult>;
+
   async get({
     collectionId,
     tokenId,
   }: TokenIdArguments): Promise<TokenInfo | null> {
-
     const collection = await this.sdk.collections.get({ collectionId });
 
     if (!collection) return null;
 
-    const exists = await this.sdk.api.rpc.unique.tokenExists(collectionId, tokenId);
+    const exists = await this.sdk.api.rpc.unique.tokenExists(
+      collectionId,
+      tokenId,
+    );
 
     if (!exists.toHuman()) {
       return null;

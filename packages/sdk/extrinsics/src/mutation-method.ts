@@ -1,6 +1,7 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
   Balance,
+  ObservableSubmitResult,
   SdkSigner,
   SubmitResult,
   SubmittableResultCompleted,
@@ -48,7 +49,7 @@ export interface MutationMethodWrap<A, R> {
   submitWatch(
     args: A | UnsignedTxPayload | SubmitTxArguments,
     options?: MutationOptions,
-  ): Observable<SubmittableResultInProcess<R>>;
+  ): Promise<ObservableSubmitResult<R>>;
 
   submitWaitResult: MutationMethod<A, R>;
 
@@ -108,22 +109,18 @@ export abstract class MutationMethodBase<A, R>
   }
 
   // todo - hide async inside Observable and return just Observable<SubmittableResultInProcess<R>
-  submitWatch(
+  async submitWatch(
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
-  ): Observable<SubmittableResultInProcess<R>> {
-    const getSubmittableResult$ = async () => {
-      const submitTxArguments = isSubmitTxArguments(args)
-        ? args
-        : await this.sign(args, options);
+  ): Promise<ObservableSubmitResult<R>> {
+    const submitTxArguments = isSubmitTxArguments(args)
+      ? args
+      : await this.sign(args, options);
 
-      const { result$ } = await this.sdk.extrinsics.submit(
-        submitTxArguments,
-        true,
-      );
-
-      return result$;
-    };
+    const { result$, hash } = await this.sdk.extrinsics.submit(
+      submitTxArguments,
+      true,
+    );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
       const parsed = await this.transformResult(submittableResult);
@@ -131,19 +128,22 @@ export abstract class MutationMethodBase<A, R>
       return { submittableResult, parsed };
     };
 
-    return from(getSubmittableResult$()).pipe(
-      mergeMap(identity),
-      switchMap(tryParse),
-    );
+    return {
+      hash,
+      result$: from(Promise.resolve(result$)).pipe(
+        mergeMap(identity),
+        switchMap(tryParse),
+      ),
+    };
   }
 
   async submitWaitResult(
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<SubmittableResultCompleted<R>> {
-    const submitted$ = await this.submitWatch(args, options);
+    const { result$ } = await this.submitWatch(args, options);
 
-    const completed = await lastValueFrom(submitted$);
+    const completed = await lastValueFrom(result$);
 
     if (completed.parsed === undefined) throw new SubmitExtrinsicError();
 

@@ -6,6 +6,7 @@
 - [Create Collection](./methods/create-collection-ex)
 - [Get effective limits by collection ID](./methods/effective-collection-limits)
 - [Set collection limits](./methods/set-collection-limits)
+- [Get collection stats](./methods/collection-stats)
 
 ## Tokens
 
@@ -14,3 +15,4 @@
 - [Token children](./methods/token-children)
 - [Token parent](./methods/token-parent)
 - [Topmost token owner](./methods/topmost-token-owner)
+- [Approve](./methods/approve)

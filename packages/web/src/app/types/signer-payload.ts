@@ -10,22 +10,14 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { SignatureType } from '@unique-nft/sdk/types';
 import {
-  Account,
-  GenerateAccountArguments,
-  GetAccountArguments,
+  AccountData,
+  GenerateAccountDataArguments,
+  GetAccountDataArguments,
 } from '@unique-nft/accounts';
 import { EncryptedJsonDescriptor } from '@polkadot/util-crypto/json/types';
 import { ValidMnemonic } from '../validation';
 
-export class GenerateAccountBody implements GenerateAccountArguments {
-  @ApiProperty({
-    description:
-      "The password will be used to encrypt the account's information. But if someone knows your seed phrase they still have control over your account",
-    required: false,
-  })
-  @IsOptional()
-  password?: string;
-
+export class GenerateAccountDataBody implements GenerateAccountDataArguments {
   @ApiProperty({
     description:
       'Signature: ed25519, sr25519 implementation using Schnorr signatures. ECDSA signatures on the secp256k1 curve',
@@ -46,9 +38,9 @@ export class GenerateAccountBody implements GenerateAccountArguments {
   @IsOptional()
   meta?: KeyringPair$Meta;
 }
-export class GetAccountQuery
-  extends GenerateAccountBody
-  implements GetAccountArguments
+export class GetAccountDataQuery
+  extends GenerateAccountDataBody
+  implements GetAccountDataArguments
 {
   @ApiProperty({
     description: 'The mnemonic seed gives full access to your account',
@@ -86,7 +78,7 @@ export class KeyringPair$JsonDto implements KeyringPair$Json {
   meta: KeyringPair$Meta;
 }
 
-export class AccountResponse implements Account {
+export class AccountDataResponse implements AccountData {
   @ApiProperty({
     description: 'The mnemonic seed gives full access to your account',
     example:

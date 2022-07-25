@@ -41,8 +41,5 @@ jobs:
       - name: NPM BUILD SDK
         run: npm run build:sdk
 
-      - name: NPM BUILD SDK (rollup)
-        run: npm run rollup:build:sdk
-
       - name: NPM BUILD WEB
         run: npm run build:web

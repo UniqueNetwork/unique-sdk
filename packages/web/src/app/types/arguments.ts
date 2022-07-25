@@ -8,12 +8,13 @@ import {
   IsArray,
 } from 'class-validator';
 import {
+  ApiMethodArguments,
+  ApiRequestArguments,
   SignatureType,
   SignTxResult,
   SubmitResult,
   SubmitTxArguments,
   TxBuildArguments,
-  ApiQueryArguments,
 } from '@unique-nft/sdk/types';
 import { SignerPayloadJSONDto } from './signer-payload';
 
@@ -91,9 +92,7 @@ export class TxBuildBody implements TxBuildArguments {
   isImmortal?: boolean;
 }
 
-export class ApiRequestParams
-  implements Pick<ApiQueryArguments, 'endpoint' | 'module' | 'method'>
-{
+export class ApiRequestParams implements ApiRequestArguments {
   @ApiProperty({
     type: String,
     example: 'query',
@@ -116,7 +115,30 @@ export class ApiRequestParams
   method: string;
 }
 
-export class ApiRequestBody implements Pick<ApiQueryArguments, 'args'> {
+export class ApiGetterParams implements ApiRequestArguments {
+  @ApiProperty({
+    type: String,
+    example: 'consts',
+  })
+  @IsString()
+  endpoint: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'common',
+  })
+  @IsString()
+  module: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'collectionCreationPrice',
+  })
+  @IsString()
+  method: string;
+}
+
+export class ApiRequestBody implements Pick<ApiMethodArguments, 'args'> {
   @ApiProperty({
     type: Array,
     example: '[]',

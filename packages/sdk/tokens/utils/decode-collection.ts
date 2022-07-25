@@ -6,7 +6,6 @@ import {
 } from '@unique-nft/sdk/utils';
 
 import type {
-  UpDataStructsCollectionLimits,
   UpDataStructsCollectionPermissions,
   UpDataStructsProperty,
   UpDataStructsRpcCollection,
@@ -23,15 +22,17 @@ import { decodeCollectionFields } from './decode-collection-fields';
 import {
   CollectionInfoBase,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   CollectionSponsorship,
   TokenPropertiesPermissions,
   CollectionPropertiesKeys,
+  CollectionInfoWithOldProperties,
 } from '../methods/create-collection-ex/types';
 import {
   decodeCollectionLimits,
   toBoolean,
 } from '../methods/set-collection-limits/utils';
+import { CollectionProperty } from '../types/shared';
 
 export const decodeCollectionSponsorship = (
   sponsorship: UpDataStructsSponsorshipState,
@@ -59,9 +60,17 @@ export const decodeCollectionPermissions = (
 };
 
 export const decodeCollectionProperties = (
+  properties: UpDataStructsProperty[] = [],
+): CollectionProperty[] =>
+  properties.map(({ key, value }) => ({
+    key: bytesToString(key),
+    value: bytesToString(value),
+  }));
+
+export const decodeCollectionOldProperties = (
   properties?: UpDataStructsProperty[],
-): CollectionProperties => {
-  const collectionProperties: CollectionProperties = {};
+): CollectionOldProperties => {
+  const collectionProperties: CollectionOldProperties = {};
   let constOnChainSchema: INamespace | undefined;
 
   properties?.forEach((property) => {
@@ -101,6 +110,19 @@ const decodeTokenPropertyPermissions = (
   tokenOwner: property.permission.tokenOwner.toHuman(),
 });
 
+export const decodeCollectionBase = (
+  collection: UpDataStructsRpcCollection,
+): CollectionInfoBase => ({
+  mode: collection.mode.type,
+  name: utf16ToString(collection.name),
+  description: utf16ToString(collection.description),
+  tokenPrefix: bytesToString(collection.tokenPrefix),
+  sponsorship: decodeCollectionSponsorship(collection.sponsorship),
+  limits: decodeCollectionLimits(collection.limits),
+  readOnly: collection.readOnly?.toHuman() || false,
+  permissions: decodeCollectionPermissions(collection.permissions),
+});
+
 const decodeTokenPropertiesPermissions = (
   tokenPropertiesPermissions: UpDataStructsPropertyKeyPermission[],
 ): TokenPropertiesPermissions => {
@@ -115,16 +137,9 @@ const decodeTokenPropertiesPermissions = (
 
 export const decodeCollection = (
   collection: UpDataStructsRpcCollection,
-): CollectionInfoBase => ({
-  mode: collection.mode.type,
-  name: utf16ToString(collection.name),
-  description: utf16ToString(collection.description),
-  tokenPrefix: bytesToString(collection.tokenPrefix),
-  sponsorship: decodeCollectionSponsorship(collection.sponsorship),
-  limits: decodeCollectionLimits(collection.limits),
-
-  permissions: decodeCollectionPermissions(collection.permissions),
-  properties: decodeCollectionProperties(collection.properties),
+): CollectionInfoWithOldProperties => ({
+  ...decodeCollectionBase(collection),
+  properties: decodeCollectionOldProperties(collection.properties),
   tokenPropertyPermissions: decodeTokenPropertiesPermissions(
     collection.tokenPropertyPermissions,
   ),

@@ -14,11 +14,12 @@ import {
   CollectionMode,
   CollectionNestingPermissions,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   MetaUpdatePermission,
   TokenPropertiesPermissions,
+  CollectionLimits,
+  CollectionInfoWithOldProperties,
 } from '@unique-nft/sdk/tokens/types';
-import { CollectionLimits } from '@unique-nft/sdk/tokens/methods/set-collection-limits/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
 import {
@@ -37,7 +38,7 @@ export class CollectionSponsorship {
   })
   address: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: false })
   isConfirmed: boolean;
 }
 
@@ -117,8 +118,10 @@ export class CollectionLimitsDto implements CollectionLimits {
 export class CollectionNestingPermissionsDto
   implements CollectionNestingPermissions
 {
+  @ApiProperty()
   tokenOwner: boolean;
 
+  @ApiProperty()
   collectionAdmin: boolean;
 }
 
@@ -134,7 +137,7 @@ export class CollectionPermissionsDto implements CollectionPermissions {
 }
 
 @ApiExtraModels(CollectionTextFieldDto, CollectionSelectFieldDto)
-export class CollectionPropertiesDto implements CollectionProperties {
+export class CollectionOldPropertiesDto implements CollectionOldProperties {
   @ApiProperty({
     required: false,
     example:
@@ -169,11 +172,13 @@ export class CollectionPropertiesDto implements CollectionProperties {
     required: false,
     example: [
       {
+        id: 1,
         type: CollectionFieldTypes.TEXT,
         name: 'name',
         required: true,
       },
       {
+        id: 2,
         type: CollectionFieldTypes.SELECT,
         name: 'mode',
         required: false,
@@ -241,13 +246,21 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
   @ApiProperty({ enum: MetaUpdatePermission, required: false })
   metaUpdatePermission?: MetaUpdatePermission | `${MetaUpdatePermission}`;
 
-  @ApiProperty()
-  properties: CollectionPropertiesDto;
-
   @ApiProperty({
     required: false,
   })
   permissions?: CollectionPermissionsDto;
+
+  @ApiProperty()
+  readOnly?: boolean;
+}
+
+export class CollectionInfoWithOldPropertiesDto
+  extends CollectionInfoBaseDto
+  implements CollectionInfoWithOldProperties
+{
+  @ApiProperty()
+  properties: CollectionOldPropertiesDto;
 
   @ApiProperty({
     required: false,
@@ -311,19 +324,6 @@ export class TokenInfoResponse implements TokenInfo {
   })
   url: string | null;
 
+  @ApiProperty({ type: TokenPropertiesResponse })
   properties: TokenPropertiesResponse;
 }
-
-export type TokenPayload =
-  | {
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      NFT: any;
-    }
-  | {
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      Fungible: any;
-    }
-  | {
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      ReFungible: any;
-    };

@@ -1,5 +1,7 @@
 import { Sdk } from '@unique-nft/sdk';
 import { QueryMethod } from '@unique-nft/sdk/extrinsics';
+import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
+import { Option } from '@polkadot/types-codec';
 import { TokenParentArguments, TokenParentResult } from './types';
 import {
   getTokenIdFromNestingAddress,
@@ -7,22 +9,16 @@ import {
   isNestingAddress,
 } from '../../utils';
 
-async function tokenParent(
-  this: Sdk,
-  args: TokenParentArguments,
-): Promise<TokenParentResult | null> {
-  const tokenOwnerOption = await this.api.rpc.unique.tokenOwner(
-    args.collectionId,
-    args.tokenId,
-  );
+export function tryParseParent(
+  owner: Option<PalletEvmAccountBasicCrossAccountIdRepr>,
+): TokenParentResult | null {
+  const unwrapped = owner?.unwrapOr(null);
 
-  const unwrap = tokenOwnerOption.unwrapOr(null);
+  if (unwrapped === null) return null;
 
-  if (unwrap === null) return null;
+  if (!unwrapped.isEthereum) return null;
 
-  if (!unwrap.isEthereum) return null;
-
-  const address = unwrap.asEthereum.toString();
+  const address = unwrapped.asEthereum.toString();
 
   if (!isNestingAddress(address)) return null;
 
@@ -34,6 +30,18 @@ async function tokenParent(
     collectionId,
     tokenId,
   };
+}
+
+async function tokenParent(
+  this: Sdk,
+  args: TokenParentArguments,
+): Promise<TokenParentResult | null> {
+  const tokenOwnerOption = await this.api.rpc.unique.tokenOwner(
+    args.collectionId,
+    args.tokenId,
+  );
+
+  return tryParseParent(tokenOwnerOption);
 }
 
 export const tokenParentQuery: QueryMethod<
