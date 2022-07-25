@@ -38,9 +38,6 @@ const getAmount = (raw: string, decimals: number): string => {
   return raw.slice(0, dotPosition) + decimalPart;
 };
 
-export const sum = (a: AnyNumber, b: AnyNumber): AnyNumber =>
-  new BN(a.toString()).add(new BN(b.toString())).toString();
-
 export function formatBalance(options: FormatOptions, raw: AnyNumber): Balance;
 export function formatBalance(api: ApiPromise, raw: AnyNumber): Balance;
 export function formatBalance(
@@ -70,4 +67,11 @@ export function formatBalance(
     formatted,
     ...options,
   };
+}
+
+export function sumBalance(balance: Balance, numToAdd: AnyNumber): Balance {
+  const { decimals, unit } = balance;
+  const sum = new BN(balance.raw).add(new BN(numToAdd.toString())).toString();
+
+  return formatBalance({ decimals, unit }, sum);
 }

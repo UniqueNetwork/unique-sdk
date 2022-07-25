@@ -7,7 +7,7 @@ import {
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
-import { sum, formatBalance } from '@unique-nft/sdk/utils';
+import { sumBalance } from '@unique-nft/sdk/utils';
 import { encodeCollection } from '../../utils';
 import { CreateCollectionArguments } from './types';
 import { CollectionIdArguments } from '../../types/shared';
@@ -57,10 +57,8 @@ export class CreateCollectionExMutation extends MutationMethodBase<
     args: UnsignedTxPayload | SubmitTxArguments | CreateCollectionArguments,
   ): Promise<Balance> {
     const txFee = await super.getFee(args);
+    const additionalFee = this.sdk.api.consts.common.collectionCreationPrice;
 
-    const additionalFee = await this.sdk.api.consts.common
-      .collectionCreationPrice;
-
-    return formatBalance(this.sdk.api, sum(additionalFee, txFee.raw));
+    return sumBalance(txFee, additionalFee);
   }
 }
