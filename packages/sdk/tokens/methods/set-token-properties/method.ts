@@ -1,8 +1,12 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { ISubmittableResult, TxBuildArguments } from '@unique-nft/sdk/types';
+import { ISubmittableResult } from '@unique-nft/sdk/types';
 import { u32, Bytes } from '@polkadot/types-codec';
 import { bytesToString } from '@unique-nft/sdk/utils';
-import { SetTokenPropertiesArguments, SetTokenPropertiesResult } from './types';
+import {
+  SetTokenPropertiesArguments,
+  SetTokenPropertiesResult,
+  SetTokenPropertiesBuildArguments,
+} from './types';
 
 /* eslint-disable class-methods-use-this */
 
@@ -12,7 +16,7 @@ export class SetTokenPropertiesMutation extends MutationMethodBase<
 > {
   async transformArgs(
     args: SetTokenPropertiesArguments,
-  ): Promise<TxBuildArguments> {
+  ): Promise<SetTokenPropertiesBuildArguments> {
     const { address, collectionId, tokenId, properties } = args;
 
     return {

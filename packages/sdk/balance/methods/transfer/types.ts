@@ -1,9 +1,13 @@
-import { Address } from '@unique-nft/sdk/types';
+import { Address, TxBuildArguments } from '@unique-nft/sdk/types';
 
 export interface BalanceTransferArguments {
   address: Address;
-  destination: string;
+  destination: Address;
   amount: number;
+}
+
+export interface BalanceTransferBuildArguments extends TxBuildArguments {
+  args: [Address, bigint];
 }
 
 export interface BalanceTransferResult {
