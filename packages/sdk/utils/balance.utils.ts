@@ -1,7 +1,7 @@
 import { INumber } from '@polkadot/types-codec/types';
 import { Balance } from '@unique-nft/sdk/types';
 import { ApiPromise } from '@polkadot/api';
-import { formatBalance as polkadotFormatBalance } from '@polkadot/util';
+import { formatBalance as polkadotFormatBalance, BN } from '@polkadot/util';
 
 type FormatOptions = {
   decimals: number;
@@ -37,6 +37,9 @@ const getAmount = (raw: string, decimals: number): string => {
 
   return raw.slice(0, dotPosition) + decimalPart;
 };
+
+export const add = (a: AnyNumber, b: AnyNumber): AnyNumber =>
+  new BN(a.toString()).add(new BN(b.toString())).toString();
 
 export function formatBalance(options: FormatOptions, raw: AnyNumber): Balance;
 export function formatBalance(api: ApiPromise, raw: AnyNumber): Balance;

@@ -1,7 +1,13 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { TxBuildArguments } from '@unique-nft/sdk/types';
+import {
+  Balance,
+  SubmitTxArguments,
+  TxBuildArguments,
+  UnsignedTxPayload,
+} from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
+import { add, formatBalance } from '@unique-nft/sdk/utils';
 import { encodeCollection } from '../../utils';
 import { CreateCollectionArguments } from './types';
 import { CollectionIdArguments } from '../../types/shared';
@@ -45,5 +51,16 @@ export class CreateCollectionExMutation extends MutationMethodBase<
     return {
       collectionId: id.toNumber(),
     };
+  }
+
+  override async getFee(
+    args: UnsignedTxPayload | SubmitTxArguments | CreateCollectionArguments,
+  ): Promise<Balance> {
+    const txFee = await super.getFee(args);
+
+    const additionalFee = await this.sdk.api.consts.common
+      .collectionCreationPrice;
+
+    return formatBalance(this.sdk.api, add(additionalFee, txFee.raw));
   }
 }
