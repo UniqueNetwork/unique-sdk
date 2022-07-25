@@ -38,7 +38,7 @@ const getAmount = (raw: string, decimals: number): string => {
   return raw.slice(0, dotPosition) + decimalPart;
 };
 
-export const add = (a: AnyNumber, b: AnyNumber): AnyNumber =>
+export const sum = (a: AnyNumber, b: AnyNumber): AnyNumber =>
   new BN(a.toString()).add(new BN(b.toString())).toString();
 
 export function formatBalance(options: FormatOptions, raw: AnyNumber): Balance;

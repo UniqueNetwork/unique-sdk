@@ -8,7 +8,7 @@ import {
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { SchemaTools } from '@unique-nft/api';
-import { formatBalance, add } from '@unique-nft/sdk/utils';
+import { formatBalance, sum } from '@unique-nft/sdk/utils';
 
 import { CollectionIdArguments } from '../../types/shared';
 import { CreateCollectionNewArguments } from './types';
@@ -85,6 +85,6 @@ export class CreateCollectionExNewMutation extends MutationMethodBase<
     const additionalFee = await this.sdk.api.consts.common
       .collectionCreationPrice;
 
-    return formatBalance(this.sdk.api, add(additionalFee, txFee.raw));
+    return formatBalance(this.sdk.api, sum(additionalFee, txFee.raw));
   }
 }
