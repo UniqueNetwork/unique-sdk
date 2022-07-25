@@ -16,6 +16,7 @@ The method returns token info:
 - **owner** - The address of token owner
 - **image** - Token image (`url`, `urlInfix` or `ipfsCid`)
 - **attributes** - Token attributes
+- **parent** - if token is nested contains *collectionId* and *tokenId* of the parent token
 
 ## Examples
 

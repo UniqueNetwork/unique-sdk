@@ -1,5 +1,3 @@
-import { CollectionIdArguments } from '../methods/collection-by-id/types';
-
 export * from '../methods/create-collection-ex/types';
 export * from '../methods/create-collection-ex-new/types';
 export * from '../methods/collection-by-id/types';
@@ -20,36 +18,7 @@ export * from '../methods/set-token-property-permissions/types';
 export * from '../methods/collection-properties/types';
 export * from '../methods/token-properties/types';
 export * from '../methods/property-permissions/types';
+export * from '../methods/approve/types';
+export * from '../methods/token-by-id';
 
-export interface TokenIdArguments extends CollectionIdArguments {
-  tokenId: number;
-}
-
-export interface BurnTokenArguments extends TokenIdArguments {
-  address: string;
-}
-export interface TransferTokenArguments extends TokenIdArguments {
-  from: string;
-  to: string;
-}
-
-export type CollectionProperty = {
-  key: string;
-  value: string;
-};
-
-export type TokenProperty = {
-  key: string;
-  value: string;
-};
-
-export type PropertyPermission = {
-  mutable: boolean;
-  collectionAdmin: boolean;
-  tokenOwner: boolean;
-};
-
-export type PropertyKeyPermission = {
-  key: string;
-  permission: PropertyPermission;
-};
+export * from './shared';

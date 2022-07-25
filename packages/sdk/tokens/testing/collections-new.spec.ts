@@ -23,7 +23,7 @@ import {
   TestAccount,
 } from '@unique-nft/sdk/testing';
 
-const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
+export const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   attributesSchema: {
     '0': {
       name: {
@@ -203,7 +203,7 @@ describe('unique schema collection and token', () => {
       tokenPrefix: createCollectionArgs.tokenPrefix,
     });
 
-    expect(collection?.schema.attributesSchema).toEqual(
+    expect(collection?.schema?.attributesSchema).toEqual(
       collectionSchemaToCreate.attributesSchema,
     );
 

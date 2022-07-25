@@ -14,11 +14,9 @@ import { GetStatsResult } from './methods/get-stats/types';
 import { collectionById } from './methods/collection-by-id/method';
 import { collectionByIdNew } from './methods/collection-by-id-new/method';
 import { effectiveCollectionLimits } from './methods/effective-collection-limits/method';
+import { CollectionInfo } from './methods/collection-by-id/types';
 import {
   CollectionIdArguments,
-  CollectionInfo,
-} from './methods/collection-by-id/types';
-import {
   SetCollectionLimitsArguments,
   SetCollectionLimitsResult,
 } from './types';

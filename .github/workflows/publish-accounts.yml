@@ -16,12 +16,10 @@ jobs:
         with:
           node-version: '16'
       - name: Install project dependencies
-        run: npm install
+        run: npm ci
       - name: NPM Build
         shell: bash
-        run: |
-          npm ci
-          npm run build:accounts
+        run: npm run build:accounts
 
       - name: NPM Publish Accounts
         working-directory: ./dist/packages/accounts

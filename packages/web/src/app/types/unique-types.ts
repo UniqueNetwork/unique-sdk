@@ -14,11 +14,11 @@ import {
   CollectionMode,
   CollectionNestingPermissions,
   CollectionPermissions,
-  CollectionProperties,
+  CollectionOldProperties,
   MetaUpdatePermission,
   TokenPropertiesPermissions,
   CollectionLimits,
-  CollectionInfoWithProperties,
+  CollectionInfoWithOldProperties,
 } from '@unique-nft/sdk/tokens/types';
 
 import { DEFAULT_CONST_SCHEMA } from './constants';
@@ -137,7 +137,7 @@ export class CollectionPermissionsDto implements CollectionPermissions {
 }
 
 @ApiExtraModels(CollectionTextFieldDto, CollectionSelectFieldDto)
-export class CollectionPropertiesDto implements CollectionProperties {
+export class CollectionOldPropertiesDto implements CollectionOldProperties {
   @ApiProperty({
     required: false,
     example:
@@ -250,14 +250,17 @@ export class CollectionInfoBaseDto implements CollectionInfoBase {
     required: false,
   })
   permissions?: CollectionPermissionsDto;
+
+  @ApiProperty()
+  readOnly?: boolean;
 }
 
-export class CollectionInfoWithPropertiesDto
+export class CollectionInfoWithOldPropertiesDto
   extends CollectionInfoBaseDto
-  implements CollectionInfoWithProperties
+  implements CollectionInfoWithOldProperties
 {
   @ApiProperty()
-  properties: CollectionPropertiesDto;
+  properties: CollectionOldPropertiesDto;
 
   @ApiProperty({
     required: false,

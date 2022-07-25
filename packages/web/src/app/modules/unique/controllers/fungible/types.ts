@@ -31,7 +31,7 @@ export class CreateFungibleCollectionRequest
   @IsInt()
   @Min(0)
   @Max(255)
-  @ApiProperty({ example: 255, minimum: 0, maximum: 255, type: 'integer' })
+  @ApiProperty({ example: 10, minimum: 0, maximum: 18, type: 'integer' })
   decimals: number;
 }
 

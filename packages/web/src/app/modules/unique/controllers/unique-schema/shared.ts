@@ -218,3 +218,13 @@ export class AudioDto extends SpatialObjectDto {
   @ApiProperty()
   isLossless?: boolean;
 }
+
+export class SubstrateAddress {
+  @ApiProperty()
+  Substrate: string;
+}
+
+export class EthereumAddress {
+  @ApiProperty()
+  Ethereum: string;
+}
