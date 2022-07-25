@@ -1,5 +1,4 @@
 import { KeyringPair, KeyringPair$Meta } from '@polkadot/keyring/types';
-import { Keyring } from '@polkadot/keyring';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { KeypairType } from '@polkadot/util-crypto/types';
 import keyring from '@polkadot/ui-keyring';
@@ -8,7 +7,7 @@ import { Account, Provider } from '../src/types';
 import { KeyringLocalOptions } from './types';
 import { KeyringLocalAccount } from './account';
 
-export class KeyringLocalProvider extends Provider<KeyringPair, Keyring> {
+export class KeyringLocalProvider extends Provider<KeyringPair> {
   constructor(private readonly options: KeyringLocalOptions = {}) {
     super();
   }
