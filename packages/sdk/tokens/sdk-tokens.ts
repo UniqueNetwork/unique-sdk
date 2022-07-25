@@ -47,6 +47,7 @@ import {
   CreateTokenNewArguments,
   CreateTokenNewMutation,
 } from './methods/create-token';
+import { addressToCrossAccountId } from '../utils';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -145,7 +146,11 @@ export class SdkTokens {
       address,
       section: 'unique',
       method: 'createItem',
-      args: [collectionId, { substrate: owner || address }, tokenPayload],
+      args: [
+        collectionId,
+        addressToCrossAccountId(owner || address),
+        tokenPayload,
+      ],
     });
   }
 
@@ -159,7 +164,7 @@ export class SdkTokens {
       address: from,
       section: 'unique',
       method: 'transfer',
-      args: [{ substrate: to }, collectionId, tokenId, 1],
+      args: [addressToCrossAccountId(to), collectionId, tokenId, 1],
     });
   }
 

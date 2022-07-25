@@ -1,7 +1,12 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { ISubmittableResult, TxBuildArguments } from '@unique-nft/sdk/types';
+import { ISubmittableResult } from '@unique-nft/sdk/types';
 import { u32 } from '@polkadot/types-codec';
-import { NestTokenArguments, NestTokenResult } from './types';
+import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
+import {
+  NestTokenArguments,
+  NestTokenBuildArguments,
+  NestTokenResult,
+} from './types';
 import { getNestingTokenAddress } from '../../utils';
 
 /* eslint-disable class-methods-use-this */
@@ -10,16 +15,16 @@ export class NestTokenMutation extends MutationMethodBase<
   NestTokenArguments,
   NestTokenResult
 > {
-  async transformArgs(args: NestTokenArguments): Promise<TxBuildArguments> {
+  async transformArgs(
+    args: NestTokenArguments,
+  ): Promise<NestTokenBuildArguments> {
     const { address, parent, nested } = args;
 
-    const from = {
-      Substrate: address,
-    };
+    const from = addressToCrossAccountId(address);
 
-    const to = {
-      Ethereum: getNestingTokenAddress(parent.collectionId, parent.tokenId),
-    };
+    const to = addressToCrossAccountId(
+      getNestingTokenAddress(parent.collectionId, parent.tokenId),
+    );
 
     return {
       address,

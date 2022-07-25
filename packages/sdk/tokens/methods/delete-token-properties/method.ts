@@ -1,9 +1,10 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { ISubmittableResult, TxBuildArguments } from '@unique-nft/sdk/types';
+import { ISubmittableResult } from '@unique-nft/sdk/types';
 import { u32, Bytes } from '@polkadot/types-codec';
 import { bytesToString } from '@unique-nft/sdk/utils';
 import {
   DeleteTokenPropertiesArguments,
+  DeleteTokenPropertiesBuildArguments,
   DeleteTokenPropertiesResult,
 } from './types';
 
@@ -15,7 +16,7 @@ export class DeleteTokenPropertiesMutation extends MutationMethodBase<
 > {
   async transformArgs(
     args: DeleteTokenPropertiesArguments,
-  ): Promise<TxBuildArguments> {
+  ): Promise<DeleteTokenPropertiesBuildArguments> {
     const { address, collectionId, tokenId, propertyKeys } = args;
 
     return {
