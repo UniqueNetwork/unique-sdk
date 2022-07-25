@@ -7,6 +7,8 @@ import {
 } from '@polkadot/util-crypto';
 import { Address, CrossAccountId } from '@unique-nft/sdk/types';
 
+export const ETHEREUM_ADDRESS_REGEX = /^0x[0-9a-f]{40}$/i;
+
 export const utf16ToString = (input: Array<{ toNumber(): number }>): string =>
   String.fromCharCode(
     ...input.map((char) => char.toNumber()).filter((num) => num),
@@ -43,9 +45,7 @@ export async function normalizeAddressAsync(
 }
 
 export function isEthereumAddress(address: Address) {
-  const regex = /^0x[a-fA-F0-9]{40}$/;
-
-  return regex.test(address);
+  return ETHEREUM_ADDRESS_REGEX.test(address);
 }
 
 export function addressToCrossAccountId(address: Address): CrossAccountId {

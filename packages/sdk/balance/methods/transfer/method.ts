@@ -36,7 +36,9 @@ export class BalanceTransferMutation extends MutationMethodBase<
     };
   }
 
-  async transformResult(result: ISubmittableResult): Promise<any | undefined> {
+  async transformResult(
+    result: ISubmittableResult,
+  ): Promise<BalanceTransferResult | undefined> {
     const isSuccess = result.findRecord('system', 'ExtrinsicSuccess');
 
     return {
