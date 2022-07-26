@@ -1,4 +1,8 @@
-import { Address } from '@unique-nft/sdk/types';
+import {
+  Address,
+  CrossAccountId,
+  TxBuildArguments,
+} from '@unique-nft/sdk/types';
 
 export type UnnestTokenParentArguments = {
   collectionId: number;
@@ -14,6 +18,10 @@ export type UnnestTokenArguments = {
   parent: UnnestTokenParentArguments;
   nested: UnnestTokenNestedArguments;
   address: Address;
+};
+
+export type UnnestTokenBuildArguments = TxBuildArguments & {
+  args: [CrossAccountId, CrossAccountId, number, number, number];
 };
 
 export type UnnestTokenResult = {

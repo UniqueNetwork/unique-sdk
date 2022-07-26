@@ -5,20 +5,12 @@ import {
   SdkSigner,
   SubmitResult,
   SubmittableResultCompleted,
-  SubmittableResultInProcess,
   SubmitTxArguments,
   TxBuildArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
-import {
-  lastValueFrom,
-  Observable,
-  switchMap,
-  from,
-  mergeMap,
-  identity,
-} from 'rxjs';
+import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
 import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
 
@@ -123,7 +115,9 @@ export abstract class MutationMethodBase<A, R>
     );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
-      const parsed = await this.transformResult(submittableResult);
+      const parsed = submittableResult.isError
+        ? undefined
+        : await this.transformResult(submittableResult);
 
       return { submittableResult, parsed };
     };

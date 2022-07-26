@@ -7,9 +7,9 @@ import { CollectionMode } from '@unique-nft/sdk/tokens';
 import {
   CreateFungibleCollectionArguments,
   FungibleCollection,
-  AddTokensArgs,
+  AddTokensArguments,
   AddTokensResult,
-  TransferTokensArgs,
+  TransferTokensArguments,
   TransferTokensResult,
   GetFungibleBalanceArgs,
 } from '@unique-nft/sdk/fungible';
@@ -52,7 +52,7 @@ export class FungibleCollectionInfoDto
   owner: string;
 }
 
-export class AddTokensArgsDto implements AddTokensArgs {
+export class AddTokensArgsDto implements AddTokensArguments {
   @AddressApiProperty
   address: Address;
 
@@ -77,7 +77,7 @@ export class AddTokensResultDto implements AddTokensResult {
   amount: number;
 }
 
-export class TransferTokensArgsDto implements TransferTokensArgs {
+export class TransferTokensArgsDto implements TransferTokensArguments {
   @AddressApiProperty
   address: Address;
 

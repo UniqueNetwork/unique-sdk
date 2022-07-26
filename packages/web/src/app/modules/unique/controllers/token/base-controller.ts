@@ -121,6 +121,7 @@ export class BaseTokenController {
     return {
       mutationMethod: this.sdk.tokens.setProperties,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 
@@ -133,6 +134,7 @@ export class BaseTokenController {
     return {
       mutationMethod: this.sdk.tokens.deleteProperties,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 }

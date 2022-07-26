@@ -1,16 +1,22 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { SdkError } from '@unique-nft/sdk/errors';
-import { TxBuildArguments } from '@unique-nft/sdk/types';
 import { u128, u32 } from '@polkadot/types-codec';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
-import { TransferTokensArgs, TransferTokensResult } from './types';
+import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
+import {
+  TransferTokensArguments,
+  TransferTokensResult,
+  TransferTokensBuildArguments,
+} from './types';
 
 export class TransferTokensMutation extends MutationMethodBase<
-  TransferTokensArgs,
+  TransferTokensArguments,
   TransferTokensResult
 > {
-  async transformArgs(args: TransferTokensArgs): Promise<TxBuildArguments> {
+  async transformArgs(
+    args: TransferTokensArguments,
+  ): Promise<TransferTokensBuildArguments> {
     const { address, amount, recipient, collectionId } = args;
 
     const collection = await this.sdk.fungible.getCollection({ collectionId });
@@ -23,7 +29,7 @@ export class TransferTokensMutation extends MutationMethodBase<
       address,
       section: 'unique',
       method: 'transfer',
-      args: [{ substrate: recipient }, collectionId, 0, amountRaw],
+      args: [addressToCrossAccountId(recipient), collectionId, 0, amountRaw],
     };
   }
 

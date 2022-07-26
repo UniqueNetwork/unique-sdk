@@ -8,14 +8,12 @@ import {
 import { Provider, Account } from '../src/types';
 import { KeyringAccount } from './account';
 
-export class KeyringProvider extends Provider<KeyringPair, Keyring> {
-  readonly #bySeed: Map<string, KeyringAccount>;
+export class KeyringProvider extends Provider<KeyringPair> {
+  private keyring: Keyring;
 
   constructor(private options: KeyringOptions = {}) {
     super();
-    this.instance = new Keyring(options);
-
-    this.#bySeed = new Map<string, KeyringAccount>();
+    this.keyring = new Keyring(options);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -24,11 +22,11 @@ export class KeyringProvider extends Provider<KeyringPair, Keyring> {
   }
 
   public override async getAccounts(): Promise<Account<KeyringPair>[]> {
-    return this.instance.pairs.map((p) => new KeyringAccount(p));
+    return this.keyring.pairs.map((p) => new KeyringAccount(p));
   }
 
   addSeed(seed: string): Account<KeyringPair> {
-    const keyringPair: KeyringPair = this.instance.addFromMnemonic(seed);
+    const keyringPair: KeyringPair = this.keyring.addFromMnemonic(seed);
 
     return new KeyringAccount(keyringPair);
   }
@@ -37,7 +35,7 @@ export class KeyringProvider extends Provider<KeyringPair, Keyring> {
     keyfile: KeyringPair$Json,
     password?: string,
   ): Account<KeyringPair> {
-    const keyringPair: KeyringPair = this.instance.addFromJson(keyfile);
+    const keyringPair: KeyringPair = this.keyring.addFromJson(keyfile);
     if (password) {
       keyringPair.unlock(password);
     }

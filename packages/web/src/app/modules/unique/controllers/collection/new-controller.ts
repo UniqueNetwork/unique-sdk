@@ -55,6 +55,7 @@ export class NewCollectionController extends BaseCollectionController {
     return {
       mutationMethod: this.sdk.collections.creation_new,
       cache: this.cache,
+      sdk: this.sdk,
     };
   }
 }
