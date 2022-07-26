@@ -3,7 +3,7 @@ import {
   CreateCollectionNewArguments,
   encodeCollectionBase,
 } from '@unique-nft/sdk/tokens';
-import { UpDataStructsCreateCollectionData } from '@unique-nft/unique-mainnet-types/default/index';
+import { UpDataStructsCreateCollectionData } from '@unique-nft/unique-mainnet-types';
 import { Registry } from '@polkadot/types/types';
 
 export const encode = (
