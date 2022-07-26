@@ -40,9 +40,6 @@ export interface MutationOptions {
 
 export interface IMutation<A, R> {
   url: string;
-  client: IClient;
-  method: 'POST' | 'PUT' | 'PATCH';
-  path: string;
   build(args: A): Promise<UnsignedTxPayloadResponse>;
   getFee(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
@@ -90,5 +87,5 @@ export interface IClient {
 }
 
 export interface Signer {
-  sign: any;
+  sign(unsignedTxPayload: UnsignedTxPayloadBody): Promise<SignTxResultResponse>;
 }

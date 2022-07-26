@@ -12,9 +12,9 @@ export class Mutation<A, R> {
   public readonly url: string;
 
   constructor(
-    public readonly client: IClient,
-    public readonly method: 'POST' | 'PUT' | 'PATCH',
-    public readonly path: string,
+    private readonly client: IClient,
+    private readonly method: 'POST' | 'PUT' | 'PATCH',
+    private readonly path: string,
   ) {
     this.url = `${this.client.options.baseUrl}/${this.path}`;
   }
@@ -53,7 +53,7 @@ export class Mutation<A, R> {
     const { signerPayloadJSON } = unsigned;
     const { signature } = await this.client.extrinsics.sign(
       unsigned,
-      undefined,
+      options?.signer,
     );
     return { signature, signerPayloadJSON };
   }

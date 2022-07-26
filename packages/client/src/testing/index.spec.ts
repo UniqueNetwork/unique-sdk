@@ -4,7 +4,7 @@
 import * as process from 'process';
 import { INestApplication } from '@nestjs/common';
 
-import { Accounts, SdkSigner } from '@unique-nft/accounts';
+import { SdkSigner, SignatureType } from '@unique-nft/accounts';
 import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 import '@unique-nft/sdk/tokens';
@@ -21,11 +21,13 @@ import {
 import { createWeb } from './utils.test';
 
 const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
+const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob'; // eslint-disable-line
+const TEST_POOR_ACCOUNT = process.env['TEST_POOR_ACCOUNT'] || '//Alice'; // eslint-disable-line
 
 describe('client tests', () => {
   let app: INestApplication;
-  let bobAddress: string;
-  let aliceAddress: string;
+  let richAccountAddress: string;
+  let poorAccountAddress: string;
   let signer: SdkSigner;
 
   beforeAll(async () => {
@@ -33,12 +35,14 @@ describe('client tests', () => {
       app = await createWeb();
     }
 
-    const keyringProvider = new KeyringProvider();
-    const bob = keyringProvider.addSeed('//Bob');
-    bobAddress = bob.instance.address;
-    const alice = keyringProvider.addSeed('//Alice');
-    aliceAddress = alice.instance.address;
-    signer = bob.getSigner();
+    const keyringProvider = new KeyringProvider({
+      type: SignatureType.Sr25519,
+    });
+    const richAccount = keyringProvider.addSeed(TEST_RICH_ACCOUNT);
+    richAccountAddress = richAccount.instance.address;
+    const poorAccount = keyringProvider.addSeed(TEST_POOR_ACCOUNT);
+    poorAccountAddress = poorAccount.instance.address;
+    signer = richAccount.getSigner();
   }, 100_000);
 
   afterAll(() => {
@@ -50,10 +54,10 @@ describe('client tests', () => {
       const client = new Client({ baseUrl, signer: null });
       const response: UnsignedTxPayloadResponse = await client.extrinsics.build(
         {
-          address: bobAddress,
+          address: richAccountAddress,
           section: 'balances',
           method: 'transfer',
-          args: [aliceAddress, 1000],
+          args: [poorAccountAddress, 1000],
         },
       );
       expect(response).toEqual(expect.any(Object));
@@ -69,8 +73,8 @@ describe('client tests', () => {
 
     it('fee for BalanceTransferBody', async () => {
       const response: FeeResponse = await client.balance.transfer.getFee({
-        address: bobAddress,
-        destination: aliceAddress,
+        address: richAccountAddress,
+        destination: poorAccountAddress,
         amount: 1000,
       });
       expect(response).toEqual(expect.any(Object));
@@ -79,8 +83,8 @@ describe('client tests', () => {
     it('build; fee for UnsignedTxPayloadResponse', async () => {
       const response: UnsignedTxPayloadResponse =
         await client.balance.transfer.build({
-          address: bobAddress,
-          destination: aliceAddress,
+          address: richAccountAddress,
+          destination: poorAccountAddress,
           amount: 1000,
         });
       expect(response).toEqual(expect.any(Object));
@@ -93,8 +97,8 @@ describe('client tests', () => {
     it.skip('error getFee', async () => {
       const response: UnsignedTxPayloadResponse =
         await client.balance.transfer.build({
-          address: bobAddress,
-          destination: aliceAddress,
+          address: richAccountAddress,
+          destination: poorAccountAddress,
           amount: 1000,
         });
       expect(response).toEqual(expect.any(Object));
@@ -108,8 +112,8 @@ describe('client tests', () => {
 
     it('sign; fee for SubmitTxBody', async () => {
       const response: SubmitTxBody = await client.balance.transfer.sign({
-        address: bobAddress,
-        destination: aliceAddress,
+        address: richAccountAddress,
+        destination: poorAccountAddress,
         amount: 1000,
       });
       expect(response).toEqual(expect.any(Object));
@@ -121,8 +125,8 @@ describe('client tests', () => {
 
     it('submitWatch', async () => {
       const response: object = await client.balance.transfer.submitWaitResult({
-        address: bobAddress,
-        destination: aliceAddress,
+        address: richAccountAddress,
+        destination: poorAccountAddress,
         amount: 0.001,
       });
       expect(response).toEqual(expect.any(Object));
@@ -132,15 +136,15 @@ describe('client tests', () => {
   it('check balance changes', async () => {
     const client = new Client({ baseUrl, signer });
     const initBalanceResponse = await client.balance.get({
-      address: bobAddress,
+      address: richAccountAddress,
     });
     await client.balance.transfer.submitWaitResult({
-      address: bobAddress,
-      destination: aliceAddress,
+      address: richAccountAddress,
+      destination: poorAccountAddress,
       amount: 0.001,
     });
     const currentBalanceResponse = await client.balance.get({
-      address: bobAddress,
+      address: richAccountAddress,
     });
     expect(initBalanceResponse.availableBalance.raw).not.toBe(
       currentBalanceResponse.availableBalance.raw,
@@ -151,8 +155,8 @@ describe('client tests', () => {
     it('success', async () => {
       const client = new Client({ baseUrl, signer });
       const response = await client.balance.transfer.sign({
-        address: bobAddress,
-        destination: aliceAddress,
+        address: richAccountAddress,
+        destination: poorAccountAddress,
         amount: 1000,
       });
       expect(response).toMatchObject({
@@ -165,8 +169,8 @@ describe('client tests', () => {
       const client = new Client({ baseUrl, signer: null });
       await expect(
         client.balance.transfer.sign({
-          address: bobAddress,
-          destination: aliceAddress,
+          address: richAccountAddress,
+          destination: poorAccountAddress,
           amount: 1000,
         }),
       ).rejects.toThrowError();
@@ -177,8 +181,8 @@ describe('client tests', () => {
     it('success', async () => {
       const client = new Client({ baseUrl, signer });
       const response = await client.balance.transfer.submit({
-        address: bobAddress,
-        destination: aliceAddress,
+        address: richAccountAddress,
+        destination: poorAccountAddress,
         amount: 1000,
       });
       expect(response).toMatchObject({
