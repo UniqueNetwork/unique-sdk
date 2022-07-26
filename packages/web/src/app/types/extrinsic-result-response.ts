@@ -36,7 +36,7 @@ export class ExtrinsicResultResponse {
   events: ExtrinsicResultEvent[];
 
   @ApiProperty({ required: false })
-  parsed?: unknown;
+  parsed?: unknown | undefined;
 
   @ApiProperty({ type: FeeResponse, required: false })
   fee?: FeeResponse;
