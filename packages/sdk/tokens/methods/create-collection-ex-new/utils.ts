@@ -1,63 +1,27 @@
+import { SchemaTools } from '@unique-nft/api';
 import {
-  AttributeSchema as AttributeSchemaOriginal,
-  AttributeType,
-  AttributeKind,
-} from '@unique-nft/api';
+  CreateCollectionNewArguments,
+  encodeCollectionBase,
+} from '@unique-nft/sdk/tokens';
+import { UpDataStructsCreateCollectionData } from '@unique-nft/unique-mainnet-types';
+import { Registry } from '@polkadot/types/types';
 
-import { AttributeTypeName, AttributeKindName, AttributeSchema } from './types';
+export const encode = (
+  registry: Registry,
+  collection: CreateCollectionNewArguments,
+): UpDataStructsCreateCollectionData => {
+  const { schema } = collection;
 
-type WithOriginal = {
-  attributesSchema: Record<number, AttributeSchemaOriginal>;
+  const properties = schema
+    ? SchemaTools.encodeUnique.collectionSchema(schema)
+    : undefined;
+
+  const tokenPropertyPermissions = schema
+    ? SchemaTools.encodeUnique.collectionTokenPropertyPermissions(schema)
+    : undefined;
+
+  return encodeCollectionBase(registry, collection, {
+    properties,
+    tokenPropertyPermissions,
+  });
 };
-
-type WithHuman = { attributesSchema: Record<number, AttributeSchema> };
-
-export class AttributesTransformer {
-  private static attributeToOriginal(
-    attributeSchema: AttributeSchema,
-  ): AttributeSchemaOriginal {
-    return {
-      ...attributeSchema,
-      kind: AttributeKind[attributeSchema.kind],
-      type: AttributeType[attributeSchema.type],
-    };
-  }
-
-  private static attributeToHuman(
-    attributeSchema: AttributeSchemaOriginal,
-  ): AttributeSchema {
-    return {
-      ...attributeSchema,
-      kind: AttributeKind[attributeSchema.kind] as AttributeKindName,
-      type: AttributeType[attributeSchema.type] as AttributeTypeName,
-    };
-  }
-
-  static toHuman<T extends WithOriginal>(schema: T): T & WithHuman {
-    const attributes = Object.entries(schema.attributesSchema).map(
-      ([key, attributeSchema]) => [
-        key,
-        AttributesTransformer.attributeToHuman(attributeSchema),
-      ],
-    );
-
-    return {
-      ...schema,
-      attributesSchema: Object.fromEntries(attributes),
-    };
-  }
-
-  static toOriginal<T extends WithHuman>(schema: T): T & WithOriginal {
-    const attributes = Object.entries(schema.attributesSchema).map(
-      ([key, attributeSchema]) => [
-        key,
-        AttributesTransformer.attributeToOriginal(attributeSchema),
-      ],
-    );
-
-    return {
-      ...schema,
-      attributesSchema: Object.fromEntries(attributes),
-    };
-  }
-}

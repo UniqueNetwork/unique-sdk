@@ -7,7 +7,6 @@ import { SchemaTools } from '@unique-nft/api';
 import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
 import { CreateTokenNewArguments, CreateTokenNewBuildArguments } from './types';
 import { TokenIdArguments } from '../../types';
-import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -24,10 +23,7 @@ export class CreateTokenNewMutation extends MutationMethodBase<
     if (!collection) throw new SdkError(`no collection ${collectionId}`);
 
     const properties = collection.schema
-      ? SchemaTools.encodeUnique.token(
-          data,
-          AttributesTransformer.toOriginal(collection.schema),
-        )
+      ? SchemaTools.encodeUnique.token(data, collection.schema)
       : null;
 
     const tokenData: TokenPayload = {

@@ -5,8 +5,7 @@ import { Option } from '@polkadot/types-codec';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
 
 import { TokenIdArguments } from '../../types/shared';
-import { AttributesTransformer } from '../create-collection-ex-new/utils';
-import { TokenDecoded, OwnerAddress } from './types';
+import { UniqueTokenDecoded, OwnerAddress } from './types';
 import { tryParseParent } from '../token-parent/method';
 
 function transformOwner(
@@ -24,7 +23,7 @@ function transformOwner(
 async function tokenByIdFn(
   this: Sdk,
   args: TokenIdArguments,
-): Promise<TokenDecoded | null> {
+): Promise<UniqueTokenDecoded | null> {
   const { collectionId, tokenId } = args;
 
   const uniqueCollection = await this.collections.get_new({ collectionId });
@@ -41,19 +40,23 @@ async function tokenByIdFn(
       collectionId,
       tokenId,
       tokenData,
-      AttributesTransformer.toOriginal(uniqueCollection.schema),
+      uniqueCollection.schema,
     );
 
-    if (tokenDecodingResult.isValid) return tokenDecodingResult.decoded;
+    if (tokenDecodingResult.result) return tokenDecodingResult.result;
   }
 
   const nestedOwner = tryParseParent(tokenData.owner) || undefined;
+
+  const nestingParentToken = nestedOwner
+    ? { collectionId: nestedOwner.collectionId, tokenId: nestedOwner.tokenId }
+    : undefined;
 
   return {
     tokenId,
     collectionId,
     owner: transformOwner(tokenData.owner),
-    parent: nestedOwner,
+    nestingParentToken,
     attributes: {},
     image: {
       ipfsCid: '',
@@ -62,5 +65,5 @@ async function tokenByIdFn(
   };
 }
 
-export const tokenById: QueryMethod<TokenIdArguments, TokenDecoded> =
+export const tokenById: QueryMethod<TokenIdArguments, UniqueTokenDecoded> =
   tokenByIdFn;

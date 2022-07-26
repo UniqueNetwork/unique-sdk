@@ -1,5 +1,4 @@
 import {
-  Body,
   CACHE_MANAGER,
   Controller,
   Get,
@@ -15,10 +14,16 @@ import { Sdk } from '@unique-nft/sdk';
 import { Cache } from 'cache-manager';
 import { SdkValidationPipe } from '../../../../validation';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
-import { TokenIdQuery } from './types';
-import { CreateTokenNewDto, TokenDecodedResponse } from '../unique-schema';
-import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
+import { TokenId, TokenIdQuery } from './types';
+import {
+  CreateTokenNewDto,
+  UniqueTokenDecodedResponse,
+} from '../unique-schema';
 import { BaseTokenController } from './base-controller';
+import {
+  MutationMethod,
+  MutationMethodOptions,
+} from '../../../../decorators/mutation-method';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -30,10 +35,10 @@ export class NewTokenController extends BaseTokenController {
   }
 
   @Get()
-  @ApiResponse({ type: TokenDecodedResponse })
+  @ApiResponse({ type: UniqueTokenDecodedResponse })
   async getTokenNew(
     @Query() args: TokenIdQuery,
-  ): Promise<TokenDecodedResponse> {
+  ): Promise<UniqueTokenDecodedResponse> {
     const token = await this.sdk.tokens.get_new(args);
 
     if (token) return token;
@@ -43,11 +48,12 @@ export class NewTokenController extends BaseTokenController {
     );
   }
 
-  @Post()
-  @ApiResponse({ type: UnsignedTxPayloadResponse })
-  async createToken(
-    @Body() args: CreateTokenNewDto,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.create_new.build(args);
+  @MutationMethod(Post(), CreateTokenNewDto, TokenId)
+  createNewTokenMutation(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.create_new,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
   }
 }
