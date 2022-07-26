@@ -32,7 +32,7 @@ function validateRequestParams(sdk: Sdk, query: ApiRequestArguments) {
 export class SdkStateQueries {
   constructor(private readonly sdk: Sdk) {}
 
-  async execute(query: ApiMethodArguments): Promise<any> {
+  async execute<T>(query: ApiMethodArguments): Promise<T> {
     const { endpoint, module, method, args } = query;
 
     validateRequestParams(this.sdk, query);
@@ -47,7 +47,7 @@ export class SdkStateQueries {
     return serialize(result);
   }
 
-  async get(query: ApiGetterArguments): Promise<any> {
+  async get<T>(query: ApiGetterArguments): Promise<T> {
     const { endpoint, module, method } = query;
 
     validateRequestParams(this.sdk, query);
