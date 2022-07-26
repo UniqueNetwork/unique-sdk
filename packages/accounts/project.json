@@ -13,7 +13,8 @@
           "./keyring-local/index.ts",
           "./polkadot/index.ts",
           "./metamask/index.ts"
-        ]
+        ],
+        "ignorePatterns": ["@nestjs/", "@unique-nft/sdk"]
       }
     },
     "lint": {

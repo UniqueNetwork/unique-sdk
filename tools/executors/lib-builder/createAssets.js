@@ -9,14 +9,21 @@ const createAssets = (options) => {
     mainPackageJson,
     currentPackageJson,
     checkIsEmbedded,
+    packageName,
+    ignorePatterns,
   } = options;
   const allImportsSet = new Set();
   const allExports = {};
+  const filesUseImport = {};
 
-  allBundles.forEach(({ file, imports }) => {
+  allBundles.forEach(({ input, file, imports }) => {
     const { dir, ext } = path.parse(file);
 
-    imports.forEach((id) => allImportsSet.add(id));
+    imports.forEach((id) => {
+      allImportsSet.add(id);
+      filesUseImport[id] = filesUseImport[id] || new Set();
+      filesUseImport[id].add(input);
+    });
 
     let pathRequest = path.relative(distDir, dir);
     pathRequest = pathRequest ? `./${pathRequest}` : '.';
@@ -40,10 +47,14 @@ const createAssets = (options) => {
   });
 
   const dependencies = Object.entries(mainPackageJson.dependencies).reduce(
-    (acc, [key, value]) =>
-      allImportsSet.has(key) && !checkIsEmbedded(key)
-        ? { ...acc, [key]: value }
-        : acc,
+    (acc, [key, value]) => {
+      if (allImportsSet.has(key) && !checkIsEmbedded(key)) {
+        checkIgnorePatterns(packageName, ignorePatterns, key, filesUseImport);
+        return { ...acc, [key]: value };
+      }
+
+      return acc;
+    },
     {},
   );
 
@@ -80,5 +91,19 @@ const createAssets = (options) => {
     path.resolve(distDir, 'README.md'),
   );
 };
+
+function checkIgnorePatterns(packageName, ignorePatterns, key, filesUseImport) {
+  if (!ignorePatterns) return;
+
+  ignorePatterns.forEach((pattern) => {
+    if (key.includes(pattern)) {
+      const files = Array.from(filesUseImport[key]);
+      const splitter = '\n- ';
+      const filesStr = files.join(splitter);
+      const message = `The package "${packageName}" must not contain a dependency "${key}" in files:${splitter}${filesStr}`;
+      throw new Error(message);
+    }
+  });
+}
 
 module.exports = createAssets;
