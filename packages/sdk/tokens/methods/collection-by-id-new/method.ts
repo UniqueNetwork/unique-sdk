@@ -8,7 +8,6 @@ import {
   decodeCollectionBase,
   decodeCollectionProperties,
 } from '../../utils/decode-collection';
-import { AttributesTransformer } from '../create-collection-ex-new/utils';
 
 async function collectionByIdNewFn(
   this: Sdk,
@@ -19,26 +18,20 @@ async function collectionByIdNewFn(
   );
 
   const collection = collectionOption.unwrapOr(null);
-
   if (!collection) return null;
 
   const properties = decodeCollectionProperties(collection.properties);
-
   const decodingResult = await SchemaTools.decode.collectionSchema(
     collectionId,
     properties,
   );
 
-  const schema = decodingResult.isValid
-    ? AttributesTransformer.toHuman(decodingResult.decoded)
-    : undefined;
-
   return {
     ...decodeCollectionBase(collection),
     id: collectionId,
     owner: collection.owner.toString(),
-    schema,
     properties,
+    schema: decodingResult.result ?? undefined,
   };
 }
 
