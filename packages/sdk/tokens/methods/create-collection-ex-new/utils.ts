@@ -1,63 +1,45 @@
 import {
-  AttributeSchema as AttributeSchemaOriginal,
-  AttributeType,
-  AttributeKind,
+  UniqueCollectionSchemaToCreate,
+  COLLECTION_SCHEMA_NAME,
+  SchemaTools,
 } from '@unique-nft/api';
+import {
+  CreateCollectionNewArguments,
+  encodeCollectionBase,
+} from '@unique-nft/sdk/tokens';
+import { UpDataStructsCreateCollectionData } from '@unique-nft/unique-mainnet-types/default/index';
+import { Registry } from '@polkadot/types/types';
 
-import { AttributeTypeName, AttributeKindName, AttributeSchema } from './types';
-
-type WithOriginal = {
-  attributesSchema: Record<number, AttributeSchemaOriginal>;
+export const defaultSchema: UniqueCollectionSchemaToCreate = {
+  attributesSchema: {},
+  attributesSchemaVersion: '',
+  coverPicture: {
+    ipfsCid: '',
+  },
+  image: { urlTemplate: '{infix}' },
+  schemaName: COLLECTION_SCHEMA_NAME.unique,
+  schemaVersion: '1.0.0',
 };
 
-type WithHuman = { attributesSchema: Record<number, AttributeSchema> };
+export const encode = (
+  registry: Registry,
+  collection: CreateCollectionNewArguments,
+): UpDataStructsCreateCollectionData => {
+  const { schema } = collection;
 
-export class AttributesTransformer {
-  private static attributeToOriginal(
-    attributeSchema: AttributeSchema,
-  ): AttributeSchemaOriginal {
-    return {
-      ...attributeSchema,
-      kind: AttributeKind[attributeSchema.kind],
-      type: AttributeType[attributeSchema.type],
-    };
-  }
+  const properties = schema
+    ? SchemaTools.encodeUnique.collectionSchema({ ...schema, ...defaultSchema })
+    : undefined;
 
-  private static attributeToHuman(
-    attributeSchema: AttributeSchemaOriginal,
-  ): AttributeSchema {
-    return {
-      ...attributeSchema,
-      kind: AttributeKind[attributeSchema.kind] as AttributeKindName,
-      type: AttributeType[attributeSchema.type] as AttributeTypeName,
-    };
-  }
+  const tokenPropertyPermissions = schema
+    ? SchemaTools.encodeUnique.collectionTokenPropertyPermissions({
+        ...schema,
+        ...defaultSchema,
+      })
+    : undefined;
 
-  static toHuman<T extends WithOriginal>(schema: T): T & WithHuman {
-    const attributes = Object.entries(schema.attributesSchema).map(
-      ([key, attributeSchema]) => [
-        key,
-        AttributesTransformer.attributeToHuman(attributeSchema),
-      ],
-    );
-
-    return {
-      ...schema,
-      attributesSchema: Object.fromEntries(attributes),
-    };
-  }
-
-  static toOriginal<T extends WithHuman>(schema: T): T & WithOriginal {
-    const attributes = Object.entries(schema.attributesSchema).map(
-      ([key, attributeSchema]) => [
-        key,
-        AttributesTransformer.attributeToOriginal(attributeSchema),
-      ],
-    );
-
-    return {
-      ...schema,
-      attributesSchema: Object.fromEntries(attributes),
-    };
-  }
-}
+  return encodeCollectionBase(registry, collection, {
+    properties,
+    tokenPropertyPermissions,
+  });
+};

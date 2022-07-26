@@ -2,12 +2,10 @@ import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { TxBuildArguments } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
-import { SchemaTools } from '@unique-nft/api';
 
 import { CollectionIdArguments } from '../../types/shared';
 import { CreateCollectionNewArguments } from './types';
-import { encodeCollectionBase } from '../../utils/encode-collection';
-import { AttributesTransformer } from './utils';
+import { encode } from './utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -18,39 +16,15 @@ export class CreateCollectionExNewMutation extends MutationMethodBase<
   async transformArgs(
     args: CreateCollectionNewArguments,
   ): Promise<TxBuildArguments> {
-    const { address, schema, ...rest } = args;
+    const { address } = args;
 
-    const encodedBase = encodeCollectionBase(this.sdk.api.registry, rest);
-
-    if (!schema) {
-      return {
-        address,
-        section: 'unique',
-        method: 'createCollectionEx',
-        args: [encodedBase],
-      };
-    }
-
-    const properties = SchemaTools.encodeUnique.collectionSchema(
-      AttributesTransformer.toOriginal(schema),
-    );
-
-    const tokenPropertyPermissions =
-      SchemaTools.encodeUnique.collectionTokenPropertyPermissions(
-        AttributesTransformer.toOriginal(schema),
-      );
-
-    const encodedCollection = {
-      ...encodedBase,
-      properties,
-      tokenPropertyPermissions,
-    };
+    const encoded = encode(this.sdk.api.registry, args);
 
     return {
       address,
       section: 'unique',
       method: 'createCollectionEx',
-      args: [encodedCollection],
+      args: [encoded],
     };
   }
 

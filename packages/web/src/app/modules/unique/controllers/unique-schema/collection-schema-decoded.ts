@@ -1,9 +1,8 @@
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import {
-  CollectionSchemaName,
-  CollectionId,
   DecodedInfixOrUrlOrCidAndHash,
   UniqueCollectionSchemaDecoded,
+  COLLECTION_SCHEMA_NAME,
 } from '@unique-nft/sdk/tokens';
 import {
   AttributesSchemaApiProperty,
@@ -31,7 +30,7 @@ export class UniqueCollectionSchemaDecodedDto
   attributesSchemaVersion: string;
 
   @ApiProperty()
-  collectionId: CollectionId;
+  collectionId: number;
 
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   coverPicture: DecodedInfixOrUrlOrCidAndHash;
@@ -40,7 +39,7 @@ export class UniqueCollectionSchemaDecodedDto
   image: ImageDto;
 
   @SchemaNameApiProperty
-  schemaName: CollectionSchemaName;
+  schemaName: COLLECTION_SCHEMA_NAME;
 
   @SchemaVersionApiProperty
   schemaVersion: string;

@@ -15,7 +15,7 @@ import { UnnestTokenMutation } from './methods/unnest-token';
 import { tokenChildrenQuery } from './methods/token-children';
 import { tokenParentQuery } from './methods/token-parent';
 import { topmostTokenOwnerQuery } from './methods/topmost-token-owner';
-import { tokenById, TokenDecoded } from './methods/token-by-id';
+import { tokenById, UniqueTokenDecoded } from './methods/token-by-id';
 import { tokenPropertiesQuery } from './methods/token-properties';
 import { DeleteTokenPropertiesMutation } from './methods/delete-token-properties';
 import { SetTokenPropertiesMutation } from './methods/set-token-properties';
@@ -72,7 +72,7 @@ export class SdkTokens {
 
   parent: QueryMethod<TokenParentArguments, TokenParentResult>;
 
-  get_new: QueryMethod<TokenIdArguments, TokenDecoded>;
+  get_new: QueryMethod<TokenIdArguments, UniqueTokenDecoded>;
 
   create_new: MutationMethodWrap<CreateTokenNewArguments, TokenIdArguments>;
 

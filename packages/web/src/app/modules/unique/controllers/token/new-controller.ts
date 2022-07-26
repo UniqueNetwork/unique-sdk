@@ -16,7 +16,10 @@ import { Cache } from 'cache-manager';
 import { SdkValidationPipe } from '../../../../validation';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
 import { TokenIdQuery } from './types';
-import { CreateTokenNewDto, TokenDecodedResponse } from '../unique-schema';
+import {
+  CreateTokenNewDto,
+  UniqueTokenDecodedResponse,
+} from '../unique-schema';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { BaseTokenController } from './base-controller';
 
@@ -30,10 +33,10 @@ export class NewTokenController extends BaseTokenController {
   }
 
   @Get()
-  @ApiResponse({ type: TokenDecodedResponse })
+  @ApiResponse({ type: UniqueTokenDecodedResponse })
   async getTokenNew(
     @Query() args: TokenIdQuery,
-  ): Promise<TokenDecodedResponse> {
+  ): Promise<UniqueTokenDecodedResponse> {
     const token = await this.sdk.tokens.get_new(args);
 
     if (token) return token;
