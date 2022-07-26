@@ -113,7 +113,6 @@ export class AttributeSchemaDto implements AttributeSchema {
   @ApiProperty({
     type: 'object',
     additionalProperties: {
-      type: 'number',
       oneOf: [localizedStringWithDefaultSchema, boxedNumberWithDefaultSchema],
     },
   })
@@ -129,7 +128,6 @@ export class UniqueTokenToCreateDto implements UniqueTokenToCreate {
   @ApiProperty({
     type: 'object',
     additionalProperties: {
-      type: 'number',
       oneOf: [
         { type: 'number' },
         { type: 'array', items: { type: 'number' } },
@@ -139,16 +137,20 @@ export class UniqueTokenToCreateDto implements UniqueTokenToCreate {
         { type: 'array', items: boxedNumberWithDefaultSchema },
       ],
     },
+    example: {
+      0: 0,
+      1: [0, 1],
+    },
   })
   encodedAttributes: EncodedTokenAttributes;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, example: 'Token name', required: false })
   name?: LocalizedStringWithDefault;
 
   @InfixOrUrlOrCidAndHashSchemaApiProperty
   audio?: InfixOrUrlOrCidAndHash;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, example: 'Token description', required: false })
   description?: LocalizedStringWithDefault;
 
   @InfixOrUrlOrCidAndHashSchemaApiProperty
@@ -180,21 +182,20 @@ export const AttributesSchemaApiProperty = ApiProperty({
   additionalProperties: { $ref: getSchemaPath(AttributeSchemaDto) },
   example: {
     0: {
-      name: { en: 'gender' },
-      type: 'localizedStringDictionary',
-      kind: 'enum',
+      name: { _: 'gender' },
+      type: 'string',
       enumValues: {
-        0: { en: 'Male' },
-        1: { en: 'Female' },
+        0: { _: 'Male' },
+        1: { _: 'Female' },
       },
     },
     1: {
-      name: { en: 'traits' },
-      type: 'localizedStringDictionary',
-      kind: 'enumMultiple',
+      name: { _: 'traits' },
+      type: 'string',
+      isArray: true,
       enumValues: {
-        0: { en: 'Black Lipstick' },
-        1: { en: 'Red Lipstick' },
+        0: { _: 'Black Lipstick' },
+        1: { _: 'Red Lipstick' },
       },
     },
   },

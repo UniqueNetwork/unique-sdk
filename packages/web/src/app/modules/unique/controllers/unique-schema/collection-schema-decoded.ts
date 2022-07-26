@@ -3,6 +3,7 @@ import {
   DecodedInfixOrUrlOrCidAndHash,
   UniqueCollectionSchemaDecoded,
   COLLECTION_SCHEMA_NAME,
+  CollectionAttributesSchema,
 } from '@unique-nft/sdk/tokens';
 import {
   AttributesSchemaApiProperty,
@@ -24,7 +25,7 @@ export class UniqueCollectionSchemaDecodedDto
   implements UniqueCollectionSchemaDecoded
 {
   @AttributesSchemaApiProperty
-  attributesSchema: Record<number, AttributeSchemaDto>;
+  attributesSchema: CollectionAttributesSchema;
 
   @AttributesSchemaVersionApiProperty
   attributesSchemaVersion: string;
