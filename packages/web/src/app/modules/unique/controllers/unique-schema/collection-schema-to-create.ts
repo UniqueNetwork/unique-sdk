@@ -1,11 +1,12 @@
 import {
-  CollectionSchemaName,
+  COLLECTION_SCHEMA_NAME,
+  UniqueCollectionSchemaToCreate,
   CollectionAttributesSchema,
   InfixOrUrlOrCidAndHash,
-  UniqueCollectionSchemaToCreate,
 } from '@unique-nft/sdk/tokens';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { Equals } from 'class-validator';
 import {
   AttributesSchemaApiProperty,
   AttributesSchemaVersionApiProperty,
@@ -35,7 +36,8 @@ export class UniqueCollectionSchemaToCreateDto
   image: ImageDto;
 
   @SchemaNameApiProperty
-  schemaName: CollectionSchemaName;
+  @Equals(COLLECTION_SCHEMA_NAME.unique)
+  schemaName: COLLECTION_SCHEMA_NAME.unique;
 
   @SchemaVersionApiProperty
   schemaVersion: string;

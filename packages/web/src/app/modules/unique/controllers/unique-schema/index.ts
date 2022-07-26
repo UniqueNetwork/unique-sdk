@@ -1,16 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import {
-  TokenDecoded,
-  CollectionId,
+  UniqueTokenDecoded,
   DecodedInfixOrUrlOrCidAndHash,
-  TokenId,
-  DecodedAttributes,
-  LocalizedStringDictionary,
-  UniqueTokenToCreate,
-  EncodedTokenAttributes,
-  InfixOrUrlOrCidAndHash,
   CreateTokenNewArguments,
   OwnerAddress,
+  LocalizedStringWithDefault,
+  BoxedNumberWithDefault,
+  DecodedAttributes,
+  AttributeType,
 } from '@unique-nft/sdk/tokens';
 import {
   ApiExtraModels,
@@ -20,19 +17,52 @@ import {
 } from '@nestjs/swagger';
 import { Address } from '@unique-nft/sdk/types';
 import {
-  DecodedAttributeDto,
+  UniqueTokenToCreateDto,
   DecodedInfixOrUrlOrCidAndHashSchemaApiProperty,
   EthereumAddress,
-  InfixOrUrlOrCidAndHashSchemaApiProperty,
-  StringOrLocalizedString,
   SubstrateAddress,
+  localizedStringWithDefaultSchema,
+  boxedNumberWithDefaultSchema,
 } from './shared';
 
 export { UniqueCollectionSchemaToCreateDto } from './collection-schema-to-create';
 export { UniqueCollectionSchemaDecodedDto } from './collection-schema-decoded';
 
+class NestingParentId {
+  @ApiProperty()
+  collectionId: number;
+
+  @ApiProperty()
+  tokenId: number;
+}
+
+class DecodedAttributeDto {
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
+  name: LocalizedStringWithDefault;
+
+  @ApiProperty({ enum: AttributeType })
+  type: AttributeType;
+
+  @ApiProperty()
+  isArray: boolean;
+
+  @ApiProperty({
+    oneOf: [
+      localizedStringWithDefaultSchema,
+      boxedNumberWithDefaultSchema,
+      { type: 'array', items: localizedStringWithDefaultSchema },
+      { type: 'array', items: boxedNumberWithDefaultSchema },
+    ],
+  })
+  value:
+    | LocalizedStringWithDefault
+    | BoxedNumberWithDefault
+    | Array<LocalizedStringWithDefault>
+    | Array<BoxedNumberWithDefault>;
+}
+
 @ApiExtraModels(DecodedAttributeDto, SubstrateAddress, EthereumAddress)
-export class TokenDecodedResponse implements TokenDecoded {
+export class UniqueTokenDecodedResponse implements UniqueTokenDecoded {
   @ApiProperty({
     type: 'array',
     items: { $ref: getSchemaPath(DecodedAttributeDto) },
@@ -54,44 +84,25 @@ export class TokenDecodedResponse implements TokenDecoded {
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   audio?: DecodedInfixOrUrlOrCidAndHash;
 
-  @StringOrLocalizedString
-  description?: string | LocalizedStringDictionary;
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
+  description?: LocalizedStringWithDefault;
 
-  @StringOrLocalizedString
-  name?: string | LocalizedStringDictionary;
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
+  name?: LocalizedStringWithDefault;
 
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   imagePreview?: DecodedInfixOrUrlOrCidAndHash;
 
   @ApiProperty({
-    type: 'object',
-    required: false,
-    properties: {
-      collectionId: { type: 'number' },
-      tokenId: { type: 'number' },
-    },
+    type: NestingParentId,
   })
-  nestingParentToken?: { collectionId: CollectionId; tokenId: TokenId };
+  nestingParentToken?: NestingParentId;
 
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   spatialObject?: DecodedInfixOrUrlOrCidAndHash;
 
   @DecodedInfixOrUrlOrCidAndHashSchemaApiProperty
   video?: DecodedInfixOrUrlOrCidAndHash;
-}
-
-class UniqueTokenDataToCreateDto implements UniqueTokenToCreate {
-  @ApiProperty({
-    type: 'object',
-    example: {
-      0: 0,
-      1: [1],
-    },
-  })
-  encodedAttributes: EncodedTokenAttributes;
-
-  @InfixOrUrlOrCidAndHashSchemaApiProperty
-  image: InfixOrUrlOrCidAndHash;
 }
 
 export class CreateTokenNewDto implements CreateTokenNewArguments {
@@ -101,8 +112,8 @@ export class CreateTokenNewDto implements CreateTokenNewArguments {
   @ApiProperty()
   collectionId: number;
 
-  @ApiProperty({ type: UniqueTokenDataToCreateDto })
-  data: UniqueTokenDataToCreateDto;
+  @ApiProperty({ type: UniqueTokenToCreateDto })
+  data: UniqueTokenToCreateDto;
 
   @ApiProperty()
   owner?: Address;
