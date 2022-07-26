@@ -33,11 +33,7 @@ describe('client tests', () => {
       app = await createWeb();
     }
 
-    const accounts = new Accounts();
-    await accounts.addProvider(KeyringProvider);
-    const keyringProvider = accounts.getProvider(
-      KeyringProvider,
-    ) as KeyringProvider;
+    const keyringProvider = new KeyringProvider();
     const bob = keyringProvider.addSeed('//Bob');
     bobAddress = bob.instance.address;
     const alice = keyringProvider.addSeed('//Alice');
@@ -102,7 +98,7 @@ describe('client tests', () => {
           amount: 1000,
         });
       expect(response).toEqual(expect.any(Object));
-      expect(
+      await expect(
         client.balance.transfer.getFee({
           ...response,
           signerPayloadHex: '1',
@@ -138,7 +134,7 @@ describe('client tests', () => {
     const initBalanceResponse = await client.balance.get({
       address: bobAddress,
     });
-    const transferResponse = await client.balance.transfer.submitWaitResult({
+    await client.balance.transfer.submitWaitResult({
       address: bobAddress,
       destination: aliceAddress,
       amount: 0.001,
@@ -167,7 +163,7 @@ describe('client tests', () => {
 
     it('error', async () => {
       const client = new Client({ baseUrl, signer: null });
-      expect(
+      await expect(
         client.balance.transfer.sign({
           address: bobAddress,
           destination: aliceAddress,

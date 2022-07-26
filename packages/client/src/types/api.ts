@@ -9,6 +9,11 @@
  * ---------------------------------------------------------------
  */
 
+export interface TokenPropertiesResponse {
+  /** @example {"ipfsJson":"{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}","gender":"Male","traits":["TEETH_SMILE","UP_HAIR"]} */
+  constData: object;
+}
+
 export interface TokenInfoResponse {
   /** @example 1 */
   id: number;
@@ -27,6 +32,7 @@ export interface TokenInfoResponse {
    * @example https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image1.png
    */
   url: string;
+  properties: TokenPropertiesResponse;
 }
 
 export interface CreateTokenBody {
@@ -188,26 +194,6 @@ export interface UnnestTokenBody {
   nested: TokenId;
 }
 
-export interface TokenChildrenResponse {
-  children: TokenId[];
-}
-
-export interface TokenParentResponse {
-  /** @example 1 */
-  collectionId: number;
-
-  /** @example 1 */
-  tokenId: number;
-
-  /** @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm */
-  address: string;
-}
-
-export interface TopmostTokenOwnerResponse {
-  /** @example unjq56sK9skTMR1MyPLsDFXkQdRNNrD1gzE4wRJSYm2k6GjJn */
-  topmostOwner: string;
-}
-
 export interface SignResponse {
   signerPayloadJSON: SignerPayloadJSONDto;
 
@@ -219,6 +205,135 @@ export interface SignResponse {
 export interface SubmitResponse {
   hash: string;
   fee?: FeeResponse;
+}
+
+export interface TokenPropertyDto {
+  /** @example example */
+  key: string;
+
+  /** @example example */
+  value: string;
+}
+
+export interface SetTokenPropertiesBody {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+  properties: TokenPropertyDto[];
+}
+
+export interface SetTokenPropertiesResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+}
+
+export interface DeleteTokenPropertiesBody {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** @example ["example"] */
+  propertyKeys: string[];
+}
+
+export interface DeleteTokenPropertiesResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+}
+
+export interface DecodedAttributeDto {
+  name: string | Record<string, string>;
+  value:
+    | (string | number | Record<string, string>)
+    | (string | number | Record<string, string>)[];
+  type:
+    | 'integer'
+    | 'float'
+    | 'boolean'
+    | 'timestamp'
+    | 'string'
+    | 'url'
+    | 'isoDate'
+    | 'time'
+    | 'colorRgba'
+    | 'localizedStringDictionary';
+  kind: 'enum' | 'enumMultiple' | 'freeValue';
+  isArray: boolean;
+}
+
+export interface SubstrateAddress {
+  Substrate: string;
+}
+
+export interface EthereumAddress {
+  Ethereum: string;
+}
+
+export interface TokenDecodedResponse {
+  attributes: DecodedAttributeDto[];
+  collectionId: number;
+  image: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+  owner: SubstrateAddress | EthereumAddress;
+  tokenId: number;
+  audio: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+  description: string | Record<string, string>;
+  name: string | Record<string, string>;
+  imagePreview: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+  nestingParentToken?: { collectionId?: number; tokenId?: number };
+  spatialObject: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+  video: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+}
+
+export interface UniqueTokenDataToCreateDto {
+  /** @example {"0":0,"1":[1]} */
+  encodedAttributes: object;
+  image:
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null };
+}
+
+export interface CreateTokenNewDto {
+  address: string;
+  collectionId: number;
+  data: UniqueTokenDataToCreateDto;
+  owner: string;
 }
 
 export interface CollectionSponsorship {
@@ -315,7 +430,7 @@ export interface CollectionSelectFieldDto {
   multi?: boolean;
 }
 
-export interface CollectionPropertiesDto {
+export interface CollectionOldPropertiesDto {
   /** @example https://ipfs.unique.network/ipfs/QmcAcH4F9HYQtpqKHxBFwGvkfKb8qckXj2YWUrcc8yd24G/image{id}.png */
   offchainSchema?: string;
   schemaVersion?: 'ImageURL' | 'Unique';
@@ -340,6 +455,26 @@ export interface TokenPropertiesPermissionsDto {
   constData?: TokenPropertyPermissionsDto;
 }
 
+export interface CollectionInfoWithOldPropertiesDto {
+  mode?: 'Nft' | 'Fungible' | 'ReFungible';
+
+  /** @example Sample collection name */
+  name: string;
+
+  /** @example sample collection description */
+  description: string;
+
+  /** @example TEST */
+  tokenPrefix: string;
+  sponsorship?: CollectionSponsorship;
+  limits?: CollectionLimitsDto;
+  metaUpdatePermission?: 'ItemOwner' | 'Admin' | 'None';
+  permissions?: CollectionPermissionsDto;
+  readOnly: boolean;
+  properties: CollectionOldPropertiesDto;
+  tokenPropertyPermissions?: TokenPropertiesPermissionsDto;
+}
+
 export interface CreateCollectionBody {
   mode?: 'Nft' | 'Fungible' | 'ReFungible';
 
@@ -355,7 +490,8 @@ export interface CreateCollectionBody {
   limits?: CollectionLimitsDto;
   metaUpdatePermission?: 'ItemOwner' | 'Admin' | 'None';
   permissions?: CollectionPermissionsDto;
-  properties: CollectionPropertiesDto;
+  readOnly: boolean;
+  properties: CollectionOldPropertiesDto;
   tokenPropertyPermissions?: TokenPropertiesPermissionsDto;
 
   /**
@@ -417,9 +553,107 @@ export interface TransferCollectionBody {
   to: string;
 }
 
+export interface CollectionPropertyDto {
+  /** @example example */
+  key: string;
+
+  /** @example example */
+  value: string;
+}
+
+export interface SetCollectionPropertiesBody {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /** @example 1 */
+  collectionId: number;
+  properties: CollectionPropertyDto[];
+}
+
+export interface SetCollectionPropertiesResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+}
+
+export interface DeleteCollectionPropertiesBody {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example ["example"] */
+  propertyKeys: string[];
+}
+
+export interface DeleteCollectionPropertiesResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+}
+
+export interface PropertyPermissionDto {
+  mutable: boolean;
+  collectionAdmin: boolean;
+  tokenOwner: boolean;
+}
+
+export interface PropertyKeyPermissionDto {
+  /** @example example */
+  key: string;
+  permission: PropertyPermissionDto;
+}
+
+export interface SetPropertyPermissionsBody {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /** @example 1 */
+  collectionId: number;
+  propertyPermissions: PropertyKeyPermissionDto[];
+}
+
+export interface SetPropertyPermissionsResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+}
+
+export interface AttributeSchemaDto {
+  enumValues: Record<string, string | number | Record<string, string>>;
+  name: string | Record<string, string>;
+  optional: boolean;
+  kind: 'enum' | 'enumMultiple' | 'freeValue';
+  type:
+    | 'integer'
+    | 'float'
+    | 'boolean'
+    | 'timestamp'
+    | 'string'
+    | 'url'
+    | 'isoDate'
+    | 'time'
+    | 'colorRgba'
+    | 'localizedStringDictionary';
+}
+
 export interface ImageDto {
   /** @example https://ipfs.unique.network/ipfs/{infix}.ext */
   urlTemplate: string;
+}
+
+export interface OldPropertiesDto {
+  _old_schemaVersion: string;
+  _old_offchainSchema: string;
+  _old_constOnChainSchema: string;
+  _old_variableOnChainSchema: string;
 }
 
 export interface ImagePreviewDto {
@@ -445,9 +679,69 @@ export interface VideoDto {
   urlTemplate?: string;
 }
 
+export interface UniqueCollectionSchemaDecodedDto {
+  /** @example {"0":{"name":{"en":"gender"},"type":"localizedStringDictionary","kind":"enum","enumValues":{"0":{"en":"Male"},"1":{"en":"Female"}}},"1":{"name":{"en":"traits"},"type":"localizedStringDictionary","kind":"enumMultiple","enumValues":{"0":{"en":"Black Lipstick"},"1":{"en":"Red Lipstick"}}}} */
+  attributesSchema: Record<string, AttributeSchemaDto>;
+
+  /** @example 1.0.0 */
+  attributesSchemaVersion: string;
+  collectionId: number;
+  coverPicture: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+  image: ImageDto;
+
+  /** @example unique */
+  schemaName: 'unique' | '_old_';
+
+  /** @example 1.0.0 */
+  schemaVersion: string;
+  oldProperties: OldPropertiesDto;
+  coverPicturePreview: (
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null }
+  ) & { fullUrl?: string | null };
+  imagePreview: ImagePreviewDto;
+  audio: AudioDto;
+  spatialObject: SpatialObjectDto;
+  video: VideoDto;
+}
+
+export interface CollectionInfoWithSchemaResponse {
+  mode?: 'Nft' | 'Fungible' | 'ReFungible';
+
+  /** @example Sample collection name */
+  name: string;
+
+  /** @example sample collection description */
+  description: string;
+
+  /** @example TEST */
+  tokenPrefix: string;
+  sponsorship?: CollectionSponsorship;
+  limits?: CollectionLimitsDto;
+  metaUpdatePermission?: 'ItemOwner' | 'Admin' | 'None';
+  permissions?: CollectionPermissionsDto;
+  readOnly: boolean;
+
+  /** @example 1 */
+  id: number;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  owner: string;
+  schema?: UniqueCollectionSchemaDecodedDto;
+  properties: CollectionPropertyDto[];
+}
+
 export interface UniqueCollectionSchemaToCreateDto {
-  /** @example {"0":{"name":{"en":"gender"},"type":1025,"kind":0,"enumValues":{"0":{"en":"Male"},"1":{"en":"Female"}}},"1":{"name":{"en":"traits"},"type":1025,"kind":1,"enumValues":{"0":{"en":"Black Lipstick"},"1":{"en":"Red Lipstick"}}}} */
-  attributesSchema: Record<string, any>;
+  /** @example {"0":{"name":{"en":"gender"},"type":"localizedStringDictionary","kind":"enum","enumValues":{"0":{"en":"Male"},"1":{"en":"Female"}}},"1":{"name":{"en":"traits"},"type":"localizedStringDictionary","kind":"enumMultiple","enumValues":{"0":{"en":"Black Lipstick"},"1":{"en":"Red Lipstick"}}}} */
+  attributesSchema: Record<string, AttributeSchemaDto>;
 
   /** @example 1.0.0 */
   attributesSchemaVersion: string;
@@ -487,16 +781,142 @@ export interface CreateCollectionNewRequest {
   limits?: CollectionLimitsDto;
   metaUpdatePermission?: 'ItemOwner' | 'Admin' | 'None';
   permissions?: CollectionPermissionsDto;
+  readOnly: boolean;
 
   /**
    * The ss-58 encoded address
    * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
    */
   address: string;
-  schema: UniqueCollectionSchemaToCreateDto;
+  schema?: UniqueCollectionSchemaToCreateDto;
 }
 
-type arrayNumberRecordStringAny = string | number;
+export interface FungibleCollectionInfoDto {
+  mode?: 'Nft' | 'Fungible' | 'ReFungible';
+
+  /** @example Sample collection name */
+  name: string;
+
+  /** @example sample collection description */
+  description: string;
+
+  /** @example TEST */
+  tokenPrefix: string;
+  sponsorship?: CollectionSponsorship;
+  limits?: CollectionLimitsDto;
+  metaUpdatePermission?: 'ItemOwner' | 'Admin' | 'None';
+  permissions?: CollectionPermissionsDto;
+  readOnly: boolean;
+  decimals: number;
+  id: number;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  owner: string;
+}
+
+export interface BalanceResponse {
+  /** @example 92485000000000000 */
+  raw: string;
+
+  /** @example 0.092485000000000000 */
+  amount: string;
+
+  /** @example 92.4850 m */
+  formatted: string;
+
+  /** @example UNQ */
+  unit: string;
+
+  /** @example 18 */
+  decimals: number;
+}
+
+export interface CreateFungibleCollectionRequest {
+  /** @example Fungible */
+  mode?: 'Nft' | 'Fungible' | 'ReFungible';
+
+  /** @example Sample collection name */
+  name: string;
+
+  /** @example sample collection description */
+  description: string;
+
+  /** @example TEST */
+  tokenPrefix: string;
+  sponsorship?: CollectionSponsorship;
+  limits?: CollectionLimitsDto;
+  metaUpdatePermission?: 'ItemOwner' | 'Admin' | 'None';
+  permissions?: CollectionPermissionsDto;
+  readOnly: boolean;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+  schema?: UniqueCollectionSchemaToCreateDto;
+
+  /**
+   * @min 0
+   * @max 18
+   * @example 10
+   */
+  decimals: number;
+}
+
+export interface AddTokensArgsDto {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+  recipient?: string;
+  collectionId: number;
+  amount: number;
+}
+
+export interface AddTokensResultDto {
+  recipient: string;
+  collectionId: number;
+  amount: number;
+}
+
+export interface TransferTokensArgsDto {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  recipient: string;
+  amount: number;
+  collectionId: number;
+}
+
+export interface TransferTokensResultDto {
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  recipient: string;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  sender: string;
+  amount: number;
+  collectionId: number;
+}
+
+export type arrayNumberRecordStringAny = string | number;
 
 export interface TxBuildBody {
   /**
@@ -557,23 +977,8 @@ export interface ExtrinsicResultResponse {
   blockIndex: number;
   errorMessage: string;
   events: ExtrinsicResultEvent;
-}
-
-export interface BalanceResponse {
-  /** @example 92485000000000000 */
-  raw: string;
-
-  /** @example 0.092485000000000000 */
-  amount: string;
-
-  /** @example 92.4850 m */
-  formatted: string;
-
-  /** @example UNQ */
-  unit: string;
-
-  /** @example 18 */
-  decimals: number;
+  parsed?: object;
+  fee?: FeeResponse;
 }
 
 export interface AllBalancesResponse {
@@ -645,7 +1050,7 @@ export interface KeyringPairJsonDto {
   meta: object;
 }
 
-export interface AccountResponse {
+export interface AccountDataResponse {
   /**
    * The mnemonic seed gives full access to your account
    * @example little crouch armed put judge bamboo avoid fine actor soccer rebuild cluster
@@ -668,10 +1073,7 @@ export interface AccountResponse {
   keyfile: KeyringPairJsonDto;
 }
 
-export interface GenerateAccountBody {
-  /** The password will be used to encrypt the account's information. But if someone knows your seed phrase they still have control over your account */
-  password?: string;
-
+export interface GenerateAccountDataBody {
   /** Signature: ed25519, sr25519 implementation using Schnorr signatures. ECDSA signatures on the secp256k1 curve */
   pairType?: 'sr25519' | 'ed25519' | 'ecdsa' | 'ethereum';
 
