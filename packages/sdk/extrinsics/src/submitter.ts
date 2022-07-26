@@ -38,12 +38,6 @@ export class Submitter {
     return new Observable<ISubmittableResult>((subscriber): TeardownLogic => {
       const stopWatching = submittable
         .send((nextTxResult: ISubmittableResult) => {
-          if (nextTxResult.isError || nextTxResult.dispatchError) {
-            subscriber.error(nextTxResult);
-          } else {
-            subscriber.next(nextTxResult);
-          }
-
           subscriber.next(nextTxResult);
 
           if (nextTxResult.isCompleted) {
