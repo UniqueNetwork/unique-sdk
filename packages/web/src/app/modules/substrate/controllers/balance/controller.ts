@@ -9,9 +9,8 @@ import {
   CACHE_MANAGER,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Sdk } from '@unique-nft/sdk';
-import { BalanceTransferResult } from '@unique-nft/sdk/balance';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
 import { SdkValidationPipe } from '../../../../validation';
 import {
@@ -35,6 +34,7 @@ export class BalanceController {
   ) {}
 
   @Get()
+  @ApiResponse({ type: AllBalancesResponse })
   async getBalance(@Query() args: AddressQuery): Promise<AllBalancesResponse> {
     return this.sdk.balance.get(args);
   }

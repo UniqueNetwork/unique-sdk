@@ -1,0 +1,32 @@
+{
+  "root": "packages/client",
+  "sourceRoot": "packages/client/src",
+  "targets": {
+    "build": {
+      "executor": "./tools/executors/lib-builder:run-build",
+      "options": {
+        "packageName": "client",
+        "distDir": "./dist/packages/client",
+        "entryPoints": [
+          "./index.ts"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/client/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/client"],
+      "options": {
+        "jestConfig": "packages/client/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
