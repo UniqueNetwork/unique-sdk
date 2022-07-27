@@ -7,4 +7,5 @@ export enum ErrorCodes {
   InvalidSigner = 'UN01005',
   BadPayload = 'UN01006',
   BuildQuery = 'UN01007',
+  NotFound = 'UN01008',
 }
