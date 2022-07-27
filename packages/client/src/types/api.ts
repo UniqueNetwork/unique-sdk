@@ -969,7 +969,7 @@ export interface ExtrinsicResultEvent {
   data: object;
 }
 
-export interface ExtrinsicResultResponse {
+export interface ExtrinsicResultResponse<T> {
   status: string;
   isCompleted: boolean;
   isError: boolean;
@@ -977,7 +977,7 @@ export interface ExtrinsicResultResponse {
   blockIndex: number;
   errorMessage: string;
   events: ExtrinsicResultEvent;
-  parsed?: object;
+  parsed?: T;
   fee?: FeeResponse;
 }
 

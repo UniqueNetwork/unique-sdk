@@ -68,12 +68,19 @@ export class Mutation<A, R> {
     return this.client.extrinsics.submit(submitTxArguments);
   }
 
-  async submitWatch(
+  // async submitWatch(
+  //   args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  // ): Promise<ExtrinsicResultResponse> {
+  //   // todo здесь мы будем периодически пинговать GET extrinsics/status
+  // }
+
+  async submitWaitResult(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<ExtrinsicResultResponse> {
-    // todo здесь мы будем периодически пинговать GET extrinsics/status
+  ): Promise<R> {
+    // : Promise<SubmittableResultCompleted<R>>
+    // todo здесь мы будем дергать submitWatch и возвращать красивые данные
     const { hash } = await this.submit(args);
-    let checkStatusResult: ExtrinsicResultResponse | undefined;
+    let checkStatusResult: ExtrinsicResultResponse<R> | undefined;
     let i = 0;
     while (
       (!checkStatusResult || !checkStatusResult?.isCompleted) &&
@@ -83,7 +90,7 @@ export class Mutation<A, R> {
       // eslint-disable-next-line no-await-in-loop
       checkStatusResult = await this.client.extrinsics.status(hash);
       if (checkStatusResult.isCompleted && !checkStatusResult.isError)
-        return checkStatusResult;
+        return checkStatusResult.parsed;
       if (checkStatusResult.isError) {
         throw new Error();
       }
@@ -91,13 +98,5 @@ export class Mutation<A, R> {
       await sleep(this.client.params.waitBetweenStatusRequestsInMs);
     }
     throw new Error();
-  }
-
-  async submitWaitResult(
-    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<ExtrinsicResultResponse> {
-    // : Promise<SubmittableResultCompleted<R>>
-    // todo здесь мы будем дергать submitWatch и возвращать красивые данные
-    return this.submitWatch(args);
   }
 }

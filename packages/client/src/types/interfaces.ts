@@ -25,7 +25,7 @@ export interface IExtrinsics extends ISection {
     signer: Signer,
   ): Promise<SignTxResultResponse>;
   submit(args: SubmitTxBody): Promise<SubmitResultResponse>;
-  status(hash: string): Promise<ExtrinsicResultResponse>;
+  status(hash: string): Promise<ExtrinsicResultResponse<any>>;
 }
 
 export interface ISection {
@@ -51,12 +51,12 @@ export interface IMutation<A, R> {
   submit(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
   ): Promise<SubmitResultResponse>;
-  submitWatch(
-    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<ExtrinsicResultResponse>;
+  // submitWatch(
+  //   args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  // ): Promise<ExtrinsicResultResponse>;
   submitWaitResult(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<ExtrinsicResultResponse>;
+  ): Promise<R>;
 }
 
 export interface IBalance extends ISection {

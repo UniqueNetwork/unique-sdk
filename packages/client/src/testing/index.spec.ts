@@ -123,7 +123,7 @@ describe('client tests', () => {
       expect(feeResponse).toEqual(expect.any(Object));
     }, 60_000);
 
-    it('submitWatch', async () => {
+    it('submitWaitResult', async () => {
       const response: object = await client.balance.transfer.submitWaitResult({
         address: richAccountAddress,
         destination: poorAccountAddress,

@@ -56,7 +56,7 @@ export class Extrinsics extends Section {
     return response.data;
   }
 
-  async status(hash: string): Promise<ExtrinsicResultResponse> {
+  async status(hash: string): Promise<ExtrinsicResultResponse<any>> {
     const response = await this.client.instance({
       method: 'GET',
       baseURL: this.baseUrl,
