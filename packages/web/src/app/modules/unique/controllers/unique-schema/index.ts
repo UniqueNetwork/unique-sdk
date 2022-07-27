@@ -46,11 +46,33 @@ class DecodedAttributeDto {
   @ApiProperty()
   isArray: boolean;
 
+  @ApiProperty()
+  isEnum: boolean;
+
   @ApiProperty({
     oneOf: [
       localizedStringWithDefaultSchema,
-      boxedNumberWithDefaultSchema,
       { type: 'array', items: localizedStringWithDefaultSchema },
+      boxedNumberWithDefaultSchema,
+      { type: 'array', items: boxedNumberWithDefaultSchema },
+      { type: 'number' },
+      { type: 'array', items: { type: 'number' } },
+    ],
+    example: 0,
+  })
+  rawValue:
+    | number
+    | number[]
+    | LocalizedStringWithDefault
+    | BoxedNumberWithDefault
+    | Array<LocalizedStringWithDefault>
+    | Array<BoxedNumberWithDefault>;
+
+  @ApiProperty({
+    oneOf: [
+      localizedStringWithDefaultSchema,
+      { type: 'array', items: localizedStringWithDefaultSchema },
+      boxedNumberWithDefaultSchema,
       { type: 'array', items: boxedNumberWithDefaultSchema },
     ],
   })

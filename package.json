@@ -8,10 +8,12 @@
     "build:sdk": "nx build sdk",
     "build:accounts": "nx build accounts",
     "build:web": "nx build web",
+    "build:client": "nx build client",
     "test": "nx run-many --target=test --all",
     "test:sdk": "nx test sdk",
     "test:web": "nx test web",
     "test:accounts": "nx test accounts",
+    "test:client": "nx test client",
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "eslint ./packages/** --fix",
     "start": "node -r source-map-support/register ./dist/packages/web/main.js",
@@ -20,7 +22,8 @@
     "fix:quartz:nft:types": "find ./node_modules/@unique-nft/quartz-mainnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
-    "tools:generate:docs": "ts-node tools/generate-docs.ts"
+    "tools:generate:docs": "ts-node tools/generate-docs.ts",
+    "generate-types:client": "npx swagger-typescript-api -p .. -o ./packages/client/src/types -n api.ts --no-client -p"
   },
   "private": true,
   "dependencies": {
@@ -35,7 +38,7 @@
     "@sentry/node": "^7.6.0",
     "@sentry/tracing": "^7.6.0",
     "@types/express": "^4.17.13",
-    "@unique-nft/api": "0.1.6",
+    "@unique-nft/api": "0.1.7",
     "@unique-nft/opal-testnet-types": "0.5.3",
     "@unique-nft/quartz-mainnet-types": "0.6.1",
     "@unique-nft/unique-mainnet-types": "0.6.3",
@@ -91,6 +94,7 @@
     "rollup-plugin-esbuild": "^4.9.1",
     "rollup-plugin-node-resolve": "^5.2.0",
     "supertest": "^6.2.2",
+    "swagger-typescript-api": "^9.3.1",
     "ts-jest": "27.0.5",
     "typescript": "~4.6.2"
   },
