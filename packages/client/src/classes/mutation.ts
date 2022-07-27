@@ -44,8 +44,6 @@ export class Mutation<A, R> {
     args: A | UnsignedTxPayloadResponse,
     options?: MutationOptions,
   ): Promise<SubmitTxBody> {
-    if (!this.client.options.signer) throw new Error('not signer');
-
     const unsigned = isUnsignedTxPayloadResponse(args)
       ? args
       : await this.build(args);
@@ -65,21 +63,37 @@ export class Mutation<A, R> {
       ? args
       : await this.sign(args);
 
-    return this.client.extrinsics.submit(submitTxArguments);
+    const response = await this.client.instance({
+      method: this.method,
+      url: this.url,
+      params: { use: 'Submit' },
+      data: submitTxArguments,
+    });
+
+    return response.data;
   }
 
-  // async submitWatch(
-  //   args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  // ): Promise<ExtrinsicResultResponse> {
-  //   // todo здесь мы будем периодически пинговать GET extrinsics/status
-  // }
+  async submitWatch(
+    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  ): Promise<SubmitResultResponse> {
+    const submitTxArguments = isSubmitTxBody(args)
+      ? args
+      : await this.sign(args);
+
+    const response = await this.client.instance({
+      method: this.method,
+      url: this.url,
+      params: { use: 'SubmitWatch' },
+      data: submitTxArguments,
+    });
+
+    return response.data;
+  }
 
   async submitWaitResult(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<R> {
-    // : Promise<SubmittableResultCompleted<R>>
-    // todo здесь мы будем дергать submitWatch и возвращать красивые данные
-    const { hash } = await this.submit(args);
+  ): Promise<ExtrinsicResultResponse<R>> {
+    const { hash } = await this.submitWatch(args);
     let checkStatusResult: ExtrinsicResultResponse<R> | undefined;
     let i = 0;
     while (
@@ -89,10 +103,8 @@ export class Mutation<A, R> {
       i += 1;
       // eslint-disable-next-line no-await-in-loop
       checkStatusResult = await this.client.extrinsics.status(hash);
-      if (checkStatusResult.isCompleted && !checkStatusResult.isError)
-        return checkStatusResult.parsed;
-      if (checkStatusResult.isError) {
-        throw new Error();
+      if (checkStatusResult.isCompleted || checkStatusResult.isError) {
+        return checkStatusResult;
       }
       // eslint-disable-next-line no-await-in-loop
       await sleep(this.client.params.waitBetweenStatusRequestsInMs);
