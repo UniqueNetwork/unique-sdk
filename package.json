@@ -38,7 +38,7 @@
     "@sentry/node": "^7.6.0",
     "@sentry/tracing": "^7.6.0",
     "@types/express": "^4.17.13",
-    "@unique-nft/api": "0.1.6",
+    "@unique-nft/api": "0.1.7",
     "@unique-nft/opal-testnet-types": "0.5.3",
     "@unique-nft/quartz-mainnet-types": "0.6.1",
     "@unique-nft/unique-mainnet-types": "0.6.3",
