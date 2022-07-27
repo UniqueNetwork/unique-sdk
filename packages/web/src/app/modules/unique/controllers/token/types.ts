@@ -9,20 +9,23 @@ import {
   TokenParentResult,
   TokenProperty,
   TopmostTokenOwnerResult,
-  TransferTokenArguments,
+  TransferArguments,
   UnnestTokenArguments,
+  TransferResult,
 } from '@unique-nft/sdk/tokens';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Address,
   AnyObject,
   CreateTokenArguments,
+  CrossAccountId,
 } from '@unique-nft/sdk/types';
 import { IsInt, IsOptional, IsPositive, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidAddress } from '../../../../validation';
 import { CollectionId } from '../collection';
 import { MutationResponse } from '../../../../decorators/mutation-method/types';
+
 import {
   AddressApiProperty,
   AddressQuery,
@@ -68,10 +71,7 @@ export class BurnTokenBody extends TokenId implements BurnTokenArguments {
   address: string;
 }
 
-export class TransferTokenBody
-  extends TokenId
-  implements TransferTokenArguments
-{
+export class TransferTokenBody extends TokenId implements TransferArguments {
   @ValidAddress()
   @AddressApiProperty
   from: string;
@@ -79,6 +79,25 @@ export class TransferTokenBody
   @ValidAddress()
   @AddressApiProperty
   to: string;
+}
+
+export class TransferTokenParsed implements TransferResult {
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ description: 'Sender address' })
+  from: CrossAccountId;
+
+  @ApiProperty({ description: 'Recipient address' })
+  to: CrossAccountId;
+}
+
+export class TransferTokenResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: TransferTokenParsed;
 }
 
 export class NestTokenBody implements NestTokenArguments {
