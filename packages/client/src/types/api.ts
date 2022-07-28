@@ -708,16 +708,16 @@ export interface DeleteCollectionPropertiesResponse {
   parsed: CollectionPropertyDeletedEvent[];
 }
 
-export interface PropertyPermissionDto {
+export interface PropertyPermission {
   mutable: boolean;
   collectionAdmin: boolean;
   tokenOwner: boolean;
 }
 
-export interface PropertyKeyPermissionDto {
+export interface PropertyKeyPermission {
   /** @example example */
   key: string;
-  permission: PropertyPermissionDto;
+  permission: PropertyPermission;
 }
 
 export interface SetPropertyPermissionsBody {
@@ -729,12 +729,21 @@ export interface SetPropertyPermissionsBody {
 
   /** @example 1 */
   collectionId: number;
-  propertyPermissions: PropertyKeyPermissionDto[];
+  propertyPermissions: PropertyKeyPermission[];
+}
+
+export interface PropertyPermissionSetEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example example */
+  propertyKey: string;
 }
 
 export interface SetPropertyPermissionsResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: PropertyPermissionSetEvent[];
 }
 
 export interface AttributeSchemaDto {

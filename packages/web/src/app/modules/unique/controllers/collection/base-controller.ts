@@ -30,6 +30,7 @@ import {
   SetCollectionPropertiesResponse,
   DeleteCollectionPropertiesResponse,
   CollectionProperty,
+  PropertyKeyPermission,
 } from './types';
 import {
   MutationMethod,
@@ -109,6 +110,7 @@ export class BaseCollectionController {
   }
 
   @Get('property-permissions')
+  @ApiResponse({ type: PropertyKeyPermission, isArray: true })
   async propertyPermissions(
     @Query() args: CollectionIdQuery,
   ): Promise<PropertyPermissionsResult> {

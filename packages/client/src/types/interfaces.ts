@@ -22,6 +22,9 @@ import {
   CollectionPropertySetEvent,
   DeleteCollectionPropertiesBody,
   CollectionPropertyDeletedEvent,
+  PropertyKeyPermission,
+  SetPropertyPermissionsBody,
+  PropertyPermissionSetEvent,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -119,5 +122,12 @@ export interface ICollections extends ISection {
   deleteProperties: IMutation<
     DeleteCollectionPropertiesBody,
     CollectionPropertyDeletedEvent[]
+  >;
+  propertyPermissions(args: {
+    collectionId: number;
+  }): Promise<PropertyKeyPermission[]>;
+  setPropertyPermissions: IMutation<
+    SetPropertyPermissionsBody,
+    PropertyPermissionSetEvent[]
   >;
 }

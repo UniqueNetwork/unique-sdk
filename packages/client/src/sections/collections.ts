@@ -6,6 +6,9 @@ import {
   DeleteCollectionPropertiesBody,
   CollectionPropertyDeletedEvent,
   CollectionProperty,
+  SetPropertyPermissionsBody,
+  PropertyPermissionSetEvent,
+  PropertyKeyPermission,
 } from '../types/api';
 import { ICollections } from '../types/interfaces';
 
@@ -24,6 +27,11 @@ export class Collections extends Section implements ICollections {
     CollectionPropertyDeletedEvent[]
   >(this.client, 'DELETE', `${this.path}/properties`);
 
+  public readonly setPropertyPermissions = new Mutation<
+    SetPropertyPermissionsBody,
+    PropertyPermissionSetEvent[]
+  >(this.client, 'POST', `${this.path}/property-permissions`);
+
   async properties({
     collectionId,
   }: {
@@ -33,6 +41,20 @@ export class Collections extends Section implements ICollections {
       method: 'GET',
       baseURL: this.baseUrl,
       url: 'properties',
+      params: { collectionId },
+    });
+    return response.data;
+  }
+
+  async propertyPermissions({
+    collectionId,
+  }: {
+    collectionId: number;
+  }): Promise<PropertyKeyPermission[]> {
+    const response = await this.client.instance({
+      method: 'GET',
+      baseURL: this.baseUrl,
+      url: 'property-permissions',
       params: { collectionId },
     });
     return response.data;
