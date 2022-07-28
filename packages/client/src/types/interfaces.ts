@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import {
+  CollectionProperty,
   TokenPropertyDeletedEvent,
   SetTokenPropertiesBody,
   SignTxResultResponse,
@@ -17,6 +18,10 @@ import {
   TokenId,
   TokenPropertySetEvent,
   DeleteTokenPropertiesBody,
+  SetCollectionPropertiesBody,
+  CollectionPropertySetEvent,
+  DeleteCollectionPropertiesBody,
+  CollectionPropertyDeletedEvent,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -102,5 +107,17 @@ export interface ITokens extends ISection {
   deleteProperties: IMutation<
     DeleteTokenPropertiesBody,
     TokenPropertyDeletedEvent[]
+  >;
+}
+
+export interface ICollections extends ISection {
+  properties(args: { collectionId: number }): Promise<CollectionProperty[]>;
+  setProperties: IMutation<
+    SetCollectionPropertiesBody,
+    CollectionPropertySetEvent[]
+  >;
+  deleteProperties: IMutation<
+    DeleteCollectionPropertiesBody,
+    CollectionPropertyDeletedEvent[]
   >;
 }

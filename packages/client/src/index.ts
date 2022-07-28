@@ -1,9 +1,12 @@
 // eslint-disable-next-line max-classes-per-file
 import Axios, { AxiosInstance } from 'axios';
 import { Balance } from './sections/balance';
+import { Collections } from './sections/collections';
 import { Extrinsics } from './sections/extrinsics';
 import { Tokens } from './sections/tokens';
 import {
+  ICollections,
+  ITokens,
   ClientParameters,
   Options,
   IExtrinsics,
@@ -17,7 +20,9 @@ export class Client {
 
   public readonly balance: IBalance = new Balance(this);
 
-  public readonly tokens = new Tokens(this);
+  public readonly collections: ICollections = new Collections(this);
+
+  public readonly tokens: ITokens = new Tokens(this);
 
   public readonly defaults: Options = {
     baseUrl: '',

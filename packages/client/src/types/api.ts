@@ -646,7 +646,7 @@ export interface TransferCollectionBody {
   to: string;
 }
 
-export interface CollectionPropertyDto {
+export interface CollectionProperty {
   /** @example example */
   key: string;
 
@@ -663,12 +663,21 @@ export interface SetCollectionPropertiesBody {
 
   /** @example 1 */
   collectionId: number;
-  properties: CollectionPropertyDto[];
+  properties: CollectionProperty[];
+}
+
+export interface CollectionPropertySetEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example example */
+  propertyKey: string;
 }
 
 export interface SetCollectionPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: CollectionPropertySetEvent[];
 }
 
 export interface DeleteCollectionPropertiesBody {
@@ -685,9 +694,18 @@ export interface DeleteCollectionPropertiesBody {
   propertyKeys: string[];
 }
 
+export interface CollectionPropertyDeletedEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example example */
+  propertyKey: string;
+}
+
 export interface DeleteCollectionPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: CollectionPropertyDeletedEvent[];
 }
 
 export interface PropertyPermissionDto {
@@ -829,7 +847,7 @@ export interface CollectionInfoWithSchemaResponse {
    */
   owner: string;
   schema?: UniqueCollectionSchemaDecodedDto;
-  properties: CollectionPropertyDto[];
+  properties: CollectionProperty[];
 }
 
 export interface UniqueCollectionSchemaToCreateDto {

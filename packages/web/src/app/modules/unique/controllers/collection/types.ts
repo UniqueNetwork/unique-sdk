@@ -8,7 +8,9 @@ import {
   CreateCollectionNewArguments,
   SetCollectionLimitsArguments,
   SetCollectionPropertiesArguments,
-  CollectionProperty,
+  CollectionProperty as CollectionPropertySDK,
+  CollectionPropertySetEvent as CollectionPropertySetEventSDK,
+  CollectionPropertyDeletedEvent as CollectionPropertyDeletedEventSDK,
   DeleteCollectionPropertiesArguments,
   SetTokenPropertyPermissionsArguments,
   PropertyKeyPermission,
@@ -70,7 +72,7 @@ export class CreateCollectionNewRequest
   schema?: UniqueCollectionSchemaToCreateDto;
 }
 
-export class CollectionPropertyDto implements CollectionProperty {
+export class CollectionProperty implements CollectionPropertySDK {
   @ApiProperty({ example: 'example' })
   key: string;
 
@@ -85,8 +87,8 @@ export class CollectionInfoWithSchemaResponse
   @ApiProperty({ type: UniqueCollectionSchemaDecodedDto, required: false })
   schema?: UniqueCollectionSchemaDecodedDto;
 
-  @ApiProperty({ type: CollectionPropertyDto, isArray: true })
-  properties: CollectionPropertyDto[];
+  @ApiProperty({ type: CollectionProperty, isArray: true })
+  properties: CollectionProperty[];
 }
 
 export class CollectionIdQuery
@@ -154,12 +156,25 @@ export class SetCollectionPropertiesBody
   @ApiProperty({ example: 1 })
   collectionId: number;
 
-  @ApiProperty({ type: [CollectionPropertyDto] })
-  @Type(() => CollectionPropertyDto)
+  @ApiProperty({ type: [CollectionProperty] })
+  @Type(() => CollectionProperty)
   properties: CollectionProperty[];
 }
 
-export class SetCollectionPropertiesResponse extends MutationResponse {}
+export class CollectionPropertySetEvent
+  implements CollectionPropertySetEventSDK
+{
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 'example' })
+  propertyKey: string;
+}
+
+export class SetCollectionPropertiesResponse extends MutationResponse {
+  @ApiProperty({ type: CollectionPropertySetEvent, isArray: true })
+  parsed: CollectionPropertySetEvent[];
+}
 
 export class DeleteCollectionPropertiesBody
   implements DeleteCollectionPropertiesArguments
@@ -177,7 +192,20 @@ export class DeleteCollectionPropertiesBody
   propertyKeys: string[];
 }
 
-export class DeleteCollectionPropertiesResponse extends MutationResponse {}
+export class CollectionPropertyDeletedEvent
+  implements CollectionPropertyDeletedEventSDK
+{
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 'example' })
+  propertyKey: string;
+}
+
+export class DeleteCollectionPropertiesResponse extends MutationResponse {
+  @ApiProperty({ type: CollectionPropertyDeletedEvent, isArray: true })
+  parsed: CollectionPropertyDeletedEvent[];
+}
 
 export class PropertyPermissionDto implements PropertyPermission {
   @ApiProperty({ default: true })
