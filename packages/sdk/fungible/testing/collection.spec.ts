@@ -1,4 +1,4 @@
-import { CollectionSchemaName } from '@unique-nft/sdk/tokens';
+import { COLLECTION_SCHEMA_NAME } from '@unique-nft/sdk/tokens';
 import { createPoorAccount, createRichAccount, createSdk } from '../../testing';
 import '../index';
 
@@ -30,7 +30,7 @@ describe('FungibleCollection', () => {
         image: {
           urlTemplate: 'https://ipfs.unique.network/ipfs/{infix}.ext',
         },
-        schemaName: CollectionSchemaName.unique,
+        schemaName: COLLECTION_SCHEMA_NAME.unique,
         schemaVersion: '1.0.0',
       },
     });
