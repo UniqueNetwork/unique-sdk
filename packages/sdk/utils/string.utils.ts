@@ -53,3 +53,11 @@ export function addressToCrossAccountId(address: Address): CrossAccountId {
 
   return { Substrate: address };
 }
+
+export const toJsonObject = (data: object) =>
+  JSON.parse(
+    JSON.stringify(data, (key, value) =>
+      // todo use toHuman() in Codec interface
+      typeof value === 'bigint' ? value.toString() : value,
+    ),
+  );

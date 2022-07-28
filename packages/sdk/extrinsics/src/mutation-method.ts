@@ -167,7 +167,7 @@ export abstract class MutationMethodBase<A, R>
       ...completed,
       isCompleted: true,
       parsed: completed.parsed,
-      error,
+      error: error || undefined,
     };
   }
 

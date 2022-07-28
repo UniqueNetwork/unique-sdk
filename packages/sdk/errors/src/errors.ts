@@ -1,3 +1,5 @@
+import { toJsonObject } from '@unique-nft/sdk/utils';
+
 import { ErrorCodes } from './codes';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -23,6 +25,6 @@ export class SdkError extends Error {
   static wrapError(error: unknown, details?: any): SdkError {
     const message = error instanceof Error ? error.message : undefined;
 
-    return new this(message, details, this.code, this.name);
+    return new this(message, toJsonObject(details), this.code, this.name);
   }
 }
