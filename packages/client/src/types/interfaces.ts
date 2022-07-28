@@ -14,6 +14,8 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionParsed,
+  CreateTokenNewDto,
+  TokenId,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -79,6 +81,12 @@ export interface ICollections extends ISection {
   collectionByIdFn(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse>;
+}
+
+export interface ITokens extends ISection {
+  path: string;
+  baseUrl: string;
+  createToken: IMutation<CreateTokenNewDto, TokenId>;
 }
 
 export interface ClientParameters {

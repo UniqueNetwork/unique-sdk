@@ -2,6 +2,7 @@
 import Axios, { AxiosInstance } from 'axios';
 import { Balance } from './sections/balance';
 import { Collections } from './sections/collections';
+import { Tokens } from './sections/tokens';
 import { Extrinsics } from './sections/extrinsics';
 import {
   ClientParameters,
@@ -9,6 +10,7 @@ import {
   IExtrinsics,
   IBalance,
   ICollections,
+  ITokens,
 } from './types/interfaces';
 
 export class Client {
@@ -19,6 +21,8 @@ export class Client {
   public readonly balance: IBalance = new Balance(this);
 
   public readonly collections: ICollections = new Collections(this);
+
+  public readonly tokens: ITokens = new Tokens(this);
 
   public readonly defaults: Options = {
     baseUrl: '',

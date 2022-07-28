@@ -17,9 +17,13 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionParsed,
   ExtrinsicResultResponse,
+  TokenId,
 } from '../types/api';
 import { createWeb } from './utils.test';
-import { inputDataForCreateCollection } from './values';
+import {
+  inputDataForCreateCollection,
+  inputDataForCreateToken,
+} from './values';
 
 const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
 const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob'; // eslint-disable-line
@@ -46,8 +50,8 @@ describe('client tests', () => {
     app.close();
   });
 
-  describe('collections', () => {
-    it('create and get collection', async () => {
+  describe('collections and tokens', () => {
+    it('create and get', async () => {
       const client = new Client({ baseUrl, signer });
       const createCollectionResponse: ExtrinsicResultResponse<CreateCollectionParsed> =
         await client.collections.createCollectionEx.submitWaitResult(
@@ -56,11 +60,22 @@ describe('client tests', () => {
       expect(createCollectionResponse.parsed.collectionId).toEqual(
         expect.any(Number),
       );
+      const { collectionId } = createCollectionResponse.parsed;
+
       const getCollectionResponse: CollectionInfoWithSchemaResponse =
         await client.collections.collectionByIdFn({
-          collectionId: createCollectionResponse.parsed.collectionId,
+          collectionId,
         });
       expect(getCollectionResponse.id).toEqual(expect.any(Number));
+
+      const createTokenResponse: ExtrinsicResultResponse<TokenId> =
+        await client.tokens.createToken.submitWaitResult({
+          ...inputDataForCreateToken,
+          collectionId,
+          address: richAccountAddress,
+          owner: richAccountAddress,
+        });
+      expect(createTokenResponse.parsed.tokenId).toEqual(expect.any(Number));
     }, 100_000);
   });
 });
