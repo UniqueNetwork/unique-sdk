@@ -18,6 +18,7 @@ import {
   CreateCollectionParsed,
   ExtrinsicResultResponse,
   TokenId,
+  UniqueTokenDecodedResponse,
 } from '../types/api';
 import { createWeb } from './utils.test';
 import {
@@ -63,7 +64,7 @@ describe('client tests', () => {
       const { collectionId } = createCollectionResponse.parsed;
 
       const getCollectionResponse: CollectionInfoWithSchemaResponse =
-        await client.collections.collectionByIdFn({
+        await client.collections.collectionById({
           collectionId,
         });
       expect(getCollectionResponse.id).toEqual(expect.any(Number));
@@ -76,6 +77,13 @@ describe('client tests', () => {
           owner: richAccountAddress,
         });
       expect(createTokenResponse.parsed.tokenId).toEqual(expect.any(Number));
+
+      const getTokenResponse: UniqueTokenDecodedResponse =
+        await client.tokens.tokenById({
+          collectionId,
+          tokenId: createTokenResponse.parsed.tokenId,
+        });
+      expect(getTokenResponse.tokenId).toEqual(expect.any(Number));
     }, 100_000);
   });
 });

@@ -1,6 +1,10 @@
 import { Mutation } from '../classes/mutation';
 import { Section } from '../classes/section';
-import { CreateTokenNewDto, TokenId } from '../types/api';
+import {
+  CreateTokenNewDto,
+  TokenId,
+  UniqueTokenDecodedResponse,
+} from '../types/api';
 
 export class Tokens extends Section {
   public readonly path = 'token-new';
@@ -12,4 +16,14 @@ export class Tokens extends Section {
     'POST',
     this.path,
   );
+
+  async tokenById(args: TokenId): Promise<UniqueTokenDecodedResponse> {
+    const response = await this.client.instance({
+      method: 'GET',
+      baseURL: this.baseUrl,
+      url: '',
+      params: { collectionId: args.collectionId, tokenId: args.tokenId },
+    });
+    return response.data;
+  }
 }

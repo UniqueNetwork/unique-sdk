@@ -16,7 +16,7 @@ export class Collections extends Section {
     CreateCollectionParsed
   >(this.client, 'POST', this.path);
 
-  async collectionByIdFn(args: {
+  async collectionById(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse> {
     const response = await this.client.instance({
