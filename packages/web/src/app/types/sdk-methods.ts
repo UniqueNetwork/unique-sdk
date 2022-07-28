@@ -1,6 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsInt, IsNumberString } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsInt,
+  IsNumberString,
+  IsInstance,
+  IsHexadecimal,
+} from 'class-validator';
 import { HexString } from '@polkadot/util/types';
 import {
   AddressArguments,
@@ -110,4 +117,16 @@ export class UnsignedTxPayloadResponse implements UnsignedTxPayload {
   fee?: FeeResponse;
 }
 
-export class UnsignedTxPayloadBody extends UnsignedTxPayloadResponse {}
+export class UnsignedTxPayloadBody implements UnsignedTxPayload {
+  @ApiProperty()
+  @IsInstance(SignerPayloadJSONDto)
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  @ApiProperty()
+  @IsInstance(SignerPayloadRawDto)
+  signerPayloadRaw: SignerPayloadRawDto;
+
+  @ApiProperty({ type: String })
+  @IsHexadecimal()
+  signerPayloadHex: HexString;
+}

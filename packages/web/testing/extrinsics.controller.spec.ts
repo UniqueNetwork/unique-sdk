@@ -46,7 +46,6 @@ describe(ExtrinsicsController.name, () => {
         });
 
       expect(badSubmit.status).toEqual(400);
-      expect(badSubmit.body.ok).toEqual(false);
       expect(badSubmit.body.error.code).toEqual(ErrorCodes.BadSignature);
 
       const correctSignature = u8aToHex(

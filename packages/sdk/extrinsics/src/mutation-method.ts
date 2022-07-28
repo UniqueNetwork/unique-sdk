@@ -12,6 +12,7 @@ import {
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
+import { getDispatchError } from '@unique-nft/sdk/utils';
 import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
 
 export interface MutationOptions {
@@ -115,9 +116,14 @@ export abstract class MutationMethodBase<A, R>
     );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
-      const parsed = submittableResult.isError
-        ? undefined
-        : await this.transformResult(submittableResult);
+      const error = getDispatchError(this.sdk.api, submittableResult);
+      if (error) {
+        return { submittableResult, error };
+      }
+
+      const parsed = submittableResult.isCompleted
+        ? await this.transformResult(submittableResult)
+        : undefined;
 
       return { submittableResult, parsed };
     };
@@ -139,7 +145,17 @@ export abstract class MutationMethodBase<A, R>
 
     const completed = await lastValueFrom(result$);
 
-    if (completed.parsed === undefined) throw new SubmitExtrinsicError();
+    const error = getDispatchError(this.sdk.api, completed.submittableResult);
+    if (error) {
+      throw new SubmitExtrinsicError(
+        `Dispatch error: ${error.message}`,
+        error.details,
+      );
+    }
+
+    if (completed.parsed === undefined) {
+      throw new SubmitExtrinsicError('Invalid parsed data');
+    }
 
     return {
       ...completed,

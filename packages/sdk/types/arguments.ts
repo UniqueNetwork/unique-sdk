@@ -51,9 +51,14 @@ export interface ApiMethodArguments extends ApiRequestArguments {
 
 export type ApiGetterArguments = ApiRequestArguments;
 
+export interface SubmittableDispatchError {
+  message: string;
+  details?: unknown;
+}
 export interface SubmittableResultInProcess<T> {
   submittableResult: ISubmittableResult;
   parsed?: T;
+  error?: SubmittableDispatchError;
 }
 
 export interface SubmittableResultCompleted<T> {

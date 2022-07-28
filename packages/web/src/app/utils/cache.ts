@@ -1,6 +1,6 @@
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { ApiPromise } from '@polkadot/api';
-import { Balance } from '@unique-nft/sdk/types';
+import { Balance, SubmittableDispatchError } from '@unique-nft/sdk/types';
 import { serializeResult } from './submittable-result-transformer';
 import { ExtrinsicResultResponse } from '../types/extrinsic-result-response';
 
@@ -13,14 +13,14 @@ export const getPendingResult = (fee?: Balance): ExtrinsicResultResponse => ({
 });
 
 export const getErrorResult = (
-  error: Error,
+  error: SubmittableDispatchError,
   fee?: Balance,
 ): ExtrinsicResultResponse => ({
   events: [],
   isCompleted: true,
   isError: true,
   status: 'Error',
-  errorMessage: error.message || error.name,
+  error,
   fee,
 });
 
