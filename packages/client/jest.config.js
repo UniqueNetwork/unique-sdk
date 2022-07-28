@@ -16,5 +16,4 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/accounts',
   testPathIgnorePatterns: ['./utils/*'],
-  setupFilesAfterEnv: ['<rootDir>/../../jest.setup.js'],
 };
