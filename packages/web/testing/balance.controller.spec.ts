@@ -94,12 +94,11 @@ describe(BalanceController.name, () => {
 
       expect(body).toMatchObject({
         error: {
-          name: 'InsufficientBalance',
-          section: 'balances',
-          message: 'Balance too low to send value',
-        },
-        parsed: {
-          success: false,
+          details: {
+            name: 'InsufficientBalance',
+            section: 'balances',
+          },
+          message: 'Dispatch error: Balance too low to send value',
         },
       });
     }, 60_000);

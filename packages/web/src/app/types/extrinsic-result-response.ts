@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
+import { SubmittableDispatchError } from '@unique-nft/sdk/types';
 import { FeeResponse } from './sdk-methods';
 
 export class ExtrinsicResultEvent {
@@ -30,7 +31,7 @@ export class ExtrinsicResultResponse {
   blockIndex?: number;
 
   @ApiProperty()
-  errorMessage?: string;
+  error?: SubmittableDispatchError;
 
   @ApiProperty({ type: ExtrinsicResultEvent })
   events: ExtrinsicResultEvent[];

@@ -55,9 +55,11 @@ export function addressToCrossAccountId(address: Address): CrossAccountId {
 }
 
 export const toJsonObject = (data: object) =>
-  JSON.parse(
-    JSON.stringify(data, (key, value) =>
-      // todo use toHuman() in Codec interface
-      typeof value === 'bigint' ? value.toString() : value,
-    ),
-  );
+  data
+    ? JSON.parse(
+        JSON.stringify(data, (key, value) =>
+          // todo use toHuman() in Codec interface
+          typeof value === 'bigint' ? value.toString() : value,
+        ),
+      )
+    : undefined;

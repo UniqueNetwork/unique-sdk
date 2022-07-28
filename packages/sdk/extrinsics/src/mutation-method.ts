@@ -12,6 +12,7 @@ import {
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
 import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
+import { getDispatchError } from '@unique-nft/sdk/utils';
 import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
 
 export interface MutationOptions {
@@ -115,9 +116,14 @@ export abstract class MutationMethodBase<A, R>
     );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
-      const parsed = submittableResult.isError
-        ? undefined
-        : await this.transformResult(submittableResult);
+      const error = getDispatchError(this.sdk.api, submittableResult);
+      if (error) {
+        return { submittableResult, error };
+      }
+
+      const parsed = submittableResult.isCompleted
+        ? await this.transformResult(submittableResult)
+        : undefined;
 
       return { submittableResult, parsed };
     };
@@ -139,7 +145,13 @@ export abstract class MutationMethodBase<A, R>
 
     const completed = await lastValueFrom(result$);
 
-    this.checkDispatchError(completed.submittableResult);
+    const error = getDispatchError(this.sdk.api, completed.submittableResult);
+    if (error) {
+      throw new SubmitExtrinsicError(
+        `Dispatch error: ${error.message}`,
+        error.details,
+      );
+    }
 
     if (completed.parsed === undefined) {
       throw new SubmitExtrinsicError('Invalid parsed data');
@@ -150,35 +162,6 @@ export abstract class MutationMethodBase<A, R>
       isCompleted: true,
       parsed: completed.parsed,
     };
-  }
-
-  checkDispatchError(submittableResult: ISubmittableResult) {
-    const { dispatchError } = submittableResult;
-
-    if (dispatchError) {
-      let details;
-      let errorMessage;
-
-      if (dispatchError.isModule) {
-        const decoded = this.sdk.api.registry.findMetaError(
-          dispatchError.asModule,
-        );
-
-        const { docs, name, section } = decoded;
-        details = {
-          name,
-          section,
-        };
-        errorMessage = docs.join(' ');
-      } else {
-        errorMessage = dispatchError.toString();
-      }
-
-      throw new SubmitExtrinsicError(
-        `Dispatch error: ${errorMessage}`,
-        details,
-      );
-    }
   }
 
   expose() {
