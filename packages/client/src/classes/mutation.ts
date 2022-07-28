@@ -13,7 +13,7 @@ export class Mutation<A, R> {
 
   constructor(
     private readonly client: IClient,
-    private readonly method: 'POST' | 'PUT' | 'PATCH',
+    private readonly method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     private readonly path: string,
   ) {
     this.url = `${this.client.options.baseUrl}/${this.path}`;

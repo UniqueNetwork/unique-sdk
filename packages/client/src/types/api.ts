@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+export type arrayNumberRecordStringAny = string | number;
+
 export interface TokenPropertiesResponse {
   /** @example {"ipfsJson":"{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}","gender":"Male","traits":["TEETH_SMILE","UP_HAIR"]} */
   constData: object;
@@ -144,6 +146,19 @@ export interface BurnTokenBody {
   address: string;
 }
 
+export interface SignResponse {
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  /** Warning: Signature must be with SignatureType! */
+  signature: string;
+  fee?: FeeResponse;
+}
+
+export interface SubmitResponse {
+  hash: string;
+  fee?: FeeResponse;
+}
+
 export interface TransferTokenBody {
   /** @example 1 */
   collectionId: number;
@@ -162,6 +177,26 @@ export interface TransferTokenBody {
    * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
    */
   to: string;
+}
+
+export interface TransferTokenParsed {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** Sender address */
+  from: object;
+
+  /** Recipient address */
+  to: object;
+}
+
+export interface TransferTokenResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+  parsed: TransferTokenParsed;
 }
 
 export interface TokenId {
@@ -194,20 +229,7 @@ export interface UnnestTokenBody {
   nested: TokenId;
 }
 
-export interface SignResponse {
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  /** Warning: Signature must be with SignatureType! */
-  signature: string;
-  fee?: FeeResponse;
-}
-
-export interface SubmitResponse {
-  hash: string;
-  fee?: FeeResponse;
-}
-
-export interface TokenPropertyDto {
+export interface TokenProperty {
   /** @example example */
   key: string;
 
@@ -227,12 +249,24 @@ export interface SetTokenPropertiesBody {
 
   /** @example 1 */
   tokenId: number;
-  properties: TokenPropertyDto[];
+  properties: TokenProperty[];
+}
+
+export interface TokenPropertySetEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** @example example */
+  propertyKey: string;
 }
 
 export interface SetTokenPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: TokenPropertySetEvent[];
 }
 
 export interface DeleteTokenPropertiesBody {
@@ -252,16 +286,26 @@ export interface DeleteTokenPropertiesBody {
   propertyKeys: string[];
 }
 
+export interface TokenPropertyDeletedEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** @example example */
+  propertyKey: string;
+}
+
 export interface DeleteTokenPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: TokenPropertyDeletedEvent[];
 }
 
 export interface DecodedAttributeDto {
-  name: string | Record<string, string>;
-  value:
-    | (string | number | Record<string, string>)
-    | (string | number | Record<string, string>)[];
+  /** @example {"_":"Hello!","en":"Hello!","fr":"Bonjour!"} */
+  name?: { _?: string };
   type:
     | 'integer'
     | 'float'
@@ -271,10 +315,19 @@ export interface DecodedAttributeDto {
     | 'url'
     | 'isoDate'
     | 'time'
-    | 'colorRgba'
-    | 'localizedStringDictionary';
-  kind: 'enum' | 'enumMultiple' | 'freeValue';
+    | 'colorRgba';
   isArray: boolean;
+  isEnum: boolean;
+
+  /** @example 0 */
+  rawValue:
+    | { _?: string }
+    | { _?: string }[]
+    | { _?: number }
+    | { _?: number }[]
+    | number
+    | number[];
+  value: { _?: string } | { _?: string }[] | { _?: number } | { _?: number }[];
 }
 
 export interface SubstrateAddress {
@@ -285,7 +338,12 @@ export interface EthereumAddress {
   Ethereum: string;
 }
 
-export interface TokenDecodedResponse {
+export interface NestingParentId {
+  collectionId: number;
+  tokenId: number;
+}
+
+export interface UniqueTokenDecodedResponse {
   attributes: DecodedAttributeDto[];
   collectionId: number;
   image: (
@@ -300,14 +358,18 @@ export interface TokenDecodedResponse {
     | { url?: string; hash?: string | null }
     | { ipfsCid?: string; hash?: string | null }
   ) & { fullUrl?: string | null };
-  description: string | Record<string, string>;
-  name: string | Record<string, string>;
+
+  /** @example {"_":"Hello!","en":"Hello!","fr":"Bonjour!"} */
+  description?: { _?: string };
+
+  /** @example {"_":"Hello!","en":"Hello!","fr":"Bonjour!"} */
+  name?: { _?: string };
   imagePreview: (
     | { urlInfix?: string; hash?: string | null }
     | { url?: string; hash?: string | null }
     | { ipfsCid?: string; hash?: string | null }
   ) & { fullUrl?: string | null };
-  nestingParentToken?: { collectionId?: number; tokenId?: number };
+  nestingParentToken: NestingParentId;
   spatialObject: (
     | { urlInfix?: string; hash?: string | null }
     | { url?: string; hash?: string | null }
@@ -320,10 +382,41 @@ export interface TokenDecodedResponse {
   ) & { fullUrl?: string | null };
 }
 
-export interface UniqueTokenDataToCreateDto {
-  /** @example {"0":0,"1":[1]} */
-  encodedAttributes: object;
+export interface UniqueTokenToCreateDto {
   image:
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null };
+
+  /** @example {"0":0,"1":[0,1]} */
+  encodedAttributes: Record<
+    string,
+    | number
+    | number[]
+    | { _?: string }
+    | { _?: string }[]
+    | { _?: number }
+    | { _?: number }[]
+  >;
+
+  /** @example {"_":"Hello!","en":"Hello!","fr":"Bonjour!"} */
+  name?: { _?: string };
+  audio:
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null };
+
+  /** @example {"_":"Hello!","en":"Hello!","fr":"Bonjour!"} */
+  description?: { _?: string };
+  imagePreview:
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null };
+  spatialObject:
+    | { urlInfix?: string; hash?: string | null }
+    | { url?: string; hash?: string | null }
+    | { ipfsCid?: string; hash?: string | null };
+  video:
     | { urlInfix?: string; hash?: string | null }
     | { url?: string; hash?: string | null }
     | { ipfsCid?: string; hash?: string | null };
@@ -332,7 +425,7 @@ export interface UniqueTokenDataToCreateDto {
 export interface CreateTokenNewDto {
   address: string;
   collectionId: number;
-  data: UniqueTokenDataToCreateDto;
+  data: UniqueTokenToCreateDto;
   owner: string;
 }
 
@@ -627,10 +720,10 @@ export interface SetPropertyPermissionsResponse {
 }
 
 export interface AttributeSchemaDto {
-  enumValues: Record<string, string | number | Record<string, string>>;
-  name: string | Record<string, string>;
+  /** @example {"_":"Hello!","en":"Hello!","fr":"Bonjour!"} */
+  name: { _?: string };
   optional: boolean;
-  kind: 'enum' | 'enumMultiple' | 'freeValue';
+  isArray: boolean;
   type:
     | 'integer'
     | 'float'
@@ -640,8 +733,8 @@ export interface AttributeSchemaDto {
     | 'url'
     | 'isoDate'
     | 'time'
-    | 'colorRgba'
-    | 'localizedStringDictionary';
+    | 'colorRgba';
+  enumValues: Record<string, { _?: string } | { _?: number }>;
 }
 
 export interface ImageDto {
@@ -680,7 +773,7 @@ export interface VideoDto {
 }
 
 export interface UniqueCollectionSchemaDecodedDto {
-  /** @example {"0":{"name":{"en":"gender"},"type":"localizedStringDictionary","kind":"enum","enumValues":{"0":{"en":"Male"},"1":{"en":"Female"}}},"1":{"name":{"en":"traits"},"type":"localizedStringDictionary","kind":"enumMultiple","enumValues":{"0":{"en":"Black Lipstick"},"1":{"en":"Red Lipstick"}}}} */
+  /** @example {"0":{"name":{"_":"gender"},"type":"string","enumValues":{"0":{"_":"Male"},"1":{"_":"Female"}}},"1":{"name":{"_":"traits"},"type":"string","isArray":true,"enumValues":{"0":{"_":"Black Lipstick"},"1":{"_":"Red Lipstick"}}}} */
   attributesSchema: Record<string, AttributeSchemaDto>;
 
   /** @example 1.0.0 */
@@ -694,7 +787,7 @@ export interface UniqueCollectionSchemaDecodedDto {
   image: ImageDto;
 
   /** @example unique */
-  schemaName: 'unique' | '_old_';
+  schemaName: 'unique' | '_old_' | 'ERC721Metadata';
 
   /** @example 1.0.0 */
   schemaVersion: string;
@@ -740,7 +833,7 @@ export interface CollectionInfoWithSchemaResponse {
 }
 
 export interface UniqueCollectionSchemaToCreateDto {
-  /** @example {"0":{"name":{"en":"gender"},"type":"localizedStringDictionary","kind":"enum","enumValues":{"0":{"en":"Male"},"1":{"en":"Female"}}},"1":{"name":{"en":"traits"},"type":"localizedStringDictionary","kind":"enumMultiple","enumValues":{"0":{"en":"Black Lipstick"},"1":{"en":"Red Lipstick"}}}} */
+  /** @example {"0":{"name":{"_":"gender"},"type":"string","enumValues":{"0":{"_":"Male"},"1":{"_":"Female"}}},"1":{"name":{"_":"traits"},"type":"string","isArray":true,"enumValues":{"0":{"_":"Black Lipstick"},"1":{"_":"Red Lipstick"}}}} */
   attributesSchema: Record<string, AttributeSchemaDto>;
 
   /** @example 1.0.0 */
@@ -752,7 +845,7 @@ export interface UniqueCollectionSchemaToCreateDto {
   image: ImageDto;
 
   /** @example unique */
-  schemaName: 'unique' | '_old_';
+  schemaName: 'unique' | '_old_' | 'ERC721Metadata';
 
   /** @example 1.0.0 */
   schemaVersion: string;
@@ -915,8 +1008,6 @@ export interface TransferTokensResultDto {
   amount: number;
   collectionId: number;
 }
-
-export type arrayNumberRecordStringAny = string | number;
 
 export interface TxBuildBody {
   /**
@@ -1082,12 +1173,4 @@ export interface GenerateAccountDataBody {
    * @example {}
    */
   meta?: object;
-}
-
-export interface IpfsUploadResponse {
-  /** File address */
-  cid: string;
-
-  /** IPFS gateway file URL */
-  fileUrl?: string;
 }

@@ -12,6 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { ApiResponse } from '@nestjs/swagger';
 import { TokenPropertiesResult } from '@unique-nft/sdk/tokens';
 import {
   BurnTokenBody,
@@ -23,6 +24,7 @@ import {
   TokenChildrenResponse,
   TokenIdQuery,
   TokenParentResponse,
+  TokenProperty,
   TopmostTokenOwnerResponse,
   TransferTokenBody,
   TransferTokenResponse,
@@ -108,6 +110,7 @@ export class BaseTokenController {
   }
 
   @Get('properties')
+  @ApiResponse({ type: TokenProperty, isArray: true })
   async tokenProperties(
     @Query() args: TokenIdQuery,
   ): Promise<TokenPropertiesResult> {

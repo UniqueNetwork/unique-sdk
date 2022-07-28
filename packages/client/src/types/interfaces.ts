@@ -1,5 +1,7 @@
 import { AxiosInstance } from 'axios';
 import {
+  TokenPropertyDeletedEvent,
+  SetTokenPropertiesBody,
   SignTxResultResponse,
   UnsignedTxPayloadBody,
   SubmitTxBody,
@@ -11,6 +13,10 @@ import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
+  TokenProperty,
+  TokenId,
+  TokenPropertySetEvent,
+  DeleteTokenPropertiesBody,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -88,4 +94,13 @@ export interface IClient {
 
 export interface Signer {
   sign(unsignedTxPayload: UnsignedTxPayloadBody): Promise<SignTxResultResponse>;
+}
+
+export interface ITokens extends ISection {
+  properties(args: TokenId): Promise<TokenProperty[]>;
+  setProperties: IMutation<SetTokenPropertiesBody, TokenPropertySetEvent[]>;
+  deleteProperties: IMutation<
+    DeleteTokenPropertiesBody,
+    TokenPropertyDeletedEvent[]
+  >;
 }
