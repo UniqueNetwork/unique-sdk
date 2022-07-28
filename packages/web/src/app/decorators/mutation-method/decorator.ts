@@ -87,17 +87,21 @@ const useSubmitWatch = async (
   );
 
   const updateCache = async (
-    next: SubmittableResultInProcess<any> | Error,
+    next: SubmittableResultInProcess<any>,
   ): Promise<void> => {
-    if (next instanceof Error) {
-      await cache.set<ExtrinsicResultResponse>(hash, getErrorResult(next, fee));
+    const { submittableResult, parsed, error } = next;
+    if (error) {
+      await cache.set<ExtrinsicResultResponse>(
+        hash,
+        getErrorResult(error, fee),
+      );
 
       return;
     }
 
     await cache.set<ExtrinsicResultResponse>(
       hash,
-      getSucceedResult(sdk.api, next.submittableResult, next.parsed, fee),
+      getSucceedResult(sdk.api, submittableResult, parsed, fee),
     );
   };
 

@@ -16,6 +16,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { Cache } from 'cache-manager';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
+import { getDispatchError } from '@unique-nft/sdk/utils';
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import { VerificationResultResponse } from '../../../types/requests';
 import { Signer } from '../../../decorators/signer.decorator';
@@ -90,13 +91,12 @@ export class ExtrinsicsController {
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
     const { hash, result$ } = await this.sdk.extrinsics.submit(args, true);
 
-    const updateCache = async (
-      next: ISubmittableResult | Error,
-    ): Promise<void> => {
-      if (next instanceof Error) {
+    const updateCache = async (next: ISubmittableResult): Promise<void> => {
+      const error = getDispatchError(this.sdk.api, next);
+      if (error) {
         await this.cache.set<ExtrinsicResultResponse>(
           hash,
-          getErrorResult(next),
+          getErrorResult(error),
         );
 
         return;
