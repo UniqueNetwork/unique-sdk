@@ -95,3 +95,6 @@ export const isUnsignedTxPayload = (args: unknown): args is UnsignedTxPayload =>
 
 export const isSubmitTxArguments = (args: unknown): args is SubmitTxArguments =>
   isUnsignedTxPayload(args) && 'signature' in args;
+
+export const isRawPayload = (body: unknown): boolean =>
+  !isSubmitTxArguments(body) && !isUnsignedTxPayload(body);

@@ -11,6 +11,7 @@ import {
 import { Cache } from 'cache-manager';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Sdk } from '@unique-nft/sdk';
+import '@unique-nft/sdk/balance';
 import { SdkExceptionsFilter } from '../../../../utils/exception-filter';
 import { SdkValidationPipe } from '../../../../validation';
 import {

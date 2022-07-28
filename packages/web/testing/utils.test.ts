@@ -23,7 +23,7 @@ export async function createApp(): Promise<INestApplication> {
   await waitReady();
 
   const app = testingModule.createNestApplication();
-  // app.setGlobalPrefix('/api');
+  app.setGlobalPrefix('/api');
 
   if (process.env.TEST_SHOW_LOG !== 'true') {
     app.useLogger(new EmptyLogger());
@@ -31,8 +31,7 @@ export async function createApp(): Promise<INestApplication> {
 
   app.enableCors();
 
-  // await app.init();
-  await app.listen(3000);
+  await app.init();
   return app;
 }
 

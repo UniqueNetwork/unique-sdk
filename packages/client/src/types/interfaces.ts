@@ -51,12 +51,12 @@ export interface IMutation<A, R> {
   submit(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
   ): Promise<SubmitResultResponse>;
-  // submitWatch(
-  //   args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  // ): Promise<ExtrinsicResultResponse>;
+  submitWatch(
+    args: A | UnsignedTxPayloadResponse | SubmitTxBody,
+  ): Promise<SubmitResultResponse>;
   submitWaitResult(
     args: A | UnsignedTxPayloadResponse | SubmitTxBody,
-  ): Promise<R>;
+  ): Promise<ExtrinsicResultResponse<R>>;
 }
 
 export interface IBalance extends ISection {
