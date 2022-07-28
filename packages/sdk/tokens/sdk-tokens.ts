@@ -27,7 +27,6 @@ import {
   TokenChildrenArguments,
   TokenChildrenResult,
   TokenIdArguments,
-  TransferTokenArguments,
   UnnestTokenArguments,
   UnnestTokenResult,
   TokenParentArguments,
@@ -42,12 +41,15 @@ import {
   SetTokenPropertiesResult,
   ApproveArguments,
   ApproveResult,
+  TransferArguments,
+  TransferResult,
 } from './types';
 import {
   CreateTokenNewArguments,
   CreateTokenNewMutation,
 } from './methods/create-token';
 import { addressToCrossAccountId } from '../utils';
+import { TransferMutation } from './methods/transfer/method';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -62,6 +64,7 @@ export class SdkTokens {
     this.deleteProperties = new DeleteTokenPropertiesMutation(this.sdk);
     this.properties = tokenPropertiesQuery.bind(this.sdk);
     this.approve = new Approve(this.sdk);
+    this.transfer = new TransferMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -94,6 +97,8 @@ export class SdkTokens {
   >;
 
   properties: QueryMethod<TokenPropertiesArguments, TokenPropertiesResult>;
+
+  transfer: MutationMethodWrap<TransferArguments, TransferResult>;
 
   async get({
     collectionId,
@@ -151,20 +156,6 @@ export class SdkTokens {
         addressToCrossAccountId(owner || address),
         tokenPayload,
       ],
-    });
-  }
-
-  transfer({
-    from,
-    to,
-    collectionId,
-    tokenId,
-  }: TransferTokenArguments): Promise<UnsignedTxPayload> {
-    return this.sdk.extrinsics.build({
-      address: from,
-      section: 'unique',
-      method: 'transfer',
-      args: [addressToCrossAccountId(to), collectionId, tokenId, 1],
     });
   }
 
