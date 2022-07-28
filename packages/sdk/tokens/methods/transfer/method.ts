@@ -1,13 +1,9 @@
 import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
-import { ISubmittableResult } from '@unique-nft/sdk/types';
+import { ISubmittableResult, TxBuildArguments } from '@unique-nft/sdk/types';
 import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
 import { u32 } from '@polkadot/types-codec';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
-import {
-  TransferArguments,
-  TransferBuildArguments,
-  TransferResult,
-} from './types';
+import { TransferArguments, TransferResult } from './types';
 
 /* eslint-disable class-methods-use-this */
 
@@ -15,9 +11,7 @@ export class TransferMutation extends MutationMethodBase<
   TransferArguments,
   TransferResult
 > {
-  async transformArgs(
-    args: TransferArguments,
-  ): Promise<TransferBuildArguments> {
+  async transformArgs(args: TransferArguments): Promise<TxBuildArguments> {
     const { from, to, collectionId, tokenId } = args;
 
     return {

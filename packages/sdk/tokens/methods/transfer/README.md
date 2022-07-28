@@ -14,6 +14,8 @@ The method returns an `Transfer` event.
 ## Examples
 
 ```ts
+import { TransferArguments } from '@unique-nft/sdk/tokens';
+
 const args: TransferArguments = {
   from: '<address>',
   to: '<address>',
