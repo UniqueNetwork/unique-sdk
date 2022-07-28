@@ -2,10 +2,11 @@ import {
   ValidationPipe,
   PipeTransform,
   ArgumentMetadata,
+  Type,
 } from '@nestjs/common';
 import { ValidationError } from '@unique-nft/sdk/errors';
 
-export function createValidationPipe(expectedType?: any) {
+export function createValidationPipe(expectedType?: Type) {
   return new ValidationPipe({
     transform: true,
     transformOptions: { enableImplicitConversion: true },
@@ -19,7 +20,7 @@ export const SdkValidationPipe = createValidationPipe();
 class ValidationOneOfPipe implements PipeTransform {
   private readonly pipes: Array<ValidationPipe>;
 
-  constructor(private readonly expectedTypes: Array<any>) {
+  constructor(private readonly expectedTypes: Type[]) {
     this.pipes = expectedTypes.map(
       (expectedType) =>
         new ValidationPipe({
@@ -45,6 +46,6 @@ class ValidationOneOfPipe implements PipeTransform {
   }
 }
 
-export function createValidationPipeOneOf(...expectedTypes) {
+export function createValidationPipeOneOf(...expectedTypes: Type[]) {
   return new ValidationOneOfPipe(expectedTypes);
 }
