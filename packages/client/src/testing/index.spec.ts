@@ -14,6 +14,8 @@ import '@unique-nft/sdk/extrinsics';
 
 import { Client } from '../index';
 import {
+  BalanceTransferParsed,
+  ExtrinsicResultResponse,
   FeeResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
@@ -124,12 +126,18 @@ describe('client tests', () => {
     }, 60_000);
 
     it('submitWaitResult', async () => {
-      const response: object = await client.balance.transfer.submitWaitResult({
-        address: richAccountAddress,
-        destination: poorAccountAddress,
-        amount: 0.001,
+      const response: ExtrinsicResultResponse<BalanceTransferParsed> =
+        await client.balance.transfer.submitWaitResult({
+          address: richAccountAddress,
+          destination: poorAccountAddress,
+          amount: 0.001,
+        });
+      console.log('response', response);
+      expect(response).toMatchObject({
+        parsed: {
+          success: true,
+        },
       });
-      expect(response).toEqual(expect.any(Object));
     }, 60_000);
   });
 
