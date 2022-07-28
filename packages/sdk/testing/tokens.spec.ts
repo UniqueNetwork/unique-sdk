@@ -32,7 +32,7 @@ describe('Sdk Tokens', () => {
       richAccount,
       poorAccount,
     );
-    const unsignedPayload = await sdk.tokens.transfer({
+    const unsignedPayload = await sdk.tokens.transfer.build({
       from: richAccount.address,
       to: poorAccount.address,
       collectionId: collection.id,
