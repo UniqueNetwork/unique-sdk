@@ -126,13 +126,12 @@ const useResult = async (
 
   const { mutationMethod } = methodOptions;
 
-  const { submittableResult, parsed } = await mutationMethod.submitWaitResult(
-    buildResult,
-    mutationOptions,
-  );
+  const { submittableResult, parsed, error } =
+    await mutationMethod.submitWaitResult(buildResult, mutationOptions);
 
   return {
     isError: submittableResult.isError,
+    error,
     parsed,
     fee,
   };

@@ -139,12 +139,35 @@ export abstract class MutationMethodBase<A, R>
 
     const completed = await lastValueFrom(result$);
 
+    let error = null;
+
+    const { dispatchError } = completed.submittableResult;
+    if (dispatchError) {
+      if (dispatchError.isModule) {
+        const decoded = this.sdk.api.registry.findMetaError(
+          dispatchError.asModule,
+        );
+
+        const { docs, name, section } = decoded;
+        error = {
+          name,
+          section,
+          message: docs.join(' '),
+        };
+      } else {
+        error = {
+          message: dispatchError.toString(),
+        };
+      }
+    }
+
     if (completed.parsed === undefined) throw new SubmitExtrinsicError();
 
     return {
       ...completed,
       isCompleted: true,
       parsed: completed.parsed,
+      error,
     };
   }
 
