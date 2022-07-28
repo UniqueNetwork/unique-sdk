@@ -1,10 +1,9 @@
 import { Mutation } from '../classes/mutation';
 import { Section } from '../classes/section';
 import {
-  BalanceTransferBody,
-  BalanceTransferParsed,
-  AllBalancesResponse,
   CollectionInfoWithSchemaResponse,
+  CreateCollectionNewRequest,
+  CreateCollectionParsed,
 } from '../types/api';
 
 export class Collections extends Section {
@@ -12,10 +11,10 @@ export class Collections extends Section {
 
   public readonly baseUrl = `${this.client.options.baseUrl}/${this.path}`;
 
-  public readonly transfer = new Mutation<
-    BalanceTransferBody,
-    BalanceTransferParsed
-  >(this.client, 'POST', `${this.path}/transfer`);
+  public readonly createCollectionEx = new Mutation<
+    CreateCollectionNewRequest,
+    CreateCollectionParsed
+  >(this.client, 'POST', this.path);
 
   async collectionByIdFn(args: {
     collectionId: number;

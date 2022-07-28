@@ -12,6 +12,8 @@ import {
   BalanceTransferParsed,
   AllBalancesResponse,
   CollectionInfoWithSchemaResponse,
+  CreateCollectionNewRequest,
+  CreateCollectionParsed,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -70,7 +72,10 @@ export interface IBalance extends ISection {
 export interface ICollections extends ISection {
   path: string;
   baseUrl: string;
-  transfer: IMutation<BalanceTransferBody, BalanceTransferParsed>;
+  createCollectionEx: IMutation<
+    CreateCollectionNewRequest,
+    CreateCollectionParsed
+  >;
   collectionByIdFn(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse>;

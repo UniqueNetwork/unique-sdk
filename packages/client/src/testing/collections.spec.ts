@@ -14,14 +14,12 @@ import '@unique-nft/sdk/extrinsics';
 
 import { Client } from '../index';
 import {
-  BalanceTransferParsed,
   CollectionInfoWithSchemaResponse,
+  CreateCollectionParsed,
   ExtrinsicResultResponse,
-  FeeResponse,
-  SubmitTxBody,
-  UnsignedTxPayloadResponse,
 } from '../types/api';
 import { createWeb } from './utils.test';
+import { inputDataForCreateCollection } from './values';
 
 const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
 const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob'; // eslint-disable-line
@@ -59,7 +57,16 @@ describe('client tests', () => {
         await client.collections.collectionByIdFn({
           collectionId: 10,
         });
-      expect(response).toEqual(expect.any(Object));
+      expect(response.id).toEqual(expect.any(Number));
+    }, 100_000);
+
+    it('create collection', async () => {
+      const client = new Client({ baseUrl, signer });
+      const response: ExtrinsicResultResponse<CreateCollectionParsed> =
+        await client.collections.createCollectionEx.submitWaitResult(
+          inputDataForCreateCollection,
+        );
+      expect(response.parsed.collectionId).toEqual(expect.any(Number));
     }, 100_000);
   });
 });
