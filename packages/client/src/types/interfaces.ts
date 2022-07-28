@@ -11,6 +11,7 @@ import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
+  CollectionInfoWithSchemaResponse,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -64,6 +65,15 @@ export interface IBalance extends ISection {
   baseUrl: string;
   transfer: IMutation<BalanceTransferBody, BalanceTransferParsed>;
   get(args: { address: string }): Promise<AllBalancesResponse>;
+}
+
+export interface ICollections extends ISection {
+  path: string;
+  baseUrl: string;
+  transfer: IMutation<BalanceTransferBody, BalanceTransferParsed>;
+  collectionByIdFn(args: {
+    collectionId: number;
+  }): Promise<CollectionInfoWithSchemaResponse>;
 }
 
 export interface ClientParameters {
