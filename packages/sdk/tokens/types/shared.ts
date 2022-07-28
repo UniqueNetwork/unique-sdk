@@ -9,10 +9,6 @@ export interface TokenIdArguments extends CollectionIdArguments {
 export interface BurnTokenArguments extends TokenIdArguments {
   address: string;
 }
-export interface TransferTokenArguments extends TokenIdArguments {
-  from: string;
-  to: string;
-}
 
 export type CollectionProperty = {
   key: string;
