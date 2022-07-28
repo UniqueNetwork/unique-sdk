@@ -34,7 +34,6 @@ httpResponseErrorMap.set(IpfsError.name, BadRequestException);
 
 function createWebException(exception: SdkError | WebError) {
   const response = {
-    ok: false,
     error: {
       code: exception.code,
       name: exception.name,

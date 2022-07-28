@@ -139,36 +139,46 @@ export abstract class MutationMethodBase<A, R>
 
     const completed = await lastValueFrom(result$);
 
-    let error = null;
+    this.checkDispatchError(completed.submittableResult);
 
-    const { dispatchError } = completed.submittableResult;
+    if (completed.parsed === undefined) {
+      throw new SubmitExtrinsicError('Invalid parsed data');
+    }
+
+    return {
+      ...completed,
+      isCompleted: true,
+      parsed: completed.parsed,
+    };
+  }
+
+  checkDispatchError(submittableResult: ISubmittableResult) {
+    const { dispatchError } = submittableResult;
+
     if (dispatchError) {
+      let details;
+      let errorMessage;
+
       if (dispatchError.isModule) {
         const decoded = this.sdk.api.registry.findMetaError(
           dispatchError.asModule,
         );
 
         const { docs, name, section } = decoded;
-        error = {
+        details = {
           name,
           section,
-          message: docs.join(' '),
         };
+        errorMessage = docs.join(' ');
       } else {
-        error = {
-          message: dispatchError.toString(),
-        };
+        errorMessage = dispatchError.toString();
       }
+
+      throw new SubmitExtrinsicError(
+        `Dispatch error: ${errorMessage}`,
+        details,
+      );
     }
-
-    if (completed.parsed === undefined) throw new SubmitExtrinsicError();
-
-    return {
-      ...completed,
-      isCompleted: true,
-      parsed: completed.parsed,
-      error: error || undefined,
-    };
   }
 
   expose() {

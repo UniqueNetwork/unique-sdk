@@ -60,7 +60,6 @@ export interface SubmittableResultCompleted<T> {
   submittableResult: ISubmittableResult;
   isCompleted: true;
   parsed: T;
-  error?: object;
 }
 
 export type Address = string;
