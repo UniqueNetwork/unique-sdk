@@ -18,7 +18,7 @@
           "./types/index.ts",
           "./errors/index.ts"
         ],
-        "ignorePatterns": ["@nestjs/", "@unique-nft/accounts"]
+        "ignorePatterns": ["@nestjs/", "@unique-nft/accounts", "@unique-nft/client"]
       }
     },
     "lint": {
