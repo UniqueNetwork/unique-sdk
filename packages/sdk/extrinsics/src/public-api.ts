@@ -8,5 +8,6 @@ export * from './tx-utils';
 export * from './sdk-extrinsics';
 export * from './mutation-method';
 export * from './query-method';
+export * from './types';
 
 addFeature('extrinsics', SdkExtrinsics);
