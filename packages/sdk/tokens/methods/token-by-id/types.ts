@@ -1,7 +1,7 @@
 // todo - replace with Address
 export type OwnerAddress = { Substrate: string } | { Ethereum: string };
 
-export {
+export type {
   UniqueTokenDecoded,
   DecodedAttributes,
   DecodedInfixOrUrlOrCidAndHash,

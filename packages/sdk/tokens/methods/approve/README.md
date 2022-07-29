@@ -18,13 +18,6 @@ The method returns a `parsed` object that contains the `collectionId: number, to
 ```typescript
 import { ApproveArguments } from '@unique-nft/sdk/tokens/methods/approve';
 
-import {
-    UniqueCollectionSchemaToCreate,
-    COLLECTION_SCHEMA_NAME,
-    AttributeType,
-    AttributeKind,
-} from '@unique-nft/api';
-
 const approveArgs: ApproveArguments = {
     spender: '<Account address for whom token will be approved>',
     collectionId: '<ID of the collection>',

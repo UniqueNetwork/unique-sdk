@@ -7,14 +7,14 @@ export interface CreateCollectionNewArguments extends CollectionInfoBase {
   schema?: UniqueCollectionSchemaToCreate;
 }
 
-export {
+export type {
   AttributeSchema,
   CollectionAttributesSchema,
-  AttributeType,
   UrlTemplateString,
-  COLLECTION_SCHEMA_NAME,
   BoxedNumberWithDefault,
   LocalizedStringWithDefault,
   UniqueCollectionSchemaToCreate,
   InfixOrUrlOrCidAndHash,
 } from '@unique-nft/api';
+
+export { COLLECTION_SCHEMA_NAME, AttributeType } from '@unique-nft/api';
