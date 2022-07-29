@@ -3,7 +3,9 @@ import {
   createPoorAccount,
   createRichAccount,
   createSdk,
+  TestAccount,
 } from '@unique-nft/sdk/testing';
+import { VerificationError } from '@unique-nft/sdk/errors';
 
 import { BalanceTransferMutation } from './method';
 import { BalanceTransferArguments } from './types';
@@ -29,6 +31,9 @@ describe('balance-transfer', () => {
 describe('balance-transfer', () => {
   let sdk: Sdk;
 
+  let richAccount: TestAccount;
+  let poorAccount: TestAccount;
+
   let transfer: BalanceTransferMutation;
 
   let createArgs: BalanceTransferArguments;
@@ -36,9 +41,9 @@ describe('balance-transfer', () => {
   beforeAll(async () => {
     sdk = await createSdk(true);
 
-    const richAccount = createRichAccount();
+    richAccount = createRichAccount();
 
-    const poorAccount = createPoorAccount();
+    poorAccount = createPoorAccount();
 
     transfer = new BalanceTransferMutation(sdk);
 
@@ -49,9 +54,21 @@ describe('balance-transfer', () => {
     };
   });
 
-  it('transfer', async () => {
+  it('ok', async () => {
     const result = await transfer.submitWaitResult(createArgs);
 
     expect(result.parsed.success).toBe(true);
+  }, 60_000);
+
+  it('verification-fail', async () => {
+    const balance = await sdk.balance.get({ address: richAccount.address });
+
+    await expect(async () => {
+      await transfer.submitWaitResult({
+        address: richAccount.address,
+        destination: poorAccount.address,
+        amount: +balance.freeBalance.amount + 1,
+      });
+    }).rejects.toThrowError(new VerificationError('Balance is too low'));
   }, 60_000);
 });

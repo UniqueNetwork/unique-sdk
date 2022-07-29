@@ -44,5 +44,5 @@ export interface MutationMethodWrap<A, R> {
 
 export interface VerificationResult {
   isAllow: boolean;
-  errorDetails?: unknown;
+  message?: string;
 }

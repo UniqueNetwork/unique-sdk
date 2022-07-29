@@ -21,8 +21,21 @@ export class BalanceTransferMutation extends MutationMethodBase<
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   override async verification(args: BalanceTransferArguments) {
+    const { address, amount } = args;
+
+    const balance = await this.sdk.balance.get({ address });
+
+    const balanceAmount = BigInt(balance.freeBalance.raw);
+    const transferAmount = BigInt(amount * this.multiplierToRaw);
+
+    if (balanceAmount < transferAmount) {
+      return Promise.resolve({
+        isAllow: false,
+        message: 'Balance is too low',
+      });
+    }
+
     return Promise.resolve({
       isAllow: true,
     });

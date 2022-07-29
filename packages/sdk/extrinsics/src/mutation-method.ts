@@ -38,6 +38,15 @@ export abstract class MutationMethodBase<A, R>
     });
   }
 
+  private async verifyArgs(args: A) {
+    if (isRawPayload(args)) {
+      const { isAllow, message } = await this.verification(args);
+      if (!isAllow) {
+        throw new VerificationError(message);
+      }
+    }
+  }
+
   abstract transformArgs(args: A): Promise<TxBuildArguments>;
 
   abstract transformResult(result: ISubmittableResult): Promise<R | undefined>;
@@ -78,12 +87,7 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
-    if (isRawPayload(args)) {
-      const { isAllow, errorDetails } = await this.verification(args as A);
-      if (!isAllow) {
-        throw VerificationError.wrapError(null, errorDetails);
-      }
-    }
+    await this.verifyArgs(args as A);
 
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
@@ -97,6 +101,8 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<ObservableSubmitResult<R>> {
+    await this.verifyArgs(args as A);
+
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
       : await this.sign(args, options);
