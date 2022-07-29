@@ -1,9 +1,15 @@
+require('dotenv').config();
+
 const esModules = ['@polkadot/', '@unique-nft/'].join('|');
+
+const maxWorkers = process.env.TEST_RICH_ACCOUNTS
+  ? process.env.TEST_RICH_ACCOUNTS.split(',').length
+  : 1;
 
 module.exports = {
   displayName: 'sdk',
   preset: '../../jest.preset.js',
-  maxWorkers: 1,
+  maxWorkers,
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
