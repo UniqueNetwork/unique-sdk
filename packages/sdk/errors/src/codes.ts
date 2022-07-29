@@ -1,4 +1,4 @@
-import { VerificationError } from '@unique-nft/sdk/errors/src/verification';
+import { VerificationFailedError } from '@unique-nft/sdk/errors/src/verification-failed';
 
 export enum ErrorCodes {
   Other = 'UN01000',
@@ -10,5 +10,5 @@ export enum ErrorCodes {
   BadPayload = 'UN01006',
   BuildQuery = 'UN01007',
   NotFound = 'UN01008',
-  Verification = 'UN01009',
+  VerificationFailed = 'UN01009',
 }

@@ -5,7 +5,7 @@ import {
   createSdk,
   TestAccount,
 } from '@unique-nft/sdk/testing';
-import { VerificationError } from '@unique-nft/sdk/errors';
+import { VerificationFailedError } from '@unique-nft/sdk/errors';
 
 import { BalanceTransferMutation } from './method';
 import { BalanceTransferArguments } from './types';
@@ -69,6 +69,6 @@ describe('balance-transfer', () => {
         destination: poorAccount.address,
         amount: +balance.freeBalance.amount + 1,
       });
-    }).rejects.toThrowError(new VerificationError('Balance is too low'));
+    }).rejects.toThrowError(new VerificationFailedError('Balance is too low'));
   }, 60_000);
 });

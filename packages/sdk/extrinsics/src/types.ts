@@ -43,6 +43,6 @@ export interface MutationMethodWrap<A, R> {
 }
 
 export interface VerificationResult {
-  isAllow: boolean;
+  isAllowed: boolean;
   message?: string;
 }

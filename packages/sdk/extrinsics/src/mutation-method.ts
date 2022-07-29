@@ -12,7 +12,7 @@ import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
 import {
   SubmitExtrinsicError,
-  VerificationError,
+  VerificationFailedError,
 } from '@unique-nft/sdk/errors';
 import { getDispatchError } from '@unique-nft/sdk/utils';
 import {
@@ -32,17 +32,15 @@ export abstract class MutationMethodBase<A, R>
   constructor(readonly sdk: Sdk) {}
 
   // eslint-disable-next-line class-methods-use-this
-  protected async verification(args: A): Promise<VerificationResult> {
-    return Promise.resolve({
-      isAllow: true,
-    });
+  protected async verify(args: A): Promise<VerificationResult> {
+    return { isAllowed: true };
   }
 
-  private async verifyArgs(args: A) {
+  private async verifyArgs(args: UnsignedTxPayload | SubmitTxArguments | A) {
     if (isRawPayload(args)) {
-      const { isAllow, message } = await this.verification(args);
-      if (!isAllow) {
-        throw new VerificationError(message);
+      const { isAllowed, message } = await this.verify(args as A);
+      if (!isAllowed) {
+        throw new VerificationFailedError(message);
       }
     }
   }
@@ -87,7 +85,7 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
-    await this.verifyArgs(args as A);
+    await this.verifyArgs(args);
 
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
@@ -101,7 +99,7 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<ObservableSubmitResult<R>> {
-    await this.verifyArgs(args as A);
+    await this.verifyArgs(args);
 
     const submitTxArguments = isSubmitTxArguments(args)
       ? args

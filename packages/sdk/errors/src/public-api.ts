@@ -8,4 +8,4 @@ export * from './validation';
 export * from './invalid-signer';
 export * from './bad-payload';
 export * from './not-found';
-export * from './verification';
+export * from './verification-failed';

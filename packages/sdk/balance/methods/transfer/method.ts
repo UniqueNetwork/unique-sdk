@@ -21,7 +21,7 @@ export class BalanceTransferMutation extends MutationMethodBase<
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  override async verification(args: BalanceTransferArguments) {
+  override async verify(args: BalanceTransferArguments) {
     const { address, amount } = args;
 
     const balance = await this.sdk.balance.get({ address });
@@ -31,13 +31,13 @@ export class BalanceTransferMutation extends MutationMethodBase<
 
     if (balanceAmount < transferAmount) {
       return Promise.resolve({
-        isAllow: false,
+        isAllowed: false,
         message: 'Balance is too low',
       });
     }
 
     return Promise.resolve({
-      isAllow: true,
+      isAllowed: true,
     });
   }
 
