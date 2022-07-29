@@ -9,7 +9,8 @@
         "distDir": "./dist/packages/client",
         "entryPoints": [
           "./index.ts"
-        ]
+        ],
+        "ignorePatterns": ["@nestjs/", "@unique-nft/sdk", "@unique-nft/accounts"]
       }
     },
     "lint": {

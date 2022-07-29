@@ -14,7 +14,7 @@
           "./polkadot/index.ts",
           "./metamask/index.ts"
         ],
-        "ignorePatterns": ["@nestjs/", "@unique-nft/sdk"]
+        "ignorePatterns": ["@nestjs/", "@unique-nft/sdk", "@unique-nft/client"]
       }
     },
     "lint": {
