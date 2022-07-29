@@ -6,6 +6,10 @@ export class SignerNestModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(SignerMiddleware)
-      .forRoutes({ path: '/*', method: RequestMethod.POST });
+      .forRoutes(
+        { path: '/*', method: RequestMethod.POST },
+        { path: '/*', method: RequestMethod.PATCH },
+        { path: '/*', method: RequestMethod.DELETE },
+      );
   }
 }
