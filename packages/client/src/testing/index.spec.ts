@@ -19,7 +19,7 @@ import {
   FeeResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
-} from '../types/api';
+} from '../types';
 import { createWeb } from './utils.test';
 
 const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';

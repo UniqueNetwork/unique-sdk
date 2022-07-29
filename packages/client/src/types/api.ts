@@ -1,3 +1,4 @@
+import { arrayNumberRecordStringAny } from './missingApiTypes';
 /* eslint-disable */
 /* tslint:disable */
 /*
@@ -8,7 +9,6 @@
  * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
  * ---------------------------------------------------------------
  */
-
 export interface TokenPropertiesResponse {
   /** @example {"ipfsJson":"{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}","gender":"Male","traits":["TEETH_SMILE","UP_HAIR"]} */
   constData: object;
@@ -962,8 +962,6 @@ export interface TransferTokensResultDto {
   amount: number;
   collectionId: number;
 }
-
-export type arrayNumberRecordStringAny = string | number;
 
 export interface TxBuildBody {
   /**

@@ -4,7 +4,7 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionParsed,
-} from '../types/api';
+} from '../types';
 
 export class Collections extends Section {
   public readonly path = 'collection-new';

@@ -19,7 +19,7 @@ import {
   ExtrinsicResultResponse,
   TokenId,
   UniqueTokenDecodedResponse,
-} from '../types/api';
+} from '../types';
 import { createWeb } from './utils.test';
 import {
   inputDataForCreateCollection,

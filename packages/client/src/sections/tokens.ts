@@ -4,7 +4,7 @@ import {
   CreateTokenNewDto,
   TokenId,
   UniqueTokenDecodedResponse,
-} from '../types/api';
+} from '../types';
 
 export class Tokens extends Section {
   public readonly path = 'token-new';
