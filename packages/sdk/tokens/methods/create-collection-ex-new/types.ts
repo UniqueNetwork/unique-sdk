@@ -10,7 +10,6 @@ export interface CreateCollectionNewArguments extends CollectionInfoBase {
 export type {
   AttributeSchema,
   CollectionAttributesSchema,
-  AttributeType,
   UrlTemplateString,
   BoxedNumberWithDefault,
   LocalizedStringWithDefault,
@@ -18,4 +17,4 @@ export type {
   InfixOrUrlOrCidAndHash,
 } from '@unique-nft/api';
 
-export { COLLECTION_SCHEMA_NAME } from '@unique-nft/api';
+export { COLLECTION_SCHEMA_NAME, AttributeType } from '@unique-nft/api';
