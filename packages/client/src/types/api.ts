@@ -1,4 +1,3 @@
-import { arrayNumberRecordStringAny } from './missingApiTypes';
 /* eslint-disable */
 /* tslint:disable */
 /*
@@ -9,6 +8,7 @@ import { arrayNumberRecordStringAny } from './missingApiTypes';
  * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
  * ---------------------------------------------------------------
  */
+
 export interface TokenPropertiesResponse {
   /** @example {"ipfsJson":"{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}","gender":"Male","traits":["TEETH_SMILE","UP_HAIR"]} */
   constData: object;
@@ -144,6 +144,19 @@ export interface BurnTokenBody {
   address: string;
 }
 
+export interface SignResponse {
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  /** Warning: Signature must be with SignatureType! */
+  signature: string;
+  fee?: FeeResponse;
+}
+
+export interface SubmitResponse {
+  hash: string;
+  fee?: FeeResponse;
+}
+
 export interface TransferTokenBody {
   /** @example 1 */
   collectionId: number;
@@ -162,6 +175,26 @@ export interface TransferTokenBody {
    * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
    */
   to: string;
+}
+
+export interface TransferTokenParsed {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** Sender address */
+  from: object;
+
+  /** Recipient address */
+  to: object;
+}
+
+export interface TransferTokenResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+  parsed: TransferTokenParsed;
 }
 
 export interface TokenId {
@@ -192,19 +225,6 @@ export interface UnnestTokenBody {
 
   /** Nested token object */
   nested: TokenId;
-}
-
-export interface SignResponse {
-  signerPayloadJSON: SignerPayloadJSONDto;
-
-  /** Warning: Signature must be with SignatureType! */
-  signature: string;
-  fee?: FeeResponse;
-}
-
-export interface SubmitResponse {
-  hash: string;
-  fee?: FeeResponse;
 }
 
 export interface TokenPropertyDto {
@@ -984,7 +1004,6 @@ export interface UnsignedTxPayloadBody {
   signerPayloadJSON: SignerPayloadJSONDto;
   signerPayloadRaw: SignerPayloadRawDto;
   signerPayloadHex: string;
-  fee?: FeeResponse;
 }
 
 export interface SignTxResultResponse {
@@ -1014,15 +1033,15 @@ export interface ExtrinsicResultEvent {
   data: object;
 }
 
-export interface ExtrinsicResultResponse<T> {
+export interface ExtrinsicResultResponse {
   status: string;
   isCompleted: boolean;
   isError: boolean;
   blockHash: string;
   blockIndex: number;
-  errorMessage: string;
+  error: object;
   events: ExtrinsicResultEvent;
-  parsed?: T;
+  parsed?: object;
   fee?: FeeResponse;
 }
 
@@ -1136,3 +1155,5 @@ export interface IpfsUploadResponse {
   /** IPFS gateway file URL */
   fileUrl?: string;
 }
+
+import { arrayNumberRecordStringAny } from './missingApiTypes';
