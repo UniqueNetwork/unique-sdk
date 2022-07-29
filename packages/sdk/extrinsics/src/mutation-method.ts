@@ -2,7 +2,6 @@ import { Sdk } from '@unique-nft/sdk';
 import {
   Balance,
   ObservableSubmitResult,
-  SdkSigner,
   SubmitResult,
   SubmittableResultCompleted,
   SubmitTxArguments,
@@ -11,48 +10,33 @@ import {
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
-import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
+import {
+  SubmitExtrinsicError,
+  VerificationError,
+} from '@unique-nft/sdk/errors';
 import { getDispatchError } from '@unique-nft/sdk/utils';
-import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
-
-export interface MutationOptions {
-  signer?: SdkSigner;
-}
-
-export type MutationMethod<A, R> = (
-  args: A | UnsignedTxPayload | SubmitTxArguments,
-  options?: MutationOptions,
-) => Promise<SubmittableResultCompleted<R>>;
-
-export interface MutationMethodWrap<A, R> {
-  build(args: A): Promise<UnsignedTxPayload>;
-
-  getFee(args: A | UnsignedTxPayload | SubmitTxArguments): Promise<Balance>;
-
-  sign(
-    args: A | UnsignedTxPayload,
-    options?: MutationOptions,
-  ): Promise<SubmitTxArguments>;
-
-  submit(
-    args: A | UnsignedTxPayload | SubmitTxArguments,
-    options?: MutationOptions,
-  ): Promise<Omit<SubmitResult, 'result$'>>;
-
-  submitWatch(
-    args: A | UnsignedTxPayload | SubmitTxArguments,
-    options?: MutationOptions,
-  ): Promise<ObservableSubmitResult<R>>;
-
-  submitWaitResult: MutationMethod<A, R>;
-
-  expose(): MutationMethod<A, R>;
-}
+import {
+  isSubmitTxArguments,
+  isUnsignedTxPayload,
+  isRawPayload,
+} from './tx-utils';
+import {
+  MutationOptions,
+  MutationMethodWrap,
+  VerificationResult,
+} from './types';
 
 export abstract class MutationMethodBase<A, R>
   implements MutationMethodWrap<A, R>
 {
   constructor(readonly sdk: Sdk) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  protected async verification(args: A): Promise<VerificationResult> {
+    return Promise.resolve({
+      isAllow: true,
+    });
+  }
 
   abstract transformArgs(args: A): Promise<TxBuildArguments>;
 
@@ -94,6 +78,13 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
+    if (isRawPayload(args)) {
+      const { isAllow, errorDetails } = await this.verification(args as A);
+      if (!isAllow) {
+        throw VerificationError.wrapError(null, errorDetails);
+      }
+    }
+
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
       : await this.sign(args, options);

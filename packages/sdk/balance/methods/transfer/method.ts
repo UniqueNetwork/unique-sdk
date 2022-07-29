@@ -21,6 +21,13 @@ export class BalanceTransferMutation extends MutationMethodBase<
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  override async verification(args: BalanceTransferArguments) {
+    return Promise.resolve({
+      isAllow: true,
+    });
+  }
+
   async transformArgs(
     args: BalanceTransferArguments,
   ): Promise<BalanceTransferBuildArguments> {
