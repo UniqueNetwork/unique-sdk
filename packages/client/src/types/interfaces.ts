@@ -75,11 +75,8 @@ export interface IBalance extends ISection {
 export interface ICollections extends ISection {
   path: string;
   baseUrl: string;
-  createCollectionEx: IMutation<
-    CreateCollectionNewRequest,
-    CreateCollectionParsed
-  >;
-  collectionById(args: {
+  creation: IMutation<CreateCollectionNewRequest, CreateCollectionParsed>;
+  get(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse>;
 }
@@ -87,8 +84,8 @@ export interface ICollections extends ISection {
 export interface ITokens extends ISection {
   path: string;
   baseUrl: string;
-  createToken: IMutation<CreateTokenNewDto, TokenId>;
-  tokenById(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  create: IMutation<CreateTokenNewDto, TokenId>;
+  get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
 }
 
 export interface ClientParameters {

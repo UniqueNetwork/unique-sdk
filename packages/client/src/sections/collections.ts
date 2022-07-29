@@ -11,12 +11,12 @@ export class Collections extends Section {
 
   public readonly baseUrl = `${this.client.options.baseUrl}/${this.path}`;
 
-  public readonly createCollectionEx = new Mutation<
+  public readonly creation = new Mutation<
     CreateCollectionNewRequest,
     CreateCollectionParsed
   >(this.client, 'POST', this.path);
 
-  async collectionById(args: {
+  async get(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse> {
     const response = await this.client.instance({

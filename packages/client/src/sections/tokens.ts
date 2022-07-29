@@ -11,13 +11,13 @@ export class Tokens extends Section {
 
   public readonly baseUrl = `${this.client.options.baseUrl}/${this.path}`;
 
-  public readonly createToken = new Mutation<CreateTokenNewDto, TokenId>(
+  public readonly create = new Mutation<CreateTokenNewDto, TokenId>(
     this.client,
     'POST',
     this.path,
   );
 
-  async tokenById(args: TokenId): Promise<UniqueTokenDecodedResponse> {
+  async get(args: TokenId): Promise<UniqueTokenDecodedResponse> {
     const response = await this.client.instance({
       method: 'GET',
       baseURL: this.baseUrl,

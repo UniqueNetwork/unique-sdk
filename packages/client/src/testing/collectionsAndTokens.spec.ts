@@ -55,7 +55,7 @@ describe('client tests', () => {
     it('create and get', async () => {
       const client = new Client({ baseUrl, signer });
       const createCollectionResponse: ExtrinsicResultResponse<CreateCollectionParsed> =
-        await client.collections.createCollectionEx.submitWaitResult(
+        await client.collections.creation.submitWaitResult(
           inputDataForCreateCollection,
         );
       expect(createCollectionResponse.parsed.collectionId).toEqual(
@@ -64,13 +64,13 @@ describe('client tests', () => {
       const { collectionId } = createCollectionResponse.parsed;
 
       const getCollectionResponse: CollectionInfoWithSchemaResponse =
-        await client.collections.collectionById({
+        await client.collections.get({
           collectionId,
         });
       expect(getCollectionResponse.id).toEqual(expect.any(Number));
 
       const createTokenResponse: ExtrinsicResultResponse<TokenId> =
-        await client.tokens.createToken.submitWaitResult({
+        await client.tokens.create.submitWaitResult({
           ...inputDataForCreateToken,
           collectionId,
           address: richAccountAddress,
@@ -79,7 +79,7 @@ describe('client tests', () => {
       expect(createTokenResponse.parsed.tokenId).toEqual(expect.any(Number));
 
       const getTokenResponse: UniqueTokenDecodedResponse =
-        await client.tokens.tokenById({
+        await client.tokens.get({
           collectionId,
           tokenId: createTokenResponse.parsed.tokenId,
         });
