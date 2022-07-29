@@ -32,13 +32,13 @@ export abstract class MutationMethodBase<A, R>
   constructor(readonly sdk: Sdk) {}
 
   // eslint-disable-next-line class-methods-use-this
-  protected async verify(args: A): Promise<VerificationResult> {
+  protected async verifyArgs(args: A): Promise<VerificationResult> {
     return { isAllowed: true };
   }
 
-  private async verifyArgs(args: UnsignedTxPayload | SubmitTxArguments | A) {
+  private async verify(args: UnsignedTxPayload | SubmitTxArguments | A) {
     if (isRawPayload(args)) {
-      const { isAllowed, message } = await this.verify(args as A);
+      const { isAllowed, message } = await this.verifyArgs(args as A);
       if (!isAllowed) {
         throw new VerificationFailedError(message);
       }
@@ -85,7 +85,7 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
-    await this.verifyArgs(args);
+    await this.verify(args);
 
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
@@ -99,7 +99,7 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<ObservableSubmitResult<R>> {
-    await this.verifyArgs(args);
+    await this.verify(args);
 
     const submitTxArguments = isSubmitTxArguments(args)
       ? args

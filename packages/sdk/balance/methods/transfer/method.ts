@@ -21,7 +21,7 @@ export class BalanceTransferMutation extends MutationMethodBase<
     this.multiplierToRaw = 10 ** tokenDecimals;
   }
 
-  override async verify(args: BalanceTransferArguments) {
+  override async verifyArgs(args: BalanceTransferArguments) {
     const { address, amount } = args;
 
     const balance = await this.sdk.balance.get({ address });
