@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "ESNext",
+    "types": ["jest", "node"],
+    "allowJs": true,
+    "paths": {
+      "@unique-nft/sdk/*": ["packages/sdk/*"],
+      "@unique-nft/sdk": ["packages/sdk/index.ts"],
+      "@unique-nft/accounts/*": ["packages/accounts/*"],
+      "@unique-nft/accounts": ["packages/accounts/index.ts"],
+      "@unique-nft/web/*": ["packages/web/*"],
+      "@unique-nft/web": ["packages/web/index.ts"]
+    },
+    "target": "ES2020"
+  },
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "**/*.ts"]
+}

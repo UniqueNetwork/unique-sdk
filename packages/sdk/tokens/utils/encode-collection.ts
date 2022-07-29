@@ -121,7 +121,7 @@ const encodeCollectionMode = (collectionInfo: Partial<CollectionInfoBase>) => {
 export const encodeCollectionBase = (
   registry: Registry,
   collectionInfo: Partial<CollectionInfoBase>,
-  extra?: Record<string, object>,
+  extra?: Record<string, any>,
 ): UpDataStructsCreateCollectionData => {
   const permissions = collectionInfo.permissions
     ? encodeCollectionPermissions(registry, collectionInfo.permissions)

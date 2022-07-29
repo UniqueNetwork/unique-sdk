@@ -4,9 +4,8 @@ import { Sdk } from '@unique-nft/sdk';
 import { normalizeAddress } from '@unique-nft/sdk/utils';
 import {
   UniqueCollectionSchemaToCreate,
-  CollectionSchemaName,
   AttributeType,
-  AttributeKind,
+  COLLECTION_SCHEMA_NAME,
 } from '@unique-nft/sdk/tokens';
 
 import {
@@ -27,38 +26,38 @@ export const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   attributesSchema: {
     '0': {
       name: {
-        en: 'gender',
+        _: 'gender',
       },
-      type: 'localizedStringDictionary',
-      kind: 'enum',
+      type: 'string' as AttributeType,
+      isArray: false,
       enumValues: {
         '0': {
-          en: 'Male',
+          _: 'Male',
         },
         '1': {
-          en: 'Female',
+          _: 'Female',
         },
       },
     },
     '1': {
       name: {
-        en: 'traits',
+        _: 'traits',
       },
-      type: 'localizedStringDictionary',
-      kind: 'enumMultiple',
+      isArray: true,
+      type: 'string' as AttributeType,
       enumValues: {
         '0': {
-          en: 'Black Lipstick',
+          _: 'Black Lipstick',
         },
         '1': {
-          en: 'Red Lipstick',
+          _: 'Red Lipstick',
         },
       },
     },
     '2': {
-      name: 'just_string_value',
-      type: 'string',
-      kind: 'freeValue',
+      name: { _: 'just_string_value' },
+      isArray: false,
+      type: 'string' as AttributeType,
     },
   },
   attributesSchemaVersion: '1.0.0',
@@ -69,7 +68,7 @@ export const collectionSchemaToCreate: UniqueCollectionSchemaToCreate = {
   image: {
     urlTemplate: 'https://ipfs.unique.network/ipfs/{infix}.ext',
   },
-  schemaName: CollectionSchemaName.unique,
+  schemaName: COLLECTION_SCHEMA_NAME.unique,
   schemaVersion: '1.0.0',
   coverPicturePreview: {
     urlInfix: 'string',
@@ -144,10 +143,12 @@ describe('unique schema collection and token', () => {
       address: richAccount.address,
       collectionId: -1,
       data: {
+        name: { _: 'just_token_name' },
+        description: { _: 'just_token_description' },
         encodedAttributes: {
           '0': 0,
           '1': [0],
-          '2': 'foo_bar',
+          '2': { _: 'foo_bar' },
         },
         image: {
           ipfsCid: 'foo',
@@ -207,43 +208,49 @@ describe('unique schema collection and token', () => {
       collectionSchemaToCreate.attributesSchema,
     );
 
+    expect(token?.name).toEqual(createTokenArgs.data.name);
+    expect(token?.description).toEqual(createTokenArgs.data.description);
+
     expect(token?.attributes).toEqual({
       '0': {
         isArray: false,
-        kind: AttributeKind.enum,
         name: {
-          en: 'gender',
+          _: 'gender',
         },
-        technicalKindName: 'enum',
-        technicalTypeName: 'localizedStringDictionary',
-        type: AttributeType.localizedStringDictionary,
+        type: 'string',
         value: {
-          en: 'Male',
+          _: 'Male',
         },
+        isEnum: true,
+        rawValue: 0,
       },
       '1': {
         isArray: true,
-        kind: AttributeKind.enumMultiple,
         name: {
-          en: 'traits',
+          _: 'traits',
         },
-        technicalKindName: 'enumMultiple',
-        technicalTypeName: 'localizedStringDictionary',
-        type: AttributeType.localizedStringDictionary,
+        type: 'string',
         value: [
           {
-            en: 'Black Lipstick',
+            _: 'Black Lipstick',
           },
         ],
+        isEnum: true,
+        rawValue: [0],
       },
       '2': {
         isArray: false,
-        kind: AttributeKind.freeValue,
-        name: 'just_string_value',
-        technicalKindName: 'freeValue',
-        technicalTypeName: 'string',
-        type: AttributeType.string,
-        value: 'foo_bar',
+        name: {
+          _: 'just_string_value',
+        },
+        type: 'string',
+        value: {
+          _: 'foo_bar',
+        },
+        isEnum: false,
+        rawValue: {
+          _: 'foo_bar',
+        },
       },
     });
   }, 60_000);

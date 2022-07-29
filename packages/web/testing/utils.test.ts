@@ -29,6 +29,8 @@ export async function createApp(): Promise<INestApplication> {
     app.useLogger(new EmptyLogger());
   }
 
+  app.enableCors();
+
   await app.init();
   return app;
 }

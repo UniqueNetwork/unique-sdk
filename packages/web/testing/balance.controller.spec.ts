@@ -81,7 +81,7 @@ describe(BalanceController.name, () => {
       const balanceResponse = await getBalance(poorAccount.address);
       const currentAmount = +balanceResponse.body.availableBalance.amount;
 
-      const transferResult = await request(app.getHttpServer())
+      const { body } = await request(app.getHttpServer())
         .post(`/api/balance/transfer?use=Result`)
         .set({
           Authorization: `Seed ${poorAccount.seed}`,
@@ -92,7 +92,15 @@ describe(BalanceController.name, () => {
           amount: currentAmount + 1,
         });
 
-      expect(transferResult.ok).toEqual(false);
+      expect(body).toMatchObject({
+        error: {
+          details: {
+            name: 'InsufficientBalance',
+            section: 'balances',
+          },
+          message: 'Dispatch error: Balance too low to send value',
+        },
+      });
     }, 60_000);
 
     it.each([-1, 0])('invalid amount: %d', async (amount) => {

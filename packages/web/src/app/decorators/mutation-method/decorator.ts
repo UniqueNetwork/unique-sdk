@@ -9,7 +9,10 @@ import {
   ApiExtraModels,
   ApiOperation,
 } from '@nestjs/swagger';
-import { MutationOptions as SdkMutationOptions } from '@unique-nft/sdk/extrinsics';
+import {
+  isRawPayload,
+  MutationOptions as SdkMutationOptions,
+} from '@unique-nft/sdk/extrinsics';
 import {
   Balance,
   SdkSigner,
@@ -17,8 +20,14 @@ import {
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { Signer } from '../signer.decorator';
-import { createValidationPipe } from '../../validation';
-import { UnsignedTxPayloadResponse } from '../../types/sdk-methods';
+import {
+  createValidationPipe,
+  createValidationPipeOneOf,
+} from '../../validation';
+import {
+  UnsignedTxPayloadBody,
+  UnsignedTxPayloadResponse,
+} from '../../types/sdk-methods';
 import {
   MutationMethodOptions,
   MutationMethodQuery,
@@ -32,6 +41,7 @@ import {
   getSucceedResult,
   getErrorResult,
 } from '../../utils/cache';
+import { SubmitTxBody } from '../../types/arguments';
 
 const useSign = async (
   methodOptions: MutationMethodOptions,
@@ -77,17 +87,21 @@ const useSubmitWatch = async (
   );
 
   const updateCache = async (
-    next: SubmittableResultInProcess<any> | Error,
+    next: SubmittableResultInProcess<any>,
   ): Promise<void> => {
-    if (next instanceof Error) {
-      await cache.set<ExtrinsicResultResponse>(hash, getErrorResult(next, fee));
+    const { submittableResult, parsed, error } = next;
+    if (error) {
+      await cache.set<ExtrinsicResultResponse>(
+        hash,
+        getErrorResult(error, fee),
+      );
 
       return;
     }
 
     await cache.set<ExtrinsicResultResponse>(
       hash,
-      getSucceedResult(sdk.api, next.submittableResult, next.parsed, fee),
+      getSucceedResult(sdk.api, submittableResult, parsed, fee),
     );
   };
 
@@ -178,15 +192,21 @@ const applyMutationDecorator = (
 const createMutationCallback = (target, propertyKey) => {
   const original = target[propertyKey];
 
-  return async function (body, query: MutationMethodQuery, signer?: SdkSigner) {
+  return async function callback(
+    body,
+    query: MutationMethodQuery,
+    signer?: SdkSigner,
+  ) {
     const methodOptions: MutationMethodOptions = original.call(this);
 
     const { mutationMethod } = methodOptions;
 
-    const buildResult = await mutationMethod.build(body);
+    const isRaw = isRawPayload(body);
+
+    const buildResult = isRaw ? await mutationMethod.build(body) : body;
 
     let fee;
-    if (query.withFee) {
+    if (query.withFee && isRaw) {
       fee = await mutationMethod.getFee(buildResult);
     }
 
@@ -199,10 +219,6 @@ const createMutationCallback = (target, propertyKey) => {
 
     if (!useMethods[query.use]) {
       throw new Error('Invalid use type');
-    }
-
-    if (!signer) {
-      throw new Error('Invalid signer');
     }
 
     const mutationOptions = { signer };
@@ -221,7 +237,7 @@ export const MutationMethod = (
   bodyArgsClass,
   resultClass,
 ): MethodDecorator =>
-  function (
+  function mutation(
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor,
@@ -238,7 +254,11 @@ export const MutationMethod = (
       descriptor,
     );
 
-    const bodyPipe = createValidationPipe(bodyArgsClass);
+    const bodyPipe = createValidationPipeOneOf(
+      bodyArgsClass,
+      UnsignedTxPayloadBody,
+      SubmitTxBody,
+    );
     const queryPipe = createValidationPipe(MutationMethodQuery);
 
     Body(bodyPipe)(target, propertyKey, 0);

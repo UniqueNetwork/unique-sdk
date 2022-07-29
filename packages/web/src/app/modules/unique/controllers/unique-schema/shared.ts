@@ -1,16 +1,19 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { SchemaObjectMetadata } from '@nestjs/swagger/dist/interfaces/schema-object-metadata.interface';
+import { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 import {
-  AttributeKind,
-  AttributeKindName,
   AttributeSchema,
   AttributeType,
-  AttributeTypeName,
-  CollectionSchemaName,
-  LocalizedStringDictionary,
+  LocalizedStringWithDefault,
+  BoxedNumberWithDefault,
+  COLLECTION_SCHEMA_NAME,
   UrlTemplateString,
+  UniqueTokenToCreate,
+  InfixOrUrlOrCidAndHash,
+  EncodedTokenAttributes,
 } from '@unique-nft/sdk/tokens';
+import { IsBoolean, IsEnum, IsOptional } from 'class-validator';
 
 const infixOrUrlOrCidAndHashSchema: SchemaObjectMetadata = {
   oneOf: [
@@ -56,18 +59,30 @@ export const DecodedInfixOrUrlOrCidAndHashSchemaApiProperty = ApiProperty(
   decodedInfixOrUrlOrCidAndHashSchema,
 );
 
-const localizedStringDictionarySchema = {
+export const localizedStringWithDefaultSchema: SchemaObject = {
   type: 'object',
+  properties: {
+    _: { type: 'string' },
+  },
   additionalProperties: { type: 'string' },
   example: {
+    _: 'Hello!',
     en: 'Hello!',
     fr: 'Bonjour!',
   },
 };
 
+export const boxedNumberWithDefaultSchema: SchemaObject = {
+  type: 'object',
+  properties: {
+    _: { type: 'number' },
+  },
+  example: { _: 1 },
+};
+
 export const SchemaNameApiProperty = ApiProperty({
-  example: CollectionSchemaName.unique,
-  enum: CollectionSchemaName,
+  example: COLLECTION_SCHEMA_NAME.unique,
+  enum: COLLECTION_SCHEMA_NAME,
 });
 
 export const SchemaVersionApiProperty = ApiProperty({
@@ -77,77 +92,75 @@ export const SchemaVersionApiProperty = ApiProperty({
 
 export const AttributesSchemaVersionApiProperty = SchemaVersionApiProperty;
 
-export const StringOrLocalizedString = ApiProperty({
-  oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
-});
-
 export class AttributeSchemaDto implements AttributeSchema {
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: true })
+  name: LocalizedStringWithDefault;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty()
+  optional?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty()
+  isArray?: boolean;
+
+  @IsEnum(AttributeType)
+  @ApiProperty({ enum: AttributeType })
+  type: AttributeType;
+
+  @ApiProperty({
+    type: 'object',
+    additionalProperties: {
+      oneOf: [localizedStringWithDefaultSchema, boxedNumberWithDefaultSchema],
+    },
+  })
+  enumValues?: {
+    [K: number]: LocalizedStringWithDefault | BoxedNumberWithDefault;
+  };
+}
+
+export class UniqueTokenToCreateDto implements UniqueTokenToCreate {
+  @InfixOrUrlOrCidAndHashSchemaApiProperty
+  image: InfixOrUrlOrCidAndHash;
+
   @ApiProperty({
     type: 'object',
     additionalProperties: {
       oneOf: [
-        { type: 'string' },
         { type: 'number' },
-        localizedStringDictionarySchema,
+        { type: 'array', items: { type: 'number' } },
+        localizedStringWithDefaultSchema,
+        { type: 'array', items: localizedStringWithDefaultSchema },
+        boxedNumberWithDefaultSchema,
+        { type: 'array', items: boxedNumberWithDefaultSchema },
       ],
     },
+    example: {
+      0: 0,
+      1: [0, 1],
+    },
   })
-  enumValues?: { [p: number]: number | string | LocalizedStringDictionary };
+  encodedAttributes: EncodedTokenAttributes;
 
-  @ApiProperty({
-    oneOf: [{ type: 'string' }, localizedStringDictionarySchema],
-  })
-  name: string | LocalizedStringDictionary;
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
+  name?: LocalizedStringWithDefault;
 
-  @ApiProperty()
-  optional?: boolean;
+  @InfixOrUrlOrCidAndHashSchemaApiProperty
+  audio?: InfixOrUrlOrCidAndHash;
 
-  @ApiProperty({ enum: AttributeKind })
-  kind: AttributeKindName;
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
+  description?: LocalizedStringWithDefault;
 
-  @ApiProperty({ enum: AttributeType })
-  type: AttributeTypeName;
-}
+  @InfixOrUrlOrCidAndHashSchemaApiProperty
+  imagePreview?: InfixOrUrlOrCidAndHash;
 
-export class DecodedAttributeDto {
-  @StringOrLocalizedString
-  name: string | LocalizedStringDictionary;
+  @InfixOrUrlOrCidAndHashSchemaApiProperty
+  spatialObject?: InfixOrUrlOrCidAndHash;
 
-  @ApiProperty({
-    oneOf: [
-      {
-        oneOf: [
-          { type: 'string' },
-          { type: 'number' },
-          localizedStringDictionarySchema,
-        ],
-      },
-      {
-        type: 'array',
-        items: {
-          oneOf: [
-            { type: 'string' },
-            { type: 'number' },
-            localizedStringDictionarySchema,
-          ],
-        },
-      },
-    ],
-  })
-  value:
-    | string
-    | number
-    | LocalizedStringDictionary
-    | Array<string | number | LocalizedStringDictionary>;
-
-  @ApiProperty({ enum: AttributeType })
-  type: AttributeTypeName;
-
-  @ApiProperty({ enum: AttributeKind })
-  kind: AttributeKindName;
-
-  @ApiProperty()
-  isArray: boolean;
+  @InfixOrUrlOrCidAndHashSchemaApiProperty
+  video?: InfixOrUrlOrCidAndHash;
 }
 
 export class OldPropertiesDto {
@@ -169,21 +182,20 @@ export const AttributesSchemaApiProperty = ApiProperty({
   additionalProperties: { $ref: getSchemaPath(AttributeSchemaDto) },
   example: {
     0: {
-      name: { en: 'gender' },
-      type: 'localizedStringDictionary',
-      kind: 'enum',
+      name: { _: 'gender' },
+      type: 'string',
       enumValues: {
-        0: { en: 'Male' },
-        1: { en: 'Female' },
+        0: { _: 'Male' },
+        1: { _: 'Female' },
       },
     },
     1: {
-      name: { en: 'traits' },
-      type: 'localizedStringDictionary',
-      kind: 'enumMultiple',
+      name: { _: 'traits' },
+      type: 'string',
+      isArray: true,
       enumValues: {
-        0: { en: 'Black Lipstick' },
-        1: { en: 'Red Lipstick' },
+        0: { _: 'Black Lipstick' },
+        1: { _: 'Red Lipstick' },
       },
     },
   },
