@@ -1,18 +1,13 @@
 /**
  * @jest-environment node
  */
-import * as process from 'process';
 import { INestApplication } from '@nestjs/common';
-
-import { SdkSigner, SignatureType } from '@unique-nft/accounts';
-import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/state-queries';
 import '@unique-nft/sdk/extrinsics';
 
-import { Client } from '../index';
 import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionParsed,
@@ -20,31 +15,24 @@ import {
   TokenId,
   UniqueTokenDecodedResponse,
 } from '../types';
-import { createWeb } from './utils.test';
+import { createWeb, createClient, createRichAccount } from './utils.test';
 import {
   inputDataForCreateCollection,
   inputDataForCreateToken,
 } from './values';
 
-const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
-const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob'; // eslint-disable-line
-
 describe('client tests', () => {
   let app: INestApplication;
   let richAccountAddress: string;
-  let signer: SdkSigner;
+  let client;
 
   beforeAll(async () => {
     if (!app) {
       app = await createWeb();
     }
 
-    const keyringProvider = new KeyringProvider({
-      type: SignatureType.Sr25519,
-    });
-    const richAccount = keyringProvider.addSeed(TEST_RICH_ACCOUNT);
-    richAccountAddress = richAccount.instance.address;
-    signer = richAccount.getSigner();
+    client = await createClient(true);
+    richAccountAddress = createRichAccount().address;
   }, 100_000);
 
   afterAll(() => {
@@ -53,7 +41,6 @@ describe('client tests', () => {
 
   describe('collections and tokens', () => {
     it('create and get', async () => {
-      const client = new Client({ baseUrl, signer });
       const createCollectionResponse: ExtrinsicResultResponse<CreateCollectionParsed> =
         await client.collections.creation.submitWaitResult(
           inputDataForCreateCollection,

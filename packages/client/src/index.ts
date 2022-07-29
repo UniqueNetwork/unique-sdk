@@ -11,7 +11,7 @@ import {
   IBalance,
   ICollections,
   ITokens,
-} from './types/interfaces';
+} from './types';
 
 export class Client {
   public instance: AxiosInstance;
