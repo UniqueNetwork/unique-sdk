@@ -6,6 +6,7 @@ import {
   BalanceTransferArguments,
   BalanceTransferBuildArguments,
 } from './types';
+import { wrapAddress } from '../../../utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -48,11 +49,14 @@ export class BalanceTransferMutation extends MutationMethodBase<
 
     const amountRaw = BigInt(amount * this.multiplierToRaw);
 
+    const { SS58Prefix } = this.sdk.chainProperties();
+    const wrapperAddress = await wrapAddress(destination, SS58Prefix);
+
     return {
       address,
       section: 'balances',
       method: 'transfer',
-      args: [destination, amountRaw],
+      args: [wrapperAddress, amountRaw],
     };
   }
 
