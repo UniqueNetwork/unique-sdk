@@ -23,7 +23,8 @@
     "fix:opal:nft:types": "find ./node_modules/@unique-nft/opal-testnet-types/ -type f -name '*.ts' ! -name '*.d.ts' -type f -delete",
     "husky:install": "husky install",
     "tools:generate:docs": "ts-node tools/generate-docs.ts",
-    "generate-types:client": "npx swagger-typescript-api -p .. -o ./packages/client/src/types -n api.ts --no-client -p"
+    "generate-types:client": "npx swagger-typescript-api -p .. -o ./packages/client/src/types -n api.ts --no-client -p",
+    "tools:add-missing-types-client": "ts-node tools/add-missing-types-client.ts"
   },
   "private": true,
   "dependencies": {

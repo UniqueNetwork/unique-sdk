@@ -4,7 +4,7 @@ import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
-} from '../types/api';
+} from '../types';
 
 export class Balance extends Section {
   public readonly path = 'balance';

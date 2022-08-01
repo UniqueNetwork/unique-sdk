@@ -11,6 +11,12 @@ import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
+  CollectionInfoWithSchemaResponse,
+  CreateCollectionNewRequest,
+  CreateCollectionParsed,
+  CreateTokenNewDto,
+  TokenId,
+  UniqueTokenDecodedResponse,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -64,6 +70,22 @@ export interface IBalance extends ISection {
   baseUrl: string;
   transfer: IMutation<BalanceTransferBody, BalanceTransferParsed>;
   get(args: { address: string }): Promise<AllBalancesResponse>;
+}
+
+export interface ICollections extends ISection {
+  path: string;
+  baseUrl: string;
+  creation: IMutation<CreateCollectionNewRequest, CreateCollectionParsed>;
+  get(args: {
+    collectionId: number;
+  }): Promise<CollectionInfoWithSchemaResponse>;
+}
+
+export interface ITokens extends ISection {
+  path: string;
+  baseUrl: string;
+  create: IMutation<CreateTokenNewDto, TokenId>;
+  get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
 }
 
 export interface ClientParameters {

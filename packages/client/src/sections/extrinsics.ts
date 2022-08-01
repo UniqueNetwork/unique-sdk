@@ -7,8 +7,8 @@ import {
   ExtrinsicResultResponse,
   FeeResponse,
   TxBuildBody,
-} from '../types/api';
-import { Signer } from '../types/interfaces';
+  Signer,
+} from '../types';
 
 export class Extrinsics extends Section {
   public readonly path = 'extrinsic';
