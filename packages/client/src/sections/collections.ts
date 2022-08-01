@@ -4,6 +4,8 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionParsed,
+  SetCollectionLimitsBody,
+  SetCollectionLimitsResponse,
 } from '../types';
 
 export class Collections extends Section {
@@ -14,6 +16,11 @@ export class Collections extends Section {
   public readonly creation = new Mutation<
     CreateCollectionNewRequest,
     CreateCollectionParsed
+  >(this.client, 'POST', this.path);
+
+  public readonly setLimits = new Mutation<
+    SetCollectionLimitsBody,
+    SetCollectionLimitsResponse
   >(this.client, 'POST', this.path);
 
   async get(args: {

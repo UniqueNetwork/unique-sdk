@@ -592,6 +592,14 @@ export interface SetCollectionLimitsBody {
   collectionId: number;
 }
 
+export interface SetCollectionLimitsResponse {
+  /** @example 1 */
+  collectionId: number;
+
+  /** The collection limits */
+  limits: CollectionLimitsDto;
+}
+
 export interface BurnCollectionBody {
   /** @example 1 */
   collectionId: number;

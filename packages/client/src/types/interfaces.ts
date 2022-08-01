@@ -17,6 +17,8 @@ import {
   CreateTokenNewDto,
   TokenId,
   UniqueTokenDecodedResponse,
+  SetCollectionLimitsBody,
+  SetCollectionLimitsResponse,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -76,6 +78,7 @@ export interface ICollections extends ISection {
   path: string;
   baseUrl: string;
   creation: IMutation<CreateCollectionNewRequest, CreateCollectionParsed>;
+  setLimits: IMutation<SetCollectionLimitsBody, SetCollectionLimitsResponse>;
   get(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse>;
