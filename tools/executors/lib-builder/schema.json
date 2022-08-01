@@ -14,6 +14,10 @@
     "entryPoints": {
       "type": "array",
       "description": "Entry points list"
+    },
+    "ignorePatterns": {
+      "type": "array",
+      "description": "Ignore packages patterns"
     }
   }
 }

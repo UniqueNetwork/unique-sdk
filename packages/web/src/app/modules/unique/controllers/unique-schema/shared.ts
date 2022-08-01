@@ -144,13 +144,13 @@ export class UniqueTokenToCreateDto implements UniqueTokenToCreate {
   })
   encodedAttributes: EncodedTokenAttributes;
 
-  @ApiProperty({ type: String, example: 'Token name', required: false })
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
   name?: LocalizedStringWithDefault;
 
   @InfixOrUrlOrCidAndHashSchemaApiProperty
   audio?: InfixOrUrlOrCidAndHash;
 
-  @ApiProperty({ type: String, example: 'Token description', required: false })
+  @ApiProperty({ ...localizedStringWithDefaultSchema, required: false })
   description?: LocalizedStringWithDefault;
 
   @InfixOrUrlOrCidAndHashSchemaApiProperty

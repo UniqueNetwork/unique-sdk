@@ -12,7 +12,7 @@ const checkIsEmbedded = (id) =>
   EMBEDDED_DEPS.some((embedded) => id.includes(embedded));
 
 async function buildExecutor(options, globalOptions) {
-  const { packageName, entryPoints, distDir } = options;
+  const { packageName, entryPoints, distDir, ignorePatterns } = options;
 
   const { sourceRoot } = globalOptions.workspace.projects[packageName];
 
@@ -38,6 +38,8 @@ async function buildExecutor(options, globalOptions) {
     mainPackageJson,
     currentPackageJson,
     checkIsEmbedded,
+    packageName,
+    ignorePatterns,
   });
 
   return { success: true };
@@ -60,6 +62,7 @@ async function runRollup(configsList, distDir) {
     });
 
     allBundles.push({
+      input: config.input,
       file: config.output.file,
       imports: generateResult.output[0].imports,
     });

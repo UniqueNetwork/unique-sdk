@@ -49,15 +49,12 @@ describe(OldCollectionController.name, () => {
 
     let signResponse;
     it('sign collection', async () => {
-      const { signerPayloadHex } = generatedCollection;
       const { ok, body } = await request(app.getHttpServer())
         .post(`/api/extrinsic/sign`)
         .set({
           Authorization: 'Seed //Alice',
         })
-        .send({
-          signerPayloadHex,
-        });
+        .send(generatedCollection);
       expect(ok).toEqual(true);
       signResponse = body;
     });

@@ -21,8 +21,7 @@ import {
     UniqueCollectionSchemaToCreate,
     COLLECTION_SCHEMA_NAME,
     AttributeType,
-    AttributeKind,
-} from '@unique-nft/api';
+} from '@unique-nft/sdk/tokens';
 
 const createTokenArgs: CreateTokenNewArguments = {
     address: '<your account address>',

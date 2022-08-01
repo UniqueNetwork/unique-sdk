@@ -142,7 +142,7 @@ describe('Web signers', () => {
       expect(body).toMatchObject({
         hash: expect.any(String),
       });
-    });
+    }, 30_000);
   });
 
   describe('sign env/uri', () => {

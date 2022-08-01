@@ -8,9 +8,9 @@ import {
   HttpStatus,
   Inject,
   NotFoundException,
-  Patch,
   Post,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { TokenPropertiesResult } from '@unique-nft/sdk/tokens';
@@ -26,6 +26,7 @@ import {
   TokenParentResponse,
   TopmostTokenOwnerResponse,
   TransferTokenBody,
+  TransferTokenResponse,
   UnnestTokenBody,
 } from './types';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
@@ -47,11 +48,13 @@ export class BaseTokenController {
     return this.sdk.tokens.burn(args);
   }
 
-  @Patch('transfer')
-  async transferToken(
-    @Body() args: TransferTokenBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.transfer(args);
+  @MutationMethod(Patch('transfer'), TransferTokenBody, TransferTokenResponse)
+  transferToken(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.transfer,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
   }
 
   @Post('nest')

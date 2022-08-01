@@ -143,6 +143,8 @@ describe('unique schema collection and token', () => {
       address: richAccount.address,
       collectionId: -1,
       data: {
+        name: { _: 'just_token_name' },
+        description: { _: 'just_token_description' },
         encodedAttributes: {
           '0': 0,
           '1': [0],
@@ -206,6 +208,9 @@ describe('unique schema collection and token', () => {
       collectionSchemaToCreate.attributesSchema,
     );
 
+    expect(token?.name).toEqual(createTokenArgs.data.name);
+    expect(token?.description).toEqual(createTokenArgs.data.description);
+
     expect(token?.attributes).toEqual({
       '0': {
         isArray: false,
@@ -216,6 +221,8 @@ describe('unique schema collection and token', () => {
         value: {
           _: 'Male',
         },
+        isEnum: true,
+        rawValue: 0,
       },
       '1': {
         isArray: true,
@@ -228,6 +235,8 @@ describe('unique schema collection and token', () => {
             _: 'Black Lipstick',
           },
         ],
+        isEnum: true,
+        rawValue: [0],
       },
       '2': {
         isArray: false,
@@ -236,6 +245,10 @@ describe('unique schema collection and token', () => {
         },
         type: 'string',
         value: {
+          _: 'foo_bar',
+        },
+        isEnum: false,
+        rawValue: {
           _: 'foo_bar',
         },
       },

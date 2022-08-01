@@ -8,11 +8,18 @@ import { SignatureType } from '@unique-nft/accounts';
 import { KeyringProvider } from '@unique-nft/accounts/keyring';
 import * as process from 'process';
 
-const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob';
+const TEST_RICH_ACCOUNTS =
+  process.env['TEST_RICH_ACCOUNTS'] || '//Bob,//Charlie,//Eve,//Dave,//Ferdie';
 const TEST_POOR_ACCOUNT = process.env['TEST_POOR_ACCOUNT'] || '//Alice';
-const TEST_ANOTHER_ACCOUNT = process.env['TEST_ANOTHER_ACCOUNT'] || '//Eve';
 const TEST_CHAIN_WS_URL =
   process.env['TEST_CHAIN_WS_URL'] || 'wss://ws-rc.unique.network';
+
+const getRichSeed = (): string => {
+  const richSeeds = TEST_RICH_ACCOUNTS.split(',');
+  const jestWorkerId = Number(process.env['JEST_WORKER_ID'] || '1') - 1;
+
+  return richSeeds[jestWorkerId];
+};
 
 async function createSigner() {
   const keyringProvider = new KeyringProvider({
@@ -21,7 +28,7 @@ async function createSigner() {
 
   await keyringProvider.init();
 
-  return keyringProvider.addSeed(TEST_RICH_ACCOUNT).getSigner();
+  return keyringProvider.addSeed(getRichSeed()).getSigner();
 }
 
 export async function createSdk(withSign: boolean): Promise<Sdk> {
@@ -48,9 +55,8 @@ function createAccount(seed: string): TestAccount {
     address: keyringPair.address,
   };
 }
-export const createRichAccount = () => createAccount(TEST_RICH_ACCOUNT);
+export const createRichAccount = () => createAccount(getRichSeed());
 export const createPoorAccount = () => createAccount(TEST_POOR_ACCOUNT);
-export const createAnotherAccount = () => createAccount(TEST_ANOTHER_ACCOUNT);
 
 export function signWithAccount(
   sdk: Sdk,

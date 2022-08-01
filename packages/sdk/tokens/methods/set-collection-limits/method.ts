@@ -2,7 +2,7 @@ import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { u32 } from '@polkadot/types-codec';
 import { TxBuildArguments } from '@unique-nft/sdk/types';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundError } from '@unique-nft/sdk/errors';
 import {
   CollectionLimits,
   SetCollectionLimitsArguments,
@@ -64,7 +64,7 @@ export class SetCollectionLimitsMutation extends MutationMethodBase<
     );
 
     const limitsUnWrap = limitsWrap.unwrapOr(null);
-    if (!limitsUnWrap) throw new NotFoundException(`error unwrap limits`);
+    if (!limitsUnWrap) throw new NotFoundError(`error unwrap limits`);
     const limits: CollectionLimits = decodeCollectionLimits(limitsUnWrap);
 
     return {

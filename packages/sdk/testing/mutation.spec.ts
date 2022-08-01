@@ -4,7 +4,7 @@ import {
   createRichAccount,
   createSdk,
 } from '@unique-nft/sdk/testing';
-import { SeedSigner } from '@unique-nft/accounts/sign';
+import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 describe(AnyMutation.name, () => {
   it('works', async () => {
@@ -52,7 +52,8 @@ describe(AnyMutation.name, () => {
       args: [poorAccount.address, 100],
     };
 
-    const signer = new SeedSigner({ seed: richAccount.seed });
+    const provider = new KeyringProvider();
+    const signer = provider.addSeed(richAccount.seed).getSigner();
 
     await expect(() => mutationWrap.submit(mutationArgs)).rejects.toThrowError(
       'No signer provided',
