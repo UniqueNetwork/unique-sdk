@@ -20,5 +20,8 @@ export * from '../methods/token-properties/types';
 export * from '../methods/property-permissions/types';
 export * from '../methods/approve/types';
 export * from '../methods/token-by-id';
+export * from '../methods/confirm-sponsorship/types';
+export * from '../methods/set-collection-sponsor/types';
+export * from '../methods/remove-collection-sponsor/types';
 
 export * from './shared';

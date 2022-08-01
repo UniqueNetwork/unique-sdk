@@ -12,7 +12,7 @@ The method returns a `parsed` object that contains the `collectionId: number, sp
 ## Examples
 
 ```typescript
-import { ConfirmSponsorshipArguments } from '@unique-nft/sdk/tokens/methods/confirm-sponsorship';
+import { ConfirmSponsorshipArguments } from '@unique-nft/sdk/tokens/types';
 
 const confirmArgs: ConfirmSponsorshipArguments = {
   address: '<Account address of owner of collection>',

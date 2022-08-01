@@ -2,9 +2,9 @@ import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SdkError } from '@unique-nft/sdk/errors';
 import { u32 } from '@polkadot/types-codec';
+import {TxBuildArguments} from "@unique-nft/sdk/types";
 import {
   RemoveCollectionSponsorArguments,
-  RemoveCollectionSponsorBuildArguments,
   RemoveCollectionSponsorResult,
 } from './types';
 
@@ -14,7 +14,7 @@ export class RemoveCollectionSponsorMutation extends MutationMethodBase<
   RemoveCollectionSponsorArguments,
   RemoveCollectionSponsorResult
 > {
-  async transformArgs(args: RemoveCollectionSponsorArguments): Promise<RemoveCollectionSponsorBuildArguments> {
+  async transformArgs(args: RemoveCollectionSponsorArguments): Promise<TxBuildArguments> {
     const { address, collectionId } = args;
 
     const collection = await this.sdk.collections.get_new({ collectionId });

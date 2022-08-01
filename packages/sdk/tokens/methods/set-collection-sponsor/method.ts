@@ -3,9 +3,9 @@ import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { SdkError } from '@unique-nft/sdk/errors';
 import { u32 } from '@polkadot/types-codec';
 
+import { TxBuildArguments } from '@unique-nft/sdk/types';
 import {
   SetCollectionSponsorArguments,
-  SetCollectionSponsorBuildArguments,
   SetCollectionSponsorResult,
 } from './types';
 
@@ -15,7 +15,7 @@ export class SetCollectionSponsorMutation extends MutationMethodBase<
   SetCollectionSponsorArguments,
   SetCollectionSponsorResult
 > {
-  async transformArgs(args: SetCollectionSponsorArguments): Promise<SetCollectionSponsorBuildArguments> {
+  async transformArgs(args: SetCollectionSponsorArguments): Promise<TxBuildArguments> {
     const { address, newSponsor, collectionId } = args;
 
     const collection = await this.sdk.collections.get_new({ collectionId });

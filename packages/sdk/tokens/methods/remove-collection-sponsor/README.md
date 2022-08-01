@@ -12,7 +12,7 @@ The method returns a `parsed` object that contains the `collectionId: number`.
 ## Examples
 
 ```typescript
-import { RemoveCollectionSponsorArguments } from '@unique-nft/sdk/tokens/methods/remove-collection-sponsor';
+import { RemoveCollectionSponsorArguments } from '@unique-nft/sdk/tokens/types';
 
 const removeArgs: SetCollectionSponsorArguments = {
   address: '<Account address of owner of collection>',

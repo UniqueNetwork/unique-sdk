@@ -13,14 +13,7 @@ The method returns a `parsed` object that contains the `collectionId: number, sp
 ## Examples
 
 ```typescript
-import { SetCollectionSponsorArguments } from '@unique-nft/sdk/tokens/methods/set-collection-sponsor';
-
-import {
-    UniqueCollectionSchemaToCreate,
-    COLLECTION_SCHEMA_NAME,
-    AttributeType,
-    AttributeKind,
-} from '@unique-nft/api';
+import { SetCollectionSponsorArguments } from '@unique-nft/sdk/tokens/types';
 
 const setSponsorArgs: SetCollectionSponsorArguments = {
     address: '<Account address of owner of collection>',
