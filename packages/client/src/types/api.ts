@@ -9,8 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-export type arrayNumberRecordStringAny = string | number;
-
 export interface TokenPropertiesResponse {
   /** @example {"ipfsJson":"{\"ipfs\":\"QmS8YXgfGKgTUnjAPtEf3uf5k4YrFLP2uDcYuNyGLnEiNb\",\"type\":\"image\"}","gender":"Male","traits":["TEETH_SMILE","UP_HAIR"]} */
   constData: object;
@@ -1057,7 +1055,6 @@ export interface UnsignedTxPayloadBody {
   signerPayloadJSON: SignerPayloadJSONDto;
   signerPayloadRaw: SignerPayloadRawDto;
   signerPayloadHex: string;
-  fee?: FeeResponse;
 }
 
 export interface SignTxResultResponse {
@@ -1093,7 +1090,7 @@ export interface ExtrinsicResultResponse<T> {
   isError: boolean;
   blockHash: string;
   blockIndex: number;
-  errorMessage: string;
+  error: object;
   events: ExtrinsicResultEvent;
   parsed?: T;
   fee?: FeeResponse;
@@ -1201,3 +1198,13 @@ export interface GenerateAccountDataBody {
    */
   meta?: object;
 }
+
+export interface IpfsUploadResponse {
+  /** File address */
+  cid: string;
+
+  /** IPFS gateway file URL */
+  fileUrl?: string;
+}
+
+import { arrayNumberRecordStringAny } from './missingApiTypes';

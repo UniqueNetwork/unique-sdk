@@ -10,6 +10,7 @@ import {
   NotFoundException,
   Post,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { ApiResponse } from '@nestjs/swagger';
@@ -49,7 +50,7 @@ export class BaseTokenController {
     return this.sdk.tokens.burn(args);
   }
 
-  @MutationMethod(Post('transfer'), TransferTokenBody, TransferTokenResponse)
+  @MutationMethod(Patch('transfer'), TransferTokenBody, TransferTokenResponse)
   transferToken(): MutationMethodOptions {
     return {
       mutationMethod: this.sdk.tokens.transfer,

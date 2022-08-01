@@ -2,7 +2,6 @@ import { Sdk } from '@unique-nft/sdk';
 import {
   Balance,
   ObservableSubmitResult,
-  SdkSigner,
   SubmitResult,
   SubmittableResultCompleted,
   SubmitTxArguments,
@@ -11,47 +10,40 @@ import {
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
 import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
-import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
-import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
-
-export interface MutationOptions {
-  signer?: SdkSigner;
-}
-
-export type MutationMethod<A, R> = (
-  args: A | UnsignedTxPayload | SubmitTxArguments,
-  options?: MutationOptions,
-) => Promise<SubmittableResultCompleted<R>>;
-
-export interface MutationMethodWrap<A, R> {
-  build(args: A): Promise<UnsignedTxPayload>;
-
-  getFee(args: A | UnsignedTxPayload | SubmitTxArguments): Promise<Balance>;
-
-  sign(
-    args: A | UnsignedTxPayload,
-    options?: MutationOptions,
-  ): Promise<SubmitTxArguments>;
-
-  submit(
-    args: A | UnsignedTxPayload | SubmitTxArguments,
-    options?: MutationOptions,
-  ): Promise<Omit<SubmitResult, 'result$'>>;
-
-  submitWatch(
-    args: A | UnsignedTxPayload | SubmitTxArguments,
-    options?: MutationOptions,
-  ): Promise<ObservableSubmitResult<R>>;
-
-  submitWaitResult: MutationMethod<A, R>;
-
-  expose(): MutationMethod<A, R>;
-}
+import {
+  SubmitExtrinsicError,
+  VerificationFailedError,
+} from '@unique-nft/sdk/errors';
+import { getDispatchError } from '@unique-nft/sdk/utils';
+import {
+  isSubmitTxArguments,
+  isUnsignedTxPayload,
+  isRawPayload,
+} from './tx-utils';
+import {
+  MutationOptions,
+  MutationMethodWrap,
+  VerificationResult,
+} from './types';
 
 export abstract class MutationMethodBase<A, R>
   implements MutationMethodWrap<A, R>
 {
   constructor(readonly sdk: Sdk) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  protected async verifyArgs(args: A): Promise<VerificationResult> {
+    return { isAllowed: true };
+  }
+
+  private async verify(args: UnsignedTxPayload | SubmitTxArguments | A) {
+    if (isRawPayload(args)) {
+      const { isAllowed, message } = await this.verifyArgs(args as A);
+      if (!isAllowed) {
+        throw new VerificationFailedError(message);
+      }
+    }
+  }
 
   abstract transformArgs(args: A): Promise<TxBuildArguments>;
 
@@ -93,6 +85,8 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
+    await this.verify(args);
+
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
       : await this.sign(args, options);
@@ -105,6 +99,8 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<ObservableSubmitResult<R>> {
+    await this.verify(args);
+
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
       : await this.sign(args, options);
@@ -115,9 +111,14 @@ export abstract class MutationMethodBase<A, R>
     );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
-      const parsed = submittableResult.isError
-        ? undefined
-        : await this.transformResult(submittableResult);
+      const error = getDispatchError(this.sdk.api, submittableResult);
+      if (error) {
+        return { submittableResult, error };
+      }
+
+      const parsed = submittableResult.isCompleted
+        ? await this.transformResult(submittableResult)
+        : undefined;
 
       return { submittableResult, parsed };
     };
@@ -139,7 +140,17 @@ export abstract class MutationMethodBase<A, R>
 
     const completed = await lastValueFrom(result$);
 
-    if (completed.parsed === undefined) throw new SubmitExtrinsicError();
+    const error = getDispatchError(this.sdk.api, completed.submittableResult);
+    if (error) {
+      throw new SubmitExtrinsicError(
+        `Dispatch error: ${error.message}`,
+        error.details,
+      );
+    }
+
+    if (completed.parsed === undefined) {
+      throw new SubmitExtrinsicError('Invalid parsed data');
+    }
 
     return {
       ...completed,

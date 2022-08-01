@@ -25,6 +25,11 @@ import {
   PropertyKeyPermission,
   SetPropertyPermissionsBody,
   PropertyPermissionSetEvent,
+  CollectionInfoWithSchemaResponse,
+  CreateCollectionNewRequest,
+  CreateCollectionParsed,
+  CreateTokenNewDto,
+  UniqueTokenDecodedResponse,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -80,6 +85,44 @@ export interface IBalance extends ISection {
   get(args: { address: string }): Promise<AllBalancesResponse>;
 }
 
+export interface ICollections extends ISection {
+  path: string;
+  baseUrl: string;
+  creation: IMutation<CreateCollectionNewRequest, CreateCollectionParsed>;
+  get(args: {
+    collectionId: number;
+  }): Promise<CollectionInfoWithSchemaResponse>;
+  properties(args: { collectionId: number }): Promise<CollectionProperty[]>;
+  setProperties: IMutation<
+    SetCollectionPropertiesBody,
+    CollectionPropertySetEvent[]
+  >;
+  deleteProperties: IMutation<
+    DeleteCollectionPropertiesBody,
+    CollectionPropertyDeletedEvent[]
+  >;
+  propertyPermissions(args: {
+    collectionId: number;
+  }): Promise<PropertyKeyPermission[]>;
+  setPropertyPermissions: IMutation<
+    SetPropertyPermissionsBody,
+    PropertyPermissionSetEvent[]
+  >;
+}
+
+export interface ITokens extends ISection {
+  path: string;
+  baseUrl: string;
+  create: IMutation<CreateTokenNewDto, TokenId>;
+  get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  properties(args: TokenId): Promise<TokenProperty[]>;
+  setProperties: IMutation<SetTokenPropertiesBody, TokenPropertySetEvent[]>;
+  deleteProperties: IMutation<
+    DeleteTokenPropertiesBody,
+    TokenPropertyDeletedEvent[]
+  >;
+}
+
 export interface ClientParameters {
   maximumNumberOfStatusRequests: number;
   waitBetweenStatusRequestsInMs: number;
@@ -102,32 +145,4 @@ export interface IClient {
 
 export interface Signer {
   sign(unsignedTxPayload: UnsignedTxPayloadBody): Promise<SignTxResultResponse>;
-}
-
-export interface ITokens extends ISection {
-  properties(args: TokenId): Promise<TokenProperty[]>;
-  setProperties: IMutation<SetTokenPropertiesBody, TokenPropertySetEvent[]>;
-  deleteProperties: IMutation<
-    DeleteTokenPropertiesBody,
-    TokenPropertyDeletedEvent[]
-  >;
-}
-
-export interface ICollections extends ISection {
-  properties(args: { collectionId: number }): Promise<CollectionProperty[]>;
-  setProperties: IMutation<
-    SetCollectionPropertiesBody,
-    CollectionPropertySetEvent[]
-  >;
-  deleteProperties: IMutation<
-    DeleteCollectionPropertiesBody,
-    CollectionPropertyDeletedEvent[]
-  >;
-  propertyPermissions(args: {
-    collectionId: number;
-  }): Promise<PropertyKeyPermission[]>;
-  setPropertyPermissions: IMutation<
-    SetPropertyPermissionsBody,
-    PropertyPermissionSetEvent[]
-  >;
 }

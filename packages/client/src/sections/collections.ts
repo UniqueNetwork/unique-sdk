@@ -9,6 +9,9 @@ import {
   SetPropertyPermissionsBody,
   PropertyPermissionSetEvent,
   PropertyKeyPermission,
+  CollectionInfoWithSchemaResponse,
+  CreateCollectionNewRequest,
+  CreateCollectionParsed,
 } from '../types/api';
 import { ICollections } from '../types/interfaces';
 
@@ -56,6 +59,24 @@ export class Collections extends Section implements ICollections {
       baseURL: this.baseUrl,
       url: 'property-permissions',
       params: { collectionId },
+    });
+
+    return response.data;
+  }
+
+  public readonly creation = new Mutation<
+    CreateCollectionNewRequest,
+    CreateCollectionParsed
+  >(this.client, 'POST', this.path);
+
+  async get(args: {
+    collectionId: number;
+  }): Promise<CollectionInfoWithSchemaResponse> {
+    const response = await this.client.instance({
+      method: 'GET',
+      baseURL: this.baseUrl,
+      url: '',
+      params: { collectionId: args.collectionId },
     });
     return response.data;
   }

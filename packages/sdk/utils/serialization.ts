@@ -1,5 +1,8 @@
 /* eslint-disable  @typescript-eslint/no-use-before-define */
 import { Codec } from '@polkadot/types-codec/types';
+import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
+import { ApiPromise } from '@polkadot/api';
+import { SubmittableDispatchError } from '@unique-nft/sdk/types';
 
 function serializeCodec(data: Codec): object {
   return {
@@ -48,3 +51,44 @@ export function serialize(data: any): any {
       return undefined;
   }
 }
+
+export const getDispatchError = (
+  api: ApiPromise,
+  submittableResult: ISubmittableResult,
+): SubmittableDispatchError | null => {
+  const { isError, dispatchError, internalError } = submittableResult;
+
+  if (dispatchError) {
+    if (dispatchError.isModule) {
+      const decoded = api.registry.findMetaError(dispatchError.asModule);
+
+      const { docs, name, section } = decoded;
+      return {
+        details: {
+          name,
+          section,
+        },
+        message: docs.join(' '),
+      };
+    }
+
+    return {
+      message: dispatchError.toString(),
+    };
+  }
+
+  if (internalError) {
+    return {
+      message: 'Internal error',
+      details: internalError,
+    };
+  }
+
+  if (isError) {
+    return {
+      message: 'Unknown error',
+    };
+  }
+
+  return null;
+};

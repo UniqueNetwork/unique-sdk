@@ -33,16 +33,22 @@ class ValidationOneOfPipe implements PipeTransform {
   }
 
   async transform(value: unknown, metadata: ArgumentMetadata) {
+    let err;
     for (let i = 0; i < this.pipes.length; i += 1) {
       const pipe = this.pipes[i];
       try {
         // eslint-disable-next-line no-await-in-loop
-        return await pipe.transform(value, metadata);
+        const result = await pipe.transform(value, metadata);
+        if (result) {
+          return result;
+        }
         // eslint-disable-next-line no-empty
-      } catch (err) {}
+      } catch (e) {
+        err = err || e;
+      }
     }
 
-    return true;
+    throw err;
   }
 }
 

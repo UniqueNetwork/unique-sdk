@@ -2,8 +2,8 @@
 import Axios, { AxiosInstance } from 'axios';
 import { Balance } from './sections/balance';
 import { Collections } from './sections/collections';
-import { Extrinsics } from './sections/extrinsics';
 import { Tokens } from './sections/tokens';
+import { Extrinsics } from './sections/extrinsics';
 import {
   ICollections,
   ITokens,
@@ -11,7 +11,7 @@ import {
   Options,
   IExtrinsics,
   IBalance,
-} from './types/interfaces';
+} from './types';
 
 export class Client {
   public instance: AxiosInstance;

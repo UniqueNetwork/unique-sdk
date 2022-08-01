@@ -1,11 +1,7 @@
 /**
  * @jest-environment node
  */
-import * as process from 'process';
 import { INestApplication } from '@nestjs/common';
-
-import { SdkSigner, SignatureType } from '@unique-nft/accounts';
-import { KeyringProvider } from '@unique-nft/accounts/keyring';
 
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
@@ -19,32 +15,30 @@ import {
   FeeResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
-} from '../types/api';
-import { createWeb } from './utils.test';
-
-const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
-const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob'; // eslint-disable-line
-const TEST_POOR_ACCOUNT = process.env['TEST_POOR_ACCOUNT'] || '//Alice'; // eslint-disable-line
+} from '../types';
+import {
+  createClient,
+  createPoorAccount,
+  createRichAccount,
+  createWeb,
+} from './utils.test';
 
 describe('client tests', () => {
   let app: INestApplication;
   let richAccountAddress: string;
   let poorAccountAddress: string;
-  let signer: SdkSigner;
+  let client: Client;
+  let clientWithoutSigner: Client;
 
   beforeAll(async () => {
     if (!app) {
       app = await createWeb();
     }
 
-    const keyringProvider = new KeyringProvider({
-      type: SignatureType.Sr25519,
-    });
-    const richAccount = keyringProvider.addSeed(TEST_RICH_ACCOUNT);
-    richAccountAddress = richAccount.instance.address;
-    const poorAccount = keyringProvider.addSeed(TEST_POOR_ACCOUNT);
-    poorAccountAddress = poorAccount.instance.address;
-    signer = richAccount.getSigner();
+    client = await createClient(true);
+    clientWithoutSigner = await createClient(false);
+    richAccountAddress = createRichAccount().address;
+    poorAccountAddress = createPoorAccount().address;
   }, 100_000);
 
   afterAll(() => {
@@ -53,26 +47,18 @@ describe('client tests', () => {
 
   describe('extrinsics', () => {
     it('build', async () => {
-      const client = new Client({ baseUrl, signer: null });
-      const response: UnsignedTxPayloadResponse = await client.extrinsics.build(
-        {
+      const response: UnsignedTxPayloadResponse =
+        await clientWithoutSigner.extrinsics.build({
           address: richAccountAddress,
           section: 'balances',
           method: 'transfer',
           args: [poorAccountAddress, 1000],
-        },
-      );
+        });
       expect(response).toEqual(expect.any(Object));
     }, 100_000);
   });
 
   describe('balance', () => {
-    let client: Client;
-
-    beforeAll(async () => {
-      client = new Client({ baseUrl, signer });
-    });
-
     it('fee for BalanceTransferBody', async () => {
       const response: FeeResponse = await client.balance.transfer.getFee({
         address: richAccountAddress,
@@ -132,7 +118,6 @@ describe('client tests', () => {
           destination: poorAccountAddress,
           amount: 0.001,
         });
-      console.log('response', response);
       expect(response).toMatchObject({
         parsed: {
           success: true,
@@ -142,7 +127,6 @@ describe('client tests', () => {
   });
 
   it('check balance changes', async () => {
-    const client = new Client({ baseUrl, signer });
     const initBalanceResponse = await client.balance.get({
       address: richAccountAddress,
     });
@@ -161,7 +145,6 @@ describe('client tests', () => {
 
   describe('sign', () => {
     it('success', async () => {
-      const client = new Client({ baseUrl, signer });
       const response = await client.balance.transfer.sign({
         address: richAccountAddress,
         destination: poorAccountAddress,
@@ -174,9 +157,8 @@ describe('client tests', () => {
     }, 60_000);
 
     it('error', async () => {
-      const client = new Client({ baseUrl, signer: null });
       await expect(
-        client.balance.transfer.sign({
+        clientWithoutSigner.balance.transfer.sign({
           address: richAccountAddress,
           destination: poorAccountAddress,
           amount: 1000,
@@ -187,7 +169,6 @@ describe('client tests', () => {
 
   describe('submit', () => {
     it('success', async () => {
-      const client = new Client({ baseUrl, signer });
       const response = await client.balance.transfer.submit({
         address: richAccountAddress,
         destination: poorAccountAddress,

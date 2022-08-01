@@ -4,7 +4,7 @@ import {
   SubmitResultResponse,
   SubmitTxBody,
   UnsignedTxPayloadResponse,
-} from '../types/api';
+} from '../types';
 import { isUnsignedTxPayloadResponse, isSubmitTxBody, sleep } from '../utils';
 import { IClient, MutationOptions } from '../types/interfaces';
 

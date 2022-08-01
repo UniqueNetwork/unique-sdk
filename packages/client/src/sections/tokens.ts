@@ -1,14 +1,16 @@
 import { Mutation } from '../classes/mutation';
 import { Section } from '../classes/section';
 import {
-  TokenProperty,
+  ITokens,
+  CreateTokenNewDto,
   TokenId,
+  UniqueTokenDecodedResponse,
   SetTokenPropertiesBody,
   TokenPropertySetEvent,
   DeleteTokenPropertiesBody,
   TokenPropertyDeletedEvent,
-} from '../types/api';
-import { ITokens } from '../types/interfaces';
+  TokenProperty,
+} from '../types';
 
 export class Tokens extends Section implements ITokens {
   public readonly path = 'token-new';
@@ -34,6 +36,23 @@ export class Tokens extends Section implements ITokens {
       baseURL: this.baseUrl,
       url: 'properties',
       params: { collectionId, tokenId },
+    });
+
+    return response.data;
+  }
+
+  public readonly create = new Mutation<CreateTokenNewDto, TokenId>(
+    this.client,
+    'POST',
+    this.path,
+  );
+
+  async get(args: TokenId): Promise<UniqueTokenDecodedResponse> {
+    const response = await this.client.instance({
+      method: 'GET',
+      baseURL: this.baseUrl,
+      url: '',
+      params: { collectionId: args.collectionId, tokenId: args.tokenId },
     });
     return response.data;
   }

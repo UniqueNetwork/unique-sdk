@@ -1,50 +1,39 @@
 /**
  * @jest-environment node
  */
-import * as process from 'process';
 import { INestApplication } from '@nestjs/common';
-
-import { SdkSigner, SignatureType } from '@unique-nft/accounts';
-import { KeyringProvider } from '@unique-nft/accounts/keyring';
-
 import '@unique-nft/sdk/tokens';
 import '@unique-nft/sdk/balance';
 import '@unique-nft/sdk/state-queries';
 import '@unique-nft/sdk/extrinsics';
-
 import { Client } from '../index';
 import {
-  BalanceTransferParsed,
   CollectionProperty,
   ExtrinsicResultResponse,
-  FeeResponse,
-  SubmitTxBody,
-  UnsignedTxPayloadResponse,
   CollectionPropertySetEvent,
   DeleteCollectionPropertiesBody,
   CollectionPropertyDeletedEvent,
   SetPropertyPermissionsBody,
   PropertyPermissionSetEvent,
   PropertyKeyPermission,
-  SetCollectionPropertiesBody,
   SetTokenPropertiesBody,
   TokenPropertySetEvent,
   TokenProperty,
   DeleteTokenPropertiesBody,
   TokenPropertyDeletedEvent,
+  CreateCollectionParsed,
 } from '../types/api';
-import { createWeb } from './utils.test';
+import { createClient, createRichAccount, createWeb } from './utils.test';
+import {
+  inputDataForCreateCollection,
+  inputDataForCreateToken,
+} from './values';
 
-const baseUrl = process.env.TEST_WEB_APP_URL || 'http://localhost:3001';
-const TEST_RICH_ACCOUNT = process.env['TEST_RICH_ACCOUNT'] || '//Bob'; // eslint-disable-line
-const TEST_POOR_ACCOUNT = process.env['TEST_POOR_ACCOUNT'] || '//Alice'; // eslint-disable-line
-
-describe('Nesting', () => {
+describe('Properties', () => {
   let app: INestApplication;
-  let signer: SdkSigner;
   let client: Client;
   let address: string;
-  const collectionId = 1976;
+  let collectionId: number;
   const tokenId = 1;
 
   beforeAll(async () => {
@@ -52,16 +41,22 @@ describe('Nesting', () => {
       app = await createWeb();
     }
 
-    const keyringProvider = new KeyringProvider({
-      type: SignatureType.Sr25519,
+    client = await createClient(true);
+    address = createRichAccount().address;
+
+    const createCollectionResponse: ExtrinsicResultResponse<CreateCollectionParsed> =
+      await client.collections.creation.submitWaitResult(
+        inputDataForCreateCollection,
+      );
+
+    collectionId = createCollectionResponse.parsed.collectionId;
+
+    await client.tokens.create.submitWaitResult({
+      ...inputDataForCreateToken,
+      collectionId,
+      address,
+      owner: address,
     });
-
-    const richAccount = keyringProvider.addSeed(TEST_RICH_ACCOUNT);
-    address = richAccount.instance.address;
-
-    signer = richAccount.getSigner();
-
-    client = new Client({ baseUrl, signer });
   }, 100_000);
 
   afterAll(() => {
@@ -168,14 +163,6 @@ describe('Nesting', () => {
     const result = await client.collections.propertyPermissions(args);
 
     const expected: PropertyKeyPermission[] = [
-      {
-        key: '_old_constData',
-        permission: {
-          collectionAdmin: true,
-          mutable: false,
-          tokenOwner: true,
-        },
-      },
       {
         key: 'test',
         permission: {
