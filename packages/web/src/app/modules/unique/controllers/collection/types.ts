@@ -13,6 +13,7 @@ import {
   SetTokenPropertyPermissionsArguments,
   PropertyKeyPermission,
   PropertyPermission,
+  SetCollectionLimitsResult,
 } from '@unique-nft/sdk/tokens';
 import { IsInt, IsPositive } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -216,3 +217,15 @@ export class SetPropertyPermissionsBody
 }
 
 export class SetPropertyPermissionsResponse extends MutationResponse {}
+
+export class SetCollectionLimitsResponse implements SetCollectionLimitsResult {
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({
+    description: 'The collection limits',
+  })
+  limits: CollectionLimitsDto;
+}

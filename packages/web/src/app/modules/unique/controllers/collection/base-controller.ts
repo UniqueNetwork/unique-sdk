@@ -28,6 +28,7 @@ import {
   SetPropertyPermissionsBody,
   SetCollectionPropertiesResponse,
   DeleteCollectionPropertiesResponse,
+  SetCollectionLimitsResponse,
 } from './types';
 import {
   MutationMethod,
@@ -51,11 +52,17 @@ export class BaseCollectionController {
     throw new NotFoundException(`no collection with id ${args.collectionId}`);
   }
 
-  @Post('set-limits')
-  async setCollectionLimits(
-    @Body() args: SetCollectionLimitsBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.collections.setLimits.build(args);
+  @MutationMethod(
+    Post('set-limits'),
+    SetCollectionLimitsBody,
+    SetCollectionLimitsResponse,
+  )
+  setCollectionLimits(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.collections.setLimits,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
   }
 
   @Delete()
