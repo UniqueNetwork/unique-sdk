@@ -22,7 +22,7 @@ import {
   DeleteTokenPropertiesBody,
   TokenPropertyDeletedEvent,
   CreateCollectionParsed,
-} from '../types/api';
+} from '../types';
 import { createClient, createRichAccount, createWeb } from './utils.test';
 import {
   inputDataForCreateCollection,

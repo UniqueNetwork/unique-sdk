@@ -12,8 +12,8 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionParsed,
-} from '../types/api';
-import { ICollections } from '../types/interfaces';
+  ICollections,
+} from '../types';
 
 export class Collections extends Section implements ICollections {
   public readonly path = 'collection-new';
