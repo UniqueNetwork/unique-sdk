@@ -65,6 +65,10 @@ import {
   propertyPermissionsQuery,
   PropertyPermissionsResult,
 } from './methods/property-permissions';
+import {
+  collectionTokensQuery,
+  CollectionTokensResult,
+} from './methods/collection-tokens';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
@@ -84,7 +88,10 @@ export class SdkCollections {
     this.propertyPermissions = propertyPermissionsQuery.bind(this.sdk);
     this.setCollectionSponsor = new SetCollectionSponsorMutation(this.sdk);
     this.confirmSponsorship = new ConfirmSponsorshipMutation(this.sdk);
-    this.removeCollectionSponsor = new RemoveCollectionSponsorMutation(this.sdk);
+    this.removeCollectionSponsor = new RemoveCollectionSponsorMutation(
+      this.sdk,
+    );
+    this.tokens = collectionTokensQuery.bind(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -167,4 +174,6 @@ export class SdkCollections {
       args: [args.collectionId],
     });
   }
+
+  tokens: QueryMethod<CollectionIdArguments, CollectionTokensResult>;
 }

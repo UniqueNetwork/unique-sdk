@@ -8,24 +8,14 @@ Get tokens contained within a collection
 
 ## Returns
 
-## todo: write me!!!
-
-Method return an array of properties `{ key: string, value: string }`
+Method returns array of tokenIds contained within passed collection.
 
 ## Examples
 
 ```ts
-import {
-  CollectionPropertiesArguments,
-  CollectionPropertiesResult,
-} from '@unique-nft/sdk/tokens/types';
+import { CollectionTokensResult } from '@unique-nft/sdk/tokens/types';
 
-const args: CollectionPropertiesArguments = {
+const result: CollectionTokensResult = await sdk.collections.tokens({
   collectionId: 1,
-  // propertyKeys: ['foo', 'bar'],
-};
-
-const result: CollectionPropertiesResult = await sdk.collections.properties(
-  args,
-);
+});
 ```

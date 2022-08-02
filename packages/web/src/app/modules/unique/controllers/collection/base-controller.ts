@@ -15,6 +15,7 @@ import {
   CollectionPropertiesResult,
   PropertyPermissionsResult,
 } from '@unique-nft/sdk/tokens';
+import { CollectionTokensResult } from '@unique-nft/sdk/tokens/methods/collection-tokens';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {
@@ -77,6 +78,13 @@ export class BaseCollectionController {
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionPropertiesResult> {
     return this.sdk.collections.properties(args);
+  }
+
+  @Get('tokens')
+  async collectionTokens(
+    @Query() args: CollectionIdQuery,
+  ): Promise<CollectionTokensResult> {
+    return this.sdk.collections.tokens(args);
   }
 
   @MutationMethod(
