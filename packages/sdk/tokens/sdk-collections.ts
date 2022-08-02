@@ -7,6 +7,21 @@ import {
   BurnCollectionArguments,
   TransferCollectionArguments,
 } from '@unique-nft/sdk/types';
+import {
+  SetCollectionSponsorArguments,
+  SetCollectionSponsorMutation,
+  SetCollectionSponsorResult,
+} from './methods/set-collection-sponsor';
+import {
+  RemoveCollectionSponsorArguments,
+  RemoveCollectionSponsorMutation,
+  RemoveCollectionSponsorResult,
+} from './methods/remove-collection-sponsor';
+import {
+  ConfirmSponsorshipArguments,
+  ConfirmSponsorshipMutation,
+  ConfirmSponsorshipResult,
+} from './methods/confirm-sponsorship';
 import { CreateCollectionExMutation } from './methods/create-collection-ex/method';
 import { CreateCollectionArguments } from './methods/create-collection-ex/types';
 import { GetCollectionLimitsResult } from './methods/effective-collection-limits/types';
@@ -67,6 +82,9 @@ export class SdkCollections {
     );
     this.properties = collectionPropertiesQuery.bind(this.sdk);
     this.propertyPermissions = propertyPermissionsQuery.bind(this.sdk);
+    this.setCollectionSponsor = new SetCollectionSponsorMutation(this.sdk);
+    this.confirmSponsorship = new ConfirmSponsorshipMutation(this.sdk);
+    this.removeCollectionSponsor = new RemoveCollectionSponsorMutation(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -105,6 +123,21 @@ export class SdkCollections {
   setPropertyPermissions: MutationMethodWrap<
     SetTokenPropertyPermissionsArguments,
     SetTokenPropertyPermissionsResult
+  >;
+
+  setCollectionSponsor: MutationMethodWrap<
+    SetCollectionSponsorArguments,
+    SetCollectionSponsorResult
+  >;
+
+  confirmSponsorship: MutationMethodWrap<
+    ConfirmSponsorshipArguments,
+    ConfirmSponsorshipResult
+  >;
+
+  removeCollectionSponsor: MutationMethodWrap<
+    RemoveCollectionSponsorArguments,
+    RemoveCollectionSponsorResult
   >;
 
   properties: QueryMethod<
