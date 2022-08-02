@@ -22,6 +22,8 @@ export class CreateTokenNewMutation extends MutationMethodBase<
     const collection = await this.sdk.collections.get_new({ collectionId });
     if (!collection) throw new SdkError(`no collection ${collectionId}`);
 
+    console.log(SchemaTools);
+
     const properties = collection.schema
       ? SchemaTools.encodeUnique.token(data, collection.schema)
       : null;

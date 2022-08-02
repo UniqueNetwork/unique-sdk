@@ -15,6 +15,7 @@ import {
   CollectionPropertiesResult,
   PropertyPermissionsResult,
 } from '@unique-nft/sdk/tokens';
+import { ApiResponse } from '@nestjs/swagger';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {
@@ -29,6 +30,8 @@ import {
   SetCollectionPropertiesResponse,
   DeleteCollectionPropertiesResponse,
   SetCollectionLimitsResponse,
+  CollectionProperty,
+  PropertyKeyPermission,
 } from './types';
 import {
   MutationMethod,
@@ -80,6 +83,7 @@ export class BaseCollectionController {
   }
 
   @Get('properties')
+  @ApiResponse({ type: CollectionProperty, isArray: true })
   async collectionProperties(
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionPropertiesResult> {
@@ -113,6 +117,7 @@ export class BaseCollectionController {
   }
 
   @Get('property-permissions')
+  @ApiResponse({ type: PropertyKeyPermission, isArray: true })
   async propertyPermissions(
     @Query() args: CollectionIdQuery,
   ): Promise<PropertyPermissionsResult> {
