@@ -116,6 +116,11 @@ export class NestTokenBody implements NestTokenArguments {
   nested: TokenId;
 }
 
+export class NestTokenResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: TokenId;
+}
+
 export class UnnestTokenBody implements UnnestTokenArguments {
   @ValidAddress()
   @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
@@ -130,9 +135,9 @@ export class UnnestTokenBody implements UnnestTokenArguments {
   nested: TokenId;
 }
 
-export class TokenChildrenResponse {
-  @ApiProperty({ type: TokenId, isArray: true })
-  children: TokenChildrenResult;
+export class UnnestTokenResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: TokenId;
 }
 
 export class TokenParentResponse extends TokenId implements TokenParentResult {

@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import {
+  TokenParentResponse,
   CollectionProperty,
   TokenPropertyDeletedEvent,
   SetTokenPropertiesBody,
@@ -30,6 +31,9 @@ import {
   CreateCollectionParsed,
   CreateTokenNewDto,
   UniqueTokenDecodedResponse,
+  TopmostTokenOwnerResponse,
+  NestTokenBody,
+  UnnestTokenBody,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -121,6 +125,11 @@ export interface ITokens extends ISection {
     DeleteTokenPropertiesBody,
     TokenPropertyDeletedEvent[]
   >;
+  children(args: TokenId): Promise<TokenId[]>;
+  parent(args: TokenId): Promise<TokenParentResponse>;
+  topmostOwner(args: TokenId): Promise<TopmostTokenOwnerResponse>;
+  nest: IMutation<NestTokenBody, TokenId>;
+  unnest: IMutation<UnnestTokenBody, TokenId>;
 }
 
 export interface ClientParameters {
