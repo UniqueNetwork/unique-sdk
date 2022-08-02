@@ -6,10 +6,6 @@ export interface TokenIdArguments extends CollectionIdArguments {
   tokenId: number;
 }
 
-export interface BurnTokenArguments extends TokenIdArguments {
-  address: string;
-}
-
 export type CollectionProperty = {
   key: string;
   value: string;

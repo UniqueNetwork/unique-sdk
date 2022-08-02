@@ -17,7 +17,7 @@ import {
 } from '@unique-nft/sdk/tokens';
 import { ApiResponse } from '@nestjs/swagger';
 import {
-  BurnTokenBody,
+  BurnItemBody,
   DeleteTokenPropertiesBody,
   DeleteTokenPropertiesResponse,
   NestTokenBody,
@@ -48,9 +48,9 @@ export class BaseTokenController {
 
   @Delete()
   async burnToken(
-    @Body() args: BurnTokenBody,
+    @Body() args: BurnItemBody,
   ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.burn(args);
+    return this.sdk.tokens.burn.build(args);
   }
 
   @MutationMethod(Patch('transfer'), TransferTokenBody, TransferTokenResponse)
