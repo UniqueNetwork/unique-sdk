@@ -1,17 +1,16 @@
 /* eslint-disable class-methods-use-this */
 import { Controller, Get, Query, UsePipes } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { CrossAccountId } from '@unique-nft/sdk/types';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UniqueUtils } from '@unique-nft/api';
 import { Sdk } from '@unique-nft/sdk';
 
 import { TokenIdQuery } from '../unique/controllers/token';
 import { SdkValidationPipe } from '../../validation';
 import {
-  AddressQuery,
+  AddressDto,
   AddressWithPrefixQuery,
-  CrossAccountResponse,
-  EthereumAddressQuery,
+  EthereumAddressDto,
+  NestingAddressDto,
 } from './types';
 
 @UsePipes(SdkValidationPipe)
@@ -21,52 +20,53 @@ export class AddressUtilsController {
   constructor(private readonly sdk: Sdk) {}
 
   @Get('nesting/ids-to-address')
-  @CrossAccountResponse
+  @ApiResponse({ type: NestingAddressDto })
   nestingTokenIdToAddress(
     @Query()
     { collectionId, tokenId }: TokenIdQuery,
-  ) {
+  ): NestingAddressDto {
     const address = UniqueUtils.Address.nesting.idsToAddress(
       collectionId,
       tokenId,
     );
 
-    return UniqueUtils.Address.to.crossAccountId(address);
+    return { address };
   }
 
   @Get('nesting/address-to-ids')
+  @ApiResponse({ type: TokenIdQuery })
   nestingAddressToCollection(
     @Query()
-    { address }: AddressQuery,
+    { address }: NestingAddressDto,
   ): TokenIdQuery {
     return UniqueUtils.Address.nesting.addressToIds(address);
   }
 
   @Get('mirror/substrate-to-ethereum')
-  @CrossAccountResponse
+  @ApiResponse({ type: EthereumAddressDto })
   substrateToEthereum(
     @Query()
-    { address }: AddressQuery,
-  ): CrossAccountId {
-    const result = UniqueUtils.Address.mirror.substrateToEthereum(address);
+    { address }: AddressDto,
+  ): EthereumAddressDto {
+    const ethereum = UniqueUtils.Address.mirror.substrateToEthereum(address);
 
-    return UniqueUtils.Address.to.crossAccountId(result);
+    return { address: ethereum };
   }
 
   @Get('mirror/ethereum-to-substrate')
-  @CrossAccountResponse
+  @ApiResponse({ type: AddressDto })
   ethereumToSubstrate(
     @Query()
-    { address }: EthereumAddressQuery,
-  ): CrossAccountId {
-    const result = UniqueUtils.Address.mirror.ethereumToSubstrate(address);
+    { address }: EthereumAddressDto,
+  ): AddressDto {
+    const substrate = UniqueUtils.Address.mirror.ethereumToSubstrate(address);
 
-    return UniqueUtils.Address.to.crossAccountId(result);
+    return this.normalize({ address: substrate });
   }
 
   @Get('normalize')
-  @CrossAccountResponse
-  normalize(@Query() query: AddressWithPrefixQuery): CrossAccountId {
+  @ApiResponse({ type: AddressDto })
+  normalize(@Query() query: AddressWithPrefixQuery): AddressDto {
     const { address, ss58prefix = this.sdk.api.registry.chainSS58 } = query;
     UniqueUtils.Address.validate.substrateAddress(address);
 
@@ -75,6 +75,6 @@ export class AddressUtilsController {
       ss58prefix,
     );
 
-    return UniqueUtils.Address.to.crossAccountId(normalized);
+    return { address: normalized };
   }
 }
