@@ -1,5 +1,8 @@
 import { AxiosInstance } from 'axios';
 import {
+  CollectionProperty,
+  TokenPropertyDeletedEvent,
+  SetTokenPropertiesBody,
   SignTxResultResponse,
   UnsignedTxPayloadBody,
   SubmitTxBody,
@@ -11,11 +14,21 @@ import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
+  TokenProperty,
+  TokenId,
+  TokenPropertySetEvent,
+  DeleteTokenPropertiesBody,
+  SetCollectionPropertiesBody,
+  CollectionPropertySetEvent,
+  DeleteCollectionPropertiesBody,
+  CollectionPropertyDeletedEvent,
+  PropertyKeyPermission,
+  SetPropertyPermissionsBody,
+  PropertyPermissionSetEvent,
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionParsed,
   CreateTokenNewDto,
-  TokenId,
   UniqueTokenDecodedResponse,
 } from './api';
 
@@ -79,6 +92,22 @@ export interface ICollections extends ISection {
   get(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse>;
+  properties(args: { collectionId: number }): Promise<CollectionProperty[]>;
+  setProperties: IMutation<
+    SetCollectionPropertiesBody,
+    CollectionPropertySetEvent[]
+  >;
+  deleteProperties: IMutation<
+    DeleteCollectionPropertiesBody,
+    CollectionPropertyDeletedEvent[]
+  >;
+  propertyPermissions(args: {
+    collectionId: number;
+  }): Promise<PropertyKeyPermission[]>;
+  setPropertyPermissions: IMutation<
+    SetPropertyPermissionsBody,
+    PropertyPermissionSetEvent[]
+  >;
 }
 
 export interface ITokens extends ISection {
@@ -86,6 +115,12 @@ export interface ITokens extends ISection {
   baseUrl: string;
   create: IMutation<CreateTokenNewDto, TokenId>;
   get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  properties(args: TokenId): Promise<TokenProperty[]>;
+  setProperties: IMutation<SetTokenPropertiesBody, TokenPropertySetEvent[]>;
+  deleteProperties: IMutation<
+    DeleteTokenPropertiesBody,
+    TokenPropertyDeletedEvent[]
+  >;
 }
 
 export interface ClientParameters {
