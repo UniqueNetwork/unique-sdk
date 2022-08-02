@@ -13,7 +13,7 @@ import {
   CreateCollectionNewRequest,
   CreateCollectionParsed,
   SetCollectionLimitsBody,
-  SetCollectionLimitsResponse,
+  SetCollectionLimitsParsed,
   ICollections,
 } from '../types';
 
@@ -73,7 +73,7 @@ export class Collections extends Section implements ICollections {
 
   public readonly setLimits = new Mutation<
     SetCollectionLimitsBody,
-    SetCollectionLimitsResponse
+    SetCollectionLimitsParsed
   >(this.client, 'POST', this.path);
 
   async get(args: {

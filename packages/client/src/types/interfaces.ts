@@ -32,7 +32,7 @@ import {
   CreateTokenNewDto,
   UniqueTokenDecodedResponse,
   SetCollectionLimitsBody,
-  SetCollectionLimitsResponse,
+  SetCollectionLimitsParsed,
   TopmostTokenOwnerResponse,
   NestTokenBody,
   UnnestTokenBody,
@@ -95,7 +95,7 @@ export interface ICollections extends ISection {
   path: string;
   baseUrl: string;
   creation: IMutation<CreateCollectionNewRequest, CreateCollectionParsed>;
-  setLimits: IMutation<SetCollectionLimitsBody, SetCollectionLimitsResponse>;
+  setLimits: IMutation<SetCollectionLimitsBody, SetCollectionLimitsParsed>;
   get(args: {
     collectionId: number;
   }): Promise<CollectionInfoWithSchemaResponse>;

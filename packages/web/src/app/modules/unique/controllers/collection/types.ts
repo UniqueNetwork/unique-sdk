@@ -245,7 +245,7 @@ export class SetPropertyPermissionsBody
   propertyPermissions: PropertyKeyPermission[];
 }
 
-export class SetCollectionLimitsResponse implements SetCollectionLimitsResult {
+export class SetCollectionLimitsParsed implements SetCollectionLimitsResult {
   @IsPositive()
   @IsInt()
   @ApiProperty({ example: 1 })
@@ -255,6 +255,10 @@ export class SetCollectionLimitsResponse implements SetCollectionLimitsResult {
     description: 'The collection limits',
   })
   limits: CollectionLimitsDto;
+}
+export class SetCollectionLimitsResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: SetCollectionLimitsParsed;
 }
 
 export class PropertyPermissionSetEvent
