@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import {
+  TokenParentResponse,
   SignTxResultResponse,
   UnsignedTxPayloadBody,
   SubmitTxBody,
@@ -17,6 +18,9 @@ import {
   CreateTokenNewDto,
   TokenId,
   UniqueTokenDecodedResponse,
+  TopmostTokenOwnerResponse,
+  NestTokenBody,
+  UnnestTokenBody,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -86,6 +90,11 @@ export interface ITokens extends ISection {
   baseUrl: string;
   create: IMutation<CreateTokenNewDto, TokenId>;
   get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  children(args: TokenId): Promise<TokenId[]>;
+  parent(args: TokenId): Promise<TokenParentResponse>;
+  topmostOwner(args: TokenId): Promise<TopmostTokenOwnerResponse>;
+  nest: IMutation<NestTokenBody, TokenId>;
+  unnest: IMutation<UnnestTokenBody, TokenId>;
 }
 
 export interface ClientParameters {

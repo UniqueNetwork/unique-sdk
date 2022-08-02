@@ -216,6 +216,12 @@ export interface NestTokenBody {
   nested: TokenId;
 }
 
+export interface NestTokenResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+  parsed: TokenId;
+}
+
 export interface UnnestTokenBody {
   /** @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm */
   address: string;
@@ -225,6 +231,28 @@ export interface UnnestTokenBody {
 
   /** Nested token object */
   nested: TokenId;
+}
+
+export interface UnnestTokenResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+  parsed: TokenId;
+}
+
+export interface TokenParentResponse {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm */
+  address: string;
+}
+
+export interface TopmostTokenOwnerResponse {
+  /** @example unjq56sK9skTMR1MyPLsDFXkQdRNNrD1gzE4wRJSYm2k6GjJn */
+  topmostOwner: string;
 }
 
 export interface TokenPropertyDto {

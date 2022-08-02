@@ -4,8 +4,6 @@ import {
   CACHE_MANAGER,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Inject,
   NotFoundException,
   Post,
@@ -13,21 +11,27 @@ import {
   Patch,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { TokenPropertiesResult } from '@unique-nft/sdk/tokens';
+import {
+  TokenChildrenResult,
+  TokenPropertiesResult,
+} from '@unique-nft/sdk/tokens';
+import { ApiResponse } from '@nestjs/swagger';
 import {
   BurnTokenBody,
   DeleteTokenPropertiesBody,
   DeleteTokenPropertiesResponse,
   NestTokenBody,
+  NestTokenResponse,
   SetTokenPropertiesBody,
   SetTokenPropertiesResponse,
-  TokenChildrenResponse,
+  TokenId,
   TokenIdQuery,
   TokenParentResponse,
   TopmostTokenOwnerResponse,
   TransferTokenBody,
   TransferTokenResponse,
   UnnestTokenBody,
+  UnnestTokenResponse,
 } from './types';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import {
@@ -57,32 +61,34 @@ export class BaseTokenController {
     };
   }
 
-  @Post('nest')
-  @HttpCode(HttpStatus.OK)
-  async nestToken(
-    @Body() args: NestTokenBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.nest.build(args);
+  @MutationMethod(Post('nest'), NestTokenBody, NestTokenResponse)
+  nestToken(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.nest,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
   }
 
-  @Post('unnest')
-  @HttpCode(HttpStatus.OK)
-  async unnestToken(
-    @Body() args: UnnestTokenBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.unnest.build(args);
+  @MutationMethod(Post('unnest'), UnnestTokenBody, UnnestTokenResponse)
+  unnestToken(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.unnest,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
   }
 
   @Get('children')
+  @ApiResponse({ type: TokenId, isArray: true })
   async tokenChildren(
     @Query() args: TokenIdQuery,
-  ): Promise<TokenChildrenResponse> {
-    const children = await this.sdk.tokens.children(args);
-
-    return { children };
+  ): Promise<TokenChildrenResult> {
+    return this.sdk.tokens.children(args);
   }
 
   @Get('parent')
+  @ApiResponse({ type: TokenParentResponse })
   async tokenParent(@Query() args: TokenIdQuery): Promise<TokenParentResponse> {
     const parent = await this.sdk.tokens.parent(args);
 
@@ -94,6 +100,7 @@ export class BaseTokenController {
   }
 
   @Get('topmost-owner')
+  @ApiResponse({ type: TopmostTokenOwnerResponse })
   async topmostTokenOwner(
     @Query() args: TokenIdQuery,
   ): Promise<TopmostTokenOwnerResponse> {
