@@ -36,6 +36,7 @@ export interface AllBalances {
   availableBalance: Balance;
   lockedBalance: Balance;
   freeBalance: Balance;
+  address: Address;
 }
 
 export type Fee = Balance;

@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { HexString } from '@polkadot/util/types';
 import {
+  Address,
   AddressArguments,
   AllBalances,
   Balance,
@@ -98,6 +99,9 @@ export class AllBalancesResponse implements AllBalances {
 
   @ApiProperty({ type: BalanceResponse })
   freeBalance: BalanceResponse;
+
+  @AddressApiProperty
+  address: Address;
 }
 
 export class FeeResponse extends BalanceResponse implements Fee {}
