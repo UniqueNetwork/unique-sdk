@@ -24,12 +24,15 @@
   - [Secondary endpoints](#secondary-endpoints)
 - [Swagger](#swagger)
 - [Mutation methods](#mutation-methods)
+- [Query methods](#query-methods)
 - [IPFS](#using-ipfs-for-uploading-files)
 
 
 ## Intro
 
-Extrinsic is a request to change data in the blockchain.
+WEB package is a REST API that allows you to connect and make changes to the chain without installing the whole SDK or using ApiPromise. By that, you can ease your work with chain and be as close to Web3 as it's possible in Web2.
+
+The main object you will work on in this package is an extrinsic. Extrinsic is a request to change data in the blockchain.
 
 https://docs.substrate.io/v3/concepts/extrinsics/
 
@@ -170,11 +173,13 @@ https://web-quartz.unique.network/swagger/ksm/
 
 ```bash
 SECONDARY_CHAIN_WS_URL=wss://kusama-rpc.polkadot.io
+SECONDARY_CHAIN_NAME=ksm
 ```
 or
 
 ```bash
 SECONDARY_CHAIN_WS_URL=wss://rpc.polkadot.io
+SECONDARY_CHAIN_NAME=ksm
 ```
 
 
@@ -196,6 +201,12 @@ By doing that you can complete the entire sequence of actions for extrinsic:
 After that you can use extrinsic hash received as a response for checking the extrinsic status.
 
 For more convenience, we have implemented a complex method: if you initialize the SDK with a signer, you can sign and send extrinsics seamlessly, without separate actions.
+
+Read more about mutation methods in <a href="../packages/sdk#mutation-and-query-methods">SDK documentation</a>.
+
+## Query methods
+
+Unique SDK allows using Query methods for reading blockchain storage (e.g. balance, or token properties) in human-readable format.
 
 Read more about mutation methods in <a href="../packages/sdk#mutation-and-query-methods">SDK documentation</a>.
 
