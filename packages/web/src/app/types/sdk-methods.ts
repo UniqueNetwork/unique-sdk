@@ -26,6 +26,11 @@ export const AddressApiProperty = ApiProperty({
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
 });
 
+export const EthereumAddressApiProperty = ApiProperty({
+  description: 'The ss-58 encoded address',
+  example: '0x0A91113393e01ebe11f932F89ccd2C3DD713aeBB',
+});
+
 export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({
     example: 255,
