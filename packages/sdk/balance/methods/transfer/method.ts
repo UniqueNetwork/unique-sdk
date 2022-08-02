@@ -6,6 +6,7 @@ import {
   BalanceTransferArguments,
   BalanceTransferBuildArguments,
 } from './types';
+import { ethereumToMirrorAddress } from '../../../utils';
 
 /* eslint-disable class-methods-use-this */
 
@@ -48,11 +49,14 @@ export class BalanceTransferMutation extends MutationMethodBase<
 
     const amountRaw = BigInt(amount * this.multiplierToRaw);
 
+    const { SS58Prefix } = this.sdk.chainProperties();
+    const mirrorAddress = ethereumToMirrorAddress(destination, SS58Prefix);
+
     return {
       address,
       section: 'balances',
       method: 'transfer',
-      args: [destination, amountRaw],
+      args: [mirrorAddress, amountRaw],
     };
   }
 

@@ -4,6 +4,7 @@ import {
   cryptoWaitReady,
   decodeAddress,
   encodeAddress,
+  evmToAddress,
 } from '@polkadot/util-crypto';
 import { Address, CrossAccountId } from '@unique-nft/sdk/types';
 
@@ -52,6 +53,15 @@ export function addressToCrossAccountId(address: Address): CrossAccountId {
   if (isEthereumAddress(address)) return { Ethereum: address };
 
   return { Substrate: address };
+}
+
+export function ethereumToMirrorAddress(
+  address: string,
+  ss58prefix: number,
+): string {
+  return isEthereumAddress(address)
+    ? evmToAddress(address, ss58prefix)
+    : address;
 }
 
 export const toJsonObject = (data: object) =>

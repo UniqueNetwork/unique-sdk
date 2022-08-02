@@ -11,6 +11,9 @@ import * as process from 'process';
 const TEST_RICH_ACCOUNTS =
   process.env['TEST_RICH_ACCOUNTS'] || '//Bob,//Charlie,//Eve,//Dave,//Ferdie';
 const TEST_POOR_ACCOUNT = process.env['TEST_POOR_ACCOUNT'] || '//Alice';
+const TEST_ETHEREUM_ACCOUNT =
+  process.env['TEST_ETHEREUM_ACCOUNT'] ||
+  '0x6A36eb833069e7a38D71Fe7A9d876348A47cF3b9';
 const TEST_CHAIN_WS_URL =
   process.env['TEST_CHAIN_WS_URL'] || 'wss://ws-rc.unique.network';
 
@@ -46,6 +49,10 @@ export type TestAccount = {
   address: string;
 };
 
+export type TestEthereumAccount = {
+  address: string;
+};
+
 function createAccount(seed: string): TestAccount {
   const keyring = new Keyring({ type: 'sr25519' });
   const keyringPair = keyring.addFromMnemonic(seed);
@@ -57,6 +64,9 @@ function createAccount(seed: string): TestAccount {
 }
 export const createRichAccount = () => createAccount(getRichSeed());
 export const createPoorAccount = () => createAccount(TEST_POOR_ACCOUNT);
+export const createEthereumAccount = (): TestEthereumAccount => ({
+  address: TEST_ETHEREUM_ACCOUNT,
+});
 
 export function signWithAccount(
   sdk: Sdk,

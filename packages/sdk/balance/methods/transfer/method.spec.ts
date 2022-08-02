@@ -1,9 +1,11 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
+  createEthereumAccount,
   createPoorAccount,
   createRichAccount,
   createSdk,
   TestAccount,
+  TestEthereumAccount,
 } from '@unique-nft/sdk/testing';
 import { VerificationFailedError } from '@unique-nft/sdk/errors';
 
@@ -11,28 +13,11 @@ import { BalanceTransferMutation } from './method';
 import { BalanceTransferArguments } from './types';
 
 describe('balance-transfer', () => {
-  it('ok', async () => {
-    const sdk: Sdk = await createSdk(true);
-    const richAccount = createRichAccount();
-    const poorAccount = createPoorAccount();
-    const { isCompleted, parsed } = await sdk.balance.transfer.submitWaitResult(
-      {
-        address: richAccount.address,
-        destination: poorAccount.address,
-        amount: 0.01,
-      },
-    );
-
-    expect(isCompleted).toBe(true);
-    expect(parsed.success).toBe(true);
-  }, 30_000);
-});
-
-describe('balance-transfer', () => {
   let sdk: Sdk;
 
   let richAccount: TestAccount;
   let poorAccount: TestAccount;
+  let ethereumAccount: TestEthereumAccount;
 
   let transfer: BalanceTransferMutation;
 
@@ -45,6 +30,8 @@ describe('balance-transfer', () => {
 
     poorAccount = createPoorAccount();
 
+    ethereumAccount = createEthereumAccount();
+
     transfer = new BalanceTransferMutation(sdk);
 
     createArgs = {
@@ -56,6 +43,16 @@ describe('balance-transfer', () => {
 
   it('ok', async () => {
     const result = await transfer.submitWaitResult(createArgs);
+
+    expect(result.parsed.success).toBe(true);
+  }, 60_000);
+
+  it('to-ethereum-ok', async () => {
+    const result = await transfer.submitWaitResult({
+      address: richAccount.address,
+      destination: ethereumAccount.address,
+      amount: 0.01,
+    });
 
     expect(result.parsed.success).toBe(true);
   }, 60_000);
