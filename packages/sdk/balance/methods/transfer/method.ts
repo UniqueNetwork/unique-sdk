@@ -50,13 +50,13 @@ export class BalanceTransferMutation extends MutationMethodBase<
     const amountRaw = BigInt(amount * this.multiplierToRaw);
 
     const { SS58Prefix } = this.sdk.chainProperties();
-    const wrapperAddress = await wrapAddress(destination, SS58Prefix);
+    const wrappedAddress = await wrapAddress(destination, SS58Prefix);
 
     return {
       address,
       section: 'balances',
       method: 'transfer',
-      args: [wrapperAddress, amountRaw],
+      args: [wrappedAddress, amountRaw],
     };
   }
 
