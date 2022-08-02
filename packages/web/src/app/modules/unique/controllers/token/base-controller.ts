@@ -27,6 +27,7 @@ import {
   TokenId,
   TokenIdQuery,
   TokenParentResponse,
+  TokenProperty,
   TopmostTokenOwnerResponse,
   TransferTokenBody,
   TransferTokenResponse,
@@ -116,6 +117,7 @@ export class BaseTokenController {
   }
 
   @Get('properties')
+  @ApiResponse({ type: TokenProperty, isArray: true })
   async tokenProperties(
     @Query() args: TokenIdQuery,
   ): Promise<TokenPropertiesResult> {

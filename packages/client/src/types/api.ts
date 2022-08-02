@@ -255,7 +255,7 @@ export interface TopmostTokenOwnerResponse {
   topmostOwner: string;
 }
 
-export interface TokenPropertyDto {
+export interface TokenProperty {
   /** @example example */
   key: string;
 
@@ -275,12 +275,24 @@ export interface SetTokenPropertiesBody {
 
   /** @example 1 */
   tokenId: number;
-  properties: TokenPropertyDto[];
+  properties: TokenProperty[];
+}
+
+export interface TokenPropertySetEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** @example example */
+  propertyKey: string;
 }
 
 export interface SetTokenPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: TokenPropertySetEvent[];
 }
 
 export interface DeleteTokenPropertiesBody {
@@ -300,9 +312,21 @@ export interface DeleteTokenPropertiesBody {
   propertyKeys: string[];
 }
 
+export interface TokenPropertyDeletedEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /** @example example */
+  propertyKey: string;
+}
+
 export interface DeleteTokenPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: TokenPropertyDeletedEvent[];
 }
 
 export interface DecodedAttributeDto {
@@ -648,7 +672,7 @@ export interface TransferCollectionBody {
   to: string;
 }
 
-export interface CollectionPropertyDto {
+export interface CollectionProperty {
   /** @example example */
   key: string;
 
@@ -665,12 +689,21 @@ export interface SetCollectionPropertiesBody {
 
   /** @example 1 */
   collectionId: number;
-  properties: CollectionPropertyDto[];
+  properties: CollectionProperty[];
+}
+
+export interface CollectionPropertySetEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example example */
+  propertyKey: string;
 }
 
 export interface SetCollectionPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: CollectionPropertySetEvent[];
 }
 
 export interface DeleteCollectionPropertiesBody {
@@ -687,21 +720,30 @@ export interface DeleteCollectionPropertiesBody {
   propertyKeys: string[];
 }
 
+export interface CollectionPropertyDeletedEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example example */
+  propertyKey: string;
+}
+
 export interface DeleteCollectionPropertiesResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: CollectionPropertyDeletedEvent[];
 }
 
-export interface PropertyPermissionDto {
+export interface PropertyPermission {
   mutable: boolean;
   collectionAdmin: boolean;
   tokenOwner: boolean;
 }
 
-export interface PropertyKeyPermissionDto {
+export interface PropertyKeyPermission {
   /** @example example */
   key: string;
-  permission: PropertyPermissionDto;
+  permission: PropertyPermission;
 }
 
 export interface SetPropertyPermissionsBody {
@@ -713,12 +755,21 @@ export interface SetPropertyPermissionsBody {
 
   /** @example 1 */
   collectionId: number;
-  propertyPermissions: PropertyKeyPermissionDto[];
+  propertyPermissions: PropertyKeyPermission[];
+}
+
+export interface PropertyPermissionSetEvent {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example example */
+  propertyKey: string;
 }
 
 export interface SetPropertyPermissionsResponse {
   isError: boolean;
   fee?: FeeResponse;
+  parsed: PropertyPermissionSetEvent[];
 }
 
 export interface AttributeSchemaDto {
@@ -831,7 +882,7 @@ export interface CollectionInfoWithSchemaResponse {
    */
   owner: string;
   schema?: UniqueCollectionSchemaDecodedDto;
-  properties: CollectionPropertyDto[];
+  properties: CollectionProperty[];
 }
 
 export interface UniqueCollectionSchemaToCreateDto {
@@ -1174,14 +1225,6 @@ export interface GenerateAccountDataBody {
    * @example {}
    */
   meta?: object;
-}
-
-export interface IpfsUploadResponse {
-  /** File address */
-  cid: string;
-
-  /** IPFS gateway file URL */
-  fileUrl?: string;
 }
 
 import { arrayNumberRecordStringAny } from './missingApiTypes';

@@ -7,11 +7,13 @@ import {
   TokenChildrenResult,
   TokenIdArguments,
   TokenParentResult,
-  TokenProperty,
   TopmostTokenOwnerResult,
   TransferArguments,
   UnnestTokenArguments,
   TransferResult,
+  TokenProperty as TokenPropertySDK,
+  TokenPropertySetEvent as TokenPropertySetEventSDK,
+  TokenPropertyDeletedEvent as TokenPropertyDeletedEventSDK,
 } from '@unique-nft/sdk/tokens';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -148,7 +150,7 @@ export class TopmostTokenOwnerResponse {
   topmostOwner: TopmostTokenOwnerResult;
 }
 
-export class TokenPropertyDto implements TokenProperty {
+export class TokenProperty implements TokenPropertySDK {
   @ApiProperty({ example: 'example' })
   key: string;
 
@@ -171,12 +173,26 @@ export class SetTokenPropertiesBody implements SetTokenPropertiesArguments {
   @ApiProperty({ example: 1 })
   tokenId: number;
 
-  @ApiProperty({ type: [TokenPropertyDto] })
-  @Type(() => TokenPropertyDto)
+  @ApiProperty({ type: [TokenProperty] })
+  @Type(() => TokenProperty)
   properties: TokenProperty[];
 }
 
-export class SetTokenPropertiesResponse extends MutationResponse {}
+export class TokenPropertySetEvent implements TokenPropertySetEventSDK {
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ example: 'example' })
+  propertyKey: string;
+}
+
+export class SetTokenPropertiesResponse extends MutationResponse {
+  @ApiProperty({ type: TokenPropertySetEvent, isArray: true })
+  parsed: TokenPropertySetEvent[];
+}
 
 export class DeleteTokenPropertiesBody
   implements DeleteTokenPropertiesArguments
@@ -199,4 +215,18 @@ export class DeleteTokenPropertiesBody
   propertyKeys: string[];
 }
 
-export class DeleteTokenPropertiesResponse extends MutationResponse {}
+export class TokenPropertyDeletedEvent implements TokenPropertyDeletedEventSDK {
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({ example: 1 })
+  tokenId: number;
+
+  @ApiProperty({ example: 'example' })
+  propertyKey: string;
+}
+
+export class DeleteTokenPropertiesResponse extends MutationResponse {
+  @ApiProperty({ type: TokenPropertyDeletedEvent, isArray: true })
+  parsed: TokenPropertyDeletedEvent[];
+}
