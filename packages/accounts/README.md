@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="400px" src="../../doc/logo-white.svg" alt="Unique Network">
+    <img width="400px" src="https://raw.githubusercontent.com/UniqueNetwork/unique-sdk/ab6b4e524f008d5e921026599de5bc120a91e14e/doc/logo-white.svg" alt="Unique Network">
 <br/>
 <br/>
 
