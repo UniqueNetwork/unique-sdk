@@ -53,7 +53,7 @@ export class CreateTokenBody
 
   @IsOptional()
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   owner?: string;
 
   @ApiProperty({
@@ -69,17 +69,17 @@ export class CreateTokenBody
 
 export class BurnTokenBody extends TokenId implements BurnTokenArguments {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 }
 
 export class TransferTokenBody extends TokenId implements TransferArguments {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty('unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx')
   from: string;
 
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty('unhk98EgHVJ3Efjz4912GfWkMoW2GXe3SuFrQ6u2bYeWToXrE')
   to: string;
 }
 
@@ -169,7 +169,7 @@ export class TokenProperty implements TokenPropertySDK {
 
 export class SetTokenPropertiesBody implements SetTokenPropertiesArguments {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @IsPositive()
@@ -207,7 +207,7 @@ export class DeleteTokenPropertiesBody
   implements DeleteTokenPropertiesArguments
 {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @IsPositive()

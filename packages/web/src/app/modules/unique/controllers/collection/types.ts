@@ -48,7 +48,7 @@ export class CreateCollectionBody
   extends CollectionInfoWithOldPropertiesDto
   implements CreateCollectionArguments
 {
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 }
 
@@ -66,7 +66,7 @@ export class CreateCollectionNewRequest
   extends CollectionInfoBaseDto
   implements CreateCollectionNewArguments
 {
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @ApiProperty({ type: UniqueCollectionSchemaToCreateDto, required: false })
@@ -104,7 +104,7 @@ export class SetCollectionLimitsBody implements SetCollectionLimitsArguments {
 
   @ValidAddress()
   @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @IsPositive()
@@ -124,7 +124,7 @@ export class BurnCollectionBody implements BurnCollectionArguments {
   collectionId: number;
 
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 }
 
@@ -137,11 +137,11 @@ export class TransferCollectionBody implements TransferCollectionArguments {
   collectionId: number;
 
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty('unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx')
   from: string;
 
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty('unhk98EgHVJ3Efjz4912GfWkMoW2GXe3SuFrQ6u2bYeWToXrE')
   to: string;
 }
 
@@ -149,7 +149,7 @@ export class SetCollectionPropertiesBody
   implements SetCollectionPropertiesArguments
 {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @IsPositive()
@@ -181,7 +181,7 @@ export class DeleteCollectionPropertiesBody
   implements DeleteCollectionPropertiesArguments
 {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @IsPositive()
@@ -231,7 +231,7 @@ export class SetPropertyPermissionsBody
   implements SetTokenPropertyPermissionsArguments
 {
   @ValidAddress()
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @IsPositive()

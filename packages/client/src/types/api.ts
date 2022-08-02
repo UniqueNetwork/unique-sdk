@@ -166,13 +166,13 @@ export interface TransferTokenBody {
 
   /**
    * The ss-58 encoded address
-   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   * @example unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx
    */
   from: string;
 
   /**
    * The ss-58 encoded address
-   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   * @example unhk98EgHVJ3Efjz4912GfWkMoW2GXe3SuFrQ6u2bYeWToXrE
    */
   to: string;
 }
@@ -206,13 +206,13 @@ export interface TransferFromTokenBody {
 
   /**
    * The ss-58 encoded address
-   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   * @example unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx
    */
   from: string;
 
   /**
    * The ss-58 encoded address
-   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   * @example unhk98EgHVJ3Efjz4912GfWkMoW2GXe3SuFrQ6u2bYeWToXrE
    */
   to: string;
 
@@ -684,13 +684,13 @@ export interface TransferCollectionBody {
 
   /**
    * The ss-58 encoded address
-   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   * @example unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx
    */
   from: string;
 
   /**
    * The ss-58 encoded address
-   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   * @example unhk98EgHVJ3Efjz4912GfWkMoW2GXe3SuFrQ6u2bYeWToXrE
    */
   to: string;
 }

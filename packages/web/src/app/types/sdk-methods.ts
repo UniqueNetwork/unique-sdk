@@ -21,10 +21,13 @@ import {
 import { ValidAddress } from '../validation';
 import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 
-export const AddressApiProperty = ApiProperty({
-  description: 'The ss-58 encoded address',
-  example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
-});
+export const AddressApiProperty = (
+  example = 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+) =>
+  ApiProperty({
+    description: 'The ss-58 encoded address',
+    example,
+  });
 
 export class ChainPropertiesResponse implements ChainProperties {
   @ApiProperty({

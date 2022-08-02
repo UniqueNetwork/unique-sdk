@@ -191,19 +191,19 @@ describe('Tokens', () => {
 
     const result = await sdk.tokens.transferFrom.submitWaitResult(args);
 
-    const richAccoutAddress = keyring.encodeAddress(
+    const richAccoutSS58Address = keyring.encodeAddress(
       richAccount.keyringPair.publicKey,
       ss58Format,
     );
 
-    const poorAccountAddress = keyring.encodeAddress(
+    const poorAccountSS58Address = keyring.encodeAddress(
       poorAccount.keyringPair.publicKey,
       ss58Format,
     );
 
     const expected: TransferResult = {
-      from: addressToCrossAccountId(richAccoutAddress),
-      to: addressToCrossAccountId(poorAccountAddress),
+      from: addressToCrossAccountId(richAccoutSS58Address),
+      to: addressToCrossAccountId(poorAccountSS58Address),
       collectionId,
       tokenId: 1,
     };

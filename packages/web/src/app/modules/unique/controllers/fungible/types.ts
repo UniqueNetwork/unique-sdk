@@ -25,7 +25,7 @@ export class CreateFungibleCollectionRequest
   @ApiProperty({ example: CollectionMode.Fungible })
   mode: CollectionMode.Fungible;
 
-  @AddressApiProperty
+  @AddressApiProperty()
   address: Address;
 
   @IsInt()
@@ -53,7 +53,7 @@ export class FungibleCollectionInfoDto
 }
 
 export class AddTokensArgsDto implements AddTokensArguments {
-  @AddressApiProperty
+  @AddressApiProperty()
   address: Address;
 
   @ApiProperty({ required: false })
@@ -78,10 +78,10 @@ export class AddTokensResultDto implements AddTokensResult {
 }
 
 export class TransferTokensArgsDto implements TransferTokensArguments {
-  @AddressApiProperty
+  @AddressApiProperty()
   address: Address;
 
-  @AddressApiProperty
+  @AddressApiProperty()
   recipient: Address;
 
   @ApiProperty()
@@ -92,10 +92,10 @@ export class TransferTokensArgsDto implements TransferTokensArguments {
 }
 
 export class TransferTokensResultDto implements TransferTokensResult {
-  @AddressApiProperty
+  @AddressApiProperty()
   recipient: Address;
 
-  @AddressApiProperty
+  @AddressApiProperty()
   sender: Address;
 
   @ApiProperty()
@@ -106,7 +106,7 @@ export class TransferTokensResultDto implements TransferTokensResult {
 }
 
 export class GetFungibleBalanceArgsRequest implements GetFungibleBalanceArgs {
-  @AddressApiProperty
+  @AddressApiProperty()
   address: Address;
 
   @ApiProperty()

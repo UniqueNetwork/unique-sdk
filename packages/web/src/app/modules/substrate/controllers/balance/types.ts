@@ -15,12 +15,12 @@ export class BalanceTransferBody implements BalanceTransferArguments {
   @IsString()
   @ValidAddress()
   @NotYourselfAddress('destination')
-  @AddressApiProperty
+  @AddressApiProperty()
   address: string;
 
   @ValidAddress()
   @ApiProperty({ example: 'unjKJQJrRd238pkUZZvzDQrfKuM39zBSnQ5zjAGAGcdRhaJTx' })
-  @AddressApiProperty
+  @AddressApiProperty()
   destination: string;
 
   @IsNumber()
