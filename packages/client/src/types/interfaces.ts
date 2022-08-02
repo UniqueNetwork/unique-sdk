@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import {
+  TransferTokenParsed,
   SignTxResultResponse,
   UnsignedTxPayloadBody,
   SubmitTxBody,
@@ -17,6 +18,7 @@ import {
   CreateTokenNewDto,
   TokenId,
   UniqueTokenDecodedResponse,
+  TransferFromTokenBody,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -86,6 +88,7 @@ export interface ITokens extends ISection {
   baseUrl: string;
   create: IMutation<CreateTokenNewDto, TokenId>;
   get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  transferFrom: IMutation<TransferFromTokenBody, TransferTokenParsed>;
 }
 
 export interface ClientParameters {

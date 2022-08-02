@@ -197,6 +197,29 @@ export interface TransferTokenResponse {
   parsed: TransferTokenParsed;
 }
 
+export interface TransferFromTokenBody {
+  /** @example 1 */
+  collectionId: number;
+
+  /** @example 1 */
+  tokenId: number;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  from: string;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  to: string;
+
+  /** @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm */
+  address: string;
+}
+
 export interface TokenId {
   /** @example 1 */
   collectionId: number;

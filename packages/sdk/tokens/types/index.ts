@@ -24,5 +24,6 @@ export * from '../methods/confirm-sponsorship/types';
 export * from '../methods/set-collection-sponsor/types';
 export * from '../methods/remove-collection-sponsor/types';
 export * from '../methods/transfer';
+export * from '../methods/transfer-from';
 
 export * from './shared';

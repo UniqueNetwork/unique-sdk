@@ -12,6 +12,7 @@ import {
   TransferArguments,
   UnnestTokenArguments,
   TransferResult,
+  TransferFromArguments,
 } from '@unique-nft/sdk/tokens';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -79,6 +80,15 @@ export class TransferTokenBody extends TokenId implements TransferArguments {
   @ValidAddress()
   @AddressApiProperty
   to: string;
+}
+
+export class TransferFromTokenBody
+  extends TransferTokenBody
+  implements TransferFromArguments
+{
+  @ValidAddress()
+  @ApiProperty({ example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm' })
+  address: Address;
 }
 
 export class TransferTokenParsed implements TransferResult {

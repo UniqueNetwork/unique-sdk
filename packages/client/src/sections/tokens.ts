@@ -4,6 +4,8 @@ import {
   CreateTokenNewDto,
   TokenId,
   UniqueTokenDecodedResponse,
+  TransferFromTokenBody,
+  TransferTokenParsed,
 } from '../types';
 
 export class Tokens extends Section {
@@ -26,4 +28,9 @@ export class Tokens extends Section {
     });
     return response.data;
   }
+
+  public readonly transferFrom = new Mutation<
+    TransferFromTokenBody,
+    TransferTokenParsed
+  >(this.client, 'PATCH', `${this.path}/transfer-from`);
 }
