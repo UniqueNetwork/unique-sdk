@@ -192,12 +192,12 @@ describe('Tokens', () => {
     const result = await sdk.tokens.transferFrom.submitWaitResult(args);
 
     const richAccoutSS58Address = keyring.encodeAddress(
-      richAccount.keyringPair.publicKey,
+      richAccount.address,
       ss58Format,
     );
 
     const poorAccountSS58Address = keyring.encodeAddress(
-      poorAccount.keyringPair.publicKey,
+      poorAccount.address,
       ss58Format,
     );
 
