@@ -1,5 +1,9 @@
 import { AxiosInstance } from 'axios';
 import {
+  TokenParentResponse,
+  CollectionProperty,
+  TokenPropertyDeletedEvent,
+  SetTokenPropertiesBody,
   SignTxResultResponse,
   UnsignedTxPayloadBody,
   SubmitTxBody,
@@ -11,6 +15,25 @@ import {
   BalanceTransferBody,
   BalanceTransferParsed,
   AllBalancesResponse,
+  TokenProperty,
+  TokenId,
+  TokenPropertySetEvent,
+  DeleteTokenPropertiesBody,
+  SetCollectionPropertiesBody,
+  CollectionPropertySetEvent,
+  DeleteCollectionPropertiesBody,
+  CollectionPropertyDeletedEvent,
+  PropertyKeyPermission,
+  SetPropertyPermissionsBody,
+  PropertyPermissionSetEvent,
+  CollectionInfoWithSchemaResponse,
+  CreateCollectionNewRequest,
+  CreateCollectionParsed,
+  CreateTokenNewDto,
+  UniqueTokenDecodedResponse,
+  TopmostTokenOwnerResponse,
+  NestTokenBody,
+  UnnestTokenBody,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -64,6 +87,49 @@ export interface IBalance extends ISection {
   baseUrl: string;
   transfer: IMutation<BalanceTransferBody, BalanceTransferParsed>;
   get(args: { address: string }): Promise<AllBalancesResponse>;
+}
+
+export interface ICollections extends ISection {
+  path: string;
+  baseUrl: string;
+  creation: IMutation<CreateCollectionNewRequest, CreateCollectionParsed>;
+  get(args: {
+    collectionId: number;
+  }): Promise<CollectionInfoWithSchemaResponse>;
+  properties(args: { collectionId: number }): Promise<CollectionProperty[]>;
+  setProperties: IMutation<
+    SetCollectionPropertiesBody,
+    CollectionPropertySetEvent[]
+  >;
+  deleteProperties: IMutation<
+    DeleteCollectionPropertiesBody,
+    CollectionPropertyDeletedEvent[]
+  >;
+  propertyPermissions(args: {
+    collectionId: number;
+  }): Promise<PropertyKeyPermission[]>;
+  setPropertyPermissions: IMutation<
+    SetPropertyPermissionsBody,
+    PropertyPermissionSetEvent[]
+  >;
+}
+
+export interface ITokens extends ISection {
+  path: string;
+  baseUrl: string;
+  create: IMutation<CreateTokenNewDto, TokenId>;
+  get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  properties(args: TokenId): Promise<TokenProperty[]>;
+  setProperties: IMutation<SetTokenPropertiesBody, TokenPropertySetEvent[]>;
+  deleteProperties: IMutation<
+    DeleteTokenPropertiesBody,
+    TokenPropertyDeletedEvent[]
+  >;
+  children(args: TokenId): Promise<TokenId[]>;
+  parent(args: TokenId): Promise<TokenParentResponse>;
+  topmostOwner(args: TokenId): Promise<TopmostTokenOwnerResponse>;
+  nest: IMutation<NestTokenBody, TokenId>;
+  unnest: IMutation<UnnestTokenBody, TokenId>;
 }
 
 export interface ClientParameters {

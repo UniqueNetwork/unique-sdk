@@ -1,4 +1,4 @@
-import { IClient } from '../types/interfaces';
+import { IClient } from '../types';
 
 export abstract class Section {
   abstract readonly path: string;
