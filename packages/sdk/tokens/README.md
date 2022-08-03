@@ -16,4 +16,4 @@
 - [Token parent](./methods/token-parent)
 - [Topmost token owner](./methods/topmost-token-owner)
 - [Approve](./methods/approve)
-- [Burn](./methods/burn-item)
+- [Burn](./methods/burn-token)

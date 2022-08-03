@@ -12,7 +12,7 @@ import {
 
 export class BurnItemMutation extends MutationMethodBase<
   BurnItemArguments,
-  BurnItemArguments
+  BurnItemResult
 > {
   async transformArgs(
     args: BurnItemArguments,

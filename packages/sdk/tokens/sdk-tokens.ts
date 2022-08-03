@@ -51,7 +51,7 @@ import {
 } from './methods/create-token';
 import { addressToCrossAccountId } from '../utils';
 import { TransferMutation } from './methods/transfer/method';
-import { BurnItemMutation } from './methods/burn-item/method';
+import { BurnItemMutation } from './methods/burn-token/method';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {

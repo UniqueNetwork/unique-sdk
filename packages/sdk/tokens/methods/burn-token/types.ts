@@ -1,10 +1,7 @@
-import {
-  Address,
-  AddressArguments,
-  TxBuildArguments,
-} from '@unique-nft/sdk/types';
+import { Address, TxBuildArguments } from '@unique-nft/sdk/types';
 
-export interface BurnItemArguments extends AddressArguments {
+export interface BurnItemArguments {
+  address: Address;
   collectionId: number;
   tokenId: number;
   value: number;

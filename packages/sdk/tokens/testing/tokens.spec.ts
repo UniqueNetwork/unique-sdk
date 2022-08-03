@@ -4,7 +4,11 @@ import {
   createSdk,
   TestAccount,
 } from '@unique-nft/sdk/testing';
-import { getNestingTokenAddress } from '@unique-nft/sdk/tokens';
+import {
+  BurnItemArguments,
+  BurnItemResult,
+  getNestingTokenAddress,
+} from '@unique-nft/sdk/tokens';
 import {
   NestTokenArguments,
   NestTokenResult,
@@ -169,5 +173,26 @@ describe('Tokens', () => {
     };
 
     expect(result.parsed).toStrictEqual(expected);
+  }, 60_000);
+
+  it('burn-token', async () => {
+    const args: BurnItemArguments = {
+      address: richAccount.address,
+      collectionId,
+      tokenId: 3,
+      value: 1,
+    };
+    const result = (await sdk.tokens.burn.submitWaitResult(args)).parsed;
+    // todo result.address = { Substrate: evmToAddress(result.address) }
+
+    const expected: BurnItemResult = {
+      address: richAccount.address,
+      collectionId,
+      tokenId: 3,
+      value: 1,
+    };
+
+    // expect(result).toStrictEqual(expected);
+    expect(result.tokenId).toBe(expected.tokenId);
   }, 60_000);
 });

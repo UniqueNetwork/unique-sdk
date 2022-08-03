@@ -13,6 +13,7 @@ import {
   TokenPropertySetEvent as TokenPropertySetEventSDK,
   TokenPropertyDeletedEvent as TokenPropertyDeletedEventSDK,
   BurnItemArguments as BurnItemArgumentsSDK,
+  BurnItemResult as BurnItemResultSDK,
 } from '@unique-nft/sdk/tokens';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -231,4 +232,18 @@ export class BurnItemBody extends TokenId implements BurnItemArgumentsSDK {
 
   @ApiProperty({ example: 1 })
   value: number;
+}
+
+export class BurnItemParsed extends TokenId implements BurnItemArgumentsSDK {
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @ApiProperty({ example: 1 })
+  value: number;
+}
+
+export class BurnItemResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: BurnItemParsed;
 }

@@ -56,10 +56,10 @@ describe('Token', () => {
     });
 
     describe('POST /api/token', () => {
-      it('generate token', async () => {
+      it('generate and burn token', async () => {
         const collection = await createCollection(sdk, richAccount);
 
-        const { ok } = await request(app.getHttpServer())
+        const response = await request(app.getHttpServer())
           .post(`/api/token`)
           .send({
             collectionId: collection.id,
@@ -67,7 +67,18 @@ describe('Token', () => {
             constData: { ipfsJson: 'aaa', name: 'bbb' },
           });
 
-        expect(ok).toEqual(true);
+        expect(response.ok).toEqual(true);
+
+        const responseBurn = await request(app.getHttpServer())
+          .del(`/api/token`)
+          .send({
+            collectionId: collection.id,
+            tokenId: 1,
+            address: richAccount.address,
+            value: 1,
+          });
+
+        expect(responseBurn.ok).toEqual(true);
       }, 120_000);
     });
   });
