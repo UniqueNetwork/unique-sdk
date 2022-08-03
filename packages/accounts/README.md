@@ -23,6 +23,7 @@
 
 ## About accounts
 The package is required to connect different accounts and create signatures for them. To get a list of accounts, you need to create an instance of the Accounts class and connect the necessary providers to it:
+
 ```typescript
 import { Account, Accounts, SdkSigner } from '@unique-nft/accounts';
 import { KeyringLocalProvider } from '@unique-nft/accounts/keyring-local';
@@ -40,9 +41,9 @@ const signer: SdkSigner = account.getSigner();
 ```
 
 ## Providers
+
 If you need to get an account from one specific provider, then it is not necessary to create an Accounts object, you can contact the provider directly:
 
-The following providers are supported:
 ```typescript
 import { Account } from '@unique-nft/accounts';
 import { KeyringProvider } from '@unique-nft/accounts/keyring';
@@ -59,7 +60,8 @@ const account: Account | undefined = await provider.first();
 const signer = account?.getSigner();
 ```
 
-Поддерживаются следующие провайдеры:
+The following providers are supported:
+
 * [Keyring](./keyring)
 * [KeyringLocal](./keyring-local)
 * [Polkadot extension](./polkadot)

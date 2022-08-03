@@ -101,5 +101,18 @@
   },
   "lint-staged": {
     "*.ts": "eslint --cache"
+  },
+  "description": "",
+  "keywords": ["blockchain", "parachain", "polkadot", "unique network", "nft"],
+  "bugs": {
+    "url": "https://github.com/UniqueNetwork/unique-sdk/issues"
+  },
+  "author": {
+    "name": "Unique Network SDK team"
+  },
+  "homepage": "https://unique.network/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UniqueNetwork/unique-sdk.git"
   }
 }
