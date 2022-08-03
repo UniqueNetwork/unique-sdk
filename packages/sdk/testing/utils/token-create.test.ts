@@ -43,6 +43,7 @@ export async function createToken(
     tokenId,
   });
 
+  // todo: This expect fails now
   // expect(newToken).toMatchObject({
   //   owner: normalizeAddress(
   //     ownerAccount?.address || authorAccount.address,
