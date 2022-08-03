@@ -644,6 +644,20 @@ export interface SetCollectionLimitsBody {
   collectionId: number;
 }
 
+export interface SetCollectionLimitsParsed {
+  /** @example 1 */
+  collectionId: number;
+
+  /** The collection limits */
+  limits: CollectionLimitsDto;
+}
+
+export interface SetCollectionLimitsResponse {
+  isError: boolean;
+  fee?: FeeResponse;
+  parsed: SetCollectionLimitsParsed;
+}
+
 export interface BurnCollectionBody {
   /** @example 1 */
   collectionId: number;
@@ -1225,6 +1239,14 @@ export interface GenerateAccountDataBody {
    * @example {}
    */
   meta?: object;
+}
+
+export interface IpfsUploadResponse {
+  /** File address */
+  cid: string;
+
+  /** IPFS gateway file URL */
+  fileUrl?: string;
 }
 
 import { arrayNumberRecordStringAny } from './missingApiTypes';
