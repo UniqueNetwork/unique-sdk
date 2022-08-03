@@ -29,6 +29,7 @@ import {
   TokenParentResponse,
   TokenProperty,
   TopmostTokenOwnerResponse,
+  TransferFromTokenBody,
   TransferTokenBody,
   TransferTokenResponse,
   UnnestTokenBody,
@@ -57,6 +58,19 @@ export class BaseTokenController {
   transferToken(): MutationMethodOptions {
     return {
       mutationMethod: this.sdk.tokens.transfer,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
+  }
+
+  @MutationMethod(
+    Patch('transfer-from'),
+    TransferFromTokenBody,
+    TransferTokenResponse,
+  )
+  transferFrom(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.transferFrom,
       cache: this.cache,
       sdk: this.sdk,
     };

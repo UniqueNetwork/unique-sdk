@@ -43,6 +43,8 @@ import {
   ApproveResult,
   TransferArguments,
   TransferResult,
+  TransferFromArguments,
+  TransferFromResult,
 } from './types';
 import {
   CreateTokenNewArguments,
@@ -50,6 +52,7 @@ import {
 } from './methods/create-token';
 import { addressToCrossAccountId } from '../utils';
 import { TransferMutation } from './methods/transfer/method';
+import { TransferFromMutation } from './methods/transfer-from';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -65,6 +68,7 @@ export class SdkTokens {
     this.properties = tokenPropertiesQuery.bind(this.sdk);
     this.approve = new Approve(this.sdk);
     this.transfer = new TransferMutation(this.sdk);
+    this.transferFrom = new TransferFromMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -99,6 +103,8 @@ export class SdkTokens {
   properties: QueryMethod<TokenPropertiesArguments, TokenPropertiesResult>;
 
   transfer: MutationMethodWrap<TransferArguments, TransferResult>;
+
+  transferFrom: MutationMethodWrap<TransferFromArguments, TransferFromResult>;
 
   async get({
     collectionId,

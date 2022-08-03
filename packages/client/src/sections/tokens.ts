@@ -5,6 +5,8 @@ import {
   CreateTokenNewDto,
   TokenId,
   UniqueTokenDecodedResponse,
+  TransferFromTokenBody,
+  TransferTokenParsed,
   TokenParentResponse,
   TopmostTokenOwnerResponse,
   NestTokenBody,
@@ -60,6 +62,11 @@ export class Tokens extends Section implements ITokens {
     });
     return response.data;
   }
+
+  public readonly transferFrom = new Mutation<
+    TransferFromTokenBody,
+    TransferTokenParsed
+  >(this.client, 'PATCH', `${this.path}/transfer-from`);
 
   async children({ collectionId, tokenId }: TokenId): Promise<TokenId[]> {
     const response = await this.client.instance({

@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import {
+  TransferTokenParsed,
   TokenParentResponse,
   CollectionProperty,
   TokenPropertyDeletedEvent,
@@ -31,6 +32,7 @@ import {
   CreateCollectionParsed,
   CreateTokenNewDto,
   UniqueTokenDecodedResponse,
+  TransferFromTokenBody,
   TopmostTokenOwnerResponse,
   NestTokenBody,
   UnnestTokenBody,
@@ -119,6 +121,7 @@ export interface ITokens extends ISection {
   baseUrl: string;
   create: IMutation<CreateTokenNewDto, TokenId>;
   get(args: TokenId): Promise<UniqueTokenDecodedResponse>;
+  transferFrom: IMutation<TransferFromTokenBody, TransferTokenParsed>;
   properties(args: TokenId): Promise<TokenProperty[]>;
   setProperties: IMutation<SetTokenPropertiesBody, TokenPropertySetEvent[]>;
   deleteProperties: IMutation<

@@ -1,6 +1,7 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
   createRichAccount,
+  createPoorAccount,
   createSdk,
   TestAccount,
 } from '@unique-nft/sdk/testing';
@@ -16,26 +17,34 @@ import {
   TokenParentResult,
   TokenChildrenArguments,
   TokenChildrenResult,
+  TransferFromArguments,
+  TransferResult,
 } from '@unique-nft/sdk/tokens/types';
 import { Keyring } from '@polkadot/api';
-import { normalizeAddress } from '@unique-nft/sdk/utils';
+import {
+  normalizeAddress,
+  addressToCrossAccountId,
+} from '@unique-nft/sdk/utils';
 import { Address } from '@unique-nft/sdk/types';
 
 describe('Tokens', () => {
   let sdk: Sdk;
   let richAccount: TestAccount;
+  let poorAccount: TestAccount;
   let collectionId: number;
+  let keyring: Keyring;
+  let ss58Format: number;
 
   beforeAll(async () => {
     sdk = await createSdk(true);
     richAccount = createRichAccount();
+    poorAccount = createPoorAccount();
 
     const chainProperties = sdk.api.registry.getChainProperties();
 
-    const ss58Format =
-      chainProperties?.ss58Format.unwrapOrDefault().toNumber() || 0;
+    ss58Format = chainProperties?.ss58Format.unwrapOrDefault().toNumber() || 0;
 
-    const keyring = new Keyring({ type: 'sr25519' });
+    keyring = new Keyring({ type: 'sr25519' });
 
     keyring.setSS58Format(ss58Format);
 
@@ -166,6 +175,37 @@ describe('Tokens', () => {
     const expected: UnnestTokenResult = {
       collectionId,
       tokenId: 2,
+    };
+
+    expect(result.parsed).toStrictEqual(expected);
+  }, 60_000);
+
+  it('transferFrom', async () => {
+    const args: TransferFromArguments = {
+      address: richAccount.address,
+      from: richAccount.address,
+      to: poorAccount.address,
+      collectionId,
+      tokenId: 1,
+    };
+
+    const result = await sdk.tokens.transferFrom.submitWaitResult(args);
+
+    const richAccoutSS58Address = keyring.encodeAddress(
+      richAccount.address,
+      ss58Format,
+    );
+
+    const poorAccountSS58Address = keyring.encodeAddress(
+      poorAccount.address,
+      ss58Format,
+    );
+
+    const expected: TransferResult = {
+      from: addressToCrossAccountId(richAccoutSS58Address),
+      to: addressToCrossAccountId(poorAccountSS58Address),
+      collectionId,
+      tokenId: 1,
     };
 
     expect(result.parsed).toStrictEqual(expected);
