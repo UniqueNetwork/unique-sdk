@@ -1,22 +1,50 @@
+<div align="center">
+    <img width="400px" src="https://raw.githubusercontent.com/UniqueNetwork/unique-sdk/ab6b4e524f008d5e921026599de5bc120a91e14e/doc/logo-white.svg" alt="Unique Network">
+<br/>
+<br/>
 
-# envs
- * `TEST_CHAIN_WS_URL` - ссылка на чейн, в котором будут проходить тесты
- * `TEST_RICH_ACCOUNTS` - seed аккаунтов с деньгами (через запятую)
- * `TEST_POOR_ACCOUNT` - seed аккаунта без денег
- * `TEST_SHOW_LOG` - по умолчанию тесты не показывают логи/варнинги, чтобы включить их отображение, необходим параметр `TEST_SHOW_LOG=true`
+[![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
+[![uniquenetwork](https://img.shields.io/badge/unique-network-blue?style=flat-square)](https://unique.network/)
+![language](https://img.shields.io/github/languages/top/uniquenetwork/unique-sdk?style=flat-square)
+![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
+![GitHub Release Date](https://img.shields.io/github/release-date/uniquenetwork/unique-sdk?style=flat-square)
+![GitHub](https://img.shields.io/github/v/tag/uniquenetwork/unique-sdk?style=flat-square)
+[![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 
-В качестве аккаунта можно передать как uri (`//Alice`, `//Bob`, ...) тестового аккаунта, так и mnemonic фразу реального аккаунта. 
+</div>
 
-# Создание sdk
+# How to test the SDK
+
+# Table of Contents
+
+- [Envs](#envs)
+- [SDK Installation](#sdk-installation)
+- [Creation of test accounts](#creation-of-test-accounts)
+- [Examples](#examples)
+
+## envs
+
+ * `TEST_CHAIN_WS_URL` - blockchain URL, in which the test will be run
+ * `TEST_RICH_ACCOUNTS` - seed of accounts with money (use a comma as a separator)
+ * `TEST_POOR_ACCOUNT` - seed of account without money
+ * `TEST_SHOW_LOG` - by default logs and warnings are off; to enable them use `TEST_SHOW_LOG=true`
+
+As an account, you can send the URI (`//Alice`, `//Bob`, ...) or the mnemonic phrase of the real account.
+
+## SDK Installation
+
 ```typescript
 import { createSdk } from '@unique-nft/sdk/testing';
 const withSigner = true;
 const sdk = await createSdk(withSigner);
 ```
-Если передать в конструктор `true` - тогда внутри sdk будет создан `signer` аккаунта `TEST_RICH_ACCOUNT`.
 
-# Создание тестовых аккаунтов
-Для тестирования используются три тестовых аккаунта, которые создаются из seed переданных в envs. Получить тестовые аккаунты можно с помощью методов:
+If you send `true` to the constructor, then a `signer` account `TEST_RICH_ACCOUNT` will be created inside the SDK.
+
+## Creation of test accounts
+
+Three test accounts are used for testing, which are created from the seed passed to envs. You can get test accounts using the following methods:
+
 ```typescript
 import {
   createRichAccount,
@@ -29,9 +57,12 @@ const poorAccount: TestAccount = createPoorAccount();
 const anotherAccount: TestAccount = createAnotherAccount();
 ```
 
-Тестовые аккаунты должны быть созданы после `Sdk` или после вызова `await cryptoWaitReady();`.
+Test accounts must be created after `Sdk` or after calling `await cryptoWaitReady();`.
 
-# Пример теста перевода баланса
+## Examples
+
+### Balance transfer example
+
 ```typescript
 describe('balance-transfer', () => {
   it('ok', async () => {
