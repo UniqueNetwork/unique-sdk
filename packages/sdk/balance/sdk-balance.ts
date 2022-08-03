@@ -2,6 +2,7 @@ import { AddressArguments, AllBalances } from '@unique-nft/sdk/types';
 import { Sdk } from '@unique-nft/sdk';
 import { formatBalance } from '@unique-nft/sdk/utils';
 import { MutationMethodWrap } from '@unique-nft/sdk/extrinsics';
+import { UniqueUtils } from '@unique-nft/api';
 import {
   BalanceTransferResult,
   BalanceTransferArguments,
@@ -20,16 +21,20 @@ export class SdkBalance {
     this.transfer = new BalanceTransferMutation(this.sdk);
   }
 
-  async get(args: AddressArguments): Promise<AllBalances> {
+  async get({ address }: AddressArguments): Promise<AllBalances> {
     // todo `get`: this.api[section][method]?
     // todo getBalance(address) { this.get('balances', 'all', address);
     const { availableBalance, lockedBalance, freeBalance } =
-      await this.sdk.api.derive.balances.all(args.address);
+      await this.sdk.api.derive.balances.all(address);
 
     return {
       availableBalance: formatBalance(this.sdk.api, availableBalance),
       lockedBalance: formatBalance(this.sdk.api, lockedBalance),
       freeBalance: formatBalance(this.sdk.api, freeBalance),
+      address: UniqueUtils.Address.normalize.substrateAddress(
+        address,
+        this.sdk.api.registry.chainSS58,
+      ),
     };
   }
 }

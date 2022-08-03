@@ -7,6 +7,7 @@ import { QueryController } from './controllers/query.controller';
 import { AccountController } from './controllers/account.controller';
 import { SdkProviderModule } from '../sdk-provider/sdk-provider.module';
 import { SignerNestModule } from '../../utils/signer.module';
+import { AddressUtilsController } from '../address-utils/controller';
 
 const controllers = [
   ExtrinsicsController,
@@ -15,6 +16,7 @@ const controllers = [
   InfoController,
   QueryController,
   AccountController,
+  AddressUtilsController,
 ];
 
 @Module({

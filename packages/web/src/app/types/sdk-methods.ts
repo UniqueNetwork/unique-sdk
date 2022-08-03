@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { HexString } from '@polkadot/util/types';
 import {
+  Address,
   AddressArguments,
   AllBalances,
   Balance,
@@ -24,6 +25,11 @@ import { SignerPayloadJSONDto, SignerPayloadRawDto } from './signer-payload';
 export const AddressApiProperty = ApiProperty({
   description: 'The ss-58 encoded address',
   example: 'yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm',
+});
+
+export const EthereumAddressApiProperty = ApiProperty({
+  description: 'The ss-58 encoded address',
+  example: '0x0A91113393e01ebe11f932F89ccd2C3DD713aeBB',
 });
 
 export class ChainPropertiesResponse implements ChainProperties {
@@ -93,6 +99,9 @@ export class AllBalancesResponse implements AllBalances {
 
   @ApiProperty({ type: BalanceResponse })
   freeBalance: BalanceResponse;
+
+  @AddressApiProperty
+  address: Address;
 }
 
 export class FeeResponse extends BalanceResponse implements Fee {}
