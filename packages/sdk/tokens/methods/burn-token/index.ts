@@ -1,3 +1,3 @@
 export * from './types';
 
-export { BurnItemMutation } from './method';
+export { BurnTokenMutation } from './method';

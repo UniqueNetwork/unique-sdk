@@ -17,8 +17,8 @@ The method returns a `parsed` object that contains the `collectionId: number, to
 
 ```ts
 import '@unique-nft/sdk/tokens';
-import { BurnItemArguments } from '@unique-nft/sdk/tokens/types';
-const burnItemArgs: BurnItemArguments = {
+import { BurnTokenArguments } from '@unique-nft/sdk/tokens/types';
+const burnItemArgs: BurnTokenArguments = {
   tokenId: 1,
   collectionId: 1,
   value: 1

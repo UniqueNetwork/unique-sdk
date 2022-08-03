@@ -17,7 +17,7 @@ import {
 } from '@unique-nft/sdk/tokens';
 import { ApiResponse } from '@nestjs/swagger';
 import {
-  BurnItemBody,
+  BurnTokenBody,
   DeleteTokenPropertiesBody,
   DeleteTokenPropertiesResponse,
   NestTokenBody,
@@ -33,7 +33,7 @@ import {
   TransferTokenResponse,
   UnnestTokenBody,
   UnnestTokenResponse,
-  BurnItemResponse,
+  BurnTokenResponse,
 } from './types';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import {
@@ -47,8 +47,8 @@ export class BaseTokenController {
     @Inject(CACHE_MANAGER) readonly cache: Cache,
   ) {}
 
-  @MutationMethod(Delete(''), BurnItemBody, BurnItemResponse)
-  burnItem(): MutationMethodOptions {
+  @MutationMethod(Delete(''), BurnTokenBody, BurnTokenResponse)
+  burnToken(): MutationMethodOptions {
     return {
       mutationMethod: this.sdk.tokens.burn,
       cache: this.cache,

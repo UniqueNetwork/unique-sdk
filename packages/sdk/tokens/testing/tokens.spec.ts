@@ -5,8 +5,8 @@ import {
   TestAccount,
 } from '@unique-nft/sdk/testing';
 import {
-  BurnItemArguments,
-  BurnItemResult,
+  BurnTokenArguments,
+  BurnTokenResult,
   getNestingTokenAddress,
 } from '@unique-nft/sdk/tokens';
 import {
@@ -176,7 +176,7 @@ describe('Tokens', () => {
   }, 60_000);
 
   it('burn-token', async () => {
-    const args: BurnItemArguments = {
+    const args: BurnTokenArguments = {
       address: richAccount.address,
       collectionId,
       tokenId: 3,
@@ -185,7 +185,7 @@ describe('Tokens', () => {
     const result = (await sdk.tokens.burn.submitWaitResult(args)).parsed;
     // todo result.address = { Substrate: evmToAddress(result.address) }
 
-    const expected: BurnItemResult = {
+    const expected: BurnTokenResult = {
       address: richAccount.address,
       collectionId,
       tokenId: 3,

@@ -4,22 +4,22 @@ import {
   createSdk,
   TestAccount,
 } from '@unique-nft/sdk/testing';
-import { BurnItemMutation } from './method';
-import { BurnItemArguments } from './types';
+import { BurnTokenMutation } from './method';
+import { BurnTokenArguments } from './types';
 
 describe('burn-token', () => {
   let sdk: Sdk;
 
   let account: TestAccount;
 
-  let mutation: BurnItemMutation;
+  let mutation: BurnTokenMutation;
 
   beforeAll(async () => {
     sdk = await createSdk(true);
 
     account = createRichAccount();
 
-    mutation = new BurnItemMutation(sdk);
+    mutation = new BurnTokenMutation(sdk);
   });
 
   it('transformArgs', async () => {
@@ -29,7 +29,7 @@ describe('burn-token', () => {
 
     const value = 1;
 
-    const args: BurnItemArguments = {
+    const args: BurnTokenArguments = {
       address: account.address,
       collectionId,
       tokenId,
@@ -41,7 +41,7 @@ describe('burn-token', () => {
     const expected = {
       address: account.address,
       section: 'unique',
-      method: 'burnItem',
+      method: 'burnToken',
       args: [collectionId, tokenId, value],
     };
 

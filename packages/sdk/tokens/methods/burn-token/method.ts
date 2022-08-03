@@ -3,20 +3,20 @@ import { ISubmittableResult } from '@unique-nft/sdk/types';
 import { u32, u128 } from '@polkadot/types-codec';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
 import {
-  BurnItemArguments,
-  BurnItemBuildArguments,
-  BurnItemResult,
+  BurnTokenArguments,
+  BurnTokenBuildArguments,
+  BurnTokenResult,
 } from './types';
 
 /* eslint-disable class-methods-use-this */
 
-export class BurnItemMutation extends MutationMethodBase<
-  BurnItemArguments,
-  BurnItemResult
+export class BurnTokenMutation extends MutationMethodBase<
+  BurnTokenArguments,
+  BurnTokenResult
 > {
   async transformArgs(
-    args: BurnItemArguments,
-  ): Promise<BurnItemBuildArguments> {
+    args: BurnTokenArguments,
+  ): Promise<BurnTokenBuildArguments> {
     const { address, collectionId, tokenId, value } = args;
 
     return {
@@ -29,7 +29,7 @@ export class BurnItemMutation extends MutationMethodBase<
 
   async transformResult(
     result: ISubmittableResult,
-  ): Promise<BurnItemResult | undefined> {
+  ): Promise<BurnTokenResult | undefined> {
     const burnItemEvent = result.findRecord('common', 'ItemDestroyed');
 
     if (!burnItemEvent) return undefined;

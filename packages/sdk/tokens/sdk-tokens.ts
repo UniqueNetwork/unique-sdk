@@ -42,8 +42,8 @@ import {
   ApproveResult,
   TransferArguments,
   TransferResult,
-  BurnItemArguments,
-  BurnItemResult,
+  BurnTokenArguments,
+  BurnTokenResult,
 } from './types';
 import {
   CreateTokenNewArguments,
@@ -51,7 +51,7 @@ import {
 } from './methods/create-token';
 import { addressToCrossAccountId } from '../utils';
 import { TransferMutation } from './methods/transfer/method';
-import { BurnItemMutation } from './methods/burn-token/method';
+import { BurnTokenMutation } from './methods/burn-token/method';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -67,7 +67,7 @@ export class SdkTokens {
     this.properties = tokenPropertiesQuery.bind(this.sdk);
     this.approve = new Approve(this.sdk);
     this.transfer = new TransferMutation(this.sdk);
-    this.burn = new BurnItemMutation(this.sdk);
+    this.burn = new BurnTokenMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -162,5 +162,5 @@ export class SdkTokens {
     });
   }
 
-  burn: MutationMethodWrap<BurnItemArguments, BurnItemResult>;
+  burn: MutationMethodWrap<BurnTokenArguments, BurnTokenResult>;
 }

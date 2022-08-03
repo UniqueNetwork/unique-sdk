@@ -12,8 +12,8 @@ import {
   TokenProperty as TokenPropertySDK,
   TokenPropertySetEvent as TokenPropertySetEventSDK,
   TokenPropertyDeletedEvent as TokenPropertyDeletedEventSDK,
-  BurnItemArguments as BurnItemArgumentsSDK,
-  BurnItemResult as BurnItemResultSDK,
+  BurnTokenArguments as BurnTokenArgumentsSDK,
+  BurnTokenResult as BurnTokenResultSDK,
 } from '@unique-nft/sdk/tokens';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -225,7 +225,7 @@ export class DeleteTokenPropertiesResponse extends MutationResponse {
   parsed: TokenPropertyDeletedEvent[];
 }
 
-export class BurnItemBody extends TokenId implements BurnItemArgumentsSDK {
+export class BurnTokenBody extends TokenId implements BurnTokenArgumentsSDK {
   @ValidAddress()
   @AddressApiProperty
   address: string;
@@ -234,7 +234,7 @@ export class BurnItemBody extends TokenId implements BurnItemArgumentsSDK {
   value: number;
 }
 
-export class BurnItemParsed extends TokenId implements BurnItemArgumentsSDK {
+export class BurnTokenParsed extends TokenId implements BurnTokenArgumentsSDK {
   @ValidAddress()
   @AddressApiProperty
   address: string;
@@ -243,7 +243,7 @@ export class BurnItemParsed extends TokenId implements BurnItemArgumentsSDK {
   value: number;
 }
 
-export class BurnItemResponse extends MutationResponse {
+export class BurnTokenResponse extends MutationResponse {
   @ApiProperty()
-  parsed: BurnItemParsed;
+  parsed: BurnTokenParsed;
 }
