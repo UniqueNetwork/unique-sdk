@@ -6,5 +6,14 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/UniqueNetwork/unique-sdk.git"
+  },
+  "description": "The @unique-nft/client package implements the SDK methods via the REST API. The package implements all the basic methods for working with the Unique Network SDK.",
+  "keywords": ["blockchain", "parachain", "polkadot", "unique network", "nft"],
+  "bugs": {
+    "url": "https://github.com/UniqueNetwork/unique-sdk/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Unique Network SDK team"
   }
 }
