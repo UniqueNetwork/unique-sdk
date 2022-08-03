@@ -5,12 +5,12 @@ import { Collections } from './sections/collections';
 import { Tokens } from './sections/tokens';
 import { Extrinsics } from './sections/extrinsics';
 import {
+  ICollections,
+  ITokens,
   ClientParameters,
   Options,
   IExtrinsics,
   IBalance,
-  ICollections,
-  ITokens,
 } from './types';
 
 export class Client {
