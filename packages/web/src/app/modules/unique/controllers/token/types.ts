@@ -233,10 +233,11 @@ export class BurnTokenBody extends TokenId implements BurnTokenArgumentsSDK {
   @IsOptional()
   @ValidAddress()
   @AddressApiProperty
+  @ApiProperty({ required: false })
   from?: string;
 
   @IsOptional()
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 1, required: false })
   value?: number;
 }
 
