@@ -1,64 +1,49 @@
 import { Sdk } from '@unique-nft/sdk';
 import {
   Balance,
-  SdkSigner,
+  ObservableSubmitResult,
   SubmitResult,
   SubmittableResultCompleted,
-  SubmittableResultInProcess,
   SubmitTxArguments,
   TxBuildArguments,
   UnsignedTxPayload,
 } from '@unique-nft/sdk/types';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
+import { lastValueFrom, switchMap, from, mergeMap, identity } from 'rxjs';
 import {
-  lastValueFrom,
-  Observable,
-  switchMap,
-  from,
-  mergeMap,
-  identity,
-} from 'rxjs';
-import { SubmitExtrinsicError } from '@unique-nft/sdk/errors';
-import { isSubmitTxArguments, isUnsignedTxPayload } from './tx-utils';
-
-export interface MutationOptions {
-  signer?: SdkSigner;
-}
-
-export type MutationMethod<A, R> = (
-  args: A | UnsignedTxPayload | SubmitTxArguments,
-  options?: MutationOptions,
-) => Promise<SubmittableResultCompleted<R>>;
-
-export interface MutationMethodWrap<A, R> {
-  build(args: A): Promise<UnsignedTxPayload>;
-
-  getFee(args: A | UnsignedTxPayload | SubmitTxArguments): Promise<Balance>;
-
-  sign(
-    args: A | UnsignedTxPayload,
-    options?: MutationOptions,
-  ): Promise<SubmitTxArguments>;
-
-  submit(
-    args: A | UnsignedTxPayload | SubmitTxArguments,
-    options?: MutationOptions,
-  ): Promise<Omit<SubmitResult, 'result$'>>;
-
-  submitWatch(
-    args: A | UnsignedTxPayload | SubmitTxArguments,
-    options?: MutationOptions,
-  ): Observable<SubmittableResultInProcess<R>>;
-
-  submitWaitResult: MutationMethod<A, R>;
-
-  expose(): MutationMethod<A, R>;
-}
+  SubmitExtrinsicError,
+  VerificationFailedError,
+} from '@unique-nft/sdk/errors';
+import { getDispatchError } from '@unique-nft/sdk/utils';
+import {
+  isSubmitTxArguments,
+  isUnsignedTxPayload,
+  isRawPayload,
+} from './tx-utils';
+import {
+  MutationOptions,
+  MutationMethodWrap,
+  VerificationResult,
+} from './types';
 
 export abstract class MutationMethodBase<A, R>
   implements MutationMethodWrap<A, R>
 {
   constructor(readonly sdk: Sdk) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  protected async verifyArgs(args: A): Promise<VerificationResult> {
+    return { isAllowed: true };
+  }
+
+  private async verify(args: UnsignedTxPayload | SubmitTxArguments | A) {
+    if (isRawPayload(args)) {
+      const { isAllowed, message } = await this.verifyArgs(args as A);
+      if (!isAllowed) {
+        throw new VerificationFailedError(message);
+      }
+    }
+  }
 
   abstract transformArgs(args: A): Promise<TxBuildArguments>;
 
@@ -100,6 +85,8 @@ export abstract class MutationMethodBase<A, R>
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<Omit<SubmitResult, 'result$'>> {
+    await this.verify(args);
+
     const submitTxArguments = isSubmitTxArguments(args)
       ? args
       : await this.sign(args, options);
@@ -108,44 +95,62 @@ export abstract class MutationMethodBase<A, R>
   }
 
   // todo - hide async inside Observable and return just Observable<SubmittableResultInProcess<R>
-  submitWatch(
+  async submitWatch(
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
-  ): Observable<SubmittableResultInProcess<R>> {
-    const getSubmittableResult$ = async () => {
-      const submitTxArguments = isSubmitTxArguments(args)
-        ? args
-        : await this.sign(args, options);
+  ): Promise<ObservableSubmitResult<R>> {
+    await this.verify(args);
 
-      const { result$ } = await this.sdk.extrinsics.submit(
-        submitTxArguments,
-        true,
-      );
+    const submitTxArguments = isSubmitTxArguments(args)
+      ? args
+      : await this.sign(args, options);
 
-      return result$;
-    };
+    const { result$, hash } = await this.sdk.extrinsics.submit(
+      submitTxArguments,
+      true,
+    );
 
     const tryParse = async (submittableResult: ISubmittableResult) => {
-      const parsed = await this.transformResult(submittableResult);
+      const error = getDispatchError(this.sdk.api, submittableResult);
+      if (error) {
+        return { submittableResult, error };
+      }
+
+      const parsed = submittableResult.isCompleted
+        ? await this.transformResult(submittableResult)
+        : undefined;
 
       return { submittableResult, parsed };
     };
 
-    return from(getSubmittableResult$()).pipe(
-      mergeMap(identity),
-      switchMap(tryParse),
-    );
+    return {
+      hash,
+      result$: from(Promise.resolve(result$)).pipe(
+        mergeMap(identity),
+        switchMap(tryParse),
+      ),
+    };
   }
 
   async submitWaitResult(
     args: UnsignedTxPayload | SubmitTxArguments | A,
     options?: MutationOptions,
   ): Promise<SubmittableResultCompleted<R>> {
-    const submitted$ = await this.submitWatch(args, options);
+    const { result$ } = await this.submitWatch(args, options);
 
-    const completed = await lastValueFrom(submitted$);
+    const completed = await lastValueFrom(result$);
 
-    if (completed.parsed === undefined) throw new SubmitExtrinsicError();
+    const error = getDispatchError(this.sdk.api, completed.submittableResult);
+    if (error) {
+      throw new SubmitExtrinsicError(
+        `Dispatch error: ${error.message}`,
+        error.details,
+      );
+    }
+
+    if (completed.parsed === undefined) {
+      throw new SubmitExtrinsicError('Invalid parsed data');
+    }
 
     return {
       ...completed,

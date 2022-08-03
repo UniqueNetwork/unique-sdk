@@ -1,66 +1,43 @@
-import { Keyring } from '@polkadot/keyring';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-
-import { generateAccount, getAccountFromMnemonic } from './accounts';
+import { KeyringProvider } from '../keyring';
+import { KeyringLocalProvider } from '../keyring-local';
+import { Accounts } from './accounts';
 
 describe('Accounts', () => {
   beforeAll(async () => {
     await cryptoWaitReady();
   });
 
-  it.each([undefined, '', 'pass1'])('generate ok - %s', async (password) => {
-    await expect(async () => {
-      const newAccount = await generateAccount({ password });
+  it('ok', async () => {
+    const accounts = new Accounts();
+    await accounts.addProvider(KeyringProvider);
+    await accounts.addProvider(KeyringLocalProvider);
 
-      const account = new Keyring({ type: 'sr25519' }).addFromJson(
-        newAccount.keyfile as KeyringPair$Json,
-      );
-      account.unlock(password);
-    }).not.toThrowError();
-  });
+    const keyringProvider = accounts.getProvider(
+      KeyringProvider,
+    ) as KeyringProvider;
 
-  it('get from mnemonic ok', async () => {
-    const account1 = await generateAccount({ password: 'pass1' });
+    const keyringLocalProvider = accounts.getProvider(
+      KeyringLocalProvider,
+    ) as KeyringLocalProvider;
 
-    const account2 = await getAccountFromMnemonic({
-      mnemonic: account1.mnemonic,
-      password: 'pass1',
-    });
+    const alice = keyringProvider.addSeed('//Alice');
+    const bob = keyringProvider.addSeed('//Bob');
 
-    expect(account1.seed).toEqual(account2.seed);
-    expect(account1.keyfile.address).toEqual(account2.keyfile.address);
-  });
+    keyringLocalProvider.addUri('//Eve');
+    const eve = (await keyringLocalProvider.getAccounts())[0];
 
-  it('different seeds', async () => {
-    const account1 = await generateAccount({ password: 'pass1' });
+    const list = await accounts.getAccounts();
 
-    const account2 = await getAccountFromMnemonic({
-      mnemonic: account1.mnemonic,
-      password: 'pass2',
-    });
+    const first = await accounts.first();
 
-    expect(account1.seed).not.toEqual(account2.seed);
-    expect(account1.keyfile.address).not.toEqual(account2.keyfile.address);
-  });
-
-  it('invalid pass fail', async () => {
-    const newAccount = await generateAccount({ password: 'pass1' });
-
-    const keypair = new Keyring({ type: 'sr25519' }).addFromJson(
-      newAccount.keyfile as KeyringPair$Json,
+    expect(accounts.getProvider(KeyringProvider)).toStrictEqual(
+      keyringProvider,
     );
-
-    expect(() => keypair.unlock('pass2')).toThrowError();
-  });
-
-  it('invalid mnemonic fail', async () => {
-    const mnemonic = 'invalid mnemonic';
-    await expect(async () => {
-      await getAccountFromMnemonic({
-        mnemonic,
-        password: 'pass1',
-      });
-    }).rejects.toThrowError(new Error('Invalid bip39 mnemonic specified'));
+    expect(accounts.getProvider(KeyringLocalProvider)).toStrictEqual(
+      keyringLocalProvider,
+    );
+    expect(list).toStrictEqual([alice, bob, eve]);
+    expect(first).toStrictEqual(alice);
   });
 });

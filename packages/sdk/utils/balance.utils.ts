@@ -1,7 +1,7 @@
 import { INumber } from '@polkadot/types-codec/types';
 import { Balance } from '@unique-nft/sdk/types';
 import { ApiPromise } from '@polkadot/api';
-import { formatBalance as polkadotFormatBalance } from '@polkadot/util';
+import { formatBalance as polkadotFormatBalance, BN } from '@polkadot/util';
 
 type FormatOptions = {
   decimals: number;
@@ -67,4 +67,11 @@ export function formatBalance(
     formatted,
     ...options,
   };
+}
+
+export function sumBalance(balance: Balance, numToAdd: AnyNumber): Balance {
+  const { decimals, unit } = balance;
+  const sum = new BN(balance.raw).add(new BN(numToAdd.toString())).toString();
+
+  return formatBalance({ decimals, unit }, sum);
 }

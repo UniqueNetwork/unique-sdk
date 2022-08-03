@@ -2,6 +2,17 @@
 import 'reflect-metadata';
 import { KeyringPair$Meta, KeyringPair$Json } from '@polkadot/keyring/types';
 import { HexString } from '@polkadot/util/types';
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+
+export interface UnsignedTxPayload {
+  signerPayloadJSON: SignerPayloadJSON;
+  signerPayloadRaw: SignerPayloadRaw;
+  signerPayloadHex: HexString;
+}
+
+export interface SdkSigner {
+  sign(unsignedTxPayload: UnsignedTxPayload): Promise<SignResult>;
+}
 
 export enum SignatureType {
   Sr25519 = 'sr25519',
@@ -15,16 +26,15 @@ export interface SignResult {
   signature: HexString;
 }
 
-export interface GenerateAccountArguments {
-  password?: string;
+export interface GenerateAccountDataArguments {
   pairType?: SignatureType;
   meta?: KeyringPair$Meta;
 }
-export interface GetAccountArguments extends GenerateAccountArguments {
+export interface GetAccountDataArguments extends GenerateAccountDataArguments {
   mnemonic: string;
 }
 
-export interface Account {
+export interface AccountData {
   mnemonic: string;
 
   seed: HexString;
@@ -33,3 +43,21 @@ export interface Account {
 
   keyfile: KeyringPair$Json;
 }
+
+export abstract class Account<T = unknown> {
+  abstract getSigner(): SdkSigner;
+  protected constructor(public instance: T) {}
+}
+
+export abstract class Provider<A = unknown> extends Object {
+  abstract init(): Promise<void>;
+
+  abstract getAccounts(): Promise<Account<A>[]>;
+
+  public async first(): Promise<Account | undefined> {
+    const accounts = await this.getAccounts();
+    return accounts.length ? accounts[0] : undefined;
+  }
+}
+
+export type ProviderClass<T extends Provider> = { new (o?: any): T };

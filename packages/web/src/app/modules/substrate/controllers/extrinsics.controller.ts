@@ -16,6 +16,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { SdkSigner } from '@unique-nft/sdk/types';
 import { Cache } from 'cache-manager';
 import { ISubmittableResult } from '@polkadot/types/types/extrinsic';
+import { getDispatchError } from '@unique-nft/sdk/utils';
 import { SdkExceptionsFilter } from '../../../utils/exception-filter';
 import { VerificationResultResponse } from '../../../types/requests';
 import { Signer } from '../../../decorators/signer.decorator';
@@ -33,8 +34,12 @@ import {
   TxBuildBody,
 } from '../../../types/arguments';
 import { ExtrinsicResultResponse } from '../../../types/extrinsic-result-response';
-import { serializeResult } from '../../../utils/submittable-result-transformer';
 import { CalculateFeeDocs } from '../docs';
+import {
+  getPendingResult,
+  getSucceedResult,
+  getErrorResult,
+} from '../../../utils/cache';
 
 @UsePipes(SdkValidationPipe)
 @UseFilters(SdkExceptionsFilter)
@@ -86,22 +91,18 @@ export class ExtrinsicsController {
   async submitTx(@Body() args: SubmitTxBody): Promise<SubmitResultResponse> {
     const { hash, result$ } = await this.sdk.extrinsics.submit(args, true);
 
-    const updateCache = async (
-      next: ISubmittableResult | Error,
-    ): Promise<void> => {
-      if (next instanceof Error) {
-        await this.cache.set<ExtrinsicResultResponse>(hash, {
-          events: [],
-          isCompleted: true,
-          isError: true,
-          status: 'Error',
-          errorMessage: next.message || next.name,
-        });
+    const updateCache = async (next: ISubmittableResult): Promise<void> => {
+      const error = getDispatchError(this.sdk.api, next);
+      if (error) {
+        await this.cache.set<ExtrinsicResultResponse>(
+          hash,
+          getErrorResult(error),
+        );
 
         return;
       }
 
-      await this.cache.set(hash, serializeResult(this.sdk.api, next));
+      await this.cache.set(hash, getSucceedResult(this.sdk.api, next));
     };
 
     result$.subscribe({
@@ -109,12 +110,7 @@ export class ExtrinsicsController {
       error: updateCache,
     });
 
-    await this.cache.set<ExtrinsicResultResponse>(hash, {
-      events: [],
-      isCompleted: false,
-      isError: false,
-      status: 'pending',
-    });
+    await this.cache.set<ExtrinsicResultResponse>(hash, getPendingResult());
 
     return { hash };
   }

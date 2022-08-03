@@ -3,7 +3,10 @@ import { Address } from '@unique-nft/sdk/types';
 
 const NESTING_ADDRESS_PREFIX = '0xf8238ccfff8ed887463fd5e0';
 
-export function getNestingTokenAddress(collectionId: number, tokenId: number) {
+export function getNestingTokenAddress(
+  collectionId: number,
+  tokenId: number,
+): Address {
   let address = `${NESTING_ADDRESS_PREFIX}${collectionId
     .toString(16)
     .padStart(8, '0')}${tokenId.toString(16).padStart(8, '0')}`;

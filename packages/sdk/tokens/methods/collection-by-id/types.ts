@@ -1,10 +1,6 @@
-import { CollectionInfoBase } from '../create-collection-ex/types';
+import { CollectionInfoWithOldProperties } from '../create-collection-ex/types';
 
-export interface CollectionIdArguments {
-  collectionId: number;
-}
-
-export interface CollectionInfo extends CollectionInfoBase {
+export interface CollectionInfo extends CollectionInfoWithOldProperties {
   id: number;
   owner: string;
   // todo tokensCount: number

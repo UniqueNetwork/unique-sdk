@@ -3,7 +3,7 @@ import * as process from 'process';
 import { CacheConfig, createCacheConfig } from './cache.config';
 
 export type Config = {
-  isProduction: boolean;
+  environment: string;
   port: number;
   chainWsUrl: string;
   ipfsGatewayUrl: string;
@@ -21,6 +21,8 @@ export type Config = {
     name?: string;
     signer?: SignerConfig;
   };
+
+  sentryDsnUrl?: string;
 };
 
 export type SignerConfig = {
@@ -28,7 +30,7 @@ export type SignerConfig = {
 };
 
 const loadConfig = (): Config => ({
-  isProduction: process.env.NODE_ENV !== 'development',
+  environment: process.env.ENVIRONMENT || 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
   chainWsUrl: process.env.CHAIN_WS_URL,
   prefix: process.env.PREFIX || '',
@@ -57,6 +59,8 @@ const loadConfig = (): Config => ({
   },
 
   cache: createCacheConfig(process.env),
+
+  sentryDsnUrl: process.env.SENTRY_DSN_URL,
 });
 
 export const GlobalConfigModule = ConfigModule.forRoot({

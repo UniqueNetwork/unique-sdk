@@ -68,15 +68,15 @@ const signer = account?.getSigner();
 ## Generate new account
 
 ```typescript
-import { generateAccount, SignatureType } from '@unique-nft/accounts';
+import { generateAccount, SignatureType } from "@unique-nft/accounts";
 
 const account = await generateAccount({
   password: '123456',
   pairType: SignatureType.Sr25519,
   meta: {
-    name: 'my_test_account',
-  },
-});
+    name: 'my_test_account'
+  }
+})
 ```
 
 ## Get account from mnemonic

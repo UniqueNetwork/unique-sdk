@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalConfigModule } from './config/config.module';
-import { SignerMiddleware } from './middlewares/signer.middleware';
 import { SdkExceptionsFilter } from './utils/exception-filter';
 import { IpfsModule } from './modules/ipfs/module';
 import { ContentTypeHeaderValidationMiddleware } from './middlewares/content-type-header-validation.middleware';
@@ -19,7 +18,6 @@ import { CacheProviderModule } from './modules/cache/cache-provider.module';
   imports: [
     GlobalConfigModule,
     UniqueModule,
-    SignerMiddleware,
     SubstrateModule.forSecondary(),
     IpfsModule.register(),
     CacheProviderModule,
@@ -51,8 +49,5 @@ export class AppModule implements NestModule {
         method: RequestMethod.PATCH,
       },
     );
-    consumer
-      .apply(SignerMiddleware)
-      .forRoutes({ path: '/extrinsic/*', method: RequestMethod.POST });
   }
 }
