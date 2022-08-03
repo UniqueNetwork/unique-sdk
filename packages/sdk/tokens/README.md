@@ -33,6 +33,7 @@
 | setTokenPropertyPermissions | TBD                                                                                                                                              | Ready  | [Link](./methods/set-token-property-permissions) |
 | transferToken               | TBD                                                                                                                                              | Ready  | [Link](./methods/transfer)                       |
 | unnestToken                 | Nesting is a process of forming a structural relationship between two NFTs that form a parent-child relationship in a tree structure             | Ready  | [Link](./methods/unnest-token)                   |
+| burn                        | Destroys a concrete instance of NFT                                                                                                              | Ready  | [Link](./methods/burn-token)                     |
 
 ### RPC methods
 | Method            | Description                                      | Status | Folder                                |
@@ -67,4 +68,3 @@
 | getStats                  | Returns blockchain collection statistics                                                                                                               | Ready              | [Link](./methods/get-stats)                   |
 | effectiveCollectionLimits | The values of the limits actually applied to the collection (default and user-set) can be obtained using Get effective limits by collection ID method. | Ready              | [Link](./methods/effective-collection-limits) |
 | propertyPermissions       | Get array of collection property permissions                                                                                                           | Ready              | [Link](./methods/property-permissions)        |
-

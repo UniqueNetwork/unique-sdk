@@ -1,10 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import {
-  BurnTokenArguments,
   DeleteTokenPropertiesArguments,
   NestTokenArguments,
   SetTokenPropertiesArguments,
-  TokenChildrenResult,
   TokenIdArguments,
   TokenParentResult,
   TopmostTokenOwnerResult,
@@ -14,6 +12,8 @@ import {
   TokenProperty as TokenPropertySDK,
   TokenPropertySetEvent as TokenPropertySetEventSDK,
   TokenPropertyDeletedEvent as TokenPropertyDeletedEventSDK,
+  BurnTokenArguments as BurnTokenArgumentsSDK,
+  BurnTokenResult as BurnTokenResultSDK,
 } from '@unique-nft/sdk/tokens';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -65,12 +65,6 @@ export class CreateTokenBody
     },
   })
   constData: AnyObject;
-}
-
-export class BurnTokenBody extends TokenId implements BurnTokenArguments {
-  @ValidAddress()
-  @AddressApiProperty
-  address: string;
 }
 
 export class TransferTokenBody extends TokenId implements TransferArguments {
@@ -229,4 +223,34 @@ export class TokenPropertyDeletedEvent implements TokenPropertyDeletedEventSDK {
 export class DeleteTokenPropertiesResponse extends MutationResponse {
   @ApiProperty({ type: TokenPropertyDeletedEvent, isArray: true })
   parsed: TokenPropertyDeletedEvent[];
+}
+
+export class BurnTokenBody extends TokenId implements BurnTokenArgumentsSDK {
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @IsOptional()
+  @ValidAddress()
+  @AddressApiProperty
+  @ApiProperty({ required: false })
+  from?: string;
+
+  @IsOptional()
+  @ApiProperty({ example: 1, required: false })
+  value?: number;
+}
+
+export class BurnTokenParsed extends TokenId implements BurnTokenArgumentsSDK {
+  @ValidAddress()
+  @AddressApiProperty
+  address: string;
+
+  @ApiProperty({ example: 1 })
+  value: number;
+}
+
+export class BurnTokenResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: BurnTokenParsed;
 }

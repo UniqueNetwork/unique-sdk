@@ -14,6 +14,8 @@ import {
   DeleteTokenPropertiesBody,
   TokenPropertyDeletedEvent,
   TokenProperty,
+  BurnTokenBody,
+  BurnTokenResponse,
 } from '../types';
 
 export class Tokens extends Section implements ITokens {
@@ -110,5 +112,11 @@ export class Tokens extends Section implements ITokens {
     this.client,
     'POST',
     `${this.path}/unnest`,
+  );
+
+  public readonly burn = new Mutation<BurnTokenBody, BurnTokenResponse>(
+    this.client,
+    'DELETE',
+    this.path,
   );
 }

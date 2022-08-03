@@ -21,7 +21,6 @@ import { DeleteTokenPropertiesMutation } from './methods/delete-token-properties
 import { SetTokenPropertiesMutation } from './methods/set-token-properties';
 import { Approve } from './methods/approve/method';
 import {
-  BurnTokenArguments,
   NestTokenArguments,
   NestTokenResult,
   TokenChildrenArguments,
@@ -43,6 +42,8 @@ import {
   ApproveResult,
   TransferArguments,
   TransferResult,
+  BurnTokenArguments,
+  BurnTokenResult,
 } from './types';
 import {
   CreateTokenNewArguments,
@@ -50,6 +51,7 @@ import {
 } from './methods/create-token';
 import { addressToCrossAccountId } from '../utils';
 import { TransferMutation } from './methods/transfer/method';
+import { BurnTokenMutation } from './methods/burn-token/method';
 
 export class SdkTokens {
   constructor(readonly sdk: Sdk) {
@@ -65,6 +67,7 @@ export class SdkTokens {
     this.properties = tokenPropertiesQuery.bind(this.sdk);
     this.approve = new Approve(this.sdk);
     this.transfer = new TransferMutation(this.sdk);
+    this.burn = new BurnTokenMutation(this.sdk);
   }
 
   nest: MutationMethodWrap<NestTokenArguments, NestTokenResult>;
@@ -159,16 +162,5 @@ export class SdkTokens {
     });
   }
 
-  burn({
-    address,
-    collectionId,
-    tokenId,
-  }: BurnTokenArguments): Promise<UnsignedTxPayload> {
-    return this.sdk.extrinsics.build({
-      address,
-      section: 'unique',
-      method: 'burnItem',
-      args: [collectionId, tokenId, 1],
-    });
-  }
+  burn: MutationMethodWrap<BurnTokenArguments, BurnTokenResult>;
 }

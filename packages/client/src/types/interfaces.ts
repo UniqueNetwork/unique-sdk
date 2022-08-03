@@ -36,6 +36,8 @@ import {
   TopmostTokenOwnerResponse,
   NestTokenBody,
   UnnestTokenBody,
+  BurnTokenBody,
+  BurnTokenResponse,
 } from './api';
 
 export interface IExtrinsics extends ISection {
@@ -133,6 +135,7 @@ export interface ITokens extends ISection {
   topmostOwner(args: TokenId): Promise<TopmostTokenOwnerResponse>;
   nest: IMutation<NestTokenBody, TokenId>;
   unnest: IMutation<UnnestTokenBody, TokenId>;
+  burn: IMutation<BurnTokenBody, BurnTokenResponse>;
 }
 
 export interface ClientParameters {

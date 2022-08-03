@@ -130,6 +130,19 @@ export interface UnsignedTxPayloadResponse {
   fee?: FeeResponse;
 }
 
+export interface SignResponse {
+  signerPayloadJSON: SignerPayloadJSONDto;
+
+  /** Warning: Signature must be with SignatureType! */
+  signature: string;
+  fee?: FeeResponse;
+}
+
+export interface SubmitResponse {
+  hash: string;
+  fee?: FeeResponse;
+}
+
 export interface BurnTokenBody {
   /** @example 1 */
   collectionId: number;
@@ -142,19 +155,38 @@ export interface BurnTokenBody {
    * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
    */
   address: string;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  from?: string;
+
+  /** @example 1 */
+  value?: number;
 }
 
-export interface SignResponse {
-  signerPayloadJSON: SignerPayloadJSONDto;
+export interface BurnTokenParsed {
+  /** @example 1 */
+  collectionId: number;
 
-  /** Warning: Signature must be with SignatureType! */
-  signature: string;
-  fee?: FeeResponse;
+  /** @example 1 */
+  tokenId: number;
+
+  /**
+   * The ss-58 encoded address
+   * @example yGCyN3eydMkze4EPtz59Tn7obwbUbYNZCz48dp8FRdemTaLwm
+   */
+  address: string;
+
+  /** @example 1 */
+  value: number;
 }
 
-export interface SubmitResponse {
-  hash: string;
+export interface BurnTokenResponse {
+  isError: boolean;
   fee?: FeeResponse;
+  parsed: BurnTokenParsed;
 }
 
 export interface TransferTokenBody {

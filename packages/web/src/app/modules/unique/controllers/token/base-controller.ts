@@ -33,6 +33,7 @@ import {
   TransferTokenResponse,
   UnnestTokenBody,
   UnnestTokenResponse,
+  BurnTokenResponse,
 } from './types';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import {
@@ -46,11 +47,13 @@ export class BaseTokenController {
     @Inject(CACHE_MANAGER) readonly cache: Cache,
   ) {}
 
-  @Delete()
-  async burnToken(
-    @Body() args: BurnTokenBody,
-  ): Promise<UnsignedTxPayloadResponse> {
-    return this.sdk.tokens.burn(args);
+  @MutationMethod(Delete(''), BurnTokenBody, BurnTokenResponse)
+  burnToken(): MutationMethodOptions {
+    return {
+      mutationMethod: this.sdk.tokens.burn,
+      cache: this.cache,
+      sdk: this.sdk,
+    };
   }
 
   @MutationMethod(Patch('transfer'), TransferTokenBody, TransferTokenResponse)
