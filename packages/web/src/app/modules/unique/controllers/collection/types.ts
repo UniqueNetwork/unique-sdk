@@ -13,6 +13,7 @@ import {
   CollectionPropertyDeletedEvent as CollectionPropertyDeletedEventSDK,
   DeleteCollectionPropertiesArguments,
   SetTokenPropertyPermissionsArguments,
+  SetCollectionLimitsResult,
   PropertyKeyPermission as PropertyKeyPermissionSDK,
   PropertyPermission as PropertyPermissionSDK,
   PropertyPermissionSetEvent as PropertyPermissionSetEventSDK,
@@ -242,6 +243,22 @@ export class SetPropertyPermissionsBody
   @ApiProperty({ type: [PropertyKeyPermission] })
   @Type(() => PropertyKeyPermission)
   propertyPermissions: PropertyKeyPermission[];
+}
+
+export class SetCollectionLimitsParsed implements SetCollectionLimitsResult {
+  @IsPositive()
+  @IsInt()
+  @ApiProperty({ example: 1 })
+  collectionId: number;
+
+  @ApiProperty({
+    description: 'The collection limits',
+  })
+  limits: CollectionLimitsDto;
+}
+export class SetCollectionLimitsResponse extends MutationResponse {
+  @ApiProperty()
+  parsed: SetCollectionLimitsParsed;
 }
 
 export class PropertyPermissionSetEvent

@@ -12,6 +12,8 @@ import {
   CollectionInfoWithSchemaResponse,
   CreateCollectionNewRequest,
   CreateCollectionParsed,
+  SetCollectionLimitsBody,
+  SetCollectionLimitsParsed,
   ICollections,
 } from '../types';
 
@@ -67,6 +69,11 @@ export class Collections extends Section implements ICollections {
   public readonly creation = new Mutation<
     CreateCollectionNewRequest,
     CreateCollectionParsed
+  >(this.client, 'POST', this.path);
+
+  public readonly setLimits = new Mutation<
+    SetCollectionLimitsBody,
+    SetCollectionLimitsParsed
   >(this.client, 'POST', this.path);
 
   async get(args: {
