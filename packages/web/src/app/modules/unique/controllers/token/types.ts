@@ -230,8 +230,14 @@ export class BurnTokenBody extends TokenId implements BurnTokenArgumentsSDK {
   @AddressApiProperty
   address: string;
 
+  @IsOptional()
+  @ValidAddress()
+  @AddressApiProperty
+  from?: string;
+
+  @IsOptional()
   @ApiProperty({ example: 1 })
-  value: number;
+  value?: number;
 }
 
 export class BurnTokenParsed extends TokenId implements BurnTokenArgumentsSDK {

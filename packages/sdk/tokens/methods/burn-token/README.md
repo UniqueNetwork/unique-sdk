@@ -2,8 +2,10 @@
 
 ## Arguments
 
-- **collectionId** - ID of the collection
-- **tokenId** - ID of NFT to burn
+- **address*** - Sender address
+- **collectionId*** - ID of the collection
+- **from** - Address that owns token
+- **tokenId*** - ID of NFT to burn
 - **value** - amount to burn
   - non-fungible mode: `ignored` (only the whole token can be burned)
   - fungible mode: `must specify` transferred amount
@@ -21,7 +23,6 @@ import { BurnTokenArguments } from '@unique-nft/sdk/tokens/types';
 const burnItemArgs: BurnTokenArguments = {
   tokenId: 1,
   collectionId: 1,
-  value: 1
 };
 const setResult = await sdk.tokens.burn.submitWaitResult(burnItemArgs);
 const { collectionId, tokenId, address, value } = setResult.parsed;

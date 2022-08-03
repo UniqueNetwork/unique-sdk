@@ -180,7 +180,6 @@ describe('Tokens', () => {
       address: richAccount.address,
       collectionId,
       tokenId: 3,
-      value: 1,
     };
     const result = (await sdk.tokens.burn.submitWaitResult(args)).parsed;
     // todo result.address = { Substrate: evmToAddress(result.address) }

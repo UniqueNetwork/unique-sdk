@@ -2,6 +2,7 @@ import { MutationMethodBase } from '@unique-nft/sdk/extrinsics';
 import { ISubmittableResult } from '@unique-nft/sdk/types';
 import { u32, u128 } from '@polkadot/types-codec';
 import { PalletEvmAccountBasicCrossAccountIdRepr } from '@unique-nft/unique-mainnet-types';
+import { addressToCrossAccountId } from '@unique-nft/sdk/utils';
 import {
   BurnTokenArguments,
   BurnTokenBuildArguments,
@@ -17,13 +18,18 @@ export class BurnTokenMutation extends MutationMethodBase<
   async transformArgs(
     args: BurnTokenArguments,
   ): Promise<BurnTokenBuildArguments> {
-    const { address, collectionId, tokenId, value } = args;
+    const { address, collectionId, tokenId } = args;
 
     return {
       address,
       section: 'unique',
-      method: 'burnItem',
-      args: [collectionId, tokenId, value],
+      method: 'burnFrom',
+      args: [
+        collectionId,
+        addressToCrossAccountId(args.from || address),
+        tokenId,
+        args.value || 1,
+      ],
     };
   }
 
