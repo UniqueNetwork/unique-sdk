@@ -32,6 +32,7 @@ import { effectiveCollectionLimits } from './methods/effective-collection-limits
 import { CollectionInfo } from './methods/collection-by-id/types';
 import {
   CollectionIdArguments,
+  CollectionTokensResult,
   SetCollectionLimitsArguments,
   SetCollectionLimitsResult,
 } from './types';
@@ -65,10 +66,7 @@ import {
   propertyPermissionsQuery,
   PropertyPermissionsResult,
 } from './methods/property-permissions';
-import {
-  collectionTokensQuery,
-  CollectionTokensResult,
-} from './methods/collection-tokens';
+import { collectionTokensQuery } from './methods/collection-tokens/method';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {

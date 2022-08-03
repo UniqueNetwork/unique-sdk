@@ -13,9 +13,9 @@ import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
 import {
   CollectionPropertiesResult,
+  CollectionTokensResult,
   PropertyPermissionsResult,
 } from '@unique-nft/sdk/tokens';
-import { CollectionTokensResult } from '@unique-nft/sdk/tokens/methods/collection-tokens';
 import { UnsignedTxPayloadResponse } from '../../../../types/sdk-methods';
 import { EffectiveCollectionLimitsResponse } from '../../../../types/unique-types';
 import {

@@ -1,1 +1,3 @@
-export type CollectionTokensResult = number[];
+export type CollectionTokensResult = {
+  ids: number[];
+};

@@ -8,7 +8,11 @@ async function query(
   { collectionId }: CollectionIdArguments,
 ): Promise<CollectionTokensResult | null> {
   const result = await this.api.rpc.unique.collectionTokens(collectionId);
-  return result as unknown as CollectionTokensResult | null;
+  return result
+    ? ({
+        ids: result,
+      } as unknown as CollectionTokensResult)
+    : null;
 }
 
 export const collectionTokensQuery: QueryMethod<
