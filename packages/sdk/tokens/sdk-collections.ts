@@ -32,6 +32,7 @@ import { effectiveCollectionLimits } from './methods/effective-collection-limits
 import { CollectionInfo } from './methods/collection-by-id/types';
 import {
   CollectionIdArguments,
+  CollectionTokensResult,
   SetCollectionLimitsArguments,
   SetCollectionLimitsResult,
 } from './types';
@@ -65,6 +66,7 @@ import {
   propertyPermissionsQuery,
   PropertyPermissionsResult,
 } from './methods/property-permissions';
+import { collectionTokensQuery } from './methods/collection-tokens/method';
 
 export class SdkCollections {
   constructor(readonly sdk: Sdk) {
@@ -84,7 +86,10 @@ export class SdkCollections {
     this.propertyPermissions = propertyPermissionsQuery.bind(this.sdk);
     this.setCollectionSponsor = new SetCollectionSponsorMutation(this.sdk);
     this.confirmSponsorship = new ConfirmSponsorshipMutation(this.sdk);
-    this.removeCollectionSponsor = new RemoveCollectionSponsorMutation(this.sdk);
+    this.removeCollectionSponsor = new RemoveCollectionSponsorMutation(
+      this.sdk,
+    );
+    this.tokens = collectionTokensQuery.bind(this.sdk);
   }
 
   get: QueryMethod<CollectionIdArguments, CollectionInfo>;
@@ -167,4 +172,6 @@ export class SdkCollections {
       args: [args.collectionId],
     });
   }
+
+  tokens: QueryMethod<CollectionIdArguments, CollectionTokensResult>;
 }

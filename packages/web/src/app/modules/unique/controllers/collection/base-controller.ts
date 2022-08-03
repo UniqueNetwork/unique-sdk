@@ -13,6 +13,7 @@ import { Cache } from 'cache-manager';
 import { Sdk } from '@unique-nft/sdk';
 import {
   CollectionPropertiesResult,
+  CollectionTokensResult,
   PropertyPermissionsResult,
 } from '@unique-nft/sdk/tokens';
 import { ApiResponse } from '@nestjs/swagger';
@@ -81,6 +82,13 @@ export class BaseCollectionController {
     @Query() args: CollectionIdQuery,
   ): Promise<CollectionPropertiesResult> {
     return this.sdk.collections.properties(args);
+  }
+
+  @Get('tokens')
+  async collectionTokens(
+    @Query() args: CollectionIdQuery,
+  ): Promise<CollectionTokensResult> {
+    return this.sdk.collections.tokens(args);
   }
 
   @MutationMethod(
